@@ -1,0 +1,29 @@
+\documentclass[border=1pt,tikz]{standalone}
+
+\usepackage{amsmath, tikz}
+\usetikzlibrary{calc}
+
+\newcounter{CountOfSections}
+\newcommand{\fracgraph}[3][1]{%
+    % #1 = optional height
+\begin{tikzpicture}
+  \draw (0,0) rectangle (#2,#1) node [midway] {1};
+  
+  \setcounter{CountOfSections}{0}%
+  \foreach \Size/\Options in {#3} {%
+    \stepcounter{CountOfSections}%
+    \pgfmathsetmacro{\YCoord}{#1*\arabic{CountOfSections}}%
+    \draw  (0,-\YCoord) rectangle (#2,-\YCoord+#1);
+    \pgfmathsetmacro{\Xincrement}{#2/\Size}%
+    \foreach \x in {1,...,\Size} {%
+      \pgfmathsetmacro{\Xcoord}{\x*\Xincrement}%
+      \pgfmathsetmacro{\XcoordLabel}{(\x-0.5)*\Xincrement}%
+      \draw [fill=\Options]  ($(\Xcoord-\Xincrement,-\YCoord)$)  rectangle ($(\Xcoord,-\YCoord+#1)$);
+        \node at ($(\XcoordLabel,-\YCoord+0.5*#1)$) {$\frac{1}{\Size}$};
+    }%
+  }%
+\end{tikzpicture}}
+
+\begin{document}
+    \fracgraph{5}{2/cyan!50,3/red!40,4/brown!50}
+\end{document}

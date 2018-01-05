@@ -1,0 +1,100 @@
+% Basic drawings
+% https://www.sharelatex.com/blog/2013/08/27/tikz-series-pt1.html
+% https://www.tug.org/TUGboat/tb29-1/tb91walczak.pdf
+
+\documentclass[border=3pt,tikz]{standalone}
+
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\tikzset{>=latex} % for LaTeX arrow head
+%\usetikzlibrary{angles,quotes} % for pic (angle labels)
+%\usetikzlibrary{calc}
+%\tikzset{ % for carc in pic
+%  pics/carc/.style args={#1:#2:#3}{
+%    code={
+%      \draw[pic actions] (#1:#3) arc(#1:#2:#3);
+%}}}
+
+\begin{document}
+
+
+
+%\tdplotsetmaincoords{90}{90} % look straight at yz plane 
+%\begin{tikzpicture}[tdplot_main_coords]
+%  \coordinate (A)  at (0, 3, 3);
+%  \coordinate (O)  at (0, 0, 0);
+%  \coordinate (B)  at (0, 4, 0);
+%  
+%  \coordinate (A2) at (0, 8, 3);
+%  \coordinate (O2) at (0, 5, 0);
+%  \coordinate (B2) at (0, 9, 0);
+%  
+%  \draw[thick] (A) -- (O) -- (B);
+%  \draw[canvas is yz plane at x=0,->]
+%    (1,0,0) arc [start angle=0,end angle=45,radius=1]
+%    node [midway,right] {$\alpha_1$};
+%
+%  \draw[thick] (A2) -- (O2) -- (B2);
+%  \draw[canvas is yz plane at x=0,->]
+%    (O2)+(1,0,0) arc [start angle=0,end angle=45,radius=1]
+%    node [midway,right] {$\alpha_2$};
+%
+%\end{tikzpicture}
+
+
+\usetikzlibrary{angles,quotes} % for pic (angle labels)
+\begin{tikzpicture}
+  
+  % define point
+  \coordinate (A)  at (3, 3);
+  \coordinate (O)  at (0, 0);
+  \coordinate (B)  at (4, 0);
+
+  % angle  
+  \draw[thick] (A) -- (O) -- (B);
+  \draw pic[->,"$\alpha_1$",draw=black,angle radius=20,angle eccentricity=1.4]
+    {angle = B--O--A};
+  
+\end{tikzpicture}
+
+
+\usetikzlibrary{angles,quotes}
+\begin{tikzpicture}
+  \coordinate (A)  at (3, 3);
+  \coordinate (O)  at (0, 0);
+  \coordinate (B)  at (4, 0);
+
+  \draw[thick] (A) -- (O) -- (B);
+  \pic [draw,"$\alpha_2$",angle radius=20,->,angle eccentricity=1.4] {angle = B--O--A};
+
+\end{tikzpicture}
+
+
+%\usetikzlibrary{angles,quotes}
+%\begin{tikzpicture}[tdplot_main_coords]
+%  \coordinate (A)  at (0, 3, 3);
+%  \coordinate (O)  at (0, 0, 0);
+%  \coordinate (B)  at (0, 4, 0);
+%
+%  \draw[thick] (A) -- (O) -- (B);
+%  \draw pic[->,"$\alpha_3$",draw=black,angle radius=20,angle eccentricity=1.4]
+%    {angle = B--O--A};
+%
+%\end{tikzpicture}
+
+
+
+%\usetikzlibrary{angles,quotes}
+%\begin{tikzpicture}[tdplot_main_coords]
+%  \coordinate (A)  at (0, 3, 3);
+%  \coordinate (O)  at (0, 0, 0);
+%  \coordinate (B)  at (0, 4, 0);
+%
+%  \draw[thick] (A) -- (O) -- (B);
+%  \pic [draw,"$\alpha_3$",angle radius=20,->,angle eccentricity=1.4] {angle = B--O--A};
+%
+%\end{tikzpicture}
+
+
+
+\end{document}

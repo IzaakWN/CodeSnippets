@@ -1,0 +1,42 @@
+\documentclass{article}
+
+\usepackage{tikz, pgfplots}
+
+% EXTERNALIZE TIKZ (Advanced technique)
+% 
+% creates folder tikz, if it doesn't exist
+% creates pdfs in folder tikz for each tikzpicture environment
+% includes pdf from folder tikz
+% automatically recompiles pdf if anything in a tikzpicture environment is changed
+%
+% if you want to change the name of the generated pdf include \tikzsetnextfilename{} before the specific tikzpicture environment, this is especially useful if you want to use the pdf in an other context as well
+%
+% manual: http://www.texample.net/media/pgf/builds/pgfmanualCVS2012-11-04.pdf
+%
+% CHANGE IN COMPILATION COMMAND! 
+% one has to add -shell-escape to the compilation command, as tikzexternalize automatically compiles twice and this has to be allowed explicitly
+% in TexStudio the compilation command can be changed in Options > Configure TexStudio > Commands > PDFLaTeX: New command: pdflatex.exe -shell-escape -synctex=1 -interaction=nonstopmode %.tex
+\usetikzlibrary{external}
+\usepgfplotslibrary{external} % e.g. for the axis environment in the tikzpicture environment
+\tikzexternalize[prefix=tikz/, optimize command away=\includepdf] % activate!, first option: keep all the external files in the subfolder named tikz, second option: needed for compatibility with the package pdfpages and its command includepdf
+
+% IF (and only then) YOU USE ANY INDEX uncomment the following part
+%\tikzifexternalizing{% required for compatibility with index, as tikzexternalize redefines makeindex
+%  \renewcommand\index[2][]{}%
+%  \renewcommand\printindex{}%
+%  \renewcommand\makeindex[1][]{}%
+%  }{}
+  
+  
+\begin{document}
+\begin{tikzpicture}
+\node {root}
+child {node {left}}
+child {node {right}
+child {node {child}}
+child {node {child}}
+};
+\end{tikzpicture}
+
+A simple image is \tikz \fill (0,0) circle(5pt);.
+\end{document}

@@ -1,0 +1,21 @@
+% https://tex.stackexchange.com/questions/61475/tikz-how-to-draw-a-sine-curve-in-3d
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\tikzset{>=latex} % for LaTeX arrow head
+\usetikzlibrary{angles,quotes} % for pic (angle labels)
+
+% split figures into pages
+\usepackage{verbatim}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{5pt}%
+
+\begin{document}
+
+\begin{tikzpicture}[scale=.2]
+   \draw [red,domain=0:360,samples=40] 
+     plot ({sin(\x)}, {cos(\x)} );
+\end{tikzpicture}
+
+\end{document}

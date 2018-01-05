@@ -1,0 +1,125 @@
+% A cone in 3D
+% Author: Marco Daniel
+
+\documentclass[border=3pt,tikz]{standalone}
+
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\tikzset{ % for carc in pic
+  pics/carc/.style args={#1:#2:#3}{
+    code={
+      \draw[pic actions] (#1:#3) arc(#1:#2:#3);
+}}}
+
+%%%%<
+%\usepackage{verbatim}
+%\usepackage[active,tightpage]{preview}
+%\PreviewEnvironment{tikzpicture}
+%\setlength\PreviewBorder{5pt}%
+%%%%>
+
+%\begin{comment}
+%:Title: A Cone in 3D
+%:Tags: 2D,geometry,mathematics
+%:Author: Marco Daniel
+%:Slug: cone
+%
+%\end{comment}
+
+\begin{document}
+
+
+
+
+\tdplotsetmaincoords{70}{0}
+\begin{tikzpicture}[tdplot_main_coords]
+\def\RI{2}
+\def\RII{1.25}
+
+\draw[thick] (\RI,0)
+  \foreach \x in {0,300,240,180} { --  (\x:\RI) node at (\x:\RI) (R1-\x) {\x} };
+
+\end{tikzpicture}
+
+
+
+\tdplotsetmaincoords{70}{0}
+\begin{tikzpicture}[tdplot_main_coords]
+\def\RI{2}
+\def\RII{1.25}
+
+\draw[dashed,thick] (R1-0.center)
+  \foreach \x in {60,120,180} { --  (\x:\RI) node at (\x:\RI) (R1-\x) {\x} };
+
+\end{tikzpicture}
+
+
+
+\tdplotsetmaincoords{70}{0}
+\begin{tikzpicture}[tdplot_main_coords]
+\def\RI{2}
+\def\RII{1.25}
+
+\draw[dashed,thick] (R1-0.center)
+  \foreach \x in {60,120,180} { --  (\x:\RI) node at (\x:\RI) (R1-\x) {\x} };
+
+%\draw[->] % draw arc beginning from some point
+%  (60:2) arc[start angle=-90, end angle=180, radius=0.5] node[left] {$\psi$};
+\draw[thick,->] (60:2) pic{carc=180:300:1}; % draw arc from some center point
+
+\end{tikzpicture}
+
+
+\tdplotsetmaincoords{70}{0}
+\begin{tikzpicture}[tdplot_main_coords]
+\def\RI{2}
+\def\RII{1.25}
+
+\draw[thick] (\RI,0)
+  \foreach \x in {0,300,240,180} { --  (\x:\RI) node at (\x:\RI) (R1-\x) {} };
+\draw[dashed,thick] (R1-0.center)
+  \foreach \x in {60,120,180} { --  (\x:\RI) node at (\x:\RI) (R1-\x) {} };
+\path[fill=gray!30] (\RI,0)
+  \foreach \x in {0,60,120,180,240,300} { --  (\x:\RI)};
+
+\end{tikzpicture}
+
+
+
+
+\tdplotsetmaincoords{70}{0}
+\begin{tikzpicture}[tdplot_main_coords]
+\def\RI{2}
+\def\RII{1.25}
+
+\begin{scope}[yshift=2cm]
+\draw[thick,fill=gray!30,opacity=0.2] (\RII,0)
+  \foreach \x in {0,60,120,180,240,300,360} { --  (\x:\RII) node at (\x:\RII) (R2-\x) {}};
+\end{scope}
+
+\end{tikzpicture}
+
+
+
+\tdplotsetmaincoords{70}{0}
+\begin{tikzpicture}[tdplot_main_coords]
+\def\RI{2}
+\def\RII{1.25}
+
+\draw[thick] (\RI,0)
+  \foreach \x in {0,300,240,180} { --  (\x:\RI) node at (\x:\RI) (R1-\x) {} };
+\draw[dashed,thick] (R1-0.center)
+  \foreach \x in {60,120,180} { --  (\x:\RI) node at (\x:\RI) (R1-\x) {} };
+\path[fill=gray!30] (\RI,0)
+  \foreach \x in {0,60,120,180,240,300} { --  (\x:\RI)};
+
+\begin{scope}[yshift=2cm]
+\draw[thick,fill=gray!30,opacity=0.2] (\RII,0)
+  \foreach \x in {0,60,120,180,240,300,360} { --  (\x:\RII) node at (\x:\RII) (R2-\x) {}};
+\end{scope}
+
+\foreach \x in {0,180,240,300} { \draw (R1-\x.center)--(R2-\x.center); };
+\foreach \x in {60,120} { \draw[dashed] (R1-\x.center)--(R2-\x.center); };
+\end{tikzpicture}
+
+\end{document}

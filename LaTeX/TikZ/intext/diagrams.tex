@@ -1,0 +1,18 @@
+% https://tex.stackexchange.com/questions/44505/export-tikz-figures-to-pdf
+% add "--shell-escape" to latex command in Preferences > Engine
+
+\documentclass[border=2pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{external}
+\tikzexternalize % activate!
+\begin{document}
+\begin{tikzpicture}
+\node {root}
+child {node {left}}
+child {node {right}
+child {node {child}}
+child {node {child}}
+};
+\end{tikzpicture}
+A simple image is \tikz \fill (0,0) circle(5pt);.
+\end{document}
