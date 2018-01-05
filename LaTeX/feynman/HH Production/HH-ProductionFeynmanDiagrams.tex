@@ -1,0 +1,195 @@
+\documentclass[16pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry} % margins
+\usepackage{amsmath}
+%\usepackage{bm} % for bold math
+\usepackage{graphicx}
+\usepackage{subcaption} % for subfigs
+\usepackage{hyperref} % hyperlinks [colorlinks=true]
+\usepackage{cancel} % MET: $\cancel{\it{E}}_{T}$
+
+\newcommand{\ww}{200}
+\newcommand{\hh}{100}
+\newcommand{\wwg}{280}
+\newcommand{\arrowlen}{15}
+\newcommand{\curlylen}{12}
+\newcommand{\dashlen}{12}
+
+\usepackage{feynmp}
+\DeclareGraphicsRule{*}{mps}{*}{}
+\makeatletter
+\def\endfmffile{%
+  \fmfcmd{\p@rcent\space the end.^^J%
+          end.^^J%
+          endinput;}%
+  \if@fmfio
+    \immediate\closeout\@outfmf
+  \fi
+%  \ifnum\pdfshellescape=\@ne
+	\ifnum\pdfshellescape>\z@
+    \immediate\write18{mpost \thefmffile}%
+  \fi}
+\makeatother
+
+
+
+
+\begin{document}
+%\maketitle
+
+
+% HIGGS PAIR production
+\begin{figure}[p]
+	\centering
+	\begin{fmffile}{ggH1}
+	\begin{fmfgraph*}(\wwg,\hh)
+    	\fmfset{arrow_len}{\arrowlen}
+    	\fmfset{curly_len}{\curlylen}
+    	\fmfset{dash_len}{\dashlen}
+		\fmfstraight
+		\fmfleft{i1,i2}
+		\fmfright{o1,m,o2}
+		% gluons
+		\fmf{gluon}{i1,t1}
+		\fmf{gluon}{t2,i2}
+		\fmf{phantom,tension=0.4}{t1,o1}
+		\fmf{phantom,tension=0.4}{t2,o2}
+		\fmffreeze
+		% top loop
+		\fmf{fermion,tension=1}{t1,t2,t3,t1}
+		\fmf{phantom,tension=1.4}{t3,m}
+		\fmffreeze
+		% Higgs boson
+		\fmf{dashes,tension=1.4}{t3,h}
+		\fmf{dashes,tension=1}{h,o1}
+		\fmf{dashes,tension=1}{h,o2}
+%		\fmflabel{\huge\quad$\sim \lambda$}{h}
+	\end{fmfgraph*}
+	\end{fmffile}
+	\vspace{5mm}
+	\caption{Feynman diagram for Higgs pair production through gluon-gluon production and trilinear self-coupling.}
+	\vspace{5mm}
+\end{figure}
+
+
+% HIGGS PAIR production
+\begin{figure}[p]
+	\centering
+	\begin{fmffile}{ggH2}
+	\begin{fmfgraph*}(\wwg,\hh)
+    	\fmfset{arrow_len}{\arrowlen}
+    	\fmfset{curly_len}{\curlylen}
+    	\fmfset{dash_len}{\dashlen}
+		\fmfstraight
+		\fmfleft{i1,i2}
+		\fmfright{o1,o2}
+		% gluons
+		\fmf{gluon}{i1,t1}
+		\fmf{gluon}{t2,i2}
+		\fmf{phantom,tension=1}{t1,t4}
+		\fmf{phantom,tension=1}{t2,t3}
+		% Higgs boson
+		\fmf{dashes,tension=1}{t4,o1}
+		\fmf{dashes,tension=1}{t3,o2}
+		% top loop
+		\fmf{fermion,tension=0}{t1,t2,t3,t4,t1}
+	\end{fmfgraph*}
+	\end{fmffile}
+	\vspace{5mm}
+	\caption{Feynman diagram for Higgs pair production through gluon-gluon production with a top box loop.}
+	\vspace{5mm}
+\end{figure}
+
+
+
+% HIGGS PAIR production
+\begin{figure}[p]
+	\centering
+	\begin{fmffile}{ggH_BSM1}
+	\begin{fmfgraph*}(\hh,\hh)
+    	\fmfset{arrow_len}{\arrowlen}
+    	\fmfset{curly_len}{\curlylen}
+    	\fmfset{dash_len}{\dashlen}
+		\fmfstraight
+		\fmfleft{i1,i2}
+		\fmfright{o1,o2}
+		% gluons
+		\fmf{gluon}{i1,v}
+		\fmf{gluon}{v,i2}
+		\fmfblob{20}{v}
+		% Higgs boson
+		\fmf{dashes,tension=1}{v,o1}
+		\fmf{dashes,tension=1}{v,o2}
+	\end{fmfgraph*}
+	\end{fmffile}
+	\vspace{5mm}
+	\caption{Feynman diagram for Higgs pair production through gluon-gluon production with a BSM coupling.}
+	\vspace{5mm}
+\end{figure}
+
+
+
+% HIGGS PAIR production
+\begin{figure}[p]
+	\centering
+	\begin{fmffile}{ggH_BSM2}
+	\begin{fmfgraph*}(\ww,\hh)
+    	\fmfset{arrow_len}{\arrowlen}
+    	\fmfset{curly_len}{\curlylen}
+    	\fmfset{dash_len}{\dashlen}
+		\fmfstraight
+		\fmfleft{i1,i2}
+		\fmfright{o1,o2}
+		% gluons
+		\fmf{gluon}{i1,v}
+		\fmf{gluon}{v,i2}
+		\fmfblob{20}{v}
+		% Higgs boson
+		\fmf{dashes,tension=1}{v,h}
+		\fmf{dashes,tension=1}{h,o1}
+		\fmf{dashes,tension=1}{h,o2}
+	\end{fmfgraph*}
+	\end{fmffile}
+	\vspace{5mm}
+	\caption{Feynman diagram for Higgs pair production through gluon-gluon production with a BSM coupling.}
+	\vspace{5mm}
+\end{figure}
+
+
+
+% HIGGS PAIR production
+\begin{figure}[t]
+	\centering
+	\begin{fmffile}{ggH_BSM3}
+	\begin{fmfgraph*}(\ww,\hh)
+    	\fmfset{arrow_len}{\arrowlen}
+    	\fmfset{curly_len}{\curlylen}
+    	\fmfset{dash_len}{\dashlen}
+		\fmfstraight
+		\fmfleft{i1,i2}
+		\fmfright{o1,o2}
+		% gluons
+		\fmf{gluon}{i1,t1}
+		\fmf{gluon}{t2,i2}
+		\fmf{phantom,tension=0.6}{t1,o1}
+		\fmf{phantom,tension=0.6}{t2,o2}
+		\fmffreeze
+		% top loop
+		\fmf{fermion,tension=0.70}{t1,t2,t3,t1}
+		% Higgs boson
+		\fmf{dashes,tension=1}{t3,o1}
+		\fmf{dashes,tension=1}{t3,o2}
+		\fmfblob{20}{t3}
+	\end{fmfgraph*}
+	\end{fmffile}
+	\vspace{5mm}
+	\caption{Feynman diagram for Higgs pair production through gluon-gluon production with a BSM coupling.}
+	\vspace{5mm}
+\end{figure}
+
+
+
+
+
+
+
+\end{document}

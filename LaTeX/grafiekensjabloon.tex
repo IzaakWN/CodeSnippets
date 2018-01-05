@@ -1,0 +1,167 @@
+\documentclass[10pt,a4paper,titlepage]{article}
+\usepackage[margin=2.5cm]{geometry} % marges
+\usepackage[dutch]{babel} % voor Nederlands taalpakker
+\usepackage{hyperref} % voor hyperlinks
+
+% nodig voor de grafiek-omgeving:
+\usepackage{graphicx}
+\usepackage[nooneline]{caption} % voor subfigs
+\usepackage{subcaption} % voor subfigs
+\captionsetup[subfigure]{labelfont=bf} % voor subfigs: vetgedrukt letternummering van subcaption
+
+
+\newcounter{grafiek} % teller voor grafiek
+\newcounter{figure2} % reservetteller voor figure
+\newenvironment{grafiek} % omgeving grafiek
+{
+	\setcounter{figure2}{\value{figure}}	
+	\setcounter{figure}{\value{grafiek}}
+	\begin{figure}[p!]
+	\renewcommand{\figurename}{Grafiek}
+}{
+	\end{figure}
+	\setcounter{figure}{\value{figure2}}
+	\stepcounter{grafiek}
+}
+
+\newcommand{\graf}[4] % kortere commando voor grafiek
+{
+	\begin{grafiek}
+	\centering
+	\setlength{\fboxsep}{2pt}
+	\setlength{\fboxrule}{1pt}
+	\fbox{\includegraphics[#1]{afbeeldingen/#2.jpg}}
+	\caption{#3} \label{#2}
+	\end{grafiek}
+}
+
+\newcommand{\grafs}[6] % kortere commando voor zij-aan-zij-grafieken 
+{
+	\begin{grafiek}
+	% fig1
+	\begin{minipage}[h!]{6.8cm}
+	\centering
+	\setlength{\fboxsep}{2pt}
+	\setlength{\fboxrule}{1pt}
+	\fbox{\includegraphics[#1]{afbeeldingen/#2.jpg}}
+	\caption{#3} \label{#2}
+	\end{minipage}
+	\hspace{12mm}
+	% fig2
+	\begin{minipage}[h!]{7cm}
+	\centering
+	\setlength{\fboxsep}{2pt}
+	\setlength{\fboxrule}{1pt}
+	\fbox{\includegraphics[#1]{afbeeldingen/#4.jpg}}
+	\caption{#5} \label{#4}
+	\end{minipage}
+	\end{grafiek}
+	\stepcounter{grafiek}
+}
+
+\newcommand{\subgrafs}[4] % kortere commando voor zij-aan-zij-figuren met drie subfiguren 
+{
+\begin{grafiek}
+
+\hspace{-5mm}
+\fbox{\begin{minipage}[l]{7.6cm} % eerste figuur
+
+	\vspace{2mm}
+	\begin{subfigure}[b]{10cm}
+		\caption{} \label{graf#1blok} \vspace{-1.5mm}
+		\setlength{\fboxsep}{2pt}
+		\setlength{\fboxrule}{1pt}
+		\fbox{\includegraphics[height=5.4cm]{afbeeldingen/#1_blok.jpg}}
+	\end{subfigure}
+	
+	\vspace{7mm}
+	\begin{subfigure}[b]{10cm}
+		\caption{} \label{graf#1log} \vspace{-1.5mm}
+		\setlength{\fboxsep}{2pt}
+		\setlength{\fboxrule}{1pt}
+		\fbox{\includegraphics[height=5.4cm]{afbeeldingen/#1_log.jpg}}
+	\end{subfigure}
+
+	\vspace{7mm}
+	\begin{subfigure}[b]{10cm}
+		\caption{} \label{graf#1ruis} \vspace{-1.5mm}
+		\setlength{\fboxsep}{2pt}
+		\setlength{\fboxrule}{1pt}
+		\fbox{\includegraphics[height=5.4cm]{afbeeldingen/#1_ruis.jpg}}
+	\end{subfigure}
+	
+	\vspace{5mm}
+	\caption{#2} \label{graf{#1}}
+	
+\end{minipage}}
+\hspace{6mm}
+\fbox{\begin{minipage}[l]{7.6cm} % tweede figuur
+	
+	\vspace{2mm}
+	\begin{subfigure}[b]{10cm}
+		\caption{} \label{graf#3blok} \vspace{-1.5mm}
+		\setlength{\fboxsep}{2pt}
+		\setlength{\fboxrule}{1pt}
+		\fbox{\includegraphics[height=5.4cm]{afbeeldingen/#3_blok.jpg}}
+	\end{subfigure}
+	
+	\vspace{7mm}
+	\begin{subfigure}[b]{10cm}
+		\caption{} \label{graf#3log} \vspace{-1.5mm}
+		\setlength{\fboxsep}{2pt}
+		\setlength{\fboxrule}{1pt}
+		\fbox{\includegraphics[height=5.4cm]{afbeeldingen/#3_log.jpg}}
+	\end{subfigure}
+
+	\vspace{7mm}
+	\begin{subfigure}[b]{10cm}
+		\caption{} \label{graf#3ruis} \vspace{-1.5mm}
+		\setlength{\fboxsep}{2pt}
+		\setlength{\fboxrule}{1pt}
+		\fbox{\includegraphics[height=5.4cm]{afbeeldingen/#3_ruis.jpg}}
+	\end{subfigure}
+	
+	\vspace{5mm}
+	\caption{#4} \label{graf{#3}}
+	
+\end{minipage}}
+\end{grafiek}
+\stepcounter{grafiek}
+}
+
+\title{Fourieranalyse en systeemtheorie: filters}
+\author{Izaak Neutelings}
+\date{31 maart 2013}
+
+%ÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐ Document ÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐ%
+\begin{document}
+\maketitle
+
+De bovenstaande code kan gebruikt worden als men figuren en grafieken (of iets anders dat ook een afbeelding moet uploaden) wilt hebben met elk een verschillende onderschriftnaam \`en nummering.\\
+
+Aan dit probleem heb ik lang gewerkt: de nummering was moeilijk. Maar nu is het gelukt!\\
+
+Maar vandaag (Paaszondag, 31 maart 2013) was ik tot de realisatie gekomen dat men in wetenschappelijke artikels, grafieken ook figuren noemt. Dit viel op in Nature en op internet las ik:
+
+\begin{quotation}
+\textbf{Text}: contrary to what you may have heard, not all analyses or results warrant a Table or Figure. Some simple results are best stated in a single sentence, with data summarized parenthetically:
+
+Seed production was higher for plants in the full-sun treatment (52.3 +/-6.8 seeds) than for those receiving filtered light (14.7+/- 3.2 seeds, t=11.8, df=55, p<0.001.)
+
+\textbf{Tables}: Tables present lists of numbers or text in columns, each column having a title or label. Do not use a table when you wish to show a trend or a pattern of relationship between sets of values - these are better presented in a Figure. For instance, if you needed to present population sizes and sex ratios for your study organism at a series of sites, and you planned to focus on the differences among individual sites according to (say) habitat type, you would use a table. However, if you wanted to show us that sex ratio was related to population size, you would use a Figure.
+
+\textbf{Figures}: Figures are visual presentations of results, including graphs, diagrams, photos, drawings, schematics, maps, etc. Graphs are the most common type of figure and will be discussed in detail; examples of other types of figures are included at the end of this section. Graphs show trends or patterns of relationship.
+\end{quotation}
+
+
+%ÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐ Bibliografie ÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐÐ%
+\begin{thebibliography}{1}
+
+\bibitem{paper} How to Write Guide: Making Tables and Figures [internet]. 2012 [ge\"updatet 2012 okt. 1, geciteerd 2013 maa. 31].\\
+Verkrijgbaar van:\\
+\url{http://abacus.bates.edu/~ganderso/biology/resources/writing/HTWtablefigs.html}
+
+\end{thebibliography}
+
+
+\end{document}

@@ -1,0 +1,80 @@
+\documentclass[14pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry} % margins
+\usepackage{amsmath}
+%\usepackage{bm} % for bold math
+\usepackage{graphicx}
+\usepackage{subcaption} % for subfigs
+\usepackage{hyperref} % hyperlinks [colorlinks=true]
+\usepackage{cancel} % MET: $\cancel{\it{E}}_{T}$
+
+\newcommand{\ww}{180}
+\newcommand{\hh}{150}
+
+\usepackage{feynmp}
+\DeclareGraphicsRule{*}{mps}{*}{}
+\makeatletter
+\def\endfmffile{%
+  \fmfcmd{\p@rcent\space the end.^^J%
+          end.^^J%
+          endinput;}%
+  \if@fmfio
+    \immediate\closeout\@outfmf
+  \fi
+%  \ifnum\pdfshellescape=\@ne
+	\ifnum\pdfshellescape>\z@
+    \immediate\write18{mpost \thefmffile}%
+  \fi}
+\makeatother
+
+
+
+\begin{document}
+%\maketitle
+
+This is a test file for Feynman diagrams.
+
+
+
+%  i2??v12???????o2
+%       S         
+%       S         _t2
+%       S        / 
+%       S      _t 
+%       S     /  \_t1
+%       S    /
+%  i1??v12??v21??o1
+
+\begin{figure}[t!]
+	\LARGE
+	\centering
+	\begin{fmffile}{ditau}
+	\begin{fmfgraph*}(300,200)
+    	\fmfset{wiggly_len}{8mm}
+		\fmfleft{i1,i2}
+		\fmfright{o1,t1,t2,o2}
+		\fmf{phantom,tension=1.2,label=b}{i1,v11}
+		\fmf{phantom,tension=1.2}{i2,v12}
+		\fmf{phantom,tension=1}{i1,v11,o1}
+		\fmf{phantom,tension=1}{i2,v12,o2}
+		\fmf{boson,tension=1,label=W'}{v11,v12}
+		\fmffreeze
+		\fmf{fermion}{i1,v11,v21,o1}
+		\fmf{fermion,label=$q$}{i2,v12}
+		\fmf{fermion,label=$\overline{q}'$,label.side=left}{v12,o2}
+		\fmf{phantom,tension=2,label=B'}{v11,v21}
+		\fmf{phantom,tension=1.5,label=b}{v21,o1}
+		\fmf{boson,label=X(28)}{v21,t}
+		\fmf{fermion,label=$\tau^+$}{t1,t}
+		\fmf{fermion,label=$\tau^-$}{t,t2}
+		\fmf{phantom,tension=1}{v12,t}
+		\fmf{phantom,tension=0.4}{v12,v21}
+	\end{fmfgraph*}
+	\end{fmffile}
+	\vspace{5mm}
+	\caption{Feynman diagram} %\label{scat}
+	\vspace{5mm}
+\end{figure}
+
+
+
+\end{document}

@@ -1,0 +1,19 @@
+% https://tex.stackexchange.com/questions/166097/natbib-multiple-citations-with-page-numbers-in-one-bracket
+
+\documentclass{article}
+\usepackage[american]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+
+\begin{document}
+
+Check these references: \citep{adams03,collier09}.
+
+And these: \citep[p.~3]{adams03}.
+
+And do not forget: (\citeauthor{adams03}, \citeyear{adams03}, p.~3; \citeauthor{collier09}, \citeyear{collier09}, p.~5).
+
+\bibliography{natbibtest}
+\bibliographystyle{apalike}
+
+\end{document}
