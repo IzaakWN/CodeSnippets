@@ -1,12 +1,11 @@
 // Author: Izaak Neutelings (March 2015)
 //
-// compile with
-//     g++ HelloWorld.cc
-// run with
-//     ./a.out
-// or do:
-//    g++ HelloWorld.cc -o HelloWorld
-//    ./HelloWorld
+// compile and run with
+//   g++ HelloWorld.cc
+//   ./a.out
+// or with:
+//   g++ HelloWorld.cc -o HelloWorld
+//   ./HelloWorld
 
 
 #include <iostream>
