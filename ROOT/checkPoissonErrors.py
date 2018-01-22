@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
+# Author: Izaak Neutelings (January 2018)
 #
 # Copy file:
 #  https://root.cern.ch/doc/master/classTFile.html#aaf0edbf57091f9d941caf134f1207156
