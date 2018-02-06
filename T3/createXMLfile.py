@@ -15,25 +15,26 @@ Examples:
  
  \033[1mTier 3 PNFS\033[0m:
    PNFS="/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Summer16/Ntuple_80_20170206"
-   ls -d $PNFS/DYJ*/*/*/* > dirs_DYJ.txt
+   ls -d $PNFS/DY*/*/*/* > dirs_DY.txt
    ls -d $PNFS/*/*/*/* > dirs.txt
    ./createXMLfile.py dirs.txt -o xmls_Moriond
  
  \033[1mTier 2 PNFS\033[0m:
    PNFS="gsiftp://storage01.lcg.cscs.ch//pnfs/lcg.cscs.ch/cms/trivcat/store/user/ytakahas/Ntuple_Moriond17"
-   uberftp -ls $PNFS/DY1J*/*/* | awk '{print $8}' > dirs_T2_DY1J.txt
+   uberftp -ls $PNFS/DY*/*/* | awk '{print $8}' > dirs_T2_DY.txt
    uberftp -ls $PNFS/*/*/* | awk '{print $8}' > dirs_T2.txt
    ./createXMLfile.py dirs_T2.txt -o xmls_Moriond_T2 -s PSI-T2
  
  \033[1mSplit files\033[0m (to run in parallel):
    cat dirs.txt | wc -l
-   split -l 200 dirs.txt dirs_split -d
+   ./createXMLfile.py dirs.txt --split 2
  
  \033[1mPrint out xml file names\033[0m formatted for copy-pasting into job options files:
    cd xmls_Moriond/
    ls *.xml | xargs -I@ echo \\"@\\",
 """
-
+#cat dirs.txt | wc -l
+#split -l 200 dirs.txt dirs_split -d
 
 import os
 import sys
@@ -42,7 +43,6 @@ import optparse
 import thread
 import subprocess
 import math
-
 
 # parse the command line
 parser=optparse.OptionParser(usage="%prog SAMPLELISTFILE") #epilog
@@ -65,11 +65,14 @@ parser.add_option("-m", "--maxFiles", action="store",
                 dest="maxFiles", default="500",
                 help="Maximum number of files [default = %default]")
 parser.add_option("-o", "--outDir", action="store",
-                dest="outDir", default="xmls_Summer2016",
+                dest="outDir", default="xmls",
                 help="Output directory for xml files [default = %default]")
 parser.add_option("-f", "--no-failed", action="store_false",
                 dest="writeFailed", default=True,
                 help="Do not write corrupt root files to a txt file")
+parser.add_option("-d", "--split", action="store",
+                dest="nSplit", default="1",
+                help="Number of parts a given file needs to be split into [default = %default]")
 (options, args) = parser.parse_args()
 if options.example or len(args) is not 1:
   parser.print_help()
@@ -85,6 +88,7 @@ verbose=options.verbose
 useXrootd=options.useXrootd
 treeName=options.treeName
 maxFiles_original=int(options.maxFiles)
+nSplit=int(options.nSplit)
 outDir=options.outDir
 writeFailed=options.writeFailed
 if verbose:
@@ -104,11 +108,15 @@ if site not in dCacheInstances:
 
 
 def main():
-
+  
+  if nSplit>1:
+    splitSampleListFile(sampleListName,nChunks=nSplit)
+    return
+  
   nSamples = 0
   with open(sampleListName) as sampleList:
     nSamples = len([l for l in sampleList if not (l.startswith("#") or l.isspace())])
-
+  
   with open(sampleListName) as sampleList:
     
     print "  Creating XML files in         %s," % (outDir)
@@ -304,6 +312,25 @@ def writeFailedRootFiles(failedRootFiles,i,outDir,outName):
   
 
 
+def splitSampleListFile(filename,nChunks=2):
+  '''Split txt file into some number of file with an equal number of lines.'''
+  if not os.path.exists(filename):
+    print "%s does not exist!"%(filename)
+    exit(1)
+  list = [ ]
+  with open(filename,'r') as file:
+    list  = [ s for s in file if not s.startswith("#") and not s.isspace() ]
+  nChunks = min(len(list),nChunks)
+  length  = int(len(list)/nChunks)
+  k, m    = divmod(len(list), nChunks)
+  for i in xrange(nChunks):
+    subfilename = filename.replace(".txt","_split%d.txt"%(i+1))
+    with open(subfilename,'w') as subfile:
+      print "Made \"%s\""%(subfilename)
+      for s in list[i*k+min(i,m):(i+1)*k+min(i+1,m)]: subfile.write(s)
+  
+
+
 def plural(list,y=False):
   '''Make plural if there is more than one element in the list.'''
   if len(list) > 1:
@@ -318,4 +345,5 @@ def plural(list,y=False):
 if __name__ == "__main__":
   main()
   print
+  
 

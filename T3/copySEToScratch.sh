@@ -15,8 +15,8 @@ REDB="\e[31m\e[1m"
 ERROR="${REDB}ERROR!"
 S="\e[0m"
 
-DIRS="LowMassDiTau_M-70_FilterLep18_madgraph"
-DIRS0="LowMassDiTau_M-70_FilterLep18_madgraph"
+DIRS="LowMassDiTau_M-20_MB-*_FilterLep18_madgraph"
+DIRS0="LowMassDiTau_M-20_MB-*_FilterLep18_madgraph"
 # IGNORE=""
 # SELECT=""
 
