@@ -1,0 +1,100 @@
+# .bashrc
+
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# MG5aMC paths:
+export LD_LIBRARY_PATH=/mnt/t3nfs01/data01/shome/ineuteli/phase2/CMSSW_8_0_4/MG5_aMC_v2_4_3/HEPTools/lib:$LD_LIBRARY_PATH
+export PATH=/mnt/t3nfs01/data01/shome/ineuteli/phase2/CMSSW_8_0_4/MG5_aMC_v2_4_3/HEPTools/bin:$PATH
+export PATH=/mnt/t3nfs01/data01/shome/ineuteli/phase2/CMSSW_8_0_4/MG5_aMC_v2_4_3/HEPTools/include:$PATH
+export SSL_CERT_DIR=/etc/grid-security/certificates # for DAS tool
+
+#SFRAME="/shome/ineuteli/analysis/SFrameAnalysis_Moriond"
+#SFRAME="/shome/ineuteli/analysis/SFrameAnalysis_emu"
+#SFRAME="/shome/ineuteli/analysis/SFrameAnalysis_mumu"
+#SFRAME="/shome/ineuteli/analysis/SFrameAnalysis_ltau2017"
+SFRAME="/shome/ineuteli/analysis/SFrameAnalysis_emu2017"
+source ~/setup_scripts/commands_SFrame.sh "${SFRAME}" # define SFrame commands here in function of directory
+
+alias vb='vim ~/.bashrc'
+alias sb='source ~/.bashrc'
+alias sshc='ssh ineuteli@lxplus.cern.ch'
+alias cdD='cd ~/phase2/CMSSW_5_3_24/src/Delphes'
+alias cdD2='cd ~/phase2/CMSSW_8_0_4/Delphes'
+alias vD='vi ~/setup_scripts/setup_Delphes.sh'
+alias sD='source ~/setup_scripts/setup_Delphes.sh'
+alias vD2='vi ~/setup_scripts/setup_Delphes2.sh'
+alias sD2='source ~/setup_scripts/setup_Delphes2.sh'
+alias vC='vi ~/setup_scripts/setup_Comb.sh'
+alias sC='source ~/setup_scripts/setup_Comb.sh'
+alias cdC='cd ~/analysis/CMSSW_7_4_8/src/CombineHarvester'
+#alias vS='vi ~/setup_scripts/setup_SFrame.sh'
+#alias sS='source ~/setup_scripts/setup_SFrame.sh ${SFRAME}'
+alias vN='vi ~/setup_scripts/setup_Ntuplizer.sh'
+alias sN='source ~/setup_scripts/setup_Ntuplizer.sh'
+alias vM='vi ~/setup_scripts/setup_SamplesMG2.sh'
+alias sM='source ~/setup_scripts/setup_SamplesMG2.sh'
+alias MVA='cd $DELPHES/plots/; python HH_MVA.py'
+alias pop='printf "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"'
+alias mk='pop; make distclean && make'
+alias duh='du -h --max-depth=1'
+function qsta { qstat | awk '{if($4=="ineuteli") print $5;}' | wc -l; }
+function qstr { printf "%7s / %s\n" "$(qstat | awk '{if($5=="r") print $5;}' | wc -l)" "$(qstat | awk '{if($4=="ineuteli") print $5;}' | wc -l)"; } #{ qstat | awk '{if($5=="r") print $5;}' | wc -l; } #'qstat -u ineuteli | grep r | wc -l'
+function spy { qstat -u \* | tail -n +3 | awk '{if($5=="r"){r[$4]++} j[$4]++} END { for(n in j) printf "%7s / %-5s - %s\n",r[n],j[n],n }'; }
+#bc <<< "scale=3; $(qstat | grep r |  wc -l)/$(qstat | wc -l)"
+function pc { eval "awk '{print \$$1}'"; }
+
+function TBrowse { root -l "$@" ~/macros/IWN.C; }
+function full { for f in $@; do readlink -f $f | sed 's/\/mnt\/t3nfs01\/data01//'; done } #grep -o "/shome/.*"
+alias lt='ls -hlt'
+#function l {
+#  echo
+#  for f in `([[ $@ ]] && echo $@)|| echo .`; do
+#    local DIR=$(([[ -d $f ]] && echo $f)||(echo `dirname $f`))
+#    local FILE=$([[ $f && ! -d $f ]] && echo ${f##*/})
+#    cd $DIR
+#    ls -hlr --sort=time $FILE | \
+#    while read c1 c2 c3 c4 c5 c6 c7 c8 c9 c10; do
+#        ( [[ $c1 == "total" ]] && (printf "        total %5s  " $c2; ls -d `full $PWD`) ) ||
+#        ( printf "%3s %3s %5s %5s  " $c7 $c6 $c8 $c5; ls `[[ -d $c9 ]] && echo -d` $c9 )
+#    done
+#    cd - &> /dev/null; echo
+#  done;
+#}
+function switchTo {
+  sed 's/^\(SFRAME=.*\)/#\1/' -i ~/.bashrc && sed "s|^#\(SFRAME=.*_$1\"\)|\1|" -i ~/.bashrc
+  printf "\n  Switched SFrame to %s; please open a new session.\n\n" $(grep -Po '^SFRAME="\K[^"]+' ~/.bashrc)  
+}
+function switch {
+  if [[ $(grep -Po '^SFRAME="\K[^"]+' ~/.bashrc) == *_Moriond ]]; then switchTo emu
+  elif [[ $(grep -Po '^SFRAME="\K[^"]+' ~/.bashrc) == *_emu ]]; then switchTo ltau2017
+  elif [[ $(grep -Po '^SFRAME="\K[^"]+' ~/.bashrc) == *_ltau2017 ]]; then switchTo emu2017
+  else switchTo Moriond
+  fi;
+}
+
+DELPHES="$HOME/phase2/CMSSW_5_3_24/src/Delphes"
+DELPHES2="$HOME/phase2/CMSSW_8_0_4/Delphes"
+AO='/scratch/ineuteli/SFrameAnalysis/AnalysisOutput'
+
+ANDREAS='/shome/hinzmann/Phase2UpgradeStudies/CMSSW_5_3_24/src/Delphes'
+YUTA='/shome/ytakahas/work/TauTau/'
+CAMILLA='/shome/cgalloni/RunII/Analysis_6/SFrameAnalysis/'
+XRD="root://t3dcachedb.psi.ch:1094"
+#DATA='root://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/hinzmann' # dcap://t3se01.psi.ch:22125
+DATA='root://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/user/ineuteli/samples'
+PNFS='/pnfs/psi.ch/cms/trivcat/store/user/ineuteli'
+PNFSD='/pnfs/psi.ch/cms/trivcat/store/user/ineuteli/samples/HH_bbWW_delphes'
+T2="gsiftp://storage01.lcg.cscs.ch//pnfs/lcg.cscs.ch/cms/trivcat/store/user" #uberftp -ls
+UNIZ='/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Spring16/Ntuple_80_190916'
+UNIZ2='/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Summer16'
+UNIZ3='/pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Summer16/Ntuple_80_20170206'
+UNIZR='root://t3dcachedb.psi.ch:1094//pnfs/psi.ch/cms/trivcat/store/t3groups/uniz-higgs/Spring16/Ntuple_80_190916'
+
+function cppur { scp -r $PWD/"$1" ineute@linux.physik.uzh.ch:/home/uzh/ineute/; }
+
+printf "\n\tOlah, Mundo!\n\n" 1>&2
+
