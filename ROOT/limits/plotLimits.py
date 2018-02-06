@@ -23,8 +23,8 @@ gStyle.SetOptStat(0)
 argv = sys.argv
 description = '''This script runs combine on data cards, extracts limits from the output and plot them.'''
 parser = ArgumentParser(prog="plotLimits",description=description,epilog="Succes!")
-parser.add_argument( "-S", "--S_exp", dest="S_exp", default=-1, type=int, action='store',
-                     metavar="CHANNEL", help="run only for this channel" )
+# parser.add_argument( "-S", "--S_exp", dest="S_exp", default=-1, type=int, action='store',
+#                      metavar="CHANNEL", help="run only for this channel" )
 parser.add_argument( "-e", "--etau", dest="etau", default=False, action='store_true',
                      help="run only for the etau channel" )
 parser.add_argument( "-m", "--mutau", dest="mutau", default=False, action='store_true',
@@ -33,15 +33,8 @@ args = parser.parse_args()
 
 # PLOT OPTIONS
 DIR                 = "./output" #"/shome/ineuteli/analysis/CMSSW_7_4_8/src/CombineHarvester/LowMassTauTau/output"
-PLOT_DIR            = "./plots"
+PLOTS_DIR            = "./plots"
 mylabel             = "_Moriond" # ICHEP
-doSUSY_bbA          = True and False
-createDataCards     = True and False # not necessary when doLimits.sh was run
-useBinScan          = True and False
-doBoxes             = True and False
-doMassScan          = True and False
-compareMassScan     = True and not doMassScan #and False
-doPValue            = True and False
 verbosity           = 1
 
 # CMS style
@@ -109,14 +102,8 @@ def getOutputFilename(label,mass,**kwargs):
     '''Get formatted output filename.'''
     verbosity       = kwargs.get('verbosity',0)
     DATACARD_DIR    = kwargs.get('DIR',DIR)
-    S_exp           = kwargs.get('S_exp',-1)
-    bin             = kwargs.get('bin',-1)
     method          = kwargs.get('method',"Asymptotic")
     extralabel      = kwargs.get('extralabel',"")
-    if S_exp>-1: label += "-S%s" % S_exp
-    if bin>-1:
-        label += "-B%s" % bin
-        mass = 28
     filename = "%s/higgsCombine.%s%s.%s.mH%s.root" % (DIR,label,extralabel,method,mass)
     if verbosity>0: print ">>>   getFilename: %s" % (filename) 
     return filename
@@ -133,43 +120,19 @@ def executeDataCards(labels,**kwargs):
     dir         = kwargs.get('DIR',".")
     masses      = kwargs.get('masses',[mass])
     bins        = kwargs.get('bins',[ ])
-    S_exp       = kwargs.get('S_exp',1)
     method      = kwargs.get('method',"Asymptotic")
     options     = kwargs.get('options',"-t -1")
     extralabel  = kwargs.get('extralabel',"")
     
-#     def run(label,mass):
-#         datacard = "%s/xtt_%s-13TeV-%s.txt" % (DIR,label,mass)
-#         combine_command = "cd output && combine -M %s -m %s -n .%s%s %s %s" % (method,mass,label,extralabel,datacard,options) # --expectSignal=%s
-#         print color(combine_command,color="magenta",prepend="\n>>> ")
-#         p = subprocess.Popen(combine_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-#         for line in p.stdout.readlines(): print line.rstrip("\n")
-#         print ">>> higgsCombine.%s.Asymptotic.mH%s.root created" % (label,mass)
-#         retval = p.wait() # wait for child process to terminate        
-    
-    if bins:
-        for bin in bins:
-            for label in labels:
-                mass = 28
-                label  += "-S%s-B%s" % (S_exp,bin)
-                datacard = "%s/xtt_%s-13TeV-%s.txt" % (DIR,label,mass)
-                combine_command = "cd output && combine -M %s -m %s -n .%s%s %s %s" % (method,mass,label,extralabel,datacard,options) # --expectSignal=%s
-                print color(combine_command,color="magenta",prepend="\n>>> ")
-                p = subprocess.Popen(combine_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-                for line in p.stdout.readlines(): print line.rstrip("\n")
-                print ">>> higgsCombine.%s.%s.mH%s.root created" % (label,method,mass)
-                retval = p.wait() # wait for child process to terminate
-    else:
-        for mass in masses:
-            for label in labels:
-                label  += "-S%s" % (S_exp)
-                datacard = "%s/xtt_%s-13TeV-%s.txt" % (dir,label,mass)
-                combine_command = "cd output && combine -M %s -m %s -n .%s%s %s %s" % (method,mass,label,extralabel,datacard,options) # --expectSignal=%s
-                print color(combine_command,color="magenta",prepend="\n>>> ")
-                p = subprocess.Popen(combine_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-                for line in p.stdout.readlines(): print line.rstrip("\n")
-                print ">>> higgsCombine.%s.%s.mH%s.root created" % (label,method,mass)
-                retval = p.wait() # wait for child process to terminate
+    for mass in masses:
+        for label in labels:
+            datacard = "%s/xtt_%s-13TeV-%s.txt" % (dir,label,mass)
+            combine_command = "cd output && combine -M %s -m %s -n .%s%s %s %s" % (method,mass,label,extralabel,datacard,options) # --expectSignal=%s
+            print color(combine_command,color="magenta",prepend="\n>>> ")
+            p = subprocess.Popen(combine_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            for line in p.stdout.readlines(): print line.rstrip("\n")
+            print ">>> higgsCombine.%s.%s.mH%s.root created" % (label,method,mass)
+            retval = p.wait() # wait for child process to terminate
 
             
 
@@ -231,8 +194,7 @@ def plotBoxes(labels,**kwargs):
     #            https://root.cern.ch/doc/master/classTGaxis.html#GA10a
     # boxes https://root.cern.ch/doc/master/classTGraphPainter.html#GP03b
     
-    # SIGNAL strength & mass
-    S_exp   = kwargs.get('S_exp',1)
+    # MASS
     mass    = kwargs.get('mass',28)
     green   = TGraphAsymmErrors()
     yellow  = TGraphAsymmErrors()
@@ -240,29 +202,12 @@ def plotBoxes(labels,**kwargs):
     labels  = labels[::-1] # reverse order: top to bottom
     width   = 0.2
     
-#     (down,up) = (1000,0)
-#     for i, label in enumerate(labels):
-#         #norm_LA = N_tot / (lumi*1000*MC_dict[label]) # /1000 convert fb to pb
-#         #print ">>> LA normalization of %s: N_tot/(lumi*1000*N) = %.1f/(%.1f*1000*%.1f) = %.3f" % (label,N_tot,lumi,MC_dict[label],norm_LA)
-#         filename = getOutputFilename(label,mass,S_exp=S_exp)
-#         limits  = getLimits(filename) #,scale=norm_LA
-#         limit.SetPoint(  i,limits[2],i+1 )
-#         green.SetPoint(  i,limits[2],i+1 ) # -/+ 1 sigma
-#         yellow.SetPoint( i,limits[2],i+1 ) # -/+ 2 sigma
-#         limit.SetPointError(  i,                  0,                  0,width,width ) # -/+ 1 sigma
-#         green.SetPointError(  i,limits[2]-limits[1],limits[3]-limits[2],width,width ) # -/+ 1 sigma
-#         yellow.SetPointError( i,limits[2]-limits[0],limits[4]-limits[2],width,width ) # -/+ 2 sigma
-#         if down > limits[0]: down = limits[0]
-#         if   up < limits[4]: up   = limits[4]
-
     (down,up)   = (1000,0)
     labels      = [ "mt-2",   "mt-2", "mt-1",   "mt-1", ]
     extralabels = [ "_noOpt", "_Opt", "_noOpt", "_Opt", ]
     for i, (label,extralabel) in enumerate(zip(labels,extralabels)):        
-        #norm_LA = N_tot / (lumi*1000*MC_dict[label]) # /1000 convert fb to pb
-        #print ">>> LA normalization of %s: N_tot/(lumi*1000*N) = %.1f/(%.1f*1000*%.1f) = %.3f" % (label,N_tot,lumi,MC_dict[label],norm_LA)
-        filename = getOutputFilename(label,mass,extralabel=extralabel,S_exp=S_exp)
-        limits   = getLimits(filename) #,scale=norm_LA
+        filename = getOutputFilename(label,mass,extralabel=extralabel)
+        limits   = getLimits(filename)
         limit.SetPoint(  i,limits[2],i+1 )
         green.SetPoint(  i,limits[2],i+1 ) # -/+ 1 sigma
         yellow.SetPoint( i,limits[2],i+1 ) # -/+ 2 sigma
@@ -295,8 +240,6 @@ def plotBoxes(labels,**kwargs):
     #frame.GetXaxis().CenterTitle(True)
     xtitle = "95% upper limit on #sigma#timesBR(X#rightarrow#tau#tau) [pb]"
     frame.GetXaxis().SetTitle(xtitle)
-    # if S_exp is 0:
-    #     yaxis_title = "95% upper limit on #sigma#timesBR(X#rightarrow#tau#tau)/LA"
     
     #frame.GetXaxis().SetRangeUser(0,up*1.10)
     #frame.SetMinimum(0)
@@ -329,8 +272,8 @@ def plotBoxes(labels,**kwargs):
     CMS_lumi.CMS_lumi(canvas,13,0)
     
     print " "
-    canvas.SaveAs("%s/upperLimitBoxes-S%s.png" % (PLOT_DIR,S_exp))
-    canvas.SaveAs("%s/upperLimitBoxes-S%s.pdf" % (PLOT_DIR,S_exp))
+    canvas.SaveAs("%s/upperLimitBoxes.png" % (PLOTS_DIR))
+    canvas.SaveAs("%s/upperLimitBoxes.pdf" % (PLOTS_DIR))
     canvas.Close()
     
 
@@ -343,7 +286,6 @@ def plotUpperLimits(labels,masses,**kwargs):
     # https://raw.githubusercontent.com/nucleosynthesis/HiggsAnalysis-CombinedLimit/combine_tutorial_SWAN/combine_tutorials_2016/combine_intro/plotPvalue.py
     
     # SIGNAL strength & mass
-    S_exp      = kwargs.get('S_exp',1)
     extralabel = kwargs.get('extralabel',"")
     
     # LOOP over LABELS
@@ -358,7 +300,7 @@ def plotUpperLimits(labels,masses,**kwargs):
         up2s    = [ ]
         down2s  = [ ]
         for i, mass in enumerate(masses):
-            filename = getOutputFilename(label,mass,extralabel=extralabel,S_exp=S_exp)
+            filename = getOutputFilename(label,mass,extralabel=extralabel)
             limits   = getLimits(filename)
             yellow.SetPoint(    i,    mass, limits[4] ) # + 2 sigma
             green.SetPoint(     i,    mass, limits[3] ) # + 1 sigma
@@ -375,7 +317,7 @@ def plotUpperLimits(labels,masses,**kwargs):
         ytitle  = "95% upper limit on #sigma#timesBR(X #rightarrow #tau#tau) [pb]"
         if "bbA" in extralabel:
           xtitle = "m_{A} [GeV]"
-          ytitle = "95% upper limit on #sigmas#timesBR(A #rightarrow #tau#tau) [pb]"
+          ytitle = "95% upper limit on #sigma#timesBR(A #rightarrow #tau#tau) [pb]"
         
         W, H = 800, 600
         T, B = 0.08*H, 0.12*H
@@ -385,8 +327,8 @@ def plotUpperLimits(labels,masses,**kwargs):
         canvas.SetBorderMode(0)
         canvas.SetFrameFillStyle(0)
         canvas.SetFrameBorderMode(0)
-        canvas.SetTopMargin( T/H );  canvas.SetBottomMargin( B/H )
-        canvas.SetLeftMargin( L/W ); canvas.SetRightMargin( R/W )
+        canvas.SetTopMargin(  T/H ); canvas.SetBottomMargin( B/H )
+        canvas.SetLeftMargin( L/W ); canvas.SetRightMargin(  R/W )
         canvas.SetTickx(0)
         canvas.SetTicky(0)
         canvas.SetGrid()
@@ -455,8 +397,8 @@ def plotUpperLimits(labels,masses,**kwargs):
         legend.Draw()
         
         print " "
-        canvas.SaveAs("%s/upperLimit-%s-S%s%s.png" % (PLOT_DIR,label,S_exp,extralabel))
-        canvas.SaveAs("%s/upperLimit-%s-S%s%s.pdf" % (PLOT_DIR,label,S_exp,extralabel))
+        canvas.SaveAs("%s/upperLimit-%s%s.png" % (PLOTS_DIR,label,extralabel))
+        canvas.SaveAs("%s/upperLimit-%s%s%s.pdf" % (PLOTS_DIR,label,extralabel))
         canvas.Close()
     
 
@@ -468,7 +410,6 @@ def compareUpperLimits(labels,masses,filelabels,**kwargs):
     print color("compareUpperLimits()",color="magenta",prepend=">>>\n>>> ")
     
     # SIGNAL strength & mass
-    S_exp      = kwargs.get('S_exp',1)
     extralabel = kwargs.get('extralabel',"")
     plotlabel  = kwargs.get('plotlabel',"")
     
@@ -486,12 +427,12 @@ def compareUpperLimits(labels,masses,filelabels,**kwargs):
           median.SetTitle(title)
           medians.append(median)
           for i, mass in enumerate(masses):
-              filename = getOutputFilename(label,mass,extralabel=filelabel,S_exp=S_exp)
+              filename = getOutputFilename(label,mass,extralabel=filelabel)
               limits   = getLimits(filename)
               median.SetPoint( i, mass, limits[2] ) # median
               if limits[2]>ymax: ymax = limits[2]
               if limits[2]<ymin: ymin = limits[2]
-              
+      
       median0 = medians[0]
       doLog   = ymin and ymax/ymin>6
       ymax    = ymax*1.40
@@ -525,7 +466,7 @@ def compareUpperLimits(labels,masses,filelabels,**kwargs):
       width  = 0.25
       height = 0.05+len(medians)*0.05
       #x1 = 0.16; x2 = x1 + width # Left
-      x2 = 0.80; x1 = x2 - width # Right
+      x2 = 0.70; x1 = x2 - width # Right
       x2 = x1 + width
       y1 = 0.86
       y2 = y1 - height
@@ -604,8 +545,8 @@ def compareUpperLimits(labels,masses,filelabels,**kwargs):
       frame_ratio.Draw('sameaxis')
       
       print " "
-      canvas.SaveAs("%s/upperLimit-%s-S%s%s%s_compare.png" % (PLOT_DIR,label,S_exp,"",plotlabel))
-      canvas.SaveAs("%s/upperLimit-%s-S%s%s%s_compare.pdf" % (PLOT_DIR,label,S_exp,"",plotlabel))
+      canvas.SaveAs("%s/upperLimit-%s%s_compare.png" % (PLOTS_DIR,label,plotlabel))
+      canvas.SaveAs("%s/upperLimit-%s%s_compare.pdf" % (PLOTS_DIR,label,plotlabel))
       canvas.Close()
 
 
@@ -616,11 +557,8 @@ def plotPValues(labels,masses0,**kwargs):
     print color("plotPValues()",color="magenta",prepend=">>>\n>>> ")
     
     # SIGNAL strength & mass
-    S_exps   = kwargs.get('S_exps',1)
-    if not isinstance(S_exps,list): S_exps = [S_exps]
     bins    = kwargs.get('bins',[ ])
     ymin    = 0.00005
-    #if S_exp > 80: ymin = 0.000000000000000000000001
     
     # LOOP over LABELS
     for label in labels:
@@ -630,17 +568,12 @@ def plotPValues(labels,masses0,**kwargs):
         zeros       = array('d',[ ])
         limitObs    = array('d',[ ])
         limitExps = [ ]
-        for S_exp in S_exps:
-            limitExps.append(array('d',[ ]))
-        
+                
         up2s    = [ ]
         for i, mass in enumerate(masses0):
             bin = -1
             if bins: bin = bins[i]
-            for S_exp, limitExp in zip(S_exps,limitExps):
-                filename = getOutputFilename(label,mass,method="ProfileLikelihood",S_exp=S_exp,bin=bin,extralabel=".SignifExp")
-                limitExp.append(getLimits(filename,brazilian=False))
-            filename = getOutputFilename(label,mass,method="ProfileLikelihood",S_exp=S_exp,bin=bin,extralabel=".SignifObs")
+            filename = getOutputFilename(label,mass,method="ProfileLikelihood",bin=bin,extralabel=".SignifObs")
             limitObs.append(getLimits(filename,brazilian=False))
             masses.append(mass)
             zeros.append(0.0)
@@ -723,7 +656,7 @@ def plotPValues(labels,masses0,**kwargs):
         graph_limitObs.Draw("Csame")
         
         CMS_lumi.CMS_lumi(canvas,13,0)
-        ROOT.gPad.SetTicks(1,1)
+        gPad.SetTicks(1,1)
         frame.Draw('sameaxis')
         
         x1 = 0.62
@@ -737,15 +670,12 @@ def plotPValues(labels,masses0,**kwargs):
         legend.SetTextFont(42)
         legend.SetHeader("%s" % (label_dict[label]))
         legend.AddEntry(graph_limitObs, "observed",'L') #p-value
-        for S_exp, graph_limitExp in zip(S_exps,graph_limitExps):
-            if len(S_exps) > 1: legend.AddEntry(graph_limitExp, "expected (S%s)" % (S_exp),'L')
-            else:               legend.AddEntry(graph_limitExp, "expected (S%s)" % (S_exp),'L')
         legend.Draw("same")                                           
         gPad.RedrawAxis()
         
         print " "
-        canvas.SaveAs("%s/p-value-local-%s-S%s.png" % (PLOT_DIR,label,S_exp))
-        canvas.SaveAs("%s/p-value-local-%s-S%s.pdf" % (PLOT_DIR,label,S_exp))
+        canvas.SaveAs("%s/p-value-local-%s.png" % (PLOTS_DIR,label))
+        canvas.SaveAs("%s/p-value-local-%s.pdf" % (PLOTS_DIR,label))
         canvas.Close()
 
 
@@ -831,11 +761,18 @@ def main():
     print ""
     
     ensureDirectory(DIR)
-    ensureDirectory(PLOT_DIR)
+    ensureDirectory(PLOTS_DIR)
+    
+    doSUSY_bbA          = True #and False
+    createDataCards     = True and False # not necessary when doLimits.sh was run
+    useBinScan          = True and False
+    doBoxes             = True and False
+    doMassScan          = True and False
+    compareMassScan     = True and not doMassScan #and False
+    doPValue            = True and False
     
     labels     = ["mt-1","mt-2","et-1","et-2","combined"]
     masses     = [20, 28, 40, 50, 60, 70]
-    S_exps     = [1] #,283]
     filelabels = [ ]
     extralabel = ""
     plotlabel  = ""
@@ -848,7 +785,9 @@ def main():
       filelabels = [ ("_bbA1",          "1 b tag"                             ),
                      ("_bbA2",          "#geq 1 b tag"                        ),
                      ("_bbA_fj",        "1 b tag, no veto on |#eta|>2.4 jets" ),
-                     #("_bbA_pt20",      "1 b tag, p_{T}>20 GeV"               ),
+                     ("_bbA_pt20_j30",  "1 b tag, p_{T}>20 GeV, other jets p_{T}<30 GeV" ),
+                     ("_bbA_pt20_j20",  "1 b tag, p_{T}>20 GeV, other jets p_{T}<20 GeV" ),
+                     #("_bbA_pt20_j20",  "1 b tag, p_{T}>20 GeV"               ),
                      ("_bbA_mt40",      "1 b tag, m_{T}<40 GeV"               ),
                      ("_bbA_Dzeta-40",  "1 b tag, D_{#zeta}>-40 GeV"          ),
                    ]
@@ -880,29 +819,24 @@ def main():
       bins   = range(1,21)
       masses = [binWidth/2.0*i for i in bins] # use bin center as mass point
     
-    if args.S_exp>-1: S_exps = [args.S_exp]
     if  args.mutau: labels = [l for l in labels if "mt" in l]
     elif args.etau: labels = [l for l in labels if "et" in l]
     
     if doBoxes and len(labels)>2:
-      for S_exp in S_exps:
-        if createDataCards: executeDataCards(labels,mass=28,S_exp=S_exp)
-        plotBoxes(labels,mass=28,S_exp=S_exp)
+        if createDataCards: executeDataCards(labels,mass=28)
+        plotBoxes(labels,mass=28)
     
     if doMassScan:
-      for S_exp in S_exps:
-        if createDataCards: executeDataCards(labels,masses=masses,extralabel=extralabel,S_exp=S_exp)
-        plotUpperLimits(labels,masses,extralabel=extralabel,S_exp=S_exp)
+        if createDataCards: executeDataCards(labels,masses=masses,extralabel=extralabel)
+        plotUpperLimits(labels,masses,extralabel=extralabel)
     
     if compareMassScan and filelabels:
-      for S_exp in S_exps:
-        if createDataCards: executeDataCards(labels,masses=masses,S_exp=S_exp)
-        compareUpperLimits(labels,masses,filelabels,extralabel=extralabel,plotlabel=plotlabel,S_exp=S_exp)
+        if createDataCards: executeDataCards(labels,masses=masses)
+        compareUpperLimits(labels,masses,filelabels,extralabel=extralabel,plotlabel=plotlabel)
     
     if doPValue:
-      for S_exp in S_exps:
-        if createDataCards: executeDataCardsPValue(labels,masses=masses,bins=bins,S_exp=S_exp)
-        plotPValues(labels,masses,bins=bins,S_exp=S_exp)
+        if createDataCards: executeDataCardsPValue(labels,masses=masses,bins=bins)
+        plotPValues(labels,masses,bins=bins)
     
 
 

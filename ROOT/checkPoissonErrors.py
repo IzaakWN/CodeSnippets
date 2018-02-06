@@ -9,10 +9,12 @@
 #  https://github.com/DESY-CMS-SUS/cmgtools-lite/blob/8_0_25/TTHAnalysis/python/plotter/mcPlots.py#L70-L102
 #  https://github.com/DESY-CMS-SUS/cmgtools-lite/blob/8_0_25/TTHAnalysis/python/plotter/susy-1lep/RcsDevel/plotDataPredictWithSyst.py#L12-L21
 #  https://root.cern.ch/doc/master/TH1_8cxx_source.html#l08344
+#  https://root.cern.ch/doc/master/group__QuantFunc.html
 
 import sys, os
 import re
 from argparse import ArgumentParser
+#import CMS_lumi, tdrstyle
 import ROOT
 from ROOT import gPad, gROOT, gStyle, TFile, TVectorD, Math, Double,\
                  TCanvas, TLegend, TLatex, TText,\
@@ -32,14 +34,8 @@ parser.add_argument( "-f", "--force", dest="force", default=False, action='store
                      help="force overwriting of existing files" )
 args = parser.parse_args()
 
-# PLOT OPTIONS
-IN_DIR      = "./datacard"
-OUT_DIR     = IN_DIR
-DIR         = "./output" #"/shome/ineuteli/analysis/CMSSW_7_4_8/src/CombineHarvester/LowMassTauTau/output"
-mylabel     = "_Moriond" # ICHEP
 force       = args.force
 verbosity   = 1*args.verbose
-
 colors = [ kRed+2, kAzure+5, kOrange-5, kGreen+2, kMagenta+2, kYellow+2,
            kRed-7, kAzure-4, kOrange+6, kGreen-2, kMagenta-3, kYellow-2 ] #kViolet
 styles = [ kSolid, kDashed, kDashDotted, ] #kDotted
@@ -50,34 +46,33 @@ styles = [ kSolid, kDashed, kDashDotted, ] #kDotted
 def checkDataPoissonErrors():
     '''Check on behaviour of Poisson errors in histograms.'''
     
-    N       = 150
-    hist1   = TH1D("data1","kPoisson",N,0,N)
-    hist2   = TH1D("data2","#chi^{2} quantile",N,0,N)
+    N      = 100
+    hist0  = TH1D("data0","default",N,0,N)
+    hist1  = TH1D("data1","TH1.kPoisson",N,0,N)
+    hist2  = TH1D("data2","#chi^{2} quantile",N,0,N)
     
     for i in xrange(0,N+2):
-        y = max(0,i-1) 
+        y = max(0,i-1)
+        hist0.SetBinContent(i,y)
         hist1.SetBinContent(i,y)
         hist2.SetBinContent(i,y)
-    
-    table   = [ ]
-    header  = "%22s  %14s  %14s  %14s\n>>>  " % (" ","default".center(14),"kPoisson".center(14),"custom".center(14))
-    header += "%4s %7s  %7s   %6s %6s   %6s %6s   %6s %6s" % ("bin","content","sqrt(N)","errLow","errUp","errLow","errUp","errLow","errUp")
-    table.append(header)
-    
-    # FILL table with default errors
-    for i in xrange(1,N+1):
-        y = hist1.GetBinContent(i)
-        table.append("%4d %5d    %7.2f   %6.2f %6.2f"%(
-          i,y,sqrt(y),hist1.GetBinErrorLow(i),hist1.GetBinErrorUp(i)))
     
     # GET data Possoin errors
     graph1 = getDataPoissonErrors(hist1,drawZeroBins=True,centerBin=False,kPoisson=True)
     graph2 = getDataPoissonErrors(hist2,drawZeroBins=True,centerBin=False,kPoisson=False)
     
-    # FILL table with kPoisson, chi-squared
-    for i in xrange(0,N):
-        table[i+1] += "   %6.2f %6.2f   %6.2f %6.2f"%(
-          graph1.GetErrorYlow(i),graph1.GetErrorYhigh(i),graph2.GetErrorYlow(i),graph2.GetErrorYhigh(i))
+    # FILL table
+    table   = [ ]
+    table.append("%22s  %14s  %14s  %14s"%(
+                    " ","default".center(14),"kPoisson".center(14),"chi^2".center(14)))
+    table.append("%4s %7s  %7s   %6s %6s   %6s %6s   %6s %6s"%(
+                    "bin","content","sqrt(N)","errLow","errUp","errLow","errUp","errLow","errUp"))
+    for i in xrange(1,N+1):
+        y = hist0.GetBinContent(i)
+        table.append("%4d %5d    %7.2f   %6.2f %6.2f   %6.2f %6.2f   %6.2f %6.2f"%(
+                        i,y,sqrt(y),hist0.GetBinErrorLow(i), hist0.GetBinErrorUp(i),
+                                    graph1.GetErrorYlow(i-1),graph1.GetErrorYhigh(i-1),
+                                    graph2.GetErrorYlow(i-1),graph2.GetErrorYhigh(i-1)))
     
     # PRINT table
     for line in table:
@@ -89,22 +84,25 @@ def checkDataPoissonErrors():
     function.SetTitle("#sqrt{N}")
     graphElow1, graphEup1 = makeErrorGraph(graph1)
     graphElow2, graphEup2 = makeErrorGraph(graph2)
-    graphElow2.SetTitle("N-[1-F^{-1}_{#chi^{2}}(1-#alpha,2N)]/2")
-    graphEup2.SetTitle("[1-F^{-1}_{#chi^{2}}(#alpha,2(N-1))]/2-N")
+    graphElow1.SetTitle("TH1.kPoisson low")
+    graphEup1.SetTitle("TH1.kPoisson high")
+    graphElow2.SetTitle("N-F^{-1}_{#chi^{2}}(1-#alpha,2N)/2")
+    graphEup2.SetTitle("F^{-1}_{#chi^{2}}(#alpha,2(N-1))/2-N")
     graphs   = [function, graphElow1, graphEup1, graphElow2, graphEup2]
     
     # DRAW settings
     W, H = 800, 800
     T, B = 0.04*H, 0.14*H
     L, R = 0.12*W, 0.04*W
-    ymax   = function.GetMaximum()*1.16
-    width  = 0.25
+    xmin, xmax = -N*0.01, N*1.01
+    ymax  = function.GetMaximum()*1.16
+    width = 0.25
     legendTextSize = 0.045
-    height = 0.066 + len(graphs)*0.066
-    x2 = 0.80; x1 = x2 - width
-    y1 = 0.16; y2 = y1 + height
+    height = 0.062*(1+len(graphs))
+    x2 = 0.86; x1 = x2 - width
+    y1 = 0.20; y2 = y1 + height
     
-    # MAIN plot
+    # CANVAS
     canvas = TCanvas("canvas","canvas",100,100,W,H)
     canvas.Divide(2)
     canvas.cd(1)
@@ -115,7 +113,8 @@ def checkDataPoissonErrors():
     gPad.SetTicky(0)
     gPad.SetGrid()
     
-    frame = gPad.DrawFrame(0,0,N,ymax)
+    # FRAME
+    frame = gPad.DrawFrame(xmin,0,xmax,ymax)
     frame.GetYaxis().SetTitleSize(0.055)
     frame.GetXaxis().SetTitleSize(0.058)
     frame.GetXaxis().SetLabelSize(0.050*0)
@@ -128,19 +127,24 @@ def checkDataPoissonErrors():
     frame.GetYaxis().SetTitle("error on number of events")
     legend = TLegend(x1,y1,x2,y2)
     
+    # DRAW
     colors = [ kRed, kBlue, kViolet, kYellow, kGreen ]
-    style = kSolid
     for i, graph in enumerate(graphs):
+        style = kSolid
+        width = 2
+        if i<3: width = 3
         if i>2: style = kDashed
         graph.SetLineColor(colors[i%len(colors)])
         graph.SetLineStyle(style)
-        graph.SetLineWidth(2)
+        graph.SetLineWidth(width)
         graph.Draw('L SAME')
         legend.AddEntry(graph,graph.GetTitle(),'L')
-    
+    #CMS_lumi.CMS_lumi(gPad,13,0)
     gPad.SetTicks(1,1)
     gPad.Modified()
     frame.Draw('SAME AXIS')
+    
+    # LEGEND
     legend.SetFillStyle(0)
     legend.SetBorderSize(0)
     legend.SetTextSize(legendTextSize)
@@ -149,13 +153,24 @@ def checkDataPoissonErrors():
     legend.SetTextFont(42)
     legend.Draw()
     
+    # CHI2 TEXT
+    text1 = "#splitline{#alpha = (1-0.6827)/2}{upper #chi^{2} CDF F_{#chi^{2}}}"
+    text = TLatex()
+    text.SetNDC()
+    text.SetTextFont(42)
+    text.SetTextSize(legendTextSize)
+    text.SetTextAlign(13) # centered: 22
+    xoffset = (legend.GetX2()-legend.GetX1())*legend.GetMargin()*1.04
+    text.DrawLatexNDC(legend.GetX1()+xoffset,legend.GetY1()-0.012,text1)
+    
     # RATIO plot
     canvas.cd(2)
     gPad.SetPad("pad2","pad2",0,0,1,0.36,0,-1,0)
     gPad.SetTopMargin(  0.05 ); gPad.SetBottomMargin( 0.24 )
     gPad.SetLeftMargin( L/W  ); gPad.SetRightMargin(  R/W  )
     
-    frame_ratio = gPad.DrawFrame(0,0.50,N,1.50)
+    # FRAME ratio
+    frame_ratio = gPad.DrawFrame(xmin,0.50,xmax,1.50)
     frame_ratio.GetYaxis().CenterTitle()
     frame_ratio.GetYaxis().SetTitleSize(0.055*1.79)
     frame_ratio.GetXaxis().SetTitleSize(0.058*1.79)
@@ -170,6 +185,7 @@ def checkDataPoissonErrors():
     frame_ratio.GetXaxis().SetTitle("number of events N")
     frame_ratio.GetYaxis().SetNdivisions(5)
     
+    # DRAW ratio
     ratios = [ ]
     graphf = makeGraphFromTF1(function,N)
     for i, graph in enumerate(graphs):
@@ -180,11 +196,11 @@ def checkDataPoissonErrors():
         ratio.SetLineWidth(graph.GetLineWidth())
         ratio.Draw('L SAME')
         ratios.append(ratio)
-    
     gPad.SetTicks(1,1)
     gPad.Modified()
     frame_ratio.Draw('sameaxis')
     
+    # SAVE
     canvas.SaveAs("PoissonError.png")
     canvas.Close()
     
@@ -244,7 +260,7 @@ def makeGraphFromTF1(function,N):
 
 # MAKE ratio
 def makeRatioTGraphs(graph0,graph1,**kwargs):
-    """Make a ratio of two TGraphs bin by bin."""
+    '''Make a ratio of two TGraphs bin by bin.'''
     
     # SETTINGS
     verbose     = kwargs.get('verbose',False)    
