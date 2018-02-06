@@ -37,6 +37,8 @@ maxDepth = args.maxDepth
 includeFiles = not args.excludeFiles
 showAll = args.showAll
 
+print args.file
+
 tab = "    "
 
 

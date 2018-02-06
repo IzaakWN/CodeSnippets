@@ -1,3 +1,4 @@
+# Author: Izaak Neutelings (Januari 2016)
 import os, sys
 import time
 
