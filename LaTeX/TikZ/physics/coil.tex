@@ -9,22 +9,13 @@
 
 \node (wall1) [ground, minimum height=2cm] {};
 \draw (wall1.north east) -- (wall1.south east);
-\node [draw,minimum width=0.5cm,minimum height=0.5cm] (mass) at (2,0) {m};
+\node [draw,minimum width=0.5cm,minimum height=0.5cm] (mass) at (2,0) {$m$};
 \node (fix) at (0,0) {};
-\draw [
-    snake=coil,
-    segment amplitude=5pt,
-    segment length=5pt
-] (wall1.east) -- (mass); 
-\draw [
-    thick,
-    decoration={
-        brace,
-        mirror,
-        raise=0.5cm
-    },
-    decorate
-] (wall1.east) -- (mass) 
-node [pos=0.5,anchor=north,yshift=-0.55cm] {coil}; 
+\draw [ snake=coil, segment amplitude=5pt, segment length=5pt]
+  (wall1.east) -- (mass)
+  node [pos=0.5,above=4] {$k$};
+\draw [thick,decoration={brace,mirror,raise=10},decorate]
+  (wall1.east) -- (mass)
+  node [pos=0.5,below=10] {coil};
 \end{tikzpicture}
 \end{document}
