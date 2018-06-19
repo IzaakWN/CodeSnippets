@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 # Author: Izaak Neutelings (June 2018)
+# https://ineuteli.web.cern.ch/ineuteli/public/TColor/
 
 import os, sys
 from math import ceil, sqrt
