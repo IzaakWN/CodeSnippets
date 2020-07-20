@@ -31,10 +31,9 @@ def makeTColorWheel():
   canvas.SaveAs("TColorWheel.pdf")
 
 
-def drawColorTable(clist=range(0,50),nrow=None,ncol=None,tag="",label=False,RBG=False,div=2):
+def drawColorTable(clist=range(0,50),nrow=None,ncol=None,cmax=10,tag="",label=False,RBG=False,newRBG=True,div=2):
     # https://root.cern.ch/doc/master/src_2TPad_8cxx_source.html#l01611
     
-    cmax = 10
     if not ncol:
       ncol = min(cmax,len(clist))
     if not nrow:
@@ -84,6 +83,8 @@ def drawColorTable(clist=range(0,50),nrow=None,ncol=None,tag="",label=False,RBG=
           name = getColorString(color)
         if (not isinstance(RBG,bool) and isinstance(RBG,int) and i%div==RBG) or (RBG and not isinstance(label,int)):
           name = getRGBString(color)
+        elif newRBG and color>=924:
+          name = getRGBString(color)
         text.DrawText(0.5*(xlow+xup), 0.5*(ylow+yup), name)
       if i >= len(clist): break
     
@@ -120,7 +121,6 @@ def getRGBString(color):
   if isinstance(color,int):
     color = gROOT.GetColor(color)
   if not color: return "255,255,255"
-  print color
   return "%d,%d,%d"%(color.GetRed()*255, color.GetGreen()*255, color.GetBlue()*255)
 
   
@@ -164,25 +164,47 @@ def main():
   #drawColorTable([kAzure+i for i in range(-25,25)],tag="_kAzure",label=True)
   #drawColorTable(range(0,1000),tag="_all",label=True)
   
-  HTTcolors = [ TColor.GetColor(155,152,204),  TColor.GetColor(248,206,104),
-                TColor.GetColor(135,206,250),  TColor.GetColor(100,182,232),
-                TColor.GetColor(155,152,204),  TColor.GetColor(100,222,106),
-                TColor.GetColor(100,222,106),  TColor.GetColor(248,206,104),
-                TColor.GetColor(140,180,220),  TColor.GetColor(200,140,220),  
-                TColor.GetColor(250,202,255),  TColor.GetColor(222,90,106),
-                TColor.GetColor(240,175,60),   TColor.GetColor(222,140,106), ]
-  drawColorTable(HTTcolors,tag="_HTT",label=True)
+  #DYcols = [
+  #  kOrange-4, TColor.GetColor(100,182,232), kGreen-6, TColor.GetColor(240,175,60),
+  #  kOrange+5, kOrange, kYellow-9, kOrange+6, kOrange-5,
+  #  kOrange-6, kOrange-8, kYellow-3,
+  #]
+  #drawColorTable(DYcols,tag="_DY",label=True,cmax=4)
   
-  colorPairs = [ ]
-  for icol in HTTcolors:
-    color = gROOT.GetColor(icol)
-    imin, cmin, dmin = findClosestExistingColor(icol)
-    r1,g1,b1 = getRGB(color)
-    r2,g2,b2 = getRGB(cmin)
-    #print "%4d, (%.3f,%.3f,%.3f) vs. %4d, (%.3f,%.3f,%.3f), %5.4f"%(icol,r1,g1,b1,imin,r2,g2,b2,dmin)
-    colorPairs += [icol,imin]
-  drawColorTable(colorPairs,tag="_HTTPairs",label=True)
-  drawColorTable(colorPairs,tag="_HTTPairsRBG",label=True,RBG=0)
+  #babycols = [
+  #  TColor.GetColor( 91,187,235), TColor.GetColor(177,227,129),
+  #  TColor.GetColor(255,134,196), TColor.GetColor(254,236,153),
+  #  TColor.GetColor( 83,170,213),
+  #]
+  #drawColorTable(babycols,tag="_baby",label=True,cmax=4)
+  
+  linecols = [
+    kRed+1,  kBlue,    kGreen+2, kOrange+7, kViolet+1, kYellow+1,
+    kRed,    kAzure,   kGreen+1, kOrange-3, kViolet+6, kYellow+1,
+    kPink+1, kAzure-9, kGreen-9, kOrange-9, kViolet-9, kYellow-9,
+    kMagenta-4, kOrange+3, kOrange+4, kOrange-7, kOrange+7, kRed-9, 5, kOrange, kCyan
+  ]
+  drawColorTable(linecols,tag="_line",label=True,cmax=6)
+  
+  #HTTcolors = [ TColor.GetColor(155,152,204),  TColor.GetColor(248,206,104),
+  #              TColor.GetColor(135,206,250),  TColor.GetColor(100,182,232),
+  #              TColor.GetColor(155,152,204),  TColor.GetColor(100,222,106),
+  #              TColor.GetColor(100,222,106),  TColor.GetColor(248,206,104),
+  #              TColor.GetColor(140,180,220),  TColor.GetColor(200,140,220),  
+  #              TColor.GetColor(250,202,255),  TColor.GetColor(222,90,106),
+  #              TColor.GetColor(240,175,60),   TColor.GetColor(222,140,106), ]
+  #drawColorTable(HTTcolors,tag="_HTT",label=True)
+  #
+  #colorPairs = [ ]
+  #for icol in HTTcolors:
+  #  color = gROOT.GetColor(icol)
+  #  imin, cmin, dmin = findClosestExistingColor(icol)
+  #  r1,g1,b1 = getRGB(color)
+  #  r2,g2,b2 = getRGB(cmin)
+  #  #print "%4d, (%.3f,%.3f,%.3f) vs. %4d, (%.3f,%.3f,%.3f), %5.4f"%(icol,r1,g1,b1,imin,r2,g2,b2,dmin)
+  #  colorPairs += [icol,imin]
+  #drawColorTable(colorPairs,tag="_HTTPairs",label=True)
+  #drawColorTable(colorPairs,tag="_HTTPairsRBG",label=True,RBG=0)
   
 
 
