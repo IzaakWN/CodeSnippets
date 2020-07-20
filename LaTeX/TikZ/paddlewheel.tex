@@ -1,0 +1,28 @@
+% Author: Izaak Neutelings (Februari, 2020)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amssymb}
+\usepackage{physics}
+\usepackage{bm}
+\usepackage{tikz}
+\tikzset{>=latex} % for LaTeX arrow head
+%\usepackage{xcolor}
+%\colorlet{myblue}{blue!60!black}
+
+\begin{document}
+
+
+
+% RADIAL OUTWARD
+\begin{tikzpicture}
+  \def\Np{4}
+  \def\R{0.6}
+  \foreach \i [evaluate={\ang=(\i-0.5)*360/\Np;}] in {0,...,\Np}{
+    \draw[very thick] (0,0) --++ (\ang:0.6*\R);
+    \draw[fill=red!80!black,rotate=\ang] (0.5*\R,-0.11*\R) rectangle++ (\R,0.22*\R);
+  }
+  \fill (0,0) circle (0.1*\R);
+\end{tikzpicture}
+
+
+
+\end{document}

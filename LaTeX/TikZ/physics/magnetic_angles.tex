@@ -1,0 +1,95 @@
+% Author: Izaak Neutelings (March 2020)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath} % for \dfrac
+\usepackage{physics}
+\usepackage{tikz}
+\usepackage[outline]{contour} % glow around text
+\usetikzlibrary{angles,quotes} % for pic (angle labels)
+%\usepackage{tkz-euclide} % for \tkzMarkRightAngle
+%\usetkzobj{all}
+\usetikzlibrary{calc}
+\tikzset{>=latex} % for LaTeX arrow head
+\usepackage{xcolor}
+\colorlet{Bcol}{violet!90}
+\colorlet{BFcol}{red!70!black}
+\colorlet{veccol}{green!45!black}
+\colorlet{Icol}{blue!70!black}
+\colorlet{Ampcol}{green!60!black!70}
+\tikzstyle{BField}=[->,thick,Bcol]
+\tikzstyle{current}=[->,Icol,thick]
+\tikzstyle{force}=[->,thick,BFcol]
+\tikzstyle{vector}=[->,thick,veccol]
+\tikzstyle{velocity}=[->,very thick,vcol]
+\contourlength{1.4pt}
+\def\tick#1#2{\draw[thick] (#1) ++ (#2:0.04*\ymax) --++ (#2-180:0.08*\ymax)}
+
+
+\begin{document}
+
+
+% TWO VECTORS
+\def\a{1.3}
+\def\y{2.4}
+\def\ymax{1.2*\y}
+\def\B{2.8}
+\begin{tikzpicture}
+  \coordinate (O) at (0,0);
+  \coordinate (AL) at (-\a,0);
+  \coordinate (AR) at ( \a,0);
+  \coordinate (B) at (0,\y);
+  \coordinate (BL) at ({-\B*\y/(\a^2+\y^2)},{\y-\B*\a/(\a^2+\y^2)});
+  \coordinate (BR) at ({ \B*\y/(\a^2+\y^2)},{\y-\B*\a/(\a^2+\y^2)});
+  
+  % AXES
+  \draw[->,thick] (0,-0.2*\y) -- (0,1.2*\y) node[left] {$y$};
+  \draw[->,thick] (-1.4*\a,0) -- (1.5*\a,0) node[below] {$x$};
+  \tick{AL}{90} node[below=-1] {$-a$};
+  \tick{AR}{90} node[below=-1] {$a$};
+  
+  % POINTS
+  \draw[dashed] (B) -- (AL);
+  \draw[dashed] (B) -- (AR);
+  \fill[blue!40!black] (AL) circle (0.05);
+  \fill[blue!40!black] (AR) circle (0.05);
+  
+  % VECTORS
+  \draw[BField] (B) -- (BL) node[above left=-2] {$\vb{B}_\mathrm{R}$};
+  \draw[BField] (B) -- (BR) node[above right=-2] {$\vb{B}_\mathrm{L}$};
+  \draw pic[->,"\contour{white}{$\theta$}",draw=black,angle radius=16,angle eccentricity=1.4] {angle = BL--B--O};
+  
+\end{tikzpicture}
+
+
+% TRIANGLE
+\begin{tikzpicture}
+  \coordinate (O) at (0,0);
+  \coordinate (AL) at (-\a,0);
+  \coordinate (A) at (-\a/2,0);
+  \coordinate (B) at (0,\y);
+  \coordinate (BL) at ({-\B*\y/(\a^2+\y^2)},{\y-\B*\a/(\a^2+\y^2)});
+  \coordinate (BR) at ({ \B*\y/(\a^2+\y^2)},{\y-\B*\a/(\a^2+\y^2)});
+  \coordinate (M) at (0.1*\a,0.83*\y);
+  
+  % AXES
+  \draw[->,thick] (0,-0.2*\y) -- (0,1.2*\y) node[left] {$y$};
+  \draw[->,thick] (-1.4*\a,0) -- (1.4*\a,0) node[below] {$x$};
+  \tick{AL}{90}; %node[below=-1] {$-a$};
+  \node[below=-1] at (-\a/2,0) {$a$};
+  \node[below=4,right=-1] at (0,\y/2) {$y$};
+  
+  % POINTS
+  \draw[blue!50!black] ($(B)!(M)!(BR)$) -- (M) -- ($(B)!(M)!(AL)$);
+  %\tkzMarkRightAngle[draw=blue!50!black,size=.2] (AL,B,BR);
+  \draw[dashed] (B) -- (AL) node[midway,above,rotate={atan(\y/\a)}] {$\sqrt{y^2+a^2}$};
+  \fill[blue!40!black] (AL) circle (0.05);
+  
+  % VECTORS
+  \draw[BField] (B) -- (BR) node[above right=-2] {$\vb{B}_\mathrm{L}$};
+  \draw pic[->,"$\theta$",draw=black,angle radius=16,angle eccentricity=1.4] {angle = O--B--BR};
+  \draw pic[->,"$\theta$",draw=black,angle radius=16,angle eccentricity=1.4] {angle = O--AL--B};
+  
+\end{tikzpicture}
+
+
+
+\end{document}

@@ -1,0 +1,163 @@
+% Author: Izaak Neutelings (March 2019)
+\documentclass[border=3pt,tikz]{standalone}
+\usetikzlibrary{calc}
+\tikzset{>=latex} % for LaTeX arrow head
+
+\colorlet{knob}{blue!20!black!40}
+\colorlet{mylightblue}{blue!10}
+\colorlet{mydarkblue}{blue!30!black}
+\colorlet{mydarkred}{red!50!black}
+\tikzstyle{gas}=[red!10]
+\tikzstyle{rope}=[orange!60!black,line width=1.5] 
+
+% ANGLE
+\newcommand{\getangle}[3]{%
+    \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}
+                              {\pgfpointanchor{#3}{center}}
+    \global\let#1\pgfmathresult  
+}
+
+
+% ENGINE
+\def\engine#1{
+  \def\Pw{2}
+  \def\Pl{3}
+  \def\Pt{0.5}
+  \def\Cl{5}
+  \def\Ct{0.2}
+  \def\R{0.2}
+  \def\Sw{3}
+  \def\Sh{1.5}
+  \def\St{.4}
+  \def\hRP{1.32}
+  \def\hSR{3.5}
+  \coordinate (O) at (0,0);
+  \coordinate (R) at (\R,\hSR);
+  
+  % PISTON
+  \begin{scope}[shift={(-2.7,\hSR+\hRP)}]
+    \coordinate (P) at (#1,0);
+    \fill[gas]
+      (-\Cl/2,-\Pw/2) rectangle (#1,\Pw/2);
+    \draw[mydarkblue,thick,fill=blue!10!black!50]
+      (\Cl/2,\Pw/2) --++ (0,\Ct) --++ (-\Cl-\Ct,0) coordinate (NE) --++ (0,-\Pw-2*\Ct)
+      --++ (\Cl+\Ct,0) --++ (0,\Ct) --++ (-\Cl,0) --++ (0,\Pw) -- cycle;
+    \draw[mydarkblue,thick,
+          top color=blue!30!black!70,bottom color=blue!30!black!60,middle color=blue!30!black!30,shading angle=0]
+      (P) ++ (0,\Pt/2) --++ (0,\Pw/2-\Pt/2) --++ (-\Pt,0) coordinate[midway] (PT)
+      --++ (0,-\Pw) --++ (\Pt,0) coordinate[midway] (PB) --++ (0,\Pw/2-\Pt/2)
+      --++ (\Pl,0) coordinate[below=1,left=4] (F) --++ (0,\Pt) coordinate[midway] (E) --++ (-\Pl,0) -- cycle;
+  \end{scope}
+  
+  % PLATFORM (S) & ROPE
+  \getangle{\a}{R}{F}
+  \begin{scope}[shift={(0,{\hRP*(1/sin(\a)-1)})}]
+    \draw[blue!30!black,thick,top color=blue!40!black!40,bottom color=blue!40!black!60,shading angle=0]
+      (-\Sw/2,0) coordinate[above right=0.5] (SL)
+      --++ (\Sw,0) coordinate[above left=0.5] (SR) --++ (0,-\St) --++ (-\Sw,0) -- cycle;
+    \draw[rope]
+      (SR) -- (0,1.5) coordinate (ST) -- (SL);
+  \end{scope}
+  \draw[rope]
+    (F) -- ($(R)+(90+\a:\R)$) -- (ST);
+  \fill[mydarkblue]
+    (SL) circle (.04) (SR) circle (.04) (F) circle (.04);
+  
+  % PULLEY
+  \draw[very thick,mydarkblue,fill=blue!40!black!50] (R) circle (\R);
+  \draw[thick,mydarkblue,fill=blue!40!black!70] (R) circle (.3*\R);
+  
+  % PLATFORM
+  \draw[blue!20!black,thick,
+        top color=blue!40!black!90,bottom color=blue!20!black!90,shading angle=10]
+    (-\Sw/2,0) --++ (0,-1) --++ (\Sw,0) --++ (0,1+\Sh) --++ (2.2,0) --++ (0,-2-\Sh) --++ (-\Sw-5.2,0) --++ (0,2) -- cycle;
+}
+
+\def\fix{
+  \node[rectangle,draw=mydarkred,inner xsep=3,inner ysep=5,
+        top color=red!90!black,bottom color=red!80!black,shading angle=20] at (PT) {};
+  \node[rectangle,draw=mydarkred,inner xsep=3,inner ysep=5,
+        top color=red!90!black,bottom color=red!80!black,shading angle=20] at (PB) {};
+  \fill[mydarkred] (PT) ++ (0, .1) circle (.02);
+  \fill[mydarkred] (PT) ++ (0,-.1) circle (.02);
+  \fill[mydarkred] (PB) ++ (0, .1) circle (.02);
+  \fill[mydarkred] (PB) ++ (0,-.1) circle (.02);
+}
+
+\def\mass#1{
+  \def\Maw{.8}
+  \def\Mbw{1.6}
+  \def\Mh{.8}
+  \begin{scope}[shift={(#1+.027)}]
+    \draw[thick,green!40!black,
+          top color=green!40!black!60,bottom color=green!40!black!70,shading angle=10]
+      (0,0) ++ (\Mbw/2,0) -- (\Maw/2,\Mh) -- (-\Maw/2,\Mh) -- (-\Mbw/2,0) -- cycle;
+    \node[scale=1.2] at (0,\Mh/2) {$m$};
+  \end{scope}
+}
+
+\def\fire{
+  \begin{scope}[shift={(-2.7-.3*\Cl,\hSR+\hRP-\Pw/2-1)}]
+    \draw[thin,red!80!black,fill=red]
+      (-.3,0) to[out=100,in=-80] (-.32,.8) to[out=-70,in=100] (-.14,.4) 
+              to[out=70,in=-130] (0,.8) to[out=-80,in=90] (.15,.3)
+              to[out=80,in=-100] (.27,.7) to[out=-70,in=70] (.3,0)
+              to[out=-110,in=0] (0,-.09) to[out=180,in=-80] cycle;
+    \draw[thin,orange!80!black,fill=orange]
+      (-.28,0) to[out=100,in=-70] (-.26,.6) to[out=-70,in=100] (-.15,.3) 
+               to[out=60,in=-130] (0,.65) to[out=-80,in=90] (.13,.2)
+               to[out=60,in=-120] (.28,.55) to[out=-80,in=70] (.27,0)
+               to[out=-110,in=0] (0,-.08) to[out=180,in=-80] cycle;
+    \draw[thin,yellow!90!black,fill=yellow]
+      (-.24,0) to[out=100,in=-80] (-.21,.32) to[out=-70,in=100] (-.17,.17) 
+               to[out=50,in=-100] (-.02,.42) to[out=-90,in=90] (.09,.08)
+               to[out=55,in=-120] (.25,.3) to[out=-95,in=70] (.23,0)
+               to[out=-110,in=0] (0,-.07) to[out=180,in=-80] cycle;
+  \end{scope}
+}
+
+
+\begin{document}
+
+
+% START
+\begin{tikzpicture}[scale=0.9]
+  \engine{0};
+  \node[right=14,above right=1,mydarkblue] at (NE) {$P_1$, $V_1$};
+  \fix
+  \mass{-3,0}
+  \fire
+\end{tikzpicture}
+
+
+% LIFT
+\begin{tikzpicture}[scale=0.9]
+  \engine{0};
+  \node[right=14,above right=1,mydarkblue] at (NE) {$P_1$, $V_1$};
+  \mass{0,0}
+  \draw[->,very thick,mydarkblue] (E) ++ (0.4,0) --++ (1.4,0);
+  \draw[->,very thick,mydarkblue] ($(ST)+(-.4,.3)$) --++ (0,1.2);
+  \fire
+\end{tikzpicture}
+
+
+% TOP
+\tikzstyle{gas}=[blue!10]
+\begin{tikzpicture}[scale=0.9]
+  \engine{2};
+  \node[right=14,above right=1,mydarkblue] at (NE) {$P_2$, $V_2$};
+  \mass{0,\Sh}
+  \draw[<->,thick,scale=1.1,mydarkblue] (-.6*\Sw,0) --++ (0,.91*\Sh) node[midway,left] {$h$};
+\end{tikzpicture}
+
+
+% SLIDE
+\begin{tikzpicture}[scale=0.9]
+  \engine{2};
+  \node[right=14,above right=1,mydarkblue] at (NE) {$P_2$, $V_2$};
+  \fix
+  \mass{2.6,\Sh}
+\end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,27 @@
+% https://tex.stackexchange.com/questions/49039/clipping-elements-in-tikz
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{tikz}
+
+\begin{document}
+
+
+
+\begin{tikzpicture}[scale=5]
+  
+  \draw[thin,dashed] (.1,1.6) .. controls (.6,1.6) and (1.5,1) .. (2,1)
+                 (2,1) .. controls (2.4,1.6) .. (2.5,1.3);
+  \draw[thin,dashed] (1,1) rectangle (2,2);
+  
+  \begin{scope}
+    \clip (1,1) rectangle (2,2);
+    \draw[thick] (.1,1.6) .. controls (.6,1.6) and (1.5,1) .. (2,1)
+                 (2,1) .. controls (2.4,1.6) .. (2.5,1.3);
+  \end{scope}
+  
+  \draw[dashed] (0,0) -- (3,3) -- (1,2) -- (2,1);
+
+\end{tikzpicture}
+
+
+
+\end{document}

@@ -1,6 +1,5 @@
+% Author: Izaak Neutelings (June 2018)
 \documentclass[border=3pt,tikz]{standalone}
-
-\usepackage{tikz}
 \tikzset{>=latex} % for LaTeX arrow head
 \usetikzlibrary{calc} 
 \usetikzlibrary{patterns,snakes}
@@ -14,9 +13,9 @@
   \def\a{0.5}  % coil segment aspect
   \def\dy{0.9} % vertical shift
   \def\dx{0.2} % horizontal shift
-  \draw[snake=coil,thick,segment amplitude=2*\A,segment length=\s,segment aspect=0.5]
+  \draw[snake=coil,thick,segment amplitude=2*\A,segment length=\s,segment aspect=\a]
     (0,0) -- (\L,0);
-  \draw[<->]
+  \draw[<->,shorten >=5]
     (0,\dy) -- (\L,\dy) node[midway,above] {length $\ell$};
   \draw[snake=brace,mirror snake,segment amplitude=3]
     (0,-\dy) -- (\L,-\dy) node[midway,below=1] {$N$ turns};

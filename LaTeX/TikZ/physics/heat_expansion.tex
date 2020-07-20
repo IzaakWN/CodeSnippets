@@ -1,0 +1,35 @@
+% Author: Izaak Neutelings (February 2019)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{tikz,pgfplots}
+\usepackage[outline]{contour} % glow around text
+\usetikzlibrary{angles,quotes} % for pic (angle labels)
+\tikzset{>=latex} % for LaTeX arrow head
+\contourlength{1.4pt}
+
+\tikzstyle{material}=[top color=blue!30,bottom color=blue!50,shading angle=10]
+\tikzstyle{measure}=[fill=white,midway,inner sep=2]
+
+\begin{document}
+
+
+% ROD
+\begin{tikzpicture}
+  \def\W{0.3}
+  \def\L{6}
+  \def\dL{1}
+
+  \draw[material] (0,-\W/2) rectangle ++(\L,\W);
+  \draw[<->] (0,-1.4*\W) --++ (\L,0) node[measure] {$L_0$};
+  \node[right=4pt] at (\L,0) {$T_0$};
+  
+  \begin{scope}[yshift=-30pt]
+    \draw[material] (0,-\W/2) rectangle ++(\L+\dL,\W);
+    \draw[<->] (0,-1.4*\W) --++ (\L,0) node[measure] {$L_0$};
+    \draw[<->,below] (\L,-1.4*\W) --++ (\dL,0) node[measure] {$\Delta L$};
+    \node[right=4pt] at (\L+\dL,0) {$T_0+\Delta T$};
+  \end{scope}
+  
+\end{tikzpicture}
+
+
+\end{document}

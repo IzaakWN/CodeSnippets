@@ -1,0 +1,59 @@
+\documentclass[border=3pt,tikz]{standalone}
+% http://tug.org/PSTricks/main.cgi?file=PS/tikz
+\usepackage{tikz}
+%\usepackage{pst-plot}
+\usepackage{auto-pst-pdf}
+%\ifpdf
+%  \usepackage{tikz}
+%\else
+%  \usepackage{pst-plot}
+%\fi
+
+
+\begin{document}
+
+% PSTRICKS
+%\begin{tikzpicture}
+\begin{pspicture} %[showgrid](4,4)
+  \psdot[dotscale=2](1,1.5)
+  \psline[linewidth=2pt,linecolor=red](0,3)(1,0)(3,3)
+\end{pspicture}
+%\end{tikzpicture}
+
+% TIKZ
+\begin{tikzpicture}
+  \draw (0,0) -- (1,3) -- (3,0);
+\end{tikzpicture}
+
+%% TIKZ in PSTRICKS
+%\begin{pspicture}[showgrid](4,4)
+%  \begin{tikzpicture}
+%    \draw (0,0) -- (1,3) -- (3,0);
+%  \end{tikzpicture}
+%  \psdot[dotscale=5](2,2)
+%\end{pspicture}
+
+% PSTRICKS in TIKZ
+\begin{tikzpicture}
+  \draw (0,0) -- (1,3) -- (3,0);
+  \begin{pspicture}%[showgrid](4,4)
+    \psdot[dotscale=2](1,1.5)
+    \psline[linewidth=2pt,linecolor=red](0,3)(1,0)(3,3)
+  \end{pspicture}
+  \draw[blue] (0,2) -- (3,2);
+\end{tikzpicture}
+
+% PSTRICKS in TIKZ with scope
+\begin{tikzpicture}
+  \draw (0,0) -- (1,3) -- (3,0);
+  \begin{scope}
+    %\clip (0,0) rectangle (3,3);
+    \begin{pspicture}%[showgrid](4,4)
+      \psdot[dotscale=2](1,1.5)
+      \psline[linewidth=2pt,linecolor=red](0,3)(1,0)(3,3)
+    \end{pspicture}
+  \end{scope}
+  \draw[blue] (0,2) -- (3,2);
+\end{tikzpicture}
+
+\end{document}

@@ -86,7 +86,10 @@
         (P1) -- (P2) -- (P3) -- (P4) -- cycle;
     
   % plane 2 - dashes corner
-  \draw[dashed,thick] (Q2) -- (Q3) -- (Q4);
+  \begin{scope}
+    \clip (P1) -- (P2) -- (P3) -- (P4) -- cycle;
+    \draw[dashed,thick] (Q2) -- (Q3) -- (Q4);
+  \end{scope}
      
   % axis and arrows
   \draw[dashed,thick]
@@ -100,11 +103,11 @@
   \draw[thick,->]
     (P0) -- node[red,above left=-2pt]  {$\pi^+$} (F1);
   \draw[thick,dotted,->]
-    (P0) -- node[red,below right=-1pt] {$\nu_\tau$} (F2);
+    (P0) -- node[red,below right=-1pt] {$\overline{\nu}_\tau$} (F2);
   \draw[thick,->]
     (Q0) -- node[red,above right=-1pt] {$\pi^-$} (F3);
   \draw[thick,dotted,->]
-    (Q0) -- node[red,below left=-2pt]  {$\overline{\nu}_\tau$} (F4);
+    (Q0) -- node[red,below left=-2pt]  {$\nu_\tau$} (F4);
   
   % dots
   \fill[blue]
@@ -176,7 +179,10 @@
         (P1) -- (P2) -- (P3) -- (P4) -- cycle;
     
   % plane 2 - dashes corner
-  \draw[dashed,thick] (Q2) -- (Q3) -- (Q4);
+  \begin{scope}
+    \clip (P1) -- (P2) -- (P3) -- (P4) -- cycle;
+    \draw[dashed,thick] (Q2) -- (Q3) -- (Q4);
+  \end{scope}
      
   % axis and arrows
   \draw[dashed,thick]
@@ -265,7 +271,10 @@
         (P1) -- (P2) -- (P3) -- (P4) -- cycle;
     
   % plane 2 - dashes corner
-  \draw[dashed,thick] (Q2) -- (Q3) -- (Q4);
+  \begin{scope}
+    \clip (P1) -- (P2) -- (P3) -- (P4) -- cycle;
+    \draw[dashed,thick] (Q2) -- (Q3) -- (Q4);
+  \end{scope}
      
   % axis and arrows
   \draw[dashed,thick]

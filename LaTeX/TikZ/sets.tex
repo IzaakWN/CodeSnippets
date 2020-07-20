@@ -9,11 +9,11 @@
 
 % SET: critical region
 \begin{tikzpicture}[scale=1.0]
-  \draw[black,rounded corners=10,thick]
+  \draw[blue!20!black,fill=blue!20,rounded corners=10,thick]
      (0,0) rectangle (4,2)
      node[above left] {data space $\Omega$};
-  \draw[black,rounded corners=10,thick,shift={(0.15,0.15)}]
-    (2,0) rectangle (0,1)
+  \draw[blue!20!black,fill=blue!70!black!70,rounded corners=10,thick,shift={(0.15,0.15)}]
+    (1,0) rectangle (0,1)
      node[above right] {critical region $\omega$};
 \end{tikzpicture}
 
@@ -21,17 +21,17 @@
 
 % SET: overlapping critical regions
 \begin{tikzpicture}[scale=1.0]
-  \draw[black,rounded corners=10,thick]
+  \draw[blue!20!black,fill=blue!20,rounded corners=10,thick]
      (0,0) rectangle (4,2)
      node[above left] {$\Omega$};
   \begin{scope}[shift={(0.35,0.05)}]
-    \draw[black,rounded corners=10,thick,shift={(0.15,0.15)},scale=0.90]
+    \draw[blue!20!black,fill=blue!70!black!70,rounded corners=10,thick,shift={(0.15,0.15)},scale=0.90]
       (2,0) rectangle (0,1)
        node[above left=-5pt] {$\omega_1$};
-    \draw[black,rounded corners=10,thick,shift={(0.30,0.45)},scale=0.90]
+    \draw[blue!20!black,rounded corners=10,thick,shift={(0.30,0.45)},scale=0.90]
       (2,0) rectangle (0,1)
        node[right=0pt,above right] {$\omega_2$};
-    \draw[black,rounded corners=10,thick,shift={(0.50,0.30)},scale=0.90]
+    \draw[blue!20!black,rounded corners=10,thick,shift={(0.50,0.30)},scale=0.90]
       (0,0) rectangle (2,1)
        node[right=-2pt] {$\omega_3$};
   \end{scope}

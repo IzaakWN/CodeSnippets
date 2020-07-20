@@ -84,26 +84,26 @@
   \def\ls{0.15}   % tick length (skipped)
   
   % help functions
+  \def\myx(#1){{(#1-\nOne)*\w/\n}}
   \def\arrowLabel(#1,#2,#3,#4){
-    \def\xy{{(#1-\nOne)*\w/\n}}; \pgfmathparse{int(#2*100)};
+    \def\xy{(#1-\nOne)*\w/\n}; \pgfmathparse{int(#2*100)};
     \ifnum \pgfmathresult<0
       \def\yyp{{(\lt*(-0.10+#2))}}; \def\yyw{{(\yyp-\la*\lt*#3)}}
       \draw[<-,thick,black!50!blue,align=center]
-        (\xy,\yyp) -- (\xy,\yyw)
-        node[below,black!80!blue] at (\xy,\yyw) {#4}; %,fill=white
+        (\myx(#1),\yyp) -- (\myx(#1),\yyw)
+        node[below,black!80!blue] {#4}; %,fill=white
     \else
       \def\yyp{{(\lt*(0.10+#2)}}; \def\yyw{{(\yyp+\la*\lt*#3)}}
       \draw[<-,thick,black!50!blue,align=center]
-        (\xy,\yyp) -- (\xy,\yyw)
-        node[above,black!80!blue] at (\xy,\yyw) {#4};
+        (\myx(#1),\yyp) -- (\myx(#1),\yyw)
+        node[above,black!80!blue] {#4};
     \fi}
   \def\arrowLabelRed(#1,#2,#3,#4){
-    \def\xy{{(#1-\nOne)*\w/\n}}; \pgfmathparse{int(#2*100)};
     \def\yyp{{(\lt*(-0.10+#2))}}; \def\yyw{{(\yyp-\la*\lt*#3)}}
-    \fill[red,radius=2pt] (\xy,0) circle;
+    \fill[red,radius=2pt] (\myx(#1),0) circle;
     \draw[<-,thick,black!25!red,align=center]
-      (\xy,\yyp) -- (\xy,\yyw)
-      node[below,black!40!red] at (\xy,\yyw) {\strut#4}; %,fill=white
+      (\myx(#1),\yyp) -- (\myx(#1),\yyw)
+      node[below,black!40!red] {\strut#4}; %,fill=white
     }
   
   % axis

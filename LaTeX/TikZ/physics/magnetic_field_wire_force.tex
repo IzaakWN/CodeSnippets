@@ -1,0 +1,119 @@
+% Author: Izaak Neutelings (March 2020)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath} % for \dfrac
+\usepackage{physics}
+\usepackage{tikz,pgfplots}
+\usepackage{tikz-3dplot}
+\usepackage[outline]{contour} % glow around text
+\usetikzlibrary{angles,quotes} % for pic (angle labels)
+\usetikzlibrary{arrows,arrows.meta}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.markings}
+\tikzset{>=latex} % for LaTeX arrow head
+\usepackage{xcolor}
+\colorlet{veccol}{green!45!black}
+\colorlet{Bcol}{violet!90}
+\colorlet{Bcol1}{violet!80!blue!90}
+\colorlet{Bcol2}{violet!80!red!90}
+\colorlet{BFcol}{red!60!black}
+\colorlet{veccol}{green!45!black}
+\colorlet{Icol}{blue!70!black}
+\tikzstyle{BField}=[->,thick,Bcol]
+\tikzstyle{current}=[->,Icol,thick]
+\tikzstyle{force}=[->,thick,BFcol]
+\tikzstyle{vector}=[->,thick,veccol]
+\tikzstyle{velocity}=[->,very thick,vcol]
+\tikzstyle{charge+}=[very thin,draw=black,top color=red!50,bottom color=red!90!black,shading angle=20,circle,inner sep=0.5]
+\tikzstyle{charge-}=[very thin,draw=black,top color=blue!50,bottom color=blue!80,shading angle=20,circle,inner sep=0.5]
+\tikzstyle{metal}=[top color=black!15,bottom color=black!25,middle color=black!20,shading angle=10]
+\tikzstyle{darkmetal}=[top color=black!40,bottom color=black!70,middle color=black!30,shading angle=10]
+\tikzset{
+  BFieldLine/.style={thick,Bcol,decoration={markings,mark=at position #1 with {\arrow{latex}}},
+                                 postaction={decorate}},
+  BFieldLine/.default=0.5,
+  pics/Bin/.style={
+    code={
+      \def\R{0.12}
+      \draw[pic actions,line width=0.6,#1,fill=white] % ,thick
+        (0,0) circle (\R) (-135:.75*\R) -- (45:.75*\R) (-45:.75*\R) -- (135:.75*\R);
+  }},
+  pics/Bout/.style={
+    code={
+      \def\R{0.12}
+      \draw[pic actions,line width=0.6,#1,fill=white] (0,0) circle (\R);
+      \fill[pic actions,#1] (0,0) circle (0.3*\R);
+  }},
+  pics/Bin/.default=Bcol,
+  pics/Bout/.default=Bcol,
+}
+\tikzstyle{measure}=[fill=white,midway,outer sep=2]
+\contourlength{1.4pt}
+
+% RING SHADING
+\makeatletter
+\pgfdeclareradialshading[tikz@ball]{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+rgb(0.719cm)=(1,1,1);
+color(0.72cm)=(tikz@ball);
+rgb(0.9cm)=(1,1,1)}
+\tikzoption{ring color}{\pgfutil@colorlet{tikz@ball}{#1}\def\tikz@shading{ring}\tikz@addmode{\tikz@mode@shadetrue}}
+\makeatother
+
+
+\begin{document}
+
+
+% TWO WIRES ATTRACTION
+\def\NB{5}
+\def\L{5.5}
+\def\W{0.1}
+\def\d{1.2}
+\begin{tikzpicture}
+  
+  % MAGNETIC FIELD
+  \foreach \i [evaluate={\x=(\i-0.5)*\L/\NB;}] in {1,...,\NB}{
+    \pic at (\x, 0.25*\d) {Bout={Bcol1}};
+    \pic at (\x, 0.75*\d) {Bin={Bcol2}};
+    \pic at (\x,-0.25*\d-\W) {Bin={Bcol1}};
+    \pic at (\x, 1.25*\d+\W) {Bout={Bcol2}};
+  }
+  \node[Bcol1] at (\L,0.22*\d) {$\vb{B}_1$};
+  \node[Bcol2] at (\L,0.75*\d) {$\vb{B}_2$};
+  
+  % VECTORS
+  \draw[metal] (0,0) rectangle ++(\L,-\W);
+  \draw[metal] (0,\d) rectangle ++(\L,\W);
+  \draw[current] (0.92*\L,-\W/2) --++ (0.18*\L,0) node[right=-1] {$I_1$};
+  \draw[current] (0.92*\L,\d+\W/2) --++ (0.18*\L,0) node[right=-1] {$I_2$};
+  \draw[force] (0.55*\L,-\W/2) --++ (0,0.44*\d) node[below right,scale=0.9] {$F_{21}$};
+  \draw[force] (0.55*\L,\d+\W/2) --++ (0,-0.44*\d) node[above right,scale=0.9] {$F_{12}$};
+  
+\end{tikzpicture}
+
+
+% TWO WIRES REPULSION
+\begin{tikzpicture}
+  
+  % MAGNETIC FIELD
+  \foreach \i [evaluate={\x=(\i-0.5)*\L/\NB;}] in {1,...,\NB}{
+    \pic at (\x, 0.25*\d) {Bout={Bcol1}};
+    \pic at (\x, 0.75*\d) {Bout={Bcol2}};
+    \pic at (\x,-0.25*\d-\W) {Bin={Bcol1}};
+    \pic at (\x, 1.25*\d+\W) {Bin={Bcol2}};
+  }
+  \node[Bcol1] at (\L,0.22*\d) {$\vb{B}_1$};
+  \node[Bcol2] at (\L,0.75*\d) {$\vb{B}_2$};
+  
+  % VECTORS
+  \draw[metal] (0,0) rectangle ++(\L,-\W);
+  \draw[metal] (0,\d) rectangle ++(\L,\W);
+  \draw[current] (0.92*\L,-\W/2) --++ (0.18*\L,0) node[right=-1] {$I_1$};
+  \draw[current] (0.08*\L,\d+\W/2) --++ (-0.18*\L,0) node[left=-1] {$I_2$};
+  \draw[force] (0.55*\L,-\W/2) --++ (0,-0.44*\d) node[above=2,right,scale=0.9] {$F_{21}$};
+  \draw[force] (0.55*\L,\d+\W/2) --++ (0,0.44*\d) node[below=2,right,scale=0.9] {$F_{12}$};
+  
+\end{tikzpicture}
+
+
+
+\end{document}
