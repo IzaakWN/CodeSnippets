@@ -1,0 +1,63 @@
+% Author: Izaak Neutelings (January 2021)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{physics}
+\usepackage{ifthen}
+\usepackage{tikz}
+%\usepackage[outline]{contour} % glow around text
+%\usetikzlibrary{calc} % for pic
+\usetikzlibrary{angles,quotes} % for angle label
+%\usetikzlibrary{patterns,snakes}
+\usetikzlibrary{bending} % for arrow head angle
+\tikzset{>=latex} % for LaTeX arrow head
+%\contourlength{1.2pt}
+
+\colorlet{myred}{red!65!black}
+\colorlet{metalcol}{blue!25!black!30!white}
+\tikzstyle{ground}=[preaction={fill,top color=black!10,bottom color=black!5,shading angle=20},
+                    fill,pattern=north east lines,draw=none,minimum width=0.3,minimum height=0.6]
+\tikzstyle{mass}=[line width=0.6,red!30!black,fill=red!40!black!10,rounded corners=1,
+                  top color=red!40!black!20,bottom color=red!40!black!10,shading angle=20]
+\tikzstyle{rod}=[line width=0.5,red!30!black,fill=red!40!black!30,rounded corners=1,
+                  top color=red!40!black!60,bottom color=red!40!black!30,shading angle=90]
+\tikzstyle{rope}=[brown!70!black,line width=1.2,line cap=round] %very thick
+
+% FORCES SWITCH
+\tikzstyle{force}=[->,myred,thick,line cap=round]
+\tikzstyle{Fproj}=[force,myred!40]
+\newcommand{\vbF}{\vb{F}}
+
+\begin{document}
+
+
+% INCLINED ground
+\begin{tikzpicture}
+  \def\h{0.4}  % mass height
+  \def\w{0.5}  % mass width
+  \def\L{1.5}  % rod length
+  \def\t{0.15} % rod thickness
+  \def\W{2.8}  % inclined ground width
+  \def\ang{28} % inclined ground angle
+  \coordinate (R) at ({\W*cos(\ang)},0); % right corner inclined ground
+  \coordinate (L) at (0,0);              % left corner inclined ground
+  \coordinate (T) at (0,{\W*sin(\ang)}); % top inclined ground
+  \coordinate (P) at ({-\t/2+0.33*\w*sin(\ang)},{\W*sin(\ang)+\L+0.25*\w*cos(\ang)}); % rod pivot point
+  
+  % ROD
+  %\draw[fill=metalcol] (P) circle(0.9*\t);
+  \draw[rod,opacity=0.25] (P)++(\t/2,\t/2) rectangle++ (-\L,-\t);
+  \draw[rod] (P)++(-\t/2,\t/2) rectangle++ (\t,-\L)
+    node[midway,above=2,right=1] {$l$, $\rho$}; %\ell
+  \draw[fill=metalcol,line width=0.3] (P) circle(0.03);
+  \draw[->] (P)++(195:0.7*\L) arc(170:280:0.4*\L);
+  
+  % MASS ON INCLINED GROUND
+  \draw[line width=0.6,top color=blue!20!black!30,bottom color=white,shading angle=160-\ang]
+    (L) -- (T) -- (R) node[pos=0.55,above] {$\mu$} -- cycle;
+  \draw[mass,rotate=-\ang] (-0.03*\w,0)++(90+\ang:{\W*sin(\ang)}) rectangle++ (\w,\h) node[midway,rotate=-\ang] {$m$};
+  \draw pic["$\theta$",draw=black,angle radius=22,angle eccentricity=1.3] {angle=T--R--L};
+  
+\end{tikzpicture}
+
+
+
+\end{document}

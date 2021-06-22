@@ -1,0 +1,112 @@
+% Author: Izaak Neutelings (December 2020)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{physics}
+\usepackage{tikz}
+\usetikzlibrary{calc} % for pic
+\usetikzlibrary{angles,quotes} % for pic
+\tikzset{>=latex} % for LaTeX arrow head
+
+\colorlet{xcol}{blue!70!black}
+\colorlet{vcol}{green!60!black}
+\tikzstyle{vvec}=[->,vcol,very thick,line cap=round]
+\tikzstyle{rope}=[brown!20!black,double=brown!70!black,double distance=1,line width=0.3] %very thick
+\def\wave#1#2{
+  ({(#1-0.22)*\xmax},0) to[out=0,in=180,looseness=0.6] (#1*\xmax,#2*\ymax)
+  to[out=0,in=180,looseness=0.6]++ (0.22*\xmax,#2*-\ymax)
+}
+%\def\waveR#1{
+%  ({(#1-0.22)*\xmax},0) to[out=0,in=180,looseness=0.6] (#1*\xmax,-\ymax)
+%  to[out=0,in=180,looseness=0.6]++ (0.22*\xmax,\ymax)
+%}
+
+\begin{document}
+
+% SUPERPOSITION, CONSTRUCTIVE - t = 0
+\def\xmax{3.0}
+\def\ymax{0.8}
+\begin{tikzpicture}
+  \def\xL{-0.5}
+  \def\xR{0.5}
+  \coordinate (L) at (\xL*\xmax,\ymax);
+  \coordinate (R) at (\xR*\xmax,\ymax);
+  \node[above=-2] at (L) {$f(x-vt)$};
+  \node[above=-2] at (R) {$f(x+vt)$};
+  \draw[rope] %very thick,xcol]
+    (-\xmax,0) -- \wave{\xL}{1} -- \wave{\xR}{1} -- (\xmax,0);
+  \draw[vvec] (L)++(-65:0.5*\ymax) --++ (0.17*\xmax,0) node[right=-2] {$v$};
+  \draw[vvec] (R)++(-115:0.5*\ymax) --++ (-0.17*\xmax,0) node[left=-2] {$v$};
+  \node[right,scale=0.9] at (-1.35*\xmax,0.6*\ymax) {$t=0$};
+\end{tikzpicture}
+
+% SUPERPOSITION, CONSTRUCTIVE - t = Dt
+\begin{tikzpicture}
+  \coordinate (T) at (0,\ymax);
+  \draw[dashed] \wave{0}{1};
+  \draw[rope] %very thick,xcol]
+    (-\xmax,0) -- (-0.22*\xmax,0) to[out=0,in=180,looseness=0.4] (0,2*\ymax)
+    to[out=0,in=180,looseness=0.4] (0.22*\xmax,0) -- (\xmax,0);
+  \draw[vvec] (T)++(-60:0.5*\ymax) --++ (0.17*\xmax,0) node[right=-2] {$v$};
+  \draw[vvec] (T)++(-120:0.5*\ymax) --++ (-0.17*\xmax,0) node[left=-2] {$v$};
+  \node[right,scale=0.9] at (-1.35*\xmax,0.6*\ymax) {$t=\Delta t$};
+\end{tikzpicture}
+
+% SUPERPOSITION, CONSTRUCTIVE - t = 2*Dt
+\begin{tikzpicture}
+  \def\xL{-0.5}
+  \def\xR{0.5}
+  \coordinate (L) at (\xL*\xmax,\ymax);
+  \coordinate (R) at (\xR*\xmax,\ymax);
+  \draw[rope] %very thick,xcol]
+    (-\xmax,0) -- \wave{\xL}{1} -- \wave{\xR}{1} -- (\xmax,0);
+  \draw[vvec] (R)++(-65:0.5*\ymax) --++ (0.17*\xmax,0) node[right=-2] {$v$};
+  \draw[vvec] (L)++(-115:0.5*\ymax) --++ (-0.17*\xmax,0) node[left=-2] {$v$};
+  \node[right,scale=0.9] at (-1.35*\xmax,0.6*\ymax) {$t=2\Delta t$};
+\end{tikzpicture}
+
+% SUPERPOSITION, DESTRUCTIVE - t = 0
+\begin{tikzpicture}
+  \def\xL{-0.5}
+  \def\xR{0.5}
+  \coordinate (L) at (\xL*\xmax,\ymax);
+  \coordinate (R) at (\xR*\xmax,-\ymax);
+  \node[above=0,right=7] at (L) {$f(x-vt)$};
+  \node[below=0,left=7] at (R) {$-f(x+vt)$};
+  \draw[rope] %very thick,xcol]
+    (-\xmax,0) -- \wave{\xL}{1} -- \wave{\xR}{-1} -- (\xmax,0);
+  \draw[vvec] (L)++(-65:0.5*\ymax) --++ (0.17*\xmax,0) node[right=-2] {$v$};
+  \draw[vvec] (R)++(115:0.5*\ymax) --++ (-0.17*\xmax,0) node[left=-2] {$v$};
+  \node[right,scale=0.9] at (-1.35*\xmax,0.5*\ymax) {$t=0$};
+\end{tikzpicture}
+
+% SUPERPOSITION, DESTRUCTIVE - t = Dt
+\begin{tikzpicture}
+  \coordinate (L) at (0,\ymax);
+  \coordinate (R) at (0,-\ymax);
+  %\node[above=0,right=7] at (L) {$f(x-vt)$};
+  %\node[below=0,left=7] at (R) {$-f(x+vt)$};
+  \draw[dashed] \wave{0}{1};
+  \draw[dashed] \wave{0}{-1};
+  \draw[rope] %very thick,xcol]
+    (-\xmax,0) -- (\xmax,0);
+  \draw[vvec] (L)++(-65:0.5*\ymax) --++ (0.17*\xmax,0) node[right=-2] {$v$};
+  \draw[vvec] (R)++(115:0.5*\ymax) --++ (-0.17*\xmax,0) node[left=-2] {$v$};
+  \node[right,scale=0.9] at (-1.35*\xmax,0.5*\ymax) {$t=\Delta t$};
+\end{tikzpicture}
+
+% SUPERPOSITION, DESTRUCTIVE - t = 2 * Dt
+\begin{tikzpicture}
+  \def\xL{0.5}
+  \def\xR{-0.5}
+  \coordinate (L) at (\xL*\xmax,\ymax);
+  \coordinate (R) at (\xR*\xmax,-\ymax);
+  %\node[above=0,right=7] at (L) {$f(x-vt)$};
+  %\node[below=0,left=7] at (R) {$-f(x+vt)$};
+  \draw[rope] %very thick,xcol]
+    (-\xmax,0) -- \wave{\xR}{-1} -- \wave{\xL}{1} -- (\xmax,0);
+  \draw[vvec] (L)++(-65:0.5*\ymax) --++ (0.17*\xmax,0) node[right=-2] {$v$};
+  \draw[vvec] (R)++(115:0.5*\ymax) --++ (-0.17*\xmax,0) node[left=-2] {$v$};
+  \node[right,scale=0.9] at (-1.35*\xmax,0.5*\ymax) {$t=2\Delta t$};
+\end{tikzpicture}
+
+
+\end{document}

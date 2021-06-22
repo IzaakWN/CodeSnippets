@@ -1,4 +1,4 @@
-% Author: Izaak Neutelings (October, 2019)
+% Author: Izaak Neutelings (October 2019)
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{amsmath}
 \usepackage{esvect} % \vv
@@ -48,7 +48,6 @@
 \begin{document}
 
 
-
 %% Simple projection
 %\begin{tikzpicture}
 %  \coordinate (A) at (0,0);
@@ -57,7 +56,6 @@
 %  \draw (A) -- (B);
 %  \draw [blue] (C) -- ($(A)!(C)!(B)$);
 %\end{tikzpicture}
-
 
 
 % Bc -> J/psi tau nu
@@ -110,7 +108,6 @@
 \end{tikzpicture}
 
 
-
 % Bs -> tau(mu) tau(3pi) 2nu
 \begin{tikzpicture}
   
@@ -158,7 +155,6 @@
   %  (PV) -- ($(Jp1)!(PV)!(SV)$) node[scale=0.85,left=3,midway,below=1] {$\delta(\mu)$};
   
 \end{tikzpicture}
-
 
 
 % Bc -> J/psi tau nu
@@ -283,6 +279,57 @@
   
 \end{tikzpicture}
 
+
+% Bc -> J/psi tau nu
+\begin{tikzpicture}
+  
+  \def\angJpsi{80}
+  \coordinate (BL) at (-1,0);
+  \coordinate (BR) at ( 3,0);
+  \coordinate (PV) at ( 0,0);
+  \coordinate (SV) at ( 2.0,1.8);
+  \coordinate (Jp1) at ($(SV)+({\angJpsi-180}:1.2)$);
+  \coordinate (Jp2) at ($(SV)+(\angJpsi:2.8)$);
+  
+  % DASHES
+  \draw[dashed,name path=beam]
+    (BL) -- (BR);
+  \draw[dashed]
+    (PV) -- (SV) -- ($(PV)!1.50!(SV)$);
+  \draw[->,dashed,line width=1,name path=mumu]
+    (Jp1) -- (Jp2) node[right=9,above] {$\vec{p}_{\mu\mu} = \vec{p}_\Jpsi$};
+  
+  % MUONS
+  \draw[->,line width=1]
+    (SV) to[out=\angJpsi+5,in=-80] ++(\angJpsi+15:2.5) node[above left=-4] {$\mu^+$};
+  \draw[->,line width=1]
+    (SV) to[out=\angJpsi-5,in=-140] ++(\angJpsi-20:2.4) node[above right] {$\mu^-$};
+  
+  % TAU
+  \draw[thick,green!70!black]
+    (SV) --++ (23:0.6) coordinate (T) node[midway,below right=-2] {$\tau^+$};
+  \fill[green!70!black]
+    (T) circle (0.06);
+  
+  % PIONS
+  \draw[->,green!70!black,line width=1]
+    (T) to[out=28,in=-130] ++(38:2.0) node[above right] {$\pi^\pm$};
+  \draw[->,green!70!black,line width=1]
+    (T) to[out=20,in=-150] ++(24:2.6) node[above right] {$\pi^\pm$};
+  \draw[->,green!70!black,line width=1]
+    (T) to[out=16,in=170] ++( 2:2.0) node[above right] {$\pi^\mp$};
+  
+  % BLOBS
+  \fill[]
+    (PV) ellipse (9pt and 4.5pt)
+    node[above left=3] {$\mathrm{b}\overline{\mathrm{b}}$ PV};
+  \fill[]
+    (SV) circle (4pt) node[above left] {B SV};
+  
+  %\draw[smallarr,shorten <=4,Jpsicol] %,dashed
+  %  (PV) -- ($(Jp1)!(PV)!(Jp2)$) node[scale=0.85,left=3,midway,below=1] {$\delta(\Jpsi)$};
+  
+\end{tikzpicture}
 
 
 \end{document}

@@ -175,6 +175,18 @@
 \end{tikzpicture}
 
 
+
+% MOMENTUM & SPING
+\begin{tikzpicture} %[scale=0.5]
+  \def\v{0.7}
+  \draw[velocity,-{Latex[length=4,width=3]}] (0,0) --++ (\v,0);
+  \pic[scale=1] at (0,0.2) {spin={0}};  
+  \node[left,scale=0.5] at (0,0) {momentum};
+  \node[left,scale=0.5] at (0,0.2) {spin};
+\end{tikzpicture}
+
+
+
 % ANOMALOUS PRECESSION
 \begin{tikzpicture}
   \def\v{0.7}
@@ -240,6 +252,12 @@
   \pic[scale=1] at (O) {spin={\ang}};  
 \end{tikzpicture}
 
+
+% CYCLOTRON FREQUENCY
+\begin{tikzpicture}
+  \pic at (0,0) {Bout};
+  \node[Bcol,right=3] at (0,0) {$\vb{B}$};
+\end{tikzpicture}
 
 
 \end{document}

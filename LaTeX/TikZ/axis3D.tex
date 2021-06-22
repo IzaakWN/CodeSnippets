@@ -9,6 +9,7 @@
 \usepackage{xcolor}
 \colorlet{veccol}{green!50!black}
 \colorlet{projcol}{blue!70!black}
+\colorlet{myblue}{blue!70!black}
 \tikzset{>=latex} % for LaTeX arrow head
 \tikzstyle{proj}=[projcol!80,line width=0.08] %very thin
 \tikzstyle{area}=[draw=veccol,fill=veccol!80,fill opacity=0.6]
@@ -21,7 +22,7 @@
 
 % 3D AXIS with spherical coordinates
 \tdplotsetmaincoords{60}{110}
-\begin{tikzpicture}[scale=3,tdplot_main_coords]
+\begin{tikzpicture}[scale=2,tdplot_main_coords]
   
   % VARIABLES
   \def\rvec{.8}
@@ -36,7 +37,7 @@
   
   % VECTORS
   \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
-  \draw[-stealth,red] (O)  -- (P) node[above right] {P};
+  \draw[-stealth,red] (O)  -- (P) node[above right=-2] {P};
   \draw[dashed,red]   (O)  -- (Pxy);
   \draw[dashed,red]   (P)  -- (Pxy);
   \draw[dashed,red]   (Py) -- (Pxy);
@@ -45,29 +46,66 @@
   \tdplotdrawarc[->]{(O)}{0.2}{0}{\phivec}
     {anchor=north}{$\phi$}
   \tdplotsetthetaplanecoords{\phivec}
-  \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.5}{0}{\thetavec}
-    {anchor=south west}{$\theta$}
+  \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.4}{0}{\thetavec}
+    {anchor=south west}{\hspace{-1mm}$\theta$}
+
+\end{tikzpicture}
+
+
+% 3D AXIS with spherical coordinates
+\tdplotsetmaincoords{60}{110}
+\begin{tikzpicture}[scale=1.8,tdplot_main_coords]
+  
+  % VARIABLES
+  \def\l{0.3}
+  \def\rvec{1.2}
+  \def\thetavec{46}
+  \def\phivec{50}
+  
+  % AXES
+  \coordinate (O) at (0,0,0);
+  \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
+  \draw[dashed,myblue] (O)  -- (Pxy);
+  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-2]{$x$};
+  \draw[thick,->] (0,0,0) -- (0,1,0) node[right=-1]{$y$};
+  \draw[thick,->] (0,0,0) -- (0,0,1) node[above=-1]{$z$};
+  \draw[vector] (0,0,0) -- (1.3*\l,0,0) node[above=3,left=-1,scale=0.8]{$\vu{x}$};
+  \draw[vector] (0,0,0) -- (0,.9*\l,0) node[right=2,above=-1,scale=0.8]{$\vu{y}$};
+  \draw[vector] (0,0,0) -- (0,0,\l) node[left,scale=0.8]{$\vu{z}$};
+  
+  % VECTORS
+  \node[circle,inner sep=0.9,fill=myblue]
+    (P') at ({\rvec*sin(\thetavec)*cos(\phivec)},{\rvec*sin(\thetavec)*sin(\phivec)},{\rvec*cos(\thetavec)}) {};
+  \draw[-stealth,thick,myblue] (O)  -- (P') node[above right=-2] {P};
+  \draw[dashed,myblue] (P)  -- (Pxy);
+  \draw[dashed,myblue] (P)  -- (Pz);
+  \draw[dashed,myblue] (Py) -- (Pxy) -- (Px);
+  
+  % ARCS
+  \tdplotsetthetaplanecoords{\phivec}
+  \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.4}{0}{\thetavec}
+    {right=2,above}{$\theta$}
 
 \end{tikzpicture}
 
 
 % 3D AXIS with spherical coordinates, dA
 \tdplotsetmaincoords{60}{103}
-\begin{tikzpicture}[scale=3,tdplot_main_coords]
+\begin{tikzpicture}[scale=2.8,tdplot_main_coords]
   
   % VARIABLE
-  \def\rvec{1.3}
+  \def\rvec{1.0}
   \def\thetavec{35}
   \def\phivec{45}
   \def\dtheta{10}
-  \def\dphi{14}
+  \def\dphi{16}
   \def\sphere#1#2#3{plot[domain=#1]({\rvec*sin(#2)*cos(#3)},{\rvec*sin(#2)*sin(#3)},{\rvec*cos(#2)})}
   
   % AXES
   \coordinate (O) at (0,0,0);
-  \draw[thick,->] (0,0,0) -- (1.16*\rvec,0,0) node[anchor=north east]{$x$};
-  \draw[thick,->] (0,0,0) -- (0,1.1*\rvec,0) node[anchor=north west]{$y$};
-  \draw[thick,->] (0,0,0) -- (0,0,1.1*\rvec) node[anchor=south]{$z$};
+  \draw[thick,->] (0,0,0) -- (1.16*\rvec,0,0) node[left=2,below]{$x$};
+  \draw[thick,->] (0,0,0) -- (0,1.1*\rvec,0) node[below=2,right=0]{$y$};
+  \draw[thick,->] (0,0,0) -- (0,0,1.1*\rvec) node[above]{$z$};
   
   % COORDINATES
   \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
@@ -78,7 +116,7 @@
   % CONE
   \draw[veccol!10,very thin] (O)  -- (PBR);
   \draw[veccol!10,very thin] (O)  -- (PR);
-  \draw[->,veccol] (O)  -- (P) node[left=3,below left=2] {$\vb{r}$};
+  \draw[->,veccol] (O)  -- (P) node[below=5,left=2] {$\vb{r}$};
   \draw[veccol,very thin] (O)  -- (PB);
   
   % PROJECTIONS
@@ -116,14 +154,14 @@
     node[above=11,right=-3] {$r\dd{\theta}$};
     
   % ANGLES
-  \tdplotdrawarc[->]{(O)}{0.29*\rvec}{0}{\phivec}
+  \tdplotdrawarc[->]{(O)}{0.35*\rvec}{0}{\phivec}
     {anchor=north}{$\phi$}
-  \tdplotdrawarc[->]{(O)}{0.4*\rvec}{\phivec}{\phivec+\dphi}
+  \tdplotdrawarc[->]{(O)}{0.45*\rvec}{\phivec}{\phivec+\dphi}
     {above=0.5,anchor=123}{\contour{white}{$\dd{\phi}$}}
   \tdplotsetthetaplanecoords{\phivec}
   \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.36*\rvec}{0}{\thetavec}
     {right=3,above}{$\theta$}
-  \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.5*\rvec}{\thetavec}{\thetavec+\dtheta}
+  \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.54*\rvec}{\thetavec}{\thetavec+\dtheta}
     {above right=-2}{\contour{white}{$\dd{\theta}$}}
   
 \end{tikzpicture}
@@ -177,103 +215,6 @@
   \draw pic[->,"$\theta$",draw=black,angle radius=16,angle eccentricity=1.4] {angle = R--P--N};
   %\draw pic[->,"$\Delta\Omega$",draw=black,angle radius=26,angle eccentricity=1.4] {angle = PB--O--PT};
   
-\end{tikzpicture}
-
-
-% CMS conventional coordinate system
-\tdplotsetmaincoords{75}{50} % to reset previous setting
-\begin{tikzpicture}[scale=2.7,tdplot_main_coords,rotate around x=90]
-  
-  % VARIABLES
-  \def\rvec{1.2}
-  \def\thetavec{40}
-  \def\phivec{70}
-  \def\w{0.3}
-  
-  % AXES
-  \coordinate (O) at (0,0,0);
-  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left]{$x$};
-  \draw[thick,->] (0,0,0) -- (0,1,0) node[below right]{$y$};
-  \draw[thick,->] (0,0,0) -- (0,0,1) node[below right]{$z$};
-  \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
-  
-  % VECTORS
-  \draw[->,red] (O) -- (P) node[above left] {P};
-  %\fill[radius=0.4pt,red] (P) circle;
-  \draw[dashed,red] (O)  -- (Pxy);
-  \draw[dashed,red] (P)  -- (Pxy);
-  \draw[dashed,red] (Py) -- (Pxy);
-  
-  % NODES
-  \fill[radius=0.8pt,black!20!red]
-    (O) circle node[left=4pt,below=2pt] {CMS};
-  
-  % ARCS
-  \tdplotdrawarc[->]{(O)}{0.2}{0}{\phivec}
-    {above=2pt,right=-1pt,anchor=mid west}{$\phi$}
-  \tdplotdrawarc[->,rotate around z=\phivec-90,rotate around y=-90]{(0,0,0)}{0.5}{0}{\thetavec}
-    {anchor=mid east}{$\theta$}
-
-\end{tikzpicture}
-
-
-% CMS conventional coordinate system with LHC and other detectors
-\tdplotsetmaincoords{75}{50} % to reset previous setting
-\begin{tikzpicture}[scale=2.7,tdplot_main_coords,rotate around x=90]
-  
-  % VARIABLES
-  \def\rvec{1.2}
-  \def\thetavec{40}
-  \def\phivec{70}
-  \def\R{1.1}
-  \def\w{0.3}
-  
-  % AXES
-  \coordinate (O) at (0,0,0);
-  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left]{$x$};
-  \draw[thick,->] (0,0,0) -- (0,1,0) node[below right]{$y$};
-  \draw[thick,->] (0,0,0) -- (0,0,1) node[below right]{$z$};
-  \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
-  
-  % VECTORS
-  \draw[->,red] (O) -- (P) node[above left] {P};
-  %\fill[radius=0.4pt,red] (P) circle;
-  \draw[dashed,red] (O)  -- (Pxy);
-  \draw[dashed,red] (P)  -- (Pxy);
-  \draw[dashed,red] (Py) -- (Pxy);
-  
-  % CIRCLE - LHC
-  \tdplotdrawarc[thick,rotate around x=90,black!70!blue]{(\R,0,0)}{\R}{0}{360}{}{}
-  
-  % COMPASS - the line between CMS and ATLAS has a ~12° declination (http://googlecompass.com)
-  \begin{scope}[shift={(1.1*\R,0,1.65*\R)},rotate around y=12]
-    \draw[<->,black!50] (-\w,0,0) -- (\w,0,0);
-    \draw[<->,black!50] (0,0,-\w) -- (0,0,\w);
-    \node[above left,black!50,scale=0.6] at (-\w,0,0) {N};
-  \end{scope}
-
-  % NODES
-  \node[left,align=center] at (0,0,1.1) {Jura};
-  \node[right] at (\R,0,0) {LHC};
-  \fill[radius=0.8pt,black!20!red]
-    (O) circle node[left=4pt,below=2pt] {CMS};
-  \draw[thick] (0.02,0,0) -- (0.5,0,0); % partially overdraw x-axis and CMS point
-  \fill[radius=0.8pt,black!20!blue]
-    (2*\R,0,0) circle
-    node[right=4pt,below=2pt,scale=0.9] {ATLAS};
-  \fill[radius=0.8pt,black!10!orange]
-    ({\R*sqrt(2)/2+\R},0,{ \R*sqrt(2)/2}) circle % 45 degrees from ATLAS
-    node[left=2pt,below=2pt,scale=0.8] {ALICE};
-  \fill[radius=0.8pt,black!60!green]
-    ({\R*sqrt(2)/2+\R},0,{-\R*sqrt(2)/2}) circle % 45 degrees from ATLAS
-    node[below=2pt,right=2pt,scale=0.8] {LHCb};
-  
-  % ARCS
-  \tdplotdrawarc[->]{(O)}{0.2}{0}{\phivec}
-    {above=2pt,right=-1pt,anchor=mid west}{$\phi$}
-  \tdplotdrawarc[->,rotate around z=\phivec-90,rotate around y=-90]{(0,0,0)}{0.5}{0}{\thetavec}
-    {anchor=mid east}{$\theta$}
-
 \end{tikzpicture}
 
 

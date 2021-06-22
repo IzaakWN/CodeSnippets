@@ -1,0 +1,79 @@
+% Author: Izaak Neutelings (May 2021)
+% Description: hadronic top quark jet
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{xcolor}
+\usetikzlibrary{calc}
+\usetikzlibrary{math} % for \tikzmath
+\tikzset{>=latex} % for LaTeX arrow head
+\usetikzlibrary{decorations.pathreplacing} % for curly braces
+
+\colorlet{myblue}{blue!70!black}
+\colorlet{mydarkblue}{blue!40!black}
+\colorlet{mygreen}{green!40!black}
+\colorlet{myred}{red!65!black}
+\tikzstyle{vector}=[->,very thick,myblue,line cap=round]
+\tikzstyle{ptmiss}=[->,dashed,thick,myred,line cap=round]
+\tikzstyle{cone}=[thin,blue!50!black,fill=blue!50!black!30] %,fill opacity=0.8
+\tikzstyle{conebase}=[cone,fill=blue!50!black!50] %,fill opacity=0.8
+\tikzstyle{mydashed}=[dash pattern=on 2pt off 2pt]
+
+\newcommand\jetcone[6][blue]{{
+  \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}{\pgfpointanchor{#3}{center}}
+  \edef\ang{#4/2}
+  \edef\e{#5}
+  \edef\vang{\pgfmathresult} % angle of vector OV
+  \tikzmath{
+    coordinate \C;
+    \C = (#2)-(#3);
+    \x = veclen(\Cx,\Cy)*\e*sin(\ang)^2; % x coordinate P
+    \y = tan(\ang)*(veclen(\Cx,\Cy)-\x); % y coordinate P
+    \a = veclen(\Cx,\Cy)*sqrt(\e)*sin(\ang); % vertical radius
+    \b = veclen(\Cx,\Cy)*tan(\ang)*sqrt(1-\e*sin(\ang)^2); % horizontal radius
+    \angb = acos(sqrt(\e)*sin(\ang)); % angle of P in ellipse
+  }
+  \coordinate (tmpL) at ($(#3)-(\vang:\x pt)+(\vang+90:\y pt)$); % tangency
+  \coordinate (tmpO) at ($(#2)+(\vang:0.04)$); % origin shifted
+  \coordinate (tmpO') at ($(#2)+(\vang:0.08)$); % origin shifted 2
+  \draw[thin,#1!40!black,rotate=\vang, %,fill=#1!50!black!80
+    top color=#1!40!black!60,bottom color=#1!60!black!50,shading angle=\vang]
+    (#3) ellipse({\a pt} and {\b pt});
+  #6 % extra tracks
+  \draw[thin,#1!40!black,rotate=\vang,
+  top color=#1!80!black!70,bottom color=#1!20!black!90,shading angle=\vang,fill opacity=0.3]
+    (tmpL) arc(180-\angb:180+\angb:{\a pt} and {\b pt})
+    -- (tmpO) -- cycle;
+}}
+
+
+\begin{document}
+
+
+% RESOLVED TOP JETS
+\def\R{2.6}
+\begin{tikzpicture}
+  \coordinate (O) at (0,0);
+  \coordinate (BJ) at (  65:1.1*\R); % b jet 1
+  \coordinate (SV) at (  65:0.4*\R); % secondary vertex
+  \coordinate (J1) at ( 160:1.0*\R); % q jet 1
+  \coordinate (J2) at (-130:1.0*\R); % q jet 2
+  \jetcone{O}{J1}{16}{0.08}{
+    \draw[->,line width=0.5,blue!20!black] (tmpO') to[out=162,in=-0] (166:1.26*\R);
+    \draw[->,line width=0.5,blue!20!black] (tmpO') to[out=158,in=-40] (154:1.26*\R);
+  }
+  \jetcone{O}{J2}{16}{0.12}{
+  
+  }
+  \jetcone[green!80!black]{O}{BJ}{19}{0.12}{
+    \draw[mydashed,red!80!black] (tmpO') -- (SV);
+    \draw[->,line width=0.5,green!20!black] (SV) to[out=67,in=-100] (70:1.26*\R);
+    \draw[->,line width=0.5,green!20!black] (SV) to[out=64,in=-136] (58:1.26*\R);
+  }
+  %\node[green!50!black] at (65:1.24*\R) {b};
+  %\node[blue!80!black,right] at (-5:1.00*\R) {$\mathrm{W} \to qq$};
+\end{tikzpicture}
+
+
+
+\end{document}

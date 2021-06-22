@@ -1,0 +1,143 @@
+% Author: Izaak Neutelings (December 2020)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{physics}
+\usepackage{tikz}
+\usetikzlibrary{calc} % for pic
+\usetikzlibrary{angles,quotes} % for pic
+\tikzset{>=latex} % for LaTeX arrow head
+
+\colorlet{xcol}{blue!70!black}
+\colorlet{vcol}{green!60!black}
+\colorlet{metalcol}{blue!25!black!30!white}
+\tikzstyle{vvec}=[->,vcol,very thick,line cap=round]
+\tikzstyle{rope}=[brown!20!black,double=brown!70!black,double distance=1,line width=0.3] %very thick
+\tikzstyle{thick rope}=[rope,double distance=2,line width=0.6]
+\tikzstyle{metal}=[draw=metalcol!10!black,rounded corners=0.1,
+  top color=metalcol,bottom color=metalcol!80!black,shading angle=10]
+\tikzstyle{ring}=[metalcol!20!black,double=metalcol!70!black,double distance=1,line width=0.3]
+\tikzstyle{wood}=[draw=brown!80!black,rounded corners=0.1,
+  top color=brown!80,bottom color=brown!80!black!80,shading angle=10]
+\def\wave#1#2{
+  ({(#1-0.22)*\xmax},0) to[out=0,in=180,looseness=0.6] (#1*\xmax,#2*\ymax)
+  to[out=0,in=180,looseness=0.6]++ (0.22*\xmax,#2*-\ymax)
+}
+\def\pole#1{
+  %\draw[wood] (0,-1.3*\ymax) rectangle (\t,1.3*\ymax);
+  \draw[wood] (#1,-1.3*\ymax) |- (#1+\t,1.3*\ymax) -- (#1+\t,-1.3*\ymax) arc(0:-180:{\t/2} and {0.4*\t/2}) -- cycle;
+  \draw[wood] (#1+\t/2,1.3*\ymax) ellipse ({\t/2} and {0.4*\t/2});
+}
+
+\begin{document}
+%\LARGE
+
+% INCIDENT - FIXED
+\def\xmax{2.2}
+\def\ymax{0.7}
+\def\t{0.12}
+\def\x{-0.5}
+\def\v{0.25*\xmax}
+\begin{tikzpicture}
+  \coordinate (T) at (\x*\xmax,\ymax);
+  \draw[rope] (-\xmax,0) -- \wave{\x}{1} -- (0,0);
+  \draw[metal] (0,0) circle(0.7*\t);
+ % \draw[wood] (0,-1.3*\ymax) rectangle (\t,1.3*\ymax);
+  \pole{0}
+  \draw[vvec] (T)++(-65:0.5*\ymax) --++ (\v,0) node[right=-2,scale=1] {$v$};
+\end{tikzpicture}
+
+% REFLECTION - FIXED
+\begin{tikzpicture}
+  \coordinate (T) at (\x*\xmax,-\ymax);
+  \draw[rope]
+    (-\xmax,0) -- \wave{\x}{-1} -- (0,0);
+  \draw[metal] (0,0) circle(.07);
+  %\draw[wood] (0,-1.3*\ymax) rectangle (\t,1.3*\ymax);
+  \pole{0}
+  \draw[vvec] (T)++(115:0.5*\ymax) --++ (-\v,0) node[left=-2,scale=1] {$v$};
+\end{tikzpicture}
+
+% INCIDENT - LOOSE
+\def\Rx{0.12}
+\def\Ry{0.07}
+\begin{tikzpicture}
+  \coordinate (T) at (\x*\xmax,\ymax);
+  \draw[ring] (\Rx,0) arc(0:180:{\Rx} and \Ry);
+  %\draw[wood] (-0.48*\t,-1.3*\ymax) rectangle (0.52*\t,1.3*\ymax);
+  \pole{-0.48*\t}
+  \draw[ring] (170:{\Rx} and \Ry) arc(170:370:{\Rx} and \Ry);
+  \draw[rope,line cap=round] (-2*\Rx,0) -- (-0.88*\Rx,0);
+  \draw[rope] (-\xmax,0) -- \wave{\x}{1} -- (-\Rx,0);
+  \draw[vvec] (T)++(-65:0.5*\ymax) --++ (\v,0) node[right=-2,scale=1] {$v$};
+\end{tikzpicture}
+
+% REFLECTION - LOOSE
+\def\Rx{0.12}
+\def\Ry{0.07}
+\begin{tikzpicture}
+  \coordinate (T) at (\x*\xmax,\ymax);
+  \draw[ring] (\Rx,0) arc(0:180:{\Rx} and \Ry);
+  %\draw[wood] (-0.48*\t,-1.3*\ymax) rectangle (0.52*\t,1.3*\ymax);
+  \pole{-0.48*\t}
+  \draw[ring] (170:{\Rx} and \Ry) arc(170:370:{\Rx} and \Ry);
+  \draw[rope,line cap=round] (-2*\Rx,0) -- (-0.88*\Rx,0);
+  \draw[rope] (-\xmax,0) -- \wave{\x}{1} -- (-\Rx,0);
+  \draw[vvec] (T)++(-115:0.5*\ymax) --++ (-\v,0) node[left=-2,scale=1] {$v$};
+\end{tikzpicture}
+
+% INCIDENT - THIN -> THICK
+\begin{tikzpicture}
+  \coordinate (T) at (\x*\xmax,\ymax);
+  \draw[blue!20!black,line width=1.5]
+    (-\xmax,0) -- \wave{\x}{1} -- (0,0);
+  \draw[thick rope,line cap=round] (-0.01,0) -- (0.01,0);
+  \draw[thick rope]
+    (0,0) -- (\xmax,0);
+  \draw[vvec] (T)++(-65:0.5*\ymax) --++ (\v,0) node[right=-2] {$v$};
+  %\node[right] at (-1.5*\xmax,0.7*\ymax) {$t=0$};
+\end{tikzpicture}
+
+% TRANSMISSION - THIN -> THICK
+\begin{tikzpicture}
+  \coordinate (L) at (\x*\xmax,-0.75*\ymax);
+  \coordinate (R) at (-\x*\xmax,0.25*\ymax);
+  \draw[blue!20!black,line width=1.5]
+    (-\xmax,0) -- \wave{\x}{-0.75} -- (0,0);
+  \draw[thick rope,line cap=round] (-0.01,0) -- (0.01,0);
+  \draw[thick rope]
+    (0,0) -- ({(-\x-0.16)*\xmax},0) to[out=0,in=180,looseness=1]
+    (-\x*\xmax,0.25*\ymax) to[out=0,in=180,looseness=1]++
+    (0.16*\xmax,-0.25*\ymax) -- (\xmax,0);
+  \draw[vvec] (L)++(115:0.4*\ymax) --++ (-\v,0) node[left=-2] {$v$};
+  \draw[vvec] (R)++(-10:0.1*\ymax) --++ (\v,0) node[above=4,right=-2] {$v'$};
+  %\node[right] at (-1.5*\xmax,0.7*\ymax) {$t=\Delta t$};
+\end{tikzpicture}
+
+% INCIDENT - THICK -> THIN
+\begin{tikzpicture}
+  \coordinate (T) at (\x*\xmax,\ymax);
+  \draw[blue!20!black,line width=1.5]
+    (0,0) -- (\xmax,0);
+  \draw[thick rope,line cap=round] (-0.01,0) -- (0.01,0);
+  \draw[thick rope]
+    (-\xmax,0) -- \wave{\x}{1} -- (0,0);
+  \draw[vvec] (T)++(-65:0.5*\ymax) --++ (\v,0) node[right=-2] {$v$};
+  %\node[right] at (-1.5*\xmax,0.7*\ymax) {$t=2\Delta t$};
+\end{tikzpicture}
+
+% TRANSMISSION - THICK -> THIN
+\begin{tikzpicture}
+  \coordinate (L) at (\x*\xmax,0.25*\ymax);
+  \coordinate (R) at (-\x*\xmax,0.75*\ymax);
+  \draw[blue!20!black,line width=1.5]
+    (0,0) -- \wave{-\x}{0.75} -- (\xmax,0);
+  \draw[thick rope,line cap=round] (-0.01,0) -- (0.01,0);
+  \draw[thick rope]
+    (-\xmax,0) -- ({(\x-0.16)*\xmax},0) to[out=0,in=180,looseness=1]
+    (\x*\xmax,0.25*\ymax) to[out=0,in=180,looseness=1]++
+    (0.16*\xmax,-0.25*\ymax) -- (0,0);
+  \draw[vvec] (L)++(190:0.1*\ymax) --++ (-\v,0) node[above=2,left=-2] {$v$};
+  \draw[vvec] (R)++(-65:0.4*\ymax) --++ (\v,0) node[above=2,right=-2] {$v'$};
+  %\node[right] at (-1.5*\xmax,0.7*\ymax) {$t=2\Delta t$};
+\end{tikzpicture}
+
+\end{document}

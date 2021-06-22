@@ -1,0 +1,132 @@
+% Author: Izaak Neutelings (October 2020)
+% Inspiration: https://tex.stackexchange.com/questions/25531/adding-underbrace-in-tikz
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{physics}
+\usepackage{siunitx}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usepackage[outline]{contour} % glow around text
+\usetikzlibrary{calc}
+\usetikzlibrary{angles,quotes} % for pic
+\usetikzlibrary{patterns,snakes}
+\tikzset{>=latex} % for LaTeX arrow head
+\contourlength{1.4pt}
+
+\colorlet{xcol}{blue!70!black}
+\colorlet{vcol}{green!60!black}
+\colorlet{myred}{red!65!black}
+\colorlet{mypurple}{blue!60!red!80}
+\colorlet{acol}{red!50!blue!80!black!80}
+\tikzstyle{CM}=[red!40!black,fill=red!80!black!80]
+\tikzstyle{rvec}=[->,xcol,very thick,line cap=round]
+\tikzstyle{force}=[->,myred,very thick,line cap=round]
+\tikzstyle{mass}=[line width=0.6,red!30!black,fill=red!40!black!10,rounded corners=1,
+                  top color=red!40!black!20,bottom color=red!40!black!10,shading angle=20]
+\tikzstyle{ground}=[preaction={fill,top color=blue!70!black!10,bottom color=blue!70!black!5,shading angle=20},
+                    fill,pattern color=blue!30!black,pattern=north east lines,draw=none,minimum width=0.3,minimum height=0.6]
+\tikzstyle{rope}=[brown!30!black,fill=brown!70!black,line width=0.4]
+\tikzstyle{limb}=[thick,line cap=round]
+
+\tikzset{
+  pics/Tin/.style={
+    code={
+      \def\R{0.12}
+      \draw[pic actions,line width=0.6,#1,fill=white] % ,thick
+        (0,0) circle (\R) (-135:.75*\R) -- (45:.75*\R) (-45:.75*\R) -- (135:.75*\R);
+  }},
+  pics/Tout/.style={
+    code={
+      \def\R{0.12}
+      \draw[pic actions,line width=0.6,#1,fill=white] (0,0) circle (\R);
+      \fill[pic actions,#1] (0,0) circle (0.3*\R);
+  }},
+  pics/Tin/.default=mypurple,
+  pics/Tout/.default=mypurple,
+}
+
+\begin{document}
+
+
+% TIGHT ROPE arms
+\def\L{3.2}   % length
+\def\T{0.08}  % plank thickness
+\def\H{2.2}   % human height
+\def\CM{0.06} % CM radius
+\begin{tikzpicture}
+  \coordinate (O) at (0,0);
+  \draw[rope] (O) circle (0.08);
+  \draw[thick] (0,\H) circle(0.3) coordinate (H);
+  \draw[thick] (H)++(-90:0.3) coordinate (N) to[out=-92,in=92]++ (0,-0.40*\H) coordinate (P);
+  \draw[limb] (N)++(-120:0.03) to[out=-120,in=30]++ (-0.27*\H,-0.3*\H); % right arm
+  \draw[limb] (N)++(-60:0.03) to[out=-60,in=140]++ (0.27*\H,-0.3*\H);   % left arm
+  \draw[limb] (P) to[out=-95,in=95] (96:0.1); % right leg
+  \draw[limb] (P) to[out=-85,in=88] (84:0.1); % left leg
+  \draw[CM] (0,0.54*\H) circle(\CM) node[below right=0,scale=0.8] {CM};
+\end{tikzpicture}
+
+
+% TIGHT ROPE - stick
+\begin{tikzpicture}
+  \coordinate (O) at (0,0);
+  \draw[rope] (O) circle (0.08);
+  \draw[thick] (0,\H) circle(0.3) coordinate (H);
+  \draw[thick] (H)++(-90:0.3) coordinate (N) to[out=-91,in=92]++ (0,-0.40*\H) coordinate (P);
+  \draw[limb] (P) to[out=-95,in=95] (96:0.1); % left leg
+  \draw[limb] (P) to[out=-85,in=88] (84:0.1); % right leg
+  \draw[myred,line width=1.5,line cap=round]
+    (-\H,0.1*\H) to[out=40,in=180] (0,0.47*\H) to[out=0,in=140] (\H,0.1*\H);
+  \draw[limb] (N)++(-95:0.03) to[out=-120,in=80]++ (-0.19*\H,-0.4*\H); % right arm
+  \draw[limb] (N)++(-85:0.03) to[out=-60,in=100]++ (0.19*\H,-0.4*\H);   % left arm
+  \draw[CM] (0,0.4*\H) circle(\CM) node[below right=0,scale=0.8] {CM};
+\end{tikzpicture}
+
+
+% TIGHT ROPE - weights
+\begin{tikzpicture}
+  \def\L{1.2}  % handle length
+  \def\w{0.3}  % mass width
+  \def\h{0.45} % mass height
+  \def\r{0.02} % rope radius
+  \coordinate (O) at (0,0);
+  \coordinate (SL) at (-\L/2,0.42*\H); % stick left
+  \coordinate (SR) at ( \L/2,0.42*\H); % stick right
+  \coordinate (ML) at (-\L/2,-0.2*\H); % mass left
+  \coordinate (MR) at ( \L/2,-0.2*\H); % mass right
+  \draw[rope] (O) circle (0.08);
+  \draw[thick] (0,\H) circle(0.3) coordinate (H);
+  \draw[thick] (H)++(-90:0.3) coordinate (N) to[out=-91,in=92]++ (0,-0.40*\H) coordinate (P);
+  \draw[limb] (P) to[out=-95,in=95] (96:0.1); % left leg
+  \draw[limb] (P) to[out=-85,in=88] (84:0.1); % right leg
+  \draw[myred,line width=1.5,line cap=round] (SL)++(-0.05,0) -- (SR) --++ (0.05,0);
+  \draw[limb] (N)++(-95:0.03) to[out=-120,in=85]++ (-0.14*\H,-0.44*\H); % right arm
+  \draw[limb] (N)++(-85:0.03) to[out=-60,in=95]++ (0.14*\H,-0.44*\H);   % left arm
+  \draw[CM] (0,-0.15*\H) circle(\CM) node[below=2,scale=0.8] {CM};
+  \draw[rope] (SL)++(-\r,0.02) arc(180:0:\r) -- ($(ML)+(\r,0)$) --++ (-2*\r,0) -- cycle;
+  \draw[rope] (SR)++(-\r,0.02) arc(180:0:\r) -- ($(MR)+(\r,0)$) --++ (-2*\r,0) -- cycle;
+  \draw[mass] (ML)++(-\w/2,-\h) rectangle++ (\w,\h);
+  \draw[mass] (MR)++(-\w/2,-\h) rectangle++ (\w,\h);
+\end{tikzpicture}
+
+
+% TIGHT ROPE - weights - forces
+\begin{tikzpicture}
+  \def\R{1.5}
+  \def\F{0.65*\R}
+  \def\ang{30}
+  \coordinate (O) at (0,0);
+  \coordinate (B) at (0,{-1.2*\R*cos(\ang)});
+  \coordinate (CM) at (-90+\ang:\R);
+  \coordinate (T) at ($(CM)+(60:0.3*\R)$);
+  \draw[dashed] (O) -- (B);
+  \draw[rope] (O) circle (0.14);
+  \draw[CM] (CM) circle(0.12) node[below=2,right=2,scale=0.8] {CM};
+  \draw[force] (O) --++ (0,\F) node[right=1] {$\vb{F}_\mathrm{N}$};
+  \draw[force] (CM) --++ (0,-\F) node[right=1] {$m\vb{g}$};
+  \pic[scale=1] at (T) {Tin};
+  \node[mypurple,above right=0] at (T) {$\vb*\tau$};
+  \draw[rvec] (O) -- (CM) node[midway,above right=-2] {$\vb{r}$};
+  \draw pic[->,"$\theta$",draw,angle radius=21,angle eccentricity=1.3] {angle=B--O--CM};
+\end{tikzpicture}
+
+
+\end{document}

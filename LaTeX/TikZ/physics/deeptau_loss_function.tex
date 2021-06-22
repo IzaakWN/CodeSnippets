@@ -1,0 +1,76 @@
+% Author: Izaak Neutelings (March 2021)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath,amssymb}
+\usepackage{bm} % math bold
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepackage[outline]{contour} % glow around text
+\contourlength{1.2pt}
+\tikzset{>=latex}
+
+\colorlet{myblue}{black!50!blue}
+\colorlet{mygreen}{black!50!green}
+%\colorlet{myred}{black!50!red}
+\definecolor{myred}{RGB}{110,47,23}
+\def\N{100}
+\def\tick#1#2{\draw[thick] (#1) ++ (#2:0.1) --++ (#2-180:0.2)}
+
+\begin{document}
+
+
+% LOSS FUNCTIONS
+% https://www.wolframalpha.com/input/?i=integrate+-ln+x+dx+from+x%3D0+to+1
+%  -ln(x) => N = 0.611
+% https://www.wolframalpha.com/input/?i=integrate+-%281-x%29%5E2+ln+x+dx+from+x%3D0+to+1
+%  -(1-x)^2 ln(x) => N = 18/11 = 1.63636
+% https://www.wolframalpha.com/input/?i=integrate+-sqrt%28x%29+ln%281-x%29+dx+from+x%3D0+to+1
+%  -x^0.5 ln(x) => N = 1/0.85358 = 1.172
+\def\xmax{2.2}
+\def\ymax{2.0}
+\begin{tikzpicture}
+  \def\a{0.85*\xmax} % x axis scale
+  \def\ga{2.0}  % gamma_alpha
+  \def\gc{0.5}  % gamma_cmb
+  %\def\yt{0.82} % y_tau
+  \def\A{0.60}   % amplitude
+  \def\Na{1.64*\A} % N_alpha
+  \def\Nc{1.17*\A} % N_cmb
+  \draw[->,thick] (-0.1*\ymax,0) -- (\xmax+0.1,0) node[below right=-1] {$y$};
+  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax+0.1);
+  \draw[dashed] (\a,0) --++ (0,0.98*\ymax);
+  \draw[thick,myblue,variable=\x,domain=\a*e^(-0.95*\ymax/\A):0.9*\xmax,samples=\N,smooth]
+    plot (\x,{-\A*ln(\x/(\a))});
+  \draw[thick,myred,variable=\x,domain=0.6*\a*e^(-0.95*\ymax/(\Na)):0.9*\xmax,samples=\N,smooth]
+    plot (\x,{-\Na*(1-\x/(\a))^\ga*ln(\x/(\a))});
+  %\draw[thick,myred,variable=\x,domain=0.45*\a*e^(-\ymax):0.9*\xmax,samples=\N,smooth]
+  %  plot (\x,{-20*(1-\yt)^\ga*ln(\x/(\a))});
+  \draw[thick,mygreen,variable=\x,domain=0:\a-0.9*\a*e^(-0.95*\ymax/(\Nc)),samples=\N,smooth]
+    plot (\x,{-\Nc*(\x/(\a))^\gc*ln(1-\x/(\a))});
+  %\draw[thick,mygreen,variable=\x,domain=0:\a,samples=\N,smooth]
+  %  plot (\x,{-(1-\x/(\a))^\gc*ln(1-\x/(\a))});
+  \tick{\a,0}{90} node[below,scale=0.9] {1};
+  \node[above right=-1,myblue]  at (0.25*\xmax,0.34*\ymax) {$H$};
+  \node[below left=-1,myred]    at (0.29*\xmax,0.38*\ymax) {$\bar{F}_\alpha$};
+  \node[above right=-1,mygreen] at (0.90*\a,   0.63*\ymax) {\contour{white}{$\bar{F}_\text{cmb}$}};
+\end{tikzpicture}
+
+
+% STEP FUNCTION
+\def\ymax{1.6}
+\begin{tikzpicture}
+  \def\a{0.40*\xmax} % x axis scale
+  \def\A{0.80*\ymax} % y axis scale
+  \draw[->,thick] (-0.1*\ymax,0) -- (\xmax+0.1,0) node[below right=-1] {$y_\tau$};
+  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax+0.1);
+  \draw[dashed] (0,\A) --++ (0.95*\xmax,0);
+  \draw[dashed] (\a,0) --++ (0,\ymax);
+  \draw[thick,myred,variable=\x,domain=0:0.95*\xmax,samples=\N,smooth]
+    plot (\x,{\A*0.5*(tanh(7*(\x-\a))+1)});
+  \tick{\a,0}{90} node[below,scale=0.9] {0.10};
+  \tick{0,\A}{ 0} node[left,scale=0.9] {1};
+  \node[below right=-1,myred]  at (0.73*\xmax,0.80*\ymax) {$D_\tau$};
+\end{tikzpicture}
+
+
+
+\end{document}

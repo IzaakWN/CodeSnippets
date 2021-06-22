@@ -1,0 +1,165 @@
+% Author: Izaak Neutelings (October 2020)
+% Inspiration: https://tex.stackexchange.com/questions/25531/adding-underbrace-in-tikz
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{physics}
+\usepackage{siunitx}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usepackage[outline]{contour} % glow around text
+\usetikzlibrary{calc}
+\usetikzlibrary{angles,quotes} % for pic
+\usetikzlibrary{patterns,snakes}
+\tikzset{>=latex} % for LaTeX arrow head
+\contourlength{1.4pt}
+
+\colorlet{xcol}{blue!70!black}
+\colorlet{vcol}{green!60!black}
+\colorlet{myred}{red!65!black}
+\colorlet{acol}{red!50!blue!80!black!80}
+\tikzstyle{mass}=[line width=0.6,red!30!black,fill=red!40!black!10,rounded corners=1,
+                  top color=red!40!black!20,bottom color=red!40!black!10,shading angle=20]
+\tikzstyle{ground}=[preaction={fill,top color=blue!50!black!10,bottom color=blue!50!black!5,shading angle=20},
+                    fill,pattern color=blue!20!black,pattern=north east lines,draw=none,minimum width=0.3,minimum height=0.6]
+\tikzstyle{velocity}=[->,vcol,very thick,line cap=round]
+
+\tikzset{
+  pics/collision/.style={
+    code={
+      \draw[line width=0.5*#1,orange,fill=yellow]
+        (0:0.20*#1) -- (30:0.06*#1) -- (50:0.25*#1) -- (80:0.10*#1) -- (105:0.32*#1) --
+        (140:0.08*#1) -- (170:0.25*#1) -- (190:0.08*#1) -- (220:0.25*#1) --
+        (250:0.08*#1) -- (270:0.24*#1) -- (300:0.08*#1) -- (320:0.25*#1) -- (340:0.09*#1) -- cycle;
+  }},
+  pics/collision/.default=1,
+}
+
+
+\begin{document}
+
+
+% COLLISION 1D before
+\def\w{0.8} % mass width
+\def\h{0.5} % mass height
+\def\v{0.7} % mass velocity
+\def\L{4.6} % length
+\begin{tikzpicture}
+  \def\d{3.8} % distance
+  \coordinate (M1) at (-\d/2+\w/2,0);
+  \coordinate (M2) at (\d/2-\w/2,0);
+  \draw[ground] (-\L/2,0) rectangle++ (\L,-0.2);
+  \draw[thick] (-\L/2,0) --++ (\L,0);
+  \draw[velocity] (M1)++(\w/2,\h/2) --++ (1.1*\v,0) node[left=2,above=0] {$\vb{v}_1$};
+  \draw[velocity] (M2)++(-\w/2,\h/2) --++ (-0.9*\v,0) node[right=0,above=0] {$\vb{v}_2$};
+  \draw[mass] (M1)++(-\w/2,0) rectangle++ (\w,\h) node[midway] {$m_1$};
+  \draw[mass] (M2)++(-\w/2,0) rectangle++ (\w,\h) node[midway] {$m_2$};
+\end{tikzpicture}
+
+
+% COLLISION 1D after (elastic)
+\begin{tikzpicture}
+  \def\d{2.2} % distance
+  \coordinate (M1) at (-\d/2+\w/2,0);
+  \coordinate (M2) at (\d/2-\w/2,0);
+  \draw[ground] (-\L/2,0) rectangle++ (\L,-0.2);
+  \draw[thick] (-\L/2,0) --++ (\L,0);
+  \draw[velocity] (M1)++(-\w/2,\h/2) --++ (-0.8*\v,0) node[left=-2] {$\vb{v}'_1$};
+  \draw[velocity] (M2)++(\w/2,\h/2) --++ (1.2*\v,0) node[right=-2] {$\vb{v}'_2$};
+  \draw[mass] (M1)++(-\w/2,0) rectangle++ (\w,\h) node[midway] {$m_1$};
+  \draw[mass] (M2)++(-\w/2,0) rectangle++ (\w,\h) node[midway] {$m_2$};
+  \pic[scale=1] at (0,0.5*\h) {collision={0.8}};
+\end{tikzpicture}
+
+
+% COLLISION 1D after (inelastic)
+\begin{tikzpicture}
+  \def\x{0.8} % position
+  \coordinate (M1) at (\x-\w/2,0);
+  \coordinate (M2) at (\x+\w/2,0);
+  \draw[ground] (-\L/2,0) rectangle++ (\L,-0.2);
+  \draw[thick] (-\L/2,0) --++ (\L,0);
+  \draw[velocity] (M2)++(\w/2,\h/2) --++ (0.4,0) node[right=-1] {$\vb{v}'$};
+  \draw[mass] (M1)++(-\w/2,0) rectangle++ (\w,\h) node[midway] {$m_1$};
+  \draw[mass] (M2)++(-\w/2,0) rectangle++ (\w,\h) node[midway] {$m_2$};
+  \pic[scale=1,rotate=-20] at (-0.1*\L,0.5*\h) {collision={0.8}};
+\end{tikzpicture}
+
+
+% COLLISION 2D before
+\def\w{0.8} % mass width
+\def\h{0.6} % mass height
+\def\d{1.5} % distance
+\begin{tikzpicture}
+  \coordinate (M1) at (0,\d);
+  \coordinate (M2) at (\d,0);
+  \draw[<->] (-0.4*\w,0.4*\d-0.4*\h) node[left] {$y$} |-++ (0.4*\d,-0.4*\d) node[right] {$x$};
+  \draw[velocity] (M1)++(\w/2,0) --++ (\v,0) node[above=0] {$\vb{v}_1$};
+  \draw[velocity] (M2)++(0,\h/2) --++ (0,\v) node[right=0] {$\vb{v}_2$};
+  \draw[mass] (M1)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m_1$};
+  \draw[mass] (M2)++(-\h/2,-\w/2) rectangle++ (\h,\w) node[midway] {$m_2$};
+\end{tikzpicture}
+
+
+% COLLISION 2D after
+\begin{tikzpicture}
+  \coordinate (M1) at (\d-0.8*\w,0.8*\d);
+  \coordinate (M2) at (\d,0.8*\d-0.3*\w);
+  \draw[<->] (0,0.4*\d) node[left] {$y$} |-++ (0.4*\d,-0.4*\d) node[right] {$x$};
+  \draw[velocity] (M1)++(0.52*\w,0.30*\h) --++ ({atan(0.8)}:\v) node[above right=-3] {$\vb{v}'$};
+  \draw[mass]
+    (M1)++(\w/2,\h/2) -|++ (-\w,-\h) --++ (\w,0) coordinate (I0)
+    to[out=100,in=-100]++(-0.05*\w,0.3*\h) coordinate (I1)
+    to[out=100,in=-100]++( 0.08*\w,0.3*\h) coordinate (I2)
+    to[out=100,in= -80]++(-0.03*\w,0.2*\h) coordinate (I3) --  cycle;
+    %node[midway] {$m_2$};
+  \draw[mass]
+    (M2)++(0,\w/2) -|++ (\h/2,-\w) -|++ (-\h,0.4*\w) -- ([xshift=0.4]I0)
+    to[out=100,in=-100] ([xshift=0.4]I1)
+    to[out=100,in=-100] ([xshift=0.4]I2)
+    to[out=100,in= -80] ([xshift=0.4]I3) -- cycle;
+  \node[red!30!black] at (M1) {$m_1$};
+  \node[red!30!black] at (M2) {\,$m_2$};
+  %\fill[blue] (M1) circle (0.05);
+  %\fill[red] (M2) circle (0.05);
+\end{tikzpicture}
+
+
+% COLLISION 2D together
+\begin{tikzpicture}
+  \def\xmax{2.6} % max x axis
+  \def\ymax{2.2} % max y axis
+  \def\d{1.9}    % distance
+  \def\v{0.7}    % mass velocity
+  \def\ang{40}  % angle after
+  \coordinate (O) at (0,0);
+  \coordinate (M1) at (-0.7*\xmax,0);
+  \coordinate (M2) at (0,-0.7*\ymax);
+  \coordinate (M')  at (\ang:\d); %(\d-0.07*\w,0.7*\d+0.23*\w);
+  \coordinate (M1') at ($(\ang:\d)+(-0.4*\w,0)$) ; %(\d-0.6*\w,0.7*\d);
+  \coordinate (M2') at ($(\ang:\d)+(0.4*\w,-0.3*\w)$); %(\d+0.2*\w,0.7*\d-0.3*\w);
+  \draw[dashed] (0,0) -- (M');
+  \draw[->,thick] (0,-\ymax) -- (0,\ymax) node[left] {$y$};
+  \draw[->,thick] (-\xmax,0) -- (\xmax,0) coordinate (X) node[below] {$x$};
+  \draw[velocity] (M')++(\ang:0.3*\w) --++ (\ang:1.3*\v) node[above right=-3] {$\vb{v}'$};
+  \draw[mass]
+    (M1')++(\w/2,\h/2) -|++ (-\w,-\h) --++ (\w,0) coordinate (I0)
+    to[out=100,in=-100]++(-0.05*\w,0.3*\h) coordinate (I1)
+    to[out=100,in=-100]++( 0.08*\w,0.3*\h) coordinate (I2)
+    to[out=100,in= -80]++(-0.03*\w,0.2*\h) coordinate (I3) --  cycle;
+    %node[midway] {$m_2$};
+  \draw[mass]
+    (M2')++(0,\w/2) -|++ (\h/2,-\w) -|++ (-\h,0.4*\w) -- ([xshift=0.4]I0)
+    to[out=100,in=-100] ([xshift=0.4]I1)
+    to[out=100,in=-100] ([xshift=0.4]I2)
+    to[out=100,in= -80] ([xshift=0.4]I3) -- cycle;
+  \node[red!30!black] at (M1') {$m_1$};
+  \node[red!30!black] at (M2') {\,$m_2$};
+  \draw pic["$\theta$",xcol,draw=xcol,angle radius=14,angle eccentricity=1.4] {angle=X--O--M'}; %pic text options={shift={(0.05,-0.05)}}
+  \draw[velocity] (M1)++(\w/2,0) --++ (1.1*\v,0) node[above=-1] {$\vb{v}_1$};
+  \draw[velocity] (M2)++(0,\h/2) --++ (0,\v) node[right=-1] {$\vb{v}_2$};
+  \draw[mass] (M1)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m_1$};
+  \draw[mass] (M2)++(-\h/2,-\w/2) rectangle++ (\h,\w) node[midway] {$m_2$};
+  \pic[scale=1,rotate=110] at (O) {collision={1.1}};
+\end{tikzpicture}
+
+
+\end{document}

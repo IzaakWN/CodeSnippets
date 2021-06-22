@@ -1,0 +1,69 @@
+% Author: Izaak Neutelings (June 2017)
+% taken from https://tex.stackexchange.com/questions/159445/draw-in-cylindrical-and-spherical-coordinates
+
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{physics}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage[outline]{contour} % glow around text
+\usepackage{xcolor}
+
+\colorlet{veccol}{green!50!black}
+\colorlet{projcol}{blue!70!black}
+\colorlet{myblue}{blue!70!black}
+\colorlet{xcol}{blue!85!black}
+\tikzset{>=latex} % for LaTeX arrow head
+\tikzstyle{proj}=[projcol!80,line width=0.08] %very thin
+\tikzstyle{area}=[draw=veccol,fill=veccol!80,fill opacity=0.6]
+\tikzstyle{vector}=[->,veccol,thick]
+\usetikzlibrary{angles,quotes} % for pic (angle labels)
+\contourlength{1.3pt}
+
+\begin{document}
+
+
+
+% 3D AXIS with spherical coordinates
+\tdplotsetmaincoords{60}{105}
+\begin{tikzpicture}[scale=2.0,tdplot_main_coords]
+  
+  % VARIABLES
+  \def\l{0.3}
+  \def\rvec{1.2}
+  \def\thetavec{46}
+  \def\phivec{50}
+  
+  % AXES
+  \coordinate (O) at (0,0,0);
+  \coordinate (A) at (0.2,-0.1,0.9);
+  \coordinate (P1) at (0.3,0.2,0.85);
+  \coordinate (P2) at (0.8,1.0,0.6);
+  \coordinate (B) at (0.9,1.2,0.3);
+  %\tdplotsetcoord{P1}{\rvec}{\thetavec}{\phivec}
+  %\tdplotsetcoord{P2}{\rvec}{\thetavec}{\phivec}
+  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-2]{$x$};
+  \draw[thick,->] (0,0,0) -- (0,1,0) node[right=-1]{$y$};
+  \draw[thick,->] (0,0,0) -- (0,0,1) node[above=-1]{$z$};
+  %\draw[vector] (0,0,0) -- (1.3*\l,0,0) node[above=3,left=-1,scale=0.8]{$\vu{x}$};
+  %\draw[vector] (0,0,0) -- (0,.9*\l,0) node[right=2,above=-1,scale=0.8]{$\vu{y}$};
+  %\draw[vector] (0,0,0) -- (0,0,\l) node[left,scale=0.8]{$\vu{z}$};
+  
+  % PATH
+  \draw[xcol!80]
+    (A) to[out=-45,in=160] (P1) to[out=-20,in=100] (P2) to[out=-80,in=150] (B);
+  
+  % VECTORS
+  \node[circle,inner sep=0.9,fill=xcol!80!black] (P1') at (P1) {};
+  \node[circle,inner sep=0.9,fill=xcol!80!black] (P2') at (P2) {};
+  \draw[-stealth,thick,xcol] (O)  -- (P1')
+    node[xcol,midway,above=4,right=-1,scale=0.8] {$\vb{r}(t_1)$}
+    node[xcol!80!black,above right=-2] {$\mathrm{P}_1$};
+  \draw[-stealth,thick,xcol] (O)  -- (P2')
+    node[xcol,midway,right=4,above=-2,scale=0.8] {$\vb{r}(t_2)$}
+    node[xcol!80!black,above right=-2] {$\mathrm{P}_2$};
+
+\end{tikzpicture}
+
+
+
+\end{document}
