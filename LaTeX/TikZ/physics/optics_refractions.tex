@@ -71,16 +71,16 @@
   
   % MEDIUM
   \fill[glass] (L) rectangle++ (\L,-\t); % glass gradient
-  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h);
+  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h); % glass bulk
   %\fill[glass] (L) rectangle (\L/2,-\h);
   \node[above left=1] at (R) {$n_1$};
   \node[below left=1] at (R) {$n_2>n_1$};
   
   % LINES
   \draw[dashed] (T) -- (B); % bisector
-  \draw[light beam={0.48}] (I) -- (O);
-  \draw[light beam={0.65},line width=0.4] (O) -- (M);
-  \draw[light beam={0.48},line width=0.6] (O) -- (F);
+  \draw[light beam={0.48}] (I) -- (O); % incoming ray
+  \draw[light beam={0.65},line width=0.4] (O) -- (M); % reflected ray
+  \draw[light beam={0.48},line width=0.6] (O) -- (F); % refracted ray
   
   % ANGLES
   \draw pic["$\theta_1$",draw=black,angle radius=28,angle eccentricity=1.3] {angle = T--O--I}; %\contour{white}{
@@ -315,7 +315,7 @@
 \end{tikzpicture}
 
 
-% REFLECTION & REFRACTION
+% REFLECTION & REFRACTION - Brewster angle
 \begin{tikzpicture}
   \def\L{4.9}   % width interface
   \def\l{2.1}   % length ray
@@ -324,7 +324,7 @@
   \def\f{0.6}   % fraction of interface to the left
   \def\na{1.0}  % air
   \def\ng{1.5}  % glass
-  \def\anga{60} % angle of incident ray
+  \def\anga{56} % angle of incident ray
   \def\angg{asin(\na/\ng*sin(\anga))}
   \coordinate (O) at (0,0);            % point of contact
   \coordinate (I) at (90+\anga:\l);    % point incident (top left)
@@ -337,15 +337,15 @@
   
   % MEDIUM
   \fill[glass] (L) rectangle++ (\L,-\t); % glass gradient
-  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h);
+  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h); % glass bulk
   \node[above right=1,scale=0.8] at (L) {air ($n_1=1$)};
   \node[below right=1,scale=0.8] at (L) {glass ($n_2=1.5$)};
   
   % LINES
   %\draw[dashed] (T) -- (B); % bisector
-  \draw[light beam={0.48}] (I) -- (O);
-  \draw[light beam={0.65},line width=0.4] (O) -- (M);
-  \draw[light beam={0.48},line width=0.6] (O) -- (F);
+  \draw[light beam={0.48}] (I) -- (O); % incoming ray
+  \draw[light beam={0.65},line width=0.4] (O) -- (M); % reflected ray
+  \draw[light beam={0.48},line width=0.6] (O) -- (F); % refracted ray
   
   % ANGLES
   \draw pic["$\gamma$",draw=black,angle radius=16,angle eccentricity=1.30] {angle = M--O--I};
