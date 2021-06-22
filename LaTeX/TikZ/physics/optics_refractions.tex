@@ -51,33 +51,33 @@
 
 % REFLECTION & REFRACTION
 \begin{tikzpicture}
-  \def\L{3.8}
-  \def\l{2.1}
-  \def\t{0.5}
-  \def\h{2.1}
-  \def\f{0.4}
-  \def\na{1.0} % air
-  \def\ng{1.5} % glass
-  \def\anga{30}
+  \def\L{3.8}   % width interface
+  \def\l{2.1}   % length ray
+  \def\t{0.5}   % depth glass gradient
+  \def\h{2.1}   % bisector height
+  \def\f{0.4}   % fraction of interface to the left
+  \def\na{1.0}  % air
+  \def\ng{1.5}  % glass
+  \def\anga{30} % angle of incident ray
   \def\angg{asin(\na/\ng*sin(\anga))}
-  \coordinate (O) at (0,0);
-  \coordinate (I) at (90+\anga:\l);
-  \coordinate (M) at (90-\anga:\l);
-  \coordinate (F) at ({-90+\angg}:\l);
-  \coordinate (L) at (-\f*\L,0);
-  \coordinate (R) at ({(1-\f)*\L},0);
-  \coordinate (T) at (0,\h);
-  \coordinate (B) at (0,-1.0*\h);
+  \coordinate (O) at (0,0);            % point of contact
+  \coordinate (I) at (90+\anga:\l);    % point incident (top left)
+  \coordinate (M) at (90-\anga:\l);    % point reflected (top right)
+  \coordinate (F) at ({-90+\angg}:\l); % point refracted (bottom)
+  \coordinate (L) at (-\f*\L,0);       % left point interface
+  \coordinate (R) at ({(1-\f)*\L},0);  % right point interface
+  \coordinate (T) at (0,\h);           % top middle point (bisector)
+  \coordinate (B) at (0,-1.0*\h);      % bottom middle point (bisector)
   
   % MEDIUM
-  \fill[glass] (L) rectangle++ (\L,-\t);
+  \fill[glass] (L) rectangle++ (\L,-\t); % glass gradient
   \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h);
   %\fill[glass] (L) rectangle (\L/2,-\h);
   \node[above left=1] at (R) {$n_1$};
   \node[below left=1] at (R) {$n_2>n_1$};
   
   % LINES
-  \draw[dashed] (T) -- (B);
+  \draw[dashed] (T) -- (B); % bisector
   \draw[light beam={0.48}] (I) -- (O);
   \draw[light beam={0.65},line width=0.4] (O) -- (M);
   \draw[light beam={0.48},line width=0.6] (O) -- (F);
@@ -191,7 +191,7 @@
   \coordinate (B) at (0,-\h);
   
   % MEDIUM
-  \fill[glass] (L) rectangle++ (\L,-\t);
+  \fill[glass] (L) rectangle++ (\L,-\t); % glass gradient
   \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h);
   %\fill[glass] (L) rectangle (\L/2,-\h);
   \node[above right=1] at (L) {$n_2$};
@@ -311,6 +311,45 @@
   }
   \dot{{-90+\angg}:{\l*2/(\N+1)}} % refracted
   \dot{{-90+\angg}:{\l*4/(\N+1)}} % refracted
+  
+\end{tikzpicture}
+
+
+% REFLECTION & REFRACTION
+\begin{tikzpicture}
+  \def\L{4.9}   % width interface
+  \def\l{2.1}   % length ray
+  \def\t{0.5}   % depth glass gradient
+  \def\h{2.1}   % bisector height
+  \def\f{0.6}   % fraction of interface to the left
+  \def\na{1.0}  % air
+  \def\ng{1.5}  % glass
+  \def\anga{60} % angle of incident ray
+  \def\angg{asin(\na/\ng*sin(\anga))}
+  \coordinate (O) at (0,0);            % point of contact
+  \coordinate (I) at (90+\anga:\l);    % point incident (top left)
+  \coordinate (M) at (90-\anga:\l);    % point reflected (top right)
+  \coordinate (F) at ({-90+\angg}:\l); % point refracted (bottom)
+  \coordinate (L) at (-\f*\L,0);       % left point interface
+  \coordinate (R) at ({(1-\f)*\L},0);  % right point interface
+  \coordinate (T) at (0,\h);           % top middle point (bisector)
+  \coordinate (B) at (0,-1.0*\h);      % bottom middle point (bisector)
+  
+  % MEDIUM
+  \fill[glass] (L) rectangle++ (\L,-\t); % glass gradient
+  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h);
+  \node[above right=1,scale=0.8] at (L) {air ($n_1=1$)};
+  \node[below right=1,scale=0.8] at (L) {glass ($n_2=1.5$)};
+  
+  % LINES
+  %\draw[dashed] (T) -- (B); % bisector
+  \draw[light beam={0.48}] (I) -- (O);
+  \draw[light beam={0.65},line width=0.4] (O) -- (M);
+  \draw[light beam={0.48},line width=0.6] (O) -- (F);
+  
+  % ANGLES
+  \draw pic["$\gamma$",draw=black,angle radius=16,angle eccentricity=1.30] {angle = M--O--I};
+  \draw pic["$\delta$",draw=black,angle radius=12,angle eccentricity=1.45] {angle = I--O--F};
   
 \end{tikzpicture}
 
