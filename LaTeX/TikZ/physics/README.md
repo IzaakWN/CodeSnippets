@@ -5,3 +5,4 @@ Please see
 * Gallery of more diagrams: https://texample.net/tikz/examples/
 * Basic tutorial and simple examples: https://wiki.physik.uzh.ch/cms/latex:tikz
 * Official TikZ manual: http://pgf.sourceforge.net/pgf_CVS.pdf
+* Some of this figures are used for Ben Kilminster's lecture notes [[https://www.physik.uzh.ch/de/lehre/PHY111/HS2020.html#Lecture_information|PHY111]] or [[https://www.physik.uzh.ch/de/lehre/PHY121/FS2021.html#Lecture_information|PHY121]].
