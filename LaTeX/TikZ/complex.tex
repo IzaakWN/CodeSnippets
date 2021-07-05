@@ -2,7 +2,7 @@
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{amsmath}
 \usepackage{tikz}
-%\usepackage{physics}
+\usepackage{physics}
 \usepackage[outline]{contour} % glow around text
 %\usetikzlibrary{intersections}
 %\usetikzlibrary{decorations.markings}
@@ -112,7 +112,7 @@
   \coordinate (R) at (\ang:\R);
   \coordinate (X) at ({\R*cos(\ang)},0);
   \coordinate (Y) at (0,{\R*sin(\ang)});
-  \draw[xline] (O) circle (0.995*\R);
+  \draw[xline] (O) circle (\R); %0.995*\R
   \node[fill=myred,circle,inner sep=1] (R') at (R) {};
   \node[mydarkblue,above right=0] at (R') {$z(t)=Ae^{i\omega t}$};
   \draw[dashed,mydarkblue]
@@ -122,10 +122,10 @@
   \draw[vector] (O) -- (R') node[pos=0.55,above left=-2] {$A$};
   \draw pic[->,"$\omega t$",mydarkblue,draw=mydarkblue,angle radius=22,angle eccentricity=1.4]
     {angle = X--O--R};
-  \tick{0,\R}{0}; %node[scale=0.9,left=2] {\contour{white}{$R$}};
-  \tick{\R,0}{90}; %node[scale=0.9,right=1,below=0] {\contour{white}{$R$}};
-  \tick{0,-\R}{0};
-  \tick{-\R,0}{90};
+  \tick{0,\R+0.015}{0}; %node[scale=0.9,left=2] {\contour{white}{$R$}};
+  \tick{\R+0.015,0}{90}; %node[scale=0.9,right=1,below=0] {\contour{white}{$R$}};
+  \tick{0,-\R-0.015}{0};
+  \tick{-\R-0.015,0}{90};
   \tick{X}{90} node[scale=0.9,left=14,below=-1] {$A\cos(\omega t)$}; %{\contour{white}{$A\cos(\omega t)$}};
   \tick{Y}{ 0} node[scale=0.9,below=1,left=-2] {$A\sin(\omega t)$}; % {\contour{white}{$A\sin(\omega t)$}};
 \end{tikzpicture}
@@ -245,8 +245,73 @@
 
 
 
+% VECTOR ROTATION
+\def\xmax{2.7}
+\def\ymax{2.7}
+\def\R{2.3}
+\def\ang{28}
+\def\dang{35}
+\begin{tikzpicture}
+  \coordinate (O) at (0,0);
+  \coordinate (R) at (\ang:\R);
+  \coordinate (Q) at (\ang+\dang:\R);
+  \coordinate (X) at ({\R*cos(\ang)},0);
+  \coordinate (Y) at (0,{\R*sin(\ang)});
+  \coordinate (X') at ({\R*cos(\ang+\dang)},0);
+  \coordinate (Y') at (0,{\R*sin(\ang+\dang)});
+  %\draw[myblue] (O) circle (0.995*\R);
+  \draw[myblue] (-10:\R) arc (-10:100:\R);
+  \node[fill=myred,circle,inner sep=0.8] at (R) {};
+  \node[fill=myred,circle,inner sep=0.8] at (Q) {};
+  \node[mydarkblue,above right=-2] at (R) {$\vb{r}=(x,y)$};
+  \node[mydarkblue,above right=-2] at (Q) {$\vb{r}'=(x',y')$};
+  \draw[dashed,mydarkblue]
+    (Y) -- (R) --++ (0,{0.1-\R*sin(\ang)});
+  \draw[dashed,mydarkblue]
+    (Y') -- (Q) --++ (0,{0.1-\R*sin(\ang+\dang)});
+  \draw[->,line width=0.9] (-0.1*\xmax,0) -- (\xmax+0.05,0) node[right] {$x$};
+  \draw[->,line width=0.9] (0,-0.1*\ymax) -- (0,\ymax+0.05) node[left] {$y$};
+  \draw[vector] (O) -- (R);
+  \draw[vector] (O) -- (Q);
+  \draw pic[->,"$\phi$",mydarkblue,draw=mydarkblue,angle radius=20,angle eccentricity=1.35]
+    {angle = R--O--Q};
+  \tick{0,\R+0.015}{0};
+  \tick{\R+0.015,0}{90};
+  \tick{X}{90} node[scale=0.9,left=14,below=-1] {$x$};
+  \tick{Y}{ 0} node[scale=0.9,below=1,left=-2] {$y$};
+  \tick{X'}{90} node[scale=0.9,left=14,below=-1] {$x'$};
+  \tick{Y'}{ 0} node[scale=0.9,below=1,left=-2] {$y'$};
+\end{tikzpicture}
 
 
+% COMPLEX ROTATION
+\begin{tikzpicture}
+  \coordinate (O) at (0,0);
+  \coordinate (R) at (\ang:\R);
+  \coordinate (Q) at (\ang+\dang:\R);
+  \coordinate (X) at ({\R*cos(\ang)},0);
+  \coordinate (Y) at (0,{\R*sin(\ang)});
+  %\draw[myblue] (O) circle (0.995*\R);
+  \draw[myblue] (-10:\R) arc (-10:100:\R);
+  \node[fill=myred,circle,inner sep=0.8] at (R) {};
+  \node[fill=myred,circle,inner sep=0.8] at (Q) {};
+  \node[mydarkblue,above right=0] at (R) {$z=re^{i\theta}$};
+  \node[mydarkblue,left=2,above right=0] at (Q) {$ze^{i\phi}=re^{i(\theta+\phi)}$};
+  \draw[dashed,mydarkblue]
+    (Y) -- (R) --++ (0,{0.1-\R*sin(\ang)});
+  \draw[->,line width=0.9] (-0.1*\xmax,0) -- (\xmax+0.05,0) node[right] {Re};
+  \draw[->,line width=0.9] (0,-0.1*\ymax) -- (0,\ymax+0.05) node[left] {Im};
+  \draw[vector] (O) -- (R) node[pos=0.65,above left=-3] {$r$};
+  \draw[vector] (O) -- (Q) node[pos=0.65,above left=-3] {$r$};
+  \draw pic[->,"$\theta$",mydarkblue,draw=mydarkblue,angle radius=24,angle eccentricity=1.25]
+    {angle = X--O--R};
+  \draw pic[->,"$\phi$",mydarkblue,draw=mydarkblue,angle radius=20,angle eccentricity=1.35]
+    {angle = R--O--Q};
+  \tick{0,\R+0.015}{0};
+  \tick{\R+0.015,0}{90};
+  \tick{X}{90} node[scale=0.9,left=14,below=-1] {$r\cos\theta$};
+  \tick{Y}{ 0} node[scale=0.9,below=1,left=-2] {$r\sin\theta$};
+\end{tikzpicture}
 
 
 \end{document}

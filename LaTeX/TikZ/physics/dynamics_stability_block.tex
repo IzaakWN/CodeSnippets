@@ -61,7 +61,7 @@
 
 
 % BLOCK - metastable
-\def\H{2.3} % block height
+\def\H{3.1} % block height
 \def\W{1.4} % block width
 \def\R{sqrt(\W^2+\H^2)/2} % block half-diagonal
 \def\D{0.25} % ground depth
@@ -114,7 +114,7 @@
   \node[mypurple,above=1] at (T) {$\vb*\tau$};
   \draw pic[myarr,draw,angle radius=35,angle eccentricity=1.1] {angle=BL--BR--L};
   \draw[rvec] (BR) -- (CM) node[midway,below left=-2] {$\vb{r}$};
-  \draw[->] (115:1.2*\H) arc(110:140:0.5*\H) node[above left=-1] {$\alpha$};
+  \draw[->] (110:1.1*\H) arc(110:148:0.4*\H) node[above left=-1] {$\alpha$};
   \fill[blue!50!black] (BR) circle(0.03*\W);
 \end{tikzpicture}
 

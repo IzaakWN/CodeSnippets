@@ -28,7 +28,9 @@
   \def\tick#1#2#3{\draw[thick,#2] (#1+.09) --++ (0,-.18) node[below=-2pt,scale=1] {\strut #3};}
   
   % MIDDLE
-  \fill[mygreen] (-7,0) rectangle (80,\h);
+  \fill[left color=white,right color=mygreen]
+    (-7,0) rectangle (10,\h);
+  \fill[mygreen] (10,0) rectangle (80,\h);
   \fill[left color=mygreen,right color=myyellow]
     (75,0) rectangle (85,\h);
   \fill[left color=myyellow,right color=myred]

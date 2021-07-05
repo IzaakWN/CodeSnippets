@@ -318,12 +318,17 @@
   \draw[<->] (-\a,\W/2) -- (-\a,\G) node[measure,fill=green!80!black!8,inner sep=1,outer sep=0] {$r$};
   \draw[<->] (-\a,-1.1*\G) -- (\a,-1.1*\G) node[measure] {$L$};
   \draw[normalvec] (-1.1*\a,-0.6*\G) --++ (-0.25*\G,0) node[left] {$\vu{n}$};
-  \draw[normalvec] (+1.1*\a,-0.5*\G) --++ (+0.25*\G,0) node[above] {$\vu{n}$};
+  \draw[normalvec] (+1.1*\a,-0.6*\G) --++ (+0.25*\G,0) node[above] {$\vu{n}$};
   \draw[gauss surf]
     (BL) arc (-90:90:{\g} and {\G}) --
     (TR) arc (90:-90:{\g} and {\G}) -- cycle;
   \draw[normalvec] (-0.064*\L,\G) --++ (0,0.25*\G) node[left=2,above] {$\vu{n}$};
   \draw[->,thick,Ecol] (-0.045*\L,\G) --++ (0,0.6*\G) node[right] {$\vb{E}$};
+  
+  % LABELS
+  \node[left,green!30!black] at ($(-\a,0)+(150:{\g} and {\G})$) {$S_1$};
+  \node[right,green!30!black] at ($(\a,0)+(30:{\g} and {\G})$) {$S_2$};
+  \node[above,green!30!black] at (0.6*\a,\G) {$S_3$};
   
 \end{tikzpicture}
 
