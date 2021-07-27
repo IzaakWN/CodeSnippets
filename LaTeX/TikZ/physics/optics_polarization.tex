@@ -39,11 +39,11 @@
 }
 
 % POLARIZER
-\def\W{3.5}
-\def\w{0.05}
-\def\l{2.9}
+\def\W{3.5}  % width polarizer
+\def\w{0.05} % width slit
+\def\l{2.9}  % length slit
 \def\t{0.05}
-\def\N{7}
+\def\N{7}    % number of slits
 \tikzset{
   plate/.pic={
 %    \fill[platetopcol]
@@ -268,13 +268,12 @@
 
 % POLARIZER projection
 \begin{tikzpicture}
-  
-  \def\W{3.2}
-  \def\w{0.05}
-  \def\l{2.9}
-  \def\N{7}
-  \def\A{1.8}
-  \def\ang{45}
+  \def\W{2.5}  % width polarizer
+  \def\w{0.05} % width slit
+  \def\l{2.3}  % length slit
+  \def\N{7}    % number of slits
+  \def\A{1.5}  % amplitude/size E vector
+  \def\ang{45} % angle polarizer
   \coordinate (O) at (0,0);
   \coordinate (E0) at (90:\A);
   \coordinate (E) at (45:{\A*cos(45)});
@@ -290,14 +289,15 @@
   \rightAngle{O}{E}{E0}{0.38}
   \draw[->,Ecol,very thick] (0,0) -- (E0) node[midway,left] {$E_0$};
   \draw[->,Ecol,very thick] (0,0) -- (E) node[midway,below right=-2] {$E_0 \cos\theta$}; %45\degree
-  \draw pic[<-,"$\theta$",draw=black,angle radius=16,angle eccentricity=1.4] {angle = E--O--E0};
+  \draw pic[<-,"$\theta$"{anchor=-85},draw=black,angle radius=16,angle eccentricity=1] {angle = E--O--E0};
   
 \end{tikzpicture}
 
 
 
 %% EXAMPLE
-%%   https://tex.stackexchange.com/questions/113900/draw-polarized-light%\begin{tikzpicture}[x=(\xangle:0.75cm), y=(90:1cm), z=(\zangle:1.5cm),
+%% Source: https://tex.stackexchange.com/questions/113900/draw-polarized-light
+%\begin{tikzpicture}[x=(\xangle:0.75cm), y=(90:1cm), z=(\zangle:1.5cm),
 %    >=stealth, line cap=round, line join=round,
 %    lines/.style={gray!50, thick}, 
 %    axis/.style={black, thick},

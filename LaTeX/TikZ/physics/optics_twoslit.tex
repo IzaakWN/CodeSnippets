@@ -186,31 +186,29 @@
   
   % INTENSITY
   \begin{scope}[shift={(1.1*\L+1.1*\A,0)}]
-    \draw[->,thick] (-0.08*\A,0) -- (1.3*\A,0) node[right=-2] {$\expval{I}$};
-    \draw[->,thick] (0,-0.52*\H) -- (0,0.54*\H) node[right] {$y$};
+    \draw[->,thick] (-0.08*\A,0) -- (1.3*\A,0) node[right=-2] {$\expval{I}$}; % I axis
+    \draw[->,thick] (0,-0.52*\H) -- (0,0.54*\H) node[right] {$y$}; % y axis
+    \draw[nodal] (NP0) --++ (0.15*\L+2.1*\A,0); % green nodal lines
+    \foreach \i [evaluate={\y=\L/sqrt((\a/(\lambd*\i))^2-1)}] in {1,...,\Nlines}{ % green nodal lines
+      \draw[nodal] (NP+\i) --++ ({0.15*\L+1.1*\A+\A*intensity(\y,\lambd,\a,\L)},0);
+      \draw[nodal] (NP-\i) --++ ({0.15*\L+1.1*\A+\A*intensity(\y,\lambd,\a,\L)},0);
+    }
     \draw[myred,thick,variable=\y,samples=\nsamples,smooth,domain=-\H/2:\H/2]
       plot({\A*intensity(\y,\lambd,\a,\L)},\y);
-    \foreach \i [evaluate={
+    \foreach \i [evaluate={ % ticks
         \modd=\i; %int(\i);
         \meven=int(\i-1);
         \y=\L/sqrt((\a/(\lambd*\i))^2-1);
                 }] in {1,...,\Nlines}{
       \ifodd\i
-        \tick{0,-\y}{180} node[right=0,scale=0.7] {$\Delta m=-\frac{\modd}{2}$};
-        \tick{0,\y}{180} node[right=0,scale=0.7] {$\Delta m=+\frac{\modd}{2}$};
+        \tick{0,-\y}{180} node[right=0,scale=0.85] {$m=-\frac{\modd}{2}$};
+        \tick{0,\y}{180} node[right=0,scale=0.85] {$m=+\frac{\modd}{2}$};
       \else
-        \tick{0,-\y}{180} node[right=0,scale=0.7] {$\Delta m=-\meven$};
-        \tick{0,\y}{180} node[right=0,scale=0.7] {$\Delta m=+\meven$};
+        \tick{0,-\y}{180} node[right=0,scale=0.85] {$m=-\meven$};
+        \tick{0,\y}{180} node[right=0,scale=0.85] {$m=+\meven$};
       \fi
     }
   \end{scope}
-  
-  % NODAL LINES
-  \draw[nodal] (NP0) --++ (0.15*\L+2.1*\A,0);
-  \foreach \i [evaluate={\y=\L/sqrt((\a/(\lambd*\i))^2-1)}] in {1,...,\Nlines}{
-    \draw[nodal] (NP+\i) --++ ({0.15*\L+1.1*\A+\A*intensity(\y,\lambd,\a,\L)},0);
-    \draw[nodal] (NP-\i) --++ ({0.15*\L+1.1*\A+\A*intensity(\y,\lambd,\a,\L)},0);
-  }
   
 \end{tikzpicture}
 

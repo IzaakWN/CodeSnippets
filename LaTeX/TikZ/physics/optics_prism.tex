@@ -11,8 +11,6 @@
 \usetikzlibrary{fadings}
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \usetikzlibrary{decorations.pathmorphing} % for snake lines
-%\usepackage{tkz-euclide} % for \tkzMarkRightAngle
-%\usetkzobj{all}
 \tikzset{>=latex} % for LaTeX arrow head
 
 \colorlet{myblue}{blue!80!black}
@@ -30,10 +28,55 @@
 \begin{document}
 
 
+%% PRISM + REFRACTION
+%\begin{tikzpicture}
+%  \def\N{6}
+%  \def\L{2.8}
+%  \def\na{1.0} % air
+%  \def\angi{50}
+%  \coordinate (O) at (0,0);
+%  \coordinate (R) at (\L,0);
+%  \coordinate (T) at (60:\L);
+%  \coordinate (I) at (60:0.5*\L);
+%  
+%  % MEDIUM
+%  \draw[line width=0.8,blue]  (I)++(150+\angi:0.3*\L) -- (I) --++ (\angi-30:0.007*\L);
+%  \draw[line width=0.6,white] (I)++(150+\angi:0.3*\L) -- (I) --++ (\angi-30:0.007*\L);
+%  \fill[glass] (O) -- (T) -- (R) -- cycle;
+%  \path[name path=side] (T) -- (R);
+%  
+%  % LIGHT BEAMS
+%  % https://tex.stackexchange.com/questions/230227/creating-a-rainbow-color-macro
+%  \foreach \i [evaluate={
+%      \ng=1.6-\i*0.2/\N;
+%      \lamb=410+\i*320/\N;
+%      %\len=1.5+\i*0.8/\N;
+%      \angr=asin(\na/\ng*sin(\angi));
+%      \angR=asin(\ng/\na*sin(60-\angr));
+%      \dang=-30+\i*60/\N;}] in {0,...,\N}{
+%    \definecolor{tmpcol}{wave}{\lamb}
+%    \colorlet{mycol}[rgb]{tmpcol}
+%    \path[name path=beam1] (I) --++ (-30+\angr:0.8*\L);
+%    \draw[mycol,name intersections={of=side and beam1,name=f}] %wave={\len}
+%      (I)++(\dang:0.0028*\L) -- (f-1) --++ (30-\angR:0.4*\L); %node[scale=0.3] {\angR};
+%  }
+%  %\foreach \i in {1,2}{
+%  %  \draw[line width=0.59,white,path fading=east] (I)++(20:0.002*\L) --++ (1:0.08*\L);
+%  %  \draw[line width=0.59,white,path fading=east] (I)++(20:0.002*\L) --++ (1:0.03*\L);
+%  %}
+%  \coordinate (IT) at ($(I)+(60:0.006*\L)$);
+%  \fill[white,path fading=east]
+%    (IT) --++ (-120:0.012*\L) --++ (-1.3:0.10*\L) --++ (80:0.018*\L) -- cycle;
+%  \fill[white,path fading=east]
+%    (IT) --++ (-120:0.012*\L) --++ (-1.3:0.06*\L) --++ (80:0.0148*\L) -- cycle;
+%  
+%\end{tikzpicture}
+
+
 % PRISM + REFRACTION
 \begin{tikzpicture}
-  \def\N{6}
-  \def\L{2.2}
+  \def\N{200} % number of rainbow rays
+  \def\L{2.8}
   \def\na{1.0} % air
   \def\angi{50}
   \coordinate (O) at (0,0);
@@ -42,34 +85,41 @@
   \coordinate (I) at (60:0.5*\L);
   
   % MEDIUM
+  \draw[line width=0.8,blue]  (I)++(150+\angi:0.3*\L) -- (I) --++ (\angi-30:0.01*\L);
+  \draw[line width=0.6,white] (I)++(150+\angi:0.3*\L) -- (I) --++ (\angi-30:0.01*\L);
   \fill[glass] (O) -- (T) -- (R) -- cycle;
-  \draw[line width=0.54,blue]  (I)++(150+\angi:0.3*\L) -- (I) --++ (\angi-30:0.0035*\L);
-  \draw[line width=0.38,white] (I)++(150+\angi:0.3*\L) -- (I) --++ (\angi-30:0.0035*\L);
   \path[name path=side] (T) -- (R);
   
   % LIGHT BEAMS
   % https://tex.stackexchange.com/questions/230227/creating-a-rainbow-color-macro
-  \foreach \i [evaluate={
-      \ng=1.6-\i*0.2/\N;
-      \lamb=410+\i*320/\N;
-      %\len=1.5+\i*0.8/\N;
-      \angr=asin(\na/\ng*sin(\angi));
-      \angR=asin(\ng/\na*sin(60-\angr));
-      \dang=-15+\i*60/\N;
-                 }] in {0,...,\N}{
-    \definecolor{tmpcol}{wave}{\lamb}
-    \colorlet{mycol}[rgb]{tmpcol}
-    \path[name path=beam1] (I) --++ (-30+\angr:0.8*\L);
-    \draw[mycol,name intersections={of=side and beam1,name=f}] %wave={\len}
-      (I)++(\dang:0.0028*\L) -- (f-1) --++ (30-\angR:0.4*\L); %node[scale=0.3] {\angR};
-  }
-  \foreach \i in {1,2}{
-    \draw[line width=0.59,white,path fading=east] (I)++(20:0.002*\L) --++ (1:0.08*\L);
-    \draw[line width=0.59,white,path fading=east] (I)++(20:0.002*\L) --++ (1:0.03*\L);
-  }
+  \begin{scope}
+    \coordinate (IT) at ($(I)+(60:0.006*\L)$);
+    \clip (O) -- (T) -- (1.08*\L,0.45*\L) to[out=-35,in=20,looseness=1]
+          (1.04*\L,0.2*\L) -- (R) -- cycle;
+    \foreach \i [evaluate={
+        \f=\i/\N;
+        \ng=1.6-\f*0.2;
+        \lamb=410+\f*320;
+        \angr=asin(\na/\ng*sin(\angi));
+        \angR=asin(\ng/\na*sin(60-\angr));
+        \dl=0.0108*(1-\f)*\L;}] in {0,...,\N}{
+      \definecolor{tmpcol}{wave}{\lamb}
+      \colorlet{mycol}[rgb]{tmpcol}
+      \path[name path=beam1] (I) --++ (-30.1+\angr:0.8*\L);
+      \path[name path=beam2] (I) --++ (-30.0+\angr:0.8*\L);
+      \coordinate (IT2) at ($(I)+(57:0.005*\L)+(-120:\dl)$);
+      \fill[mycol,name intersections={of=side and beam1,name=t},
+            name intersections={of=side and beam2,name=b}] %wave={\len}
+        (IT2) -- (t-1) -- ($(t-1)+(30.0-\angR:0.4*\L)$)
+        -- ($(b-1)+(30.1-\angR:0.4*\L)$) -- (b-1) -- ($(IT2)+(-120:-0.001*\L)$); %node[scale=0.3] {\angR};
+    }
+  \end{scope}
+  \fill[white,path fading=east]
+    (IT) --++ (-120:0.012*\L) --++ (-1.3:0.06*\L) --++ (80:0.015*\L) -- cycle;
+  \fill[white,path fading=east]
+    (IT) --++ (-120:0.012*\L) --++ (-1.3:0.10*\L) --++ (80:0.018*\L) -- cycle;
   
 \end{tikzpicture}
-
 
 
 % REFRACTION

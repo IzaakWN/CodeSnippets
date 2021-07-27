@@ -8,7 +8,7 @@
 \colorlet{mydarkblue}{blue!30!black}
 \colorlet{mydarkred}{red!50!black}
 \tikzstyle{gas}=[red!10]
-\tikzstyle{rope}=[orange!60!black,line width=1.5] 
+\tikzstyle{rope}=[orange!60!black,line width=1.5]
 
 % ANGLE
 \newcommand{\getangle}[3]{%
@@ -43,7 +43,7 @@
       (\Cl/2,\Pw/2) --++ (0,\Ct) --++ (-\Cl-\Ct,0) coordinate (NE) --++ (0,-\Pw-2*\Ct)
       --++ (\Cl+\Ct,0) --++ (0,\Ct) --++ (-\Cl,0) --++ (0,\Pw) -- cycle;
     \draw[mydarkblue,thick,
-          top color=blue!30!black!70,bottom color=blue!30!black!60,middle color=blue!30!black!30,shading angle=0]
+          top color=blue!20!black!70,bottom color=blue!20!black!60,middle color=blue!20!black!30,shading angle=0]
       (P) ++ (0,\Pt/2) --++ (0,\Pw/2-\Pt/2) --++ (-\Pt,0) coordinate[midway] (PT)
       --++ (0,-\Pw) --++ (\Pt,0) coordinate[midway] (PB) --++ (0,\Pw/2-\Pt/2)
       --++ (\Pl,0) coordinate[below=1,left=4] (F) --++ (0,\Pt) coordinate[midway] (E) --++ (-\Pl,0) -- cycle;
@@ -52,14 +52,15 @@
   % PLATFORM (S) & ROPE
   \getangle{\a}{R}{F}
   \begin{scope}[shift={(0,{\hRP*(1/sin(\a)-1)})}]
-    \draw[blue!30!black,thick,top color=blue!40!black!40,bottom color=blue!40!black!60,shading angle=0]
+    \draw[blue!20!black,thick,top color=blue!20!black!40,bottom color=blue!20!black!60,shading angle=0]
       (-\Sw/2,0) coordinate[above right=0.5] (SL)
       --++ (\Sw,0) coordinate[above left=0.5] (SR) --++ (0,-\St) --++ (-\Sw,0) -- cycle;
     \draw[rope]
       (SR) -- (0,1.5) coordinate (ST) -- (SL);
   \end{scope}
   \draw[rope]
-    (F) -- ($(R)+(90+\a:\R)$) -- (ST);
+    %(F) -- ($(R)+(90+\a:\R)$) -- ($(R)+(180:\R)$) -- (ST);
+    (F) -- ($(R)+(90+\a:\R)$) arc(90+\a:180:\R) -- (ST);
   \fill[mydarkblue]
     (SL) circle (.04) (SR) circle (.04) (F) circle (.04);
   
@@ -69,7 +70,7 @@
   
   % PLATFORM
   \draw[blue!20!black,thick,
-        top color=blue!40!black!90,bottom color=blue!20!black!90,shading angle=10]
+        top color=blue!40!black!50,bottom color=blue!30!black!50,shading angle=10]
     (-\Sw/2,0) --++ (0,-1) --++ (\Sw,0) --++ (0,1+\Sh) --++ (2.2,0) --++ (0,-2-\Sh) --++ (-\Sw-5.2,0) --++ (0,2) -- cycle;
 }
 
@@ -121,9 +122,10 @@
 
 
 % START
-\begin{tikzpicture}[scale=0.9]
+\begin{tikzpicture}[scale=0.7]
   \engine{0};
-  \node[right=14,above right=1,mydarkblue] at (NE) {$P_1$, $V_1$};
+  %\node[right=14,above right=1,mydarkblue] at (NE) {$P_1$, $V_1$};
+  \node[below=7,below right=7,mydarkblue] at (NE) {$P_1$, $V_1$};
   \fix
   \mass{-3,0}
   \fire
@@ -131,30 +133,33 @@
 
 
 % LIFT
-\begin{tikzpicture}[scale=0.9]
+\begin{tikzpicture}[scale=0.7]
   \engine{0};
-  \node[right=14,above right=1,mydarkblue] at (NE) {$P_1$, $V_1$};
+  %\node[right=14,above right=1,mydarkblue] at (NE) {$P_1$, $V_1$};
+  \node[below=7,below right=7,mydarkblue] at (NE) {$P_1$, $V_1$};
   \mass{0,0}
-  \draw[->,very thick,mydarkblue] (E) ++ (0.4,0) --++ (1.4,0);
-  \draw[->,very thick,mydarkblue] ($(ST)+(-.4,.3)$) --++ (0,1.2);
+  \draw[->,thick,mydarkblue] (E) ++ (0.4,0) --++ (1.4,0);
+  \draw[->,thick,mydarkblue] ($(ST)+(-.4,.3)$) --++ (0,1.2);
   \fire
 \end{tikzpicture}
 
 
 % TOP
 \tikzstyle{gas}=[blue!10]
-\begin{tikzpicture}[scale=0.9]
+\begin{tikzpicture}[scale=0.7]
   \engine{2};
-  \node[right=14,above right=1,mydarkblue] at (NE) {$P_2$, $V_2$};
+  %\node[right=14,above right=1,mydarkblue] at (NE) {$P_2$, $V_2$};
+  \node[below=1,below right=13,mydarkblue] at (NE) {$P_2$, $V_2$};
   \mass{0,\Sh}
   \draw[<->,thick,scale=1.1,mydarkblue] (-.6*\Sw,0) --++ (0,.91*\Sh) node[midway,left] {$h$};
 \end{tikzpicture}
 
 
 % SLIDE
-\begin{tikzpicture}[scale=0.9]
+\begin{tikzpicture}[scale=0.7]
   \engine{2};
-  \node[right=14,above right=1,mydarkblue] at (NE) {$P_2$, $V_2$};
+  %\node[right=14,above right=1,mydarkblue] at (NE) {$P_2$, $V_2$};
+  \node[below=1,below right=13,mydarkblue] at (NE) {$P_2$, $V_2$};
   \fix
   \mass{2.6,\Sh}
 \end{tikzpicture}

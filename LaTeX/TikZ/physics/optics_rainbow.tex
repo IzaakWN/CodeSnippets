@@ -13,15 +13,13 @@
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \usetikzlibrary{decorations.pathreplacing} % for curly braces
 \usetikzlibrary{decorations.pathmorphing} % for snake lines
-%\usepackage{tkz-euclide} % for \tkzMarkRightAngle
-%\usetkzobj{all}
 \tikzset{>=latex} % for LaTeX arrow head
 \contourlength{1.7pt}
 \newcommand\degree{^\circ}
 
 \colorlet{myblue}{blue!80!black}
 \colorlet{myred}{black!50!red}
-\colorlet{watercol}{blue!50}
+\colorlet{watercol}{blue!70!cyan!50}
 \tikzstyle{myarr}=[-{Latex[length=3,width=2]}]
 \tikzstyle{water}=[ball color=watercol]
 \tikzset{
@@ -39,7 +37,7 @@
 % DROPLET refraction & reflection
 \begin{tikzpicture}
   \def\L{2.4}    % length of ray outside droplet
-  \def\R{2.2}    % droplet radius
+  \def\R{1.8}    % droplet radius
   \def\na{1.0}   % air
   \def\nw{1.33}  % water
   \def\alphI{150}                                   % A: incident (180-90)
@@ -49,12 +47,12 @@
   \pgfmathsetmacro\alphIII{\alphI+4*\thetII-360}    % D: exiting
   \pgfmathsetmacro\py{\R*sin(\alphI)/sin(\alphII)}  % intersection height
   \coordinate (O) at (0,0);
-  \coordinate (A) at (-\L-\R,{\R*sin(\alphI)});     % incident ray
-  \coordinate (B) at (\alphI:\R);                   % entry of incident
-  \coordinate (C) at (\alphII:\R);                  % internal reflection
-  \coordinate (D) at (\alphIII:\R);                 % exit of ray
-  \coordinate (E) at ($(D)+(\alphIII-\thetI:\L)$);  % final ray to observer
-  \coordinate (P) at (\alphII:\py);                 % intersection point
+  \coordinate (A) at (-\L-0.5*\R,{\R*sin(\alphI)});    % incident ray
+  \coordinate (B) at (\alphI:\R);                      % entry of incident
+  \coordinate (C) at (\alphII:\R);                     % internal reflection
+  \coordinate (D) at (\alphIII:\R);                    % exit of ray
+  \coordinate (E) at ($(D)+(\alphIII-\thetI:0.7*\L)$); % final ray to observer
+  \coordinate (P) at (\alphII:\py);                    % intersection point
   
   % WATER DROPLET
   \fill[water] (O) circle (\R);
@@ -66,8 +64,8 @@
   \draw[dashed] (B) -- (P) --++ (0:0.3*\R);
   \draw[dashed] (O) -- (P) --++ (\alphII:0.3*\R);
   \draw[dashed] (D) -- (P) --++ (2*\alphII:0.3*\R);
-  \draw[dashed] (O) -- (B) --++ (\alphI:0.4*\R) coordinate (PB);
-  \draw[dashed] (O) -- (D) --++ (\alphIII:0.4*\R) coordinate (PD);
+  \draw[dashed] (O) -- (B) --++ (\alphI:0.6*\R) coordinate (PB);
+  \draw[dashed] (O) -- (D) --++ (\alphIII:0.6*\R) coordinate (PD);
   
   % ANGLES
   \draw pic[-,"$\theta_1$",draw=black,angle radius=23,angle eccentricity=1.25] {angle = PB--B--A};
@@ -83,10 +81,10 @@
 % DROPLET pileup
 \begin{tikzpicture}
   \def\L{3}      % length of ray outside droplet
-  \def\R{2}      % droplet radius
+  \def\R{1.4}    % droplet radius
   \def\na{1.0}   % air
   \def\nw{1.33}  % water
-  \def\N{12}      % number of rays
+  \def\N{12}     % number of rays
   \coordinate (O) at (0,0);
   
   % WATER DROPLET
@@ -103,14 +101,14 @@
       \alphII=\alphI+2*\thetII-180;      % C: reflected
       \alphIII=\alphI+4*\thetII-360;     % D: exiting
       \f=100-\i*100/\N;                  % color fraction
-      \s=1.3-0.7*\i/\N+0.01*int(\y>0.9*\R); % scale
+      \s=0.8-0.4*\i/\N+0.03*int(\y>0.9*\R); % scale
               }] in {0,...,\N}{
-    \coordinate (A)   at (-\L-\R,\y);                     % incident ray
+    \coordinate (A)   at (-\L-0.5*\R,\y);                 % incident ray
     \coordinate (B)   at (\alphI:\R);                     % entry of incident
     \coordinate (C)   at (\alphII:\R);                    % internal reflection
     \coordinate (D)   at (\alphIII:\R);                   % exit of ray
     \coordinate (E\i) at ($(D)+(\alphIII-\thetI:\s*\L)$); % final ray to observer
-    \draw[beam,red!\f!blue]
+    \draw[beam,red!\f!blue,line width=0.9]
       (A) -- (B) -- (C) -- (D) -- (E\i);
   }
   
@@ -132,13 +130,13 @@
   \coordinate (P) at (\alphII:\py);                 % intersection point
   \draw[dashed] (B)++(180:0.5*\R) -- (P) --++ (0:0.3*\R);
   \draw[dashed] (E) -- (D) -- (P); %--++ (0:0.3*\R)
-  \draw[dashed] (O) -- (P) --++ (\alphII:0.3*\R);
-  \draw[dashed] (O) -- (B) --++ (\alphI:0.3*\R) coordinate (PB);
-  \draw[dashed] (O) -- (D) --++ (\alphIII:0.3*\R) coordinate (PD);
+  \draw[dashed] (O) -- (P) --++ (\alphII:0.5*\R);
+  \draw[dashed] (O) -- (B) --++ (\alphI:0.5*\R) coordinate (PB);
+  \draw[dashed] (O) -- (D) --++ (\alphIII:0.5*\R) coordinate (PD);
   
   % ANGLES
-  \draw pic["\strut$\theta_1$",draw=black,angle radius=16,angle eccentricity=1.4] {angle = PB--B--A};
-  \draw pic["$\theta_1$",draw=black,angle radius=12,angle eccentricity=1.4] {angle = E--D--PD};
+  \draw pic["\strut$\theta_1$",draw=black,angle radius=16,angle eccentricity=1.45] {angle = PB--B--A};
+  \draw pic["$\theta_1$",draw=black,angle radius=12,angle eccentricity=1.45] {angle = E--D--PD};
   \draw pic["\contour{white}{$\sim42\degree$}",draw=black,angle radius=20.5,angle eccentricity=1.75] {angle = B--P--D};
   
   % BRACE
@@ -150,8 +148,8 @@
 
 % DROPLET dispersion & rainbow
 \begin{tikzpicture}
-  \def\L{2}              % length of ray outside droplet
-  \def\R{2}              % droplet radius
+  \def\L{1.8}            % length of ray outside droplet
+  \def\R{1.6}            % droplet radius
   \def\na{1.0}           % air
   \def\N{6}              % number of rays
   \def\alphI{100}        % A: incident (180-90)
@@ -171,7 +169,7 @@
       \thetII=asin(\na/\nw*sin(\thetI); % theta_2: air -> water & reflection
       \alphII=\alphI+2*\thetII-180;     % C: reflected
       \alphIII=\alphI+4*\thetII-360;    % D: exiting
-      \s=0.8+0.45*\i/\N;                 % scale
+      \s=0.8+0.45*\i/\N;                % scale
               }] in {0,...,\N}{
     \definecolor{tmpcol}{wave}{\lamb}
     \colorlet{mycol}[rgb]{tmpcol}
@@ -192,6 +190,35 @@
   \draw[beam,white,line width=1.0,path fading=east] (B) --++ (-180+\alphI+\thetII:0.6*\R);
   %\draw[beam,white,line width=1.2] (B)++(-0.005,0) -- (B) --++ (-180+\alphI+\thetII:0.005);
   
+\end{tikzpicture}
+
+
+% GRADIENT RAINBOW
+% Instead of smooth gradient, use many thin polygons
+\begin{tikzpicture}
+  \def\H{1} % width of band
+  \def\L{4} % length of rays
+  \def\N{200}
+  \foreach \i [evaluate={\f=\i/\N; \lamb=410+\f*320;\y=\f*\H;}] in {0,...,\N}{
+    \definecolor{tmpcol}{wave}{\lamb}
+    \colorlet{mycol}[rgb]{tmpcol}
+    \draw[mycol,line width=0.3] (0,\y) -- (\L,\y);
+  }
+\end{tikzpicture}
+
+
+% GRADIENT RAINBOW - divergent
+% Instead of smooth gradient, use many thin polygons
+\begin{tikzpicture}
+  \def\H{1} % width of band
+  \def\L{4} % length of rays
+  \def\N{200}
+  \foreach \i [evaluate={\f=\i/\N; \lamb=410.+\f*320.;\y=\f*\H;}] in {0,...,\N}{
+    \definecolor{tmpcol}{wave}{\lamb}
+    \colorlet{mycol}[rgb]{tmpcol}
+    %\draw[beam,thick,mycol] (0,\y) -- (\L,\y);
+    \fill[mycol,line width=0.3] (0,0) -- (\L,\y+0.05) -- (\L,\y-0.05) -- cycle;
+  }
 \end{tikzpicture}
 
 

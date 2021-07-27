@@ -354,6 +354,8 @@
   \def\ymax{3}
   \def\xmin{-0.2}
   \def\xmax{7}
+  \def\t{0.3}    % water/steam transition zone
+  \def\ang{30.4} % angle gradient
   \coordinate (O) at (0,0);
   \coordinate (I) at (0.0,-0.4); % ice
   \coordinate (M) at (0.4,0.0);  % melting
@@ -361,22 +363,26 @@
   \coordinate (E) at (2.6,2,0);  % evaporate
   \coordinate (S) at (6.6,2.0);  % steam
   \coordinate (F) at (6.9,2.9);  % final
-  \coordinate (Ex) at ($(E|-O)$);
-  \coordinate (Ey) at ($(E-|O)$);
-  \coordinate (Sx) at ($(S|-O)$);
+  \coordinate (Ex) at ($(E|-O)$); % x evaporation
+  \coordinate (Ey) at ($(E-|O)$); % y evaporation
+  \coordinate (Sx) at ($(S|-O)$); % x steam
   \coordinate (Fx) at ($(F|-O)$);
   
   % AREA
   \fill[mylightblue] (O) -- (I) -- (M) -- cycle;
   \fill[blue!8] (W) -- (Ex) -- (S) -- (E) -- cycle;
   \fill[mylightred] (Ex) -- (S) -- (F) -- (Fx) -- cycle;
+  \begin{scope} % fade/gradient border
+    \clip (Ex) -- (Sx) -- (S) -- (E) -- cycle; % clip gradient rectangle
+    \draw[draw=none,transform canvas={rotate=\ang},top color=blue!8,bottom color=mylightred,shading angle=0]
+      ({2.6*cos(\ang)},{-2.6*sin(\ang)-\t}) rectangle++(0.65*\xmax,\t); % diagonal border 
+  \end{scope}
   \node[blue!40!black,left=4,below right=10] at (E) {water};
   \node[red!40!black,above left=10] at (Sx) {steam};
   
   % AXES
   \draw[->,thick] (0,\ymin) -- (0,\ymax) node[left] {$T$ [\si{\degree C}]};
   \draw[->,thick] (\xmin,0) -- (\xmax,0) node[below] {$Q$}; %[\si{J}]
-  
   \draw[dashed] (Ex) -- (E) --++ (0,0.1*\ymax);
   \draw[dashed] (Ey) -- (E);
   \draw[dashed] (Sx) -- (S) --++ (0,0.1*\ymax);

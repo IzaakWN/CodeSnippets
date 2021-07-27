@@ -85,8 +85,9 @@
 %\end{tikzpicture}
 
 
-% TWO SPLIT: interference x diffraction
+% TWO SLIT: interference x diffraction
 \begin{tikzpicture}
+  \message{Two slits^^J}
   \def\A{1.7}
   \def\d{3.4}     % slit distance
   \def\a{1.2}     % slit size
@@ -136,6 +137,7 @@
 \def\dN{30}     % number shift
 \def\ang{6}    % angle of diffraction
 \begin{tikzpicture}
+  \message{Diffraction, circular^^J}
   
   \def\lambd{0.4} % wavelength
   
@@ -165,6 +167,7 @@
 % DIFFRACTION - large slit - straight
 \def\ang{10} % angle of diffraction
 \begin{tikzpicture}
+  \message{Diffraction, straight^^J}
   
   % WAVES
   \foreach \i [evaluate={\r=\i*\lambd;}] in {1,...,\N}{
@@ -191,6 +194,7 @@
 
 % DIFFRACTION - obstacle - straight
 \begin{tikzpicture}
+  \message{Diffraction, obstacle^^J}
   
   % WAVES
   \foreach \i [evaluate={\r=\i*\lambd;}] in {1,...,\N}{
@@ -219,6 +223,7 @@
 
 % DIFFRACTION - small slit
 \begin{tikzpicture}
+  \message{Diffraction, small slit^^J}
   
   \def\H{5.5}     % total wall height
   \def\h{4.0}     % plane wave height
@@ -248,10 +253,11 @@
 \end{tikzpicture}
 
 
-% DIFFRACTION - ONE SLIT - projection
+% DIFFRACTION - SINGLE SLIT - projection
 \begin{tikzpicture}[
     nodal/.style={mylightgreen,dashed,very thin},
   ]
+  \message{Diffraction, single slit^^J}
   
   \def\L{3.8}       % distance between walls
   \def\H{5.4}       % total wall height
@@ -265,6 +271,7 @@
   \def\lambd{0.20}  % wavelength
   \def\R{\N*\lambd} % wave radius
   \def\Nfringes{2}  % number of nodal lines
+  \def\nshades{70}  % number of shades
   \def\nsamples{40}
   \def\ang{40}
   
@@ -280,6 +287,13 @@
     \foreach \i [evaluate={\Rp=2*(\i+\dN)*\lambd; \Rm=2*(\i+\dN+0.5)*\lambd;}] in {1,...,\N}{
       \draw[myblue,line width=0.8] (-2.2*\lambd,0)++(\ang:\Rp) arc (\ang:-\ang:\Rp);
       \draw[myblue!80,line width=0.1] (-2.2*\lambd,0)++(\ang:\Rm) arc (\ang:-\ang:\Rm);
+    }
+    \foreach \m [evaluate={\ddy=0.1*\m;}] in {1,2,2.7}{ % mask at destructive interference
+      \foreach \i [evaluate={\ym=\L/sqrt((\a/(\lambd*\m))^2-1); \dy=0.55*\i/\nshades;}]
+        in {1,...,\nshades}{
+        \fill[white,opacity=0.045] (0.05,0.005+\ddy) -- (\L,{\dy+\ym}) --++ (0,-2*\dy) -- (0.05,-0.005+\ddy);
+        \fill[white,opacity=0.045] (0.05,0.005-\ddy) -- (\L,{\dy-\ym}) --++ (0,-2*\dy) -- (0.05,-0.005-\ddy);
+      }
     }
   \end{scope}
   
@@ -316,8 +330,8 @@
     \draw[myred,thick,variable=\y,samples=\nsamples,smooth,domain=-\H/2:\H/2]
       plot({\A*int_one(\y,\lambd,\a,\L)},\y);
     \foreach \i [evaluate={\y=\L/sqrt((\a/(\lambd*\i))^2-1);}] in {1,...,\Nfringes}{
-      \tick{0,-\y}{180} node[right=-1,scale=0.7] {$m=-\i$};
-      \tick{0,\y}{180} node[right=-1,scale=0.7] {$m=+\i$};
+      \tick{0,-\y}{180} node[right=-1,scale=0.9] {$m=-\i$};
+      \tick{0,\y}{180} node[right=-1,scale=0.9] {$m=+\i$};
     }
   \end{scope}
   
@@ -326,6 +340,7 @@
 
 % DIFFRACTION - ONE SLIT - PATH DIFFERENCE
 \begin{tikzpicture}
+  \message{Diffraction, path difference^^J}
   
   \def\L{5.9}       % distance between walls
   \def\H{4.3}       % total wall height
@@ -374,8 +389,9 @@
 \end{tikzpicture}
 
 
-% DIFFRACTION - ONE SLIT - PATH DIFFERENCE close up
+% DIFFRACTION - ONE SLIT - PATH DIFFERENCE close-up
 \begin{tikzpicture}
+  \message{Diffraction, path difference (close-up)^^J}
   
   \def\L{6.15}      % distance between walls
   \def\l{4.0}       % path length
@@ -424,6 +440,70 @@
   \fill[wall]
     (0,\a/2) rectangle (-\t,\H/2)
     (0,-\a/2) rectangle (-\t,-\H/2);
+  
+\end{tikzpicture}
+
+
+% DIFFRACTION - dispersion
+\begin{tikzpicture}
+  \message{Diffraction, dispersion^^J}
+  \def\L{4.8}  % distance between walls
+  \def\H{5.5}  % total wall height
+  \def\l{5.5}  % second/third order ray length
+  \def\t{0.18} % wall thickness
+  \def\a{0.3}  % slit distance
+  \def\N{200}  % number of rays in rainbow
+  \def\A{1.2}  % band height
+  \def\ym{0.128*\H} % minimum y coordinate of 2nd order (violet)
+  \def\xb{1.08*\L}  % band x position
+  
+  % SHADE
+  \fill[myshadow]
+    (\xb,-\H/2) rectangle++ (\A,\H);
+  \fill[left color=myshadow,right color=myshadow,middle color=white,shading angle=0]
+    (\xb,-\ym) rectangle++ (\A,2*\ym);
+  
+  % RAYS, THIRD & FOURTH ORDER
+  \message{  Third \& fourth order^^J}
+  \begin{scope}
+    \clip (0,-\H/2) rectangle++ (\L,\H);
+    \foreach \i [evaluate={\f=\i/\N;\lamb=410.+\f*320.;\dy=0.051*\f;\ang=31+\f*16;}] in {0,...,\N}{
+      \definecolor{tmpcol}{wave}{\lamb}
+      \colorlet{mycol}[rgb]{tmpcol}
+      \fill[mycol!3,line width=0.3] % third order
+       (0.05, 0.028+\dy) -- ( 25+\ang:\l) -- ( 25+\ang+1:\l) -- (0.05, 0.030+\dy)
+       (0.05,-0.028-\dy) -- (-25-\ang:\l) -- (-25-\ang+1:\l) -- (0.05,-0.030-\dy);
+      \fill[mycol!14,line width=0.3]% second order
+       (0.10, 0.028+\dy) -- ( \ang:\l) -- ( \ang+0.1:\l) -- (0.05, 0.030+\dy)
+       (0.10,-0.028-\dy) -- (-\ang:\l) -- (-\ang-0.1:\l) -- (0.05,-0.030-\dy);
+    }
+  \end{scope}
+  
+  % RAYS, FIRST ORDER
+  \message{  First order^^J}
+  \draw[myblue,line width=4.6] (-0.35*\L,0) -- (0.05,0); % incoming white light
+  \draw[white, line width=4.0] (-0.35*\L,0) -- (0.05,0); % incoming white light
+  \draw[myblue,line width=1.8] (0.05,0) -- (\L,0);
+  \draw[white, line width=1.5] (0.05,0) -- (\L,0);
+  
+  % RAYS, SECOND ORDER
+  \message{  Second order^^J}
+  \foreach \i [evaluate={\f=\i/\N;\lamb=410.+\f*320.;\dy=0.051*\f;
+               \y=\ym+\f*0.25*\H;}]in {0,...,\N}{
+    \definecolor{tmpcol}{wave}{\lamb}
+    \colorlet{mycol}[rgb]{tmpcol}
+    \fill[mycol!60,line width=0.3] % instead of smooth gradient, use many thin polygons
+      (0.05, 0.028+\dy) -- (\L, \y) -- (\L, \y+0.01) -- (0.05, 0.030+\dy)
+      (0.05,-0.028-\dy) -- (\L,-\y) -- (\L,-\y-0.01) -- (0.05,-0.030-\dy)
+      (\xb, \y) rectangle++ (\A, 0.01)
+      (\xb,-\y) rectangle++ (\A,-0.01);
+  }
+  
+  % WALL
+  \fill[wall]
+    (\t/2,\a/2) rectangle (-\t/2,\H/2)
+    (\t/2,-\a/2) rectangle (-\t/2,-\H/2)
+    (\L,-\H/2) rectangle (\L+\t,\H/2);
   
 \end{tikzpicture}
 
