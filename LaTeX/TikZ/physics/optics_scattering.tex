@@ -129,8 +129,8 @@
   \def\T{1}      % thickness scattered beams
   \def\t{0.70}   % thickness scattered beams
   \def\f{0.9}    % horizonatal/vertical radius ratio
-  \def\anga{-15} % angle beam 1
-  \def\angb{-13} % angle beam 2 (mostly parallel)
+  \def\anga{-13} % angle beam 1
+  \def\angb{-11} % angle beam 2 (mostly parallel)
   \coordinate (S)  at (0,\H);              % sun
   \coordinate (O)  at (0,0,0);             % start point
   \coordinate (O1) at ($(S)+(-60:0.25)$);  % start point beam 1
@@ -159,13 +159,13 @@
   \end{scope}
   
   % PERSON
-  \begin{scope}[shift={(0.61*\L,0)}]
+  \begin{scope}[shift={(0.607*\L,0)}]
     \draw[thin,fill=white] (0.1*\h,\h) circle (\r) coordinate (H);
     \draw[thin] % neck (N) -> shoulders (SH) -> pelvis (P)
       (H)++(-110:\r) coordinate (N) --++ (-100:0.02*\h) coordinate (SH)
       to[out=-85,in=85]++ (0,-0.38*\h) coordinate (P);
-    \draw[thin,line cap=round] (SH)++(-85:0.015*\h) to[out=-115,in=-140,looseness=2]++ (-0.14*\h,0.23*\h);
-    \draw[thin,line cap=round] (SH)++(-85:0.015*\h) to[out=-60,in=90]++ (0.5*\w,-0.4*\h);
+    \draw[thin,line cap=round] (SH)++(-85:0.015*\h) to[out=-115,in=-150,looseness=1.8]++ (-0.12*\h,0.26*\h); % hand up
+    \draw[thin,line cap=round] (SH)++(-85:0.015*\h) to[out=-60,in=90]++ (0.5*\w,-0.4*\h); % hand down
     \draw[thin] (P) to[out=-110,in=85] (-0.5*\w,0);
     \draw[thin] (P) to[out=-80,in=108] ( 0.5*\w,0);
     %\draw[draw=blue!80!black,fill=black,line width=0.1,rotate=-15]
