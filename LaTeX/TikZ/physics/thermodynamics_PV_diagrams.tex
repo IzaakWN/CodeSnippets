@@ -11,10 +11,10 @@
 \usepackage{xcolor} % for colored text
 
 \colorlet{mylightblue}{blue!20}
-\colorlet{myblue}{blue!50!black}
+\colorlet{myblue}{blue!80!black}
 \colorlet{mydarkblue}{blue!30!black}
 \colorlet{mylightred}{red!10}
-\colorlet{myred}{red!50!black}
+\colorlet{myred}{red!80!black}
 \colorlet{mydarkred}{red!60!black}
 \colorlet{mydarkgreen}{green!30!black}
 
@@ -43,7 +43,7 @@
   \fill[mylightblue] (A) rectangle (C|-0,0) node[midway,blue] {$W$};
   
   % LINE
-  \draw[very thick,midarr=.55,red] (A) -- (B);
+  \draw[very thick,midarr=.55,myred] (A) -- (B);
   \draw[very thick,midarr=.55,blue] (B) -- (C);
   \fill (A) circle (2pt) node[right=5,above=2] {$P_1$, $V_1$};
   \fill (B) circle (2pt);
@@ -68,7 +68,7 @@
   
   % LINE
   \draw[very thick,midarr=.55,blue] (A) -- (B);
-  \draw[very thick,midarr=.55,red] (B) -- (C);
+  \draw[very thick,midarr=.55,myred] (B) -- (C);
   \fill (A) circle (2pt) node[right=5,above=2] {$P_1$, $V_1$};
   \fill (B) circle (2pt);
   \fill (C) circle (2pt) node[right=2] {$P_2$, $V_2$};
@@ -98,7 +98,7 @@
     plot(\x,{\T/\x}) -- (B|-0,0) -- (A|-0,0) node[midway,left=4,above=5,blue] {$W$} -- cycle;
   
   % LINE
-  \draw[red,very thick,midarr=.58,samples=\N,domain={\xa}:{\xb}]
+  \draw[myred,very thick,midarr=.58,samples=\N,domain={\xa}:{\xb}]
     plot(\x,{\T/\x});
   \fill (A) circle (2pt) node[right=5,above=2] {$P_1$, $V_1$};
   \fill (B) circle (2pt) node[right=2] {$P_2$, $V_2$};
@@ -124,7 +124,7 @@
   \fill[mylightblue] (A) rectangle (C) node[midway,blue] {$W$};
   
   % LINE
-  \draw[very thick,red,midarr=.25,midarr=.80]
+  \draw[very thick,myred,midarr=.25,midarr=.80]
     (D) -- (A) -- (B);
   \draw[very thick,blue,midarr=.25,midarr=.80]
     (B) -- (C) -- (D);
@@ -154,9 +154,9 @@
     ($(D)!.26!(A)$)++(-.2,0) --++ (.6,0) node[near end,left=10,scale=.9] {$Q_1$};
   \draw[>={LaTeX[width=8,length=5]},->,line width=4,mydarkred]
     ($(A)!.27!(B)$)++(0,.2) --++ (0,-.6) node[near end,above=11,scale=.9] {$Q_2$};
-  \draw[>={LaTeX[width=8,length=5]},->,line width=4,myblue]
+  \draw[>={LaTeX[width=8,length=5]},->,line width=4,mydarkblue]
     ($(B)!.25!(C)$)++(-.2,0) --++ (.6,0) node[right=-2,scale=.9] {$Q_3$};
-  \draw[>={LaTeX[width=8,length=5]},->,line width=4,myblue]
+  \draw[>={LaTeX[width=8,length=5]},->,line width=4,mydarkblue]
     ($(C)!.28!(D)$)++(0,.2) --++ (0,-.6) node[right=0,scale=.9] {$Q_4$};
   
 \end{tikzpicture}
@@ -285,7 +285,7 @@
   \node[below=-5,blue,scale=.9] at ($(D)!.4!(B)$) {$W$};
   
   % ADIABATIC
-  \draw[red,thick,midarr=.18,midarr=.75,domain={\xA:\xB},samples=\N]
+  \draw[myred,thick,midarr=.18,midarr=.75,domain={\xA:\xB},samples=\N]
     (D) -- (A)
     plot (\x,\adiabatic{\x}{\Ch});
   \draw[blue,thick,midarr=.1,midarr=.62,domain={\xB:\xA},samples=\N]
@@ -296,12 +296,12 @@
     (E)++(0,-.03) -- ($(C)+(0,-.03)$);
   \node[blue,above=2,right,scale=0.75] at (B) {exhaust};
   \node[blue!80!black,right=14,below=-.8,scale=0.75] at (E) {intake};
-  \node[red,above left,scale=0.75] at (D) {spark};
+  \node[myred,above left,scale=0.75] at (D) {spark};
   
   % HEAT
   \draw[>={LaTeX[width=5,length=4]},->,line width=2,mydarkred]
     ($(D)!.28!(A)$)++(-.2,0) --++ (.5,0) node[near end,left=10,scale=.8] {$Q_\text{h}$};
-  \draw[>={LaTeX[width=5,length=4]},->,line width=2,myblue]
+  \draw[>={LaTeX[width=5,length=4]},->,line width=2,mydarkblue]
     ($(B)!.72!(C)$)++(-.2,0) --++ (.5,0) node[right=-2,scale=.8] {$Q_\text{c}$};
   
   % POINTS
@@ -354,7 +354,7 @@
  \node[blue,scale=.9] at ($(B)!.5!(D)$) {$W$};
   
   % ADIABATIC
-  \draw[red,thick,midarr=.65,domain={\xA:\xB},samples=\N]
+  \draw[myred,thick,midarr=.65,domain={\xA:\xB},samples=\N]
     plot (\x,\isotherm{\x}{\Th});
   
   \draw[blue,thick,midarr=.50,domain={\xB:\xC},samples=\N]
@@ -363,7 +363,7 @@
   \draw[blue,thick,midarr=.65,domain={\xC:\xD},samples=\N]
     plot (\x,\isotherm{\x}{\Tc});
   
-  \draw[red,thick,midarr=.45,domain={\xD:\xA},samples=\N]
+  \draw[myred,thick,midarr=.45,domain={\xD:\xA},samples=\N]
     plot(\x,\adiabatic{\x}{\Ch});
   
   % POINTS
@@ -376,7 +376,7 @@
   % HEAT
   \draw[>={LaTeX[width=6,length=4]},->,line width=2,mydarkred]
     (.09*\xmax,.28*\ymax) --++ (0:.6) node[near end,below left=1,scale=.9] {$Q_\text{in}$};
-  \draw[>={LaTeX[width=6,length=4]},->,line width=2,myblue]
+  \draw[>={LaTeX[width=6,length=4]},->,line width=2,mydarkblue]
     (.38*\xmax,.17*\ymax) --++ (0:.6) node[above=1,right=-2,scale=.9] {$Q_\text{out}$};
   
   % AXIS

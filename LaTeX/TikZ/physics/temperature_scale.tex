@@ -1,0 +1,62 @@
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\tikzset{>=latex}
+
+\colorlet{myblue}{blue!40!black}
+\colorlet{mycyan}{blue!20!cyan!40!black}
+\colorlet{myred}{red!40!black}
+
+\begin{document}
+
+
+% TEMPERATURE SCALE
+\begin{tikzpicture}[xscale=1.1]
+  \def\Tzero{-6.0}  % absolute zero
+  \def\Tnitro{-4.3} % liquid nitrogen
+  \def\Tbody{0.8}   % body temperature
+  \def\Tboil{2.1}   % boiling temperature
+  \def\Tmax{4.0}    % maximum temperature on the scale
+  \def\h{0.75}      % axis off sets
+  \def\tick#1#2#3{\draw[thick,#3] (#1+.08) --++ (0,-.16) node[below=-.5pt,scale=1] {#2};}
+  
+  % AXIS
+  \draw[->,thick] % degrees Celsius
+    (1.1*\Tzero,0) -- (1.1*\Tmax,0) node[right] {$T$ [$^\circ$C]};
+  \draw[->,thick] % Kelvin
+    (1.1*\Tzero,-\h) -- (1.1*\Tmax,-\h) node[right] {$T$ [K]};
+  \draw[->,thick] % Fahrenheit
+    (1.1*\Tzero,-2*\h) -- (1.1*\Tmax,-2*\h) node[right] {$T$ [$^\circ$F]};
+  
+  % LABEL
+  \node[above=-3,align=center,myblue] at (\Tzero,0.1) {absolute\\[-2]\strut zero};
+  \node[above=-3,align=center] at (\Tnitro,0.1) {liquid\\[-2]\strut nitrogen};
+  \node[left=4,above=-3,align=center,mycyan] at (0,0.1) {water\\[-2]\strut freezes};
+  \node[right=4,above=-3,align=center] at (\Tbody,0.1) {human\\[-2]\strut body};
+  \node[above=-3,align=center,myred] at (\Tboil,0.1) {water\\[-2]\strut boils};
+  
+  % CELSIUS
+  \tick{\Tzero,0}{$-273.15$}{myblue} % absolute zero
+  \tick{\Tnitro,0}{\hspace{6pt}$-195.79$}{} % liquid nitrogen
+  \tick{0,0}{0}{mycyan}              % freezing temperature
+  \tick{\Tbody,0}{36.8}{}            % body temperature
+  \tick{\Tboil,0}{100}{myred}        % boiling temperature
+  
+  % KELVIN
+  \tick{\Tzero,-\h}{0}{myblue}       % absolute zero
+  \tick{\Tnitro,-\h}{77}{}           % liquid nitrogen
+  \tick{0,-\h}{273.15}{mycyan}       % freezing temperature
+  %\tick{\Tbody,-\h}{310.0}{}         % body temperature
+  \tick{\Tboil,-\h}{373.15}{myred}   % boiling temperature
+  
+  % FAHRENHEIT
+  \tick{\Tzero,-2*\h}{$-459.67$}{myblue} % absolute zero
+  \tick{\Tnitro,-2*\h}{$-320$}{}      % liquid nitrogen
+  \tick{0,-2*\h}{32}{mycyan}          % freezing temperature
+  \tick{\Tbody,-2*\h}{98.2}{}         % body temperature
+  \tick{\Tboil,-2*\h}{212}{myred}     % boiling temperature
+  
+\end{tikzpicture}
+
+
+\end{document}
