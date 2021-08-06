@@ -24,6 +24,7 @@ if [[ $VERBOSE -gt 0 ]]; then
   echo ">>> RESO=$RESO"
   echo ">>> DELAY=$DELAY"
 fi
+GIFS=""
 for pdf in $PDFS; do
   [[ ! $pdf = *".pdf" ]] && echo ">>> Warning! Invalid input: $pdf! Ignoring..." && continue
   NPAGES="$(identify $pdf | wc -l | xargs)" #`identify -format "%n" $pdf` # number of pages
@@ -33,7 +34,8 @@ for pdf in $PDFS; do
     [[ $FIRST -gt $NPAGES ]] && echo ">>> Warning! Not enough pages in $pdf to start at index $FIRST! Ignoring..." && continue
     PDF=$pdf # "naked pdf name"
     pdf=""
-    INDICES=`seq $((FIRST-1)) $NPAGES | xargs`
+    INDICES=`seq $((FIRST-1)) $((NPAGES-1))
+     | xargs`
     [[ $FIRST -gt 1 ]] && INDICES+=" $(seq 0 $((FIRST-2)) | xargs)"
     [[ $VERBOSE -gt 0 ]] && echo ">>> FIRST=$FIRST, NPAGES=$NPAGES, INDICES=$INDICES"
     for i in $INDICES; do
@@ -43,4 +45,6 @@ for pdf in $PDFS; do
   fi
   OPTS="-verbose -delay $DELAY -loop 0 -density $RESO -despeckle -dispose previous"
   peval "convert $OPTS $pdf -resize $RESO -coalesce -layers optimize $GIF"
+  GIFS+=" $GIF"
 done
+echo ">>> Created $GIFS"
