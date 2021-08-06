@@ -34,8 +34,7 @@ for pdf in $PDFS; do
     [[ $FIRST -gt $NPAGES ]] && echo ">>> Warning! Not enough pages in $pdf to start at index $FIRST! Ignoring..." && continue
     PDF=$pdf # "naked pdf name"
     pdf=""
-    INDICES=`seq $((FIRST-1)) $((NPAGES-1))
-     | xargs`
+    INDICES="$(seq $((FIRST-1)) $((NPAGES-1)) | xargs)"
     [[ $FIRST -gt 1 ]] && INDICES+=" $(seq 0 $((FIRST-2)) | xargs)"
     [[ $VERBOSE -gt 0 ]] && echo ">>> FIRST=$FIRST, NPAGES=$NPAGES, INDICES=$INDICES"
     for i in $INDICES; do
