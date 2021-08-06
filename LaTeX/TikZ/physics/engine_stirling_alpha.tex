@@ -1,4 +1,5 @@
 % Author: Izaak Neutelings (March 2019)
+% Inspiration: https://commons.wikimedia.org/wiki/File:Alpha_Stirling.gif
 \documentclass[border=3pt,tikz]{standalone}
 \usetikzlibrary{calc}
 \tikzset{>=latex} % for LaTeX arrow head
@@ -10,11 +11,11 @@
 \tikzstyle{gas}=[top color=red!30,bottom color=blue!20,shading angle=-45]
 \tikzstyle{cold gas}=[blue!20]
 \tikzstyle{hot gas}=[red!30]
-\tikzstyle{knob}=[line width=2,mydarkblue,fill=blue!20!black!80]
+\tikzstyle{knob}=[line width=2,mydarkblue,fill=blue!20!black!70]
 \tikzstyle{arm1}=[very thick,mydarkblue,top color=blue!20!black!25,bottom color=blue!20!black!50]
 \tikzstyle{arm2}=[very thick,mydarkblue,top color=blue!20!black!50,bottom color=blue!20!black!60]
-\tikzstyle{piston1}=[very thick,mydarkblue,top color=blue!20!black!50,bottom color=blue!20!black!60,middle color=blue!20!black!40,shading angle=90]
-\tikzstyle{piston2}=[very thick,mydarkblue,top color=blue!20!black!60,bottom color=blue!20!black!70,middle color=blue!20!black!40,shading angle=0]
+\tikzstyle{piston1}=[very thick,mydarkblue,top color=blue!20!black!40,bottom color=blue!20!black!50,middle color=blue!20!black!40,shading angle=90]
+\tikzstyle{piston2}=[very thick,mydarkblue,top color=blue!20!black!50,bottom color=blue!20!black!60,middle color=blue!20!black!40,shading angle=0]
 
 
 % ANGLE
@@ -38,7 +39,7 @@
   \def\wt{1.0} % tube width
   \def\W{4.0}  % wall width
   \def\H{8.4}  % wall height
-  \def\T{2}    % wall thickness
+  \def\T{2.5}  % wall thickness
   \def\cl{1.3} % cooling length
   \def\ct{.25} % cooling thickness
   \def\rb{0.1} % bolt
@@ -58,7 +59,7 @@
   \fill[hot gas] (Ph) ++ (\ha+.2*\hp,-\W/2) rectangle (\R+\d+\H+.01,\W/2);
   
   % FLYWHEEL
-  \draw[very thick,mydarkblue,top color=blue!20!black!50,bottom color=blue!20!black!60,shading angle=0]
+  \draw[very thick,mydarkblue,top color=blue!20!black!40,bottom color=blue!20!black!50,shading angle=0]
     (O) circle (\R);
   \draw[knob] (O) circle (.25*\R);
   
@@ -100,7 +101,7 @@
   }
   
   % WALL
-  \draw[line width=2,mydarkblue,double=blue!20!black!60,double distance=\T,line cap=rect]
+  \draw[line width=1.7,mydarkblue,double=blue!20!black!60,double distance=\T,line cap=rect]
     (-\W/2,-\R-\d) |-++ (\W-\wt,-\H)
     \pipeoutside --++ (0,\W-\wt) --++ (-\H,0)
     ( \W/2,-\R-\d) |-++ (\H+\d,-\H) |-++ (-\H,\H+\d);

@@ -291,16 +291,19 @@
     \end{scope}
   }
   
-  \fill[mylightblue,draw=mylightblue,thin,use Hobby shortcut]
-    (.06*\xmax,0) -- (pe0-1) -- (pe1-1) -- (pe2-1) -- (pe3-1) --
-    (pe4-1) to[out=80,in=180]
-    (C) to[out=0,in=135]
-    (pe4-3) to[out=-42,in=145]
-    (pe3-3) to[out=-35,in=155]
-    (pe2-3) to[out=-30,in=160]
-    (pe1-3) to[out=-17,in=170]
-    (pe0-3) to[out=-10,in=172]
-    (.96*\xmax,.145*\ymax) |- (0,0);
+  \begin{scope}
+    \clip (0,0) rectangle (.96*\xmax,.96*\ymax);
+    \fill[myblue!10,draw=mydarkblue!40,thin,use Hobby shortcut]
+      (.06*\xmax,0) -- (pe0-1) -- (pe1-1) -- (pe2-1) -- (pe3-1) --
+      (pe4-1) to[out=80,in=180]
+      (C) to[out=0,in=135]
+      (pe4-3) to[out=-42,in=145]
+      (pe3-3) to[out=-35,in=155]
+      (pe2-3) to[out=-25,in=165]
+      (pe1-3) to[out=-15,in=170]
+      (pe0-3) to[out=-10,in=172]
+      (.97*\xmax,.144*\ymax) |- (0,0);
+  \end{scope}
   
   % MAXWELL CONSTRUCTION
   \fill (C) circle (1pt);
@@ -381,8 +384,8 @@
   \node[red!40!black,above left=10] at (Sx) {steam};
   
   % AXES
-  \draw[->,thick] (0,\ymin) -- (0,\ymax) node[left] {$T$ [\si{\degree C}]};
-  \draw[->,thick] (\xmin,0) -- (\xmax,0) node[below] {$Q$}; %[\si{J}]
+  \draw[->,thick] (0,\ymin) -- (0,\ymax) node[below left=0] {$T$ [\si{\degree C}]};
+  \draw[->,thick] (\xmin,0) -- (\xmax+0.1,0) node[below left=0] {$Q$ [J]}; %[\si{J}]
   \draw[dashed] (Ex) -- (E) --++ (0,0.1*\ymax);
   \draw[dashed] (Ey) -- (E);
   \draw[dashed] (Sx) -- (S) --++ (0,0.1*\ymax);

@@ -15,8 +15,8 @@
 \colorlet{Ecol}{orange!90!black}
 \colorlet{veccol}{green!45!black}
 \tikzstyle{EField}=[thick,Ecol]
-\def\xmax{5.5}
-\def\ymax{4}
+\def\xmax{5.0}
+\def\ymax{3.3}
 \def\tick#1#2{\draw[thick] (#1) ++ (#2:0.03*\ymax) --++ (#2-180:0.06*\ymax)}
 
 
@@ -26,7 +26,7 @@
 % ELECTRIC FIELD of a ROD
 \begin{tikzpicture}
   
-  \def\kQ{2.4}
+  \def\kQ{2.0}
   \coordinate (O) at (0,0);
   \coordinate (X) at (\xmax,0);
   \coordinate (Y) at (0,\ymax);
@@ -36,9 +36,9 @@
     (X) node[below] {$y$} -- (O) -- (Y) node[left] {$E$};
   
   % PLOT
-  \draw[EField,samples=100,smooth,variable=\x,domain={1.1*\kQ/\ymax}:0.98*\xmax]
+  \draw[EField,samples=100,smooth,variable=\x,domain={1.1*\kQ/\ymax}:0.96*\xmax]
     plot(\x,\kQ/\x);
-  \node[above right] at (1.4,1.8) {$E \sim \dfrac{1}{y}$};
+  \node[above right] at (1.3,1.6) {$E \sim \dfrac{1}{y}$};
   
 \end{tikzpicture}
 
@@ -46,7 +46,7 @@
 % ELECTRIC FIELD of a ROD
 \begin{tikzpicture}
   
-  \def\kQ{2.4}
+  \def\kQ{2.0}
   \coordinate (O) at (0,0);
   \coordinate (X) at (\xmax,0);
   \coordinate (Y) at (0,\ymax);
@@ -56,9 +56,9 @@
     (X) node[below] {$r$} -- (O) -- (Y) node[left] {$E$};
   
   % PLOT
-  \draw[EField,samples=100,smooth,variable=\x,domain={1.1*\kQ/\ymax}:0.98*\xmax]
+  \draw[EField,samples=100,smooth,variable=\x,domain={1.1*\kQ/\ymax}:0.96*\xmax]
     plot(\x,\kQ/\x);
-  \draw[black!70,thin,dashed,black,samples=100,smooth,variable=\x,domain={sqrt(1.1*\kQ/\ymax)}:0.98*\xmax]
+  \draw[black!70,thin,dashed,black,samples=100,smooth,variable=\x,domain={sqrt(1.1*\kQ/\ymax)}:0.96*\xmax]
     plot(\x,\kQ/\x^2);
   \node[black!70,left,scale=0.9] at (1.5,0.6) {$E \sim \dfrac{1}{r^2}$}; %(0.9,2.9)
   \node[Ecol!90!black,above right] at (1.9,1.1) {$E \sim \dfrac{1}{r}$};
@@ -69,7 +69,7 @@
 % ELECTRIC FIELD of a PLANE
 \begin{tikzpicture}
   
-  \def\kQ{3}
+  \def\kQ{2.3}
   \coordinate (O) at (0,0);
   \coordinate (X) at (\xmax,0);
   \coordinate (Y) at (0,\ymax);
@@ -80,9 +80,9 @@
   \tick{0,\kQ}{ 0} node[below=-1,left] {$\dfrac{\sigma}{2\epsilon_0}$};
   
   % PLOT
-  \draw[EField,samples=100,smooth,variable=\x,domain=0:0.98*\xmax]
+  \draw[EField,samples=100,smooth,variable=\x,domain=0:0.96*\xmax]
     plot(\x,\kQ);
-  \draw[black!60,thin,dashed,black,samples=100,smooth,variable=\x,domain={sqrt(1.1*\kQ/\ymax)}:0.98*\xmax]
+  \draw[black!60,thin,dashed,black,samples=100,smooth,variable=\x,domain={sqrt(1.1*\kQ/\ymax)}:0.96*\xmax]
     plot(\x,\kQ/\x^2);
   \node[black!60,left,scale=0.9] at (3.2,1.2) {$E \sim \dfrac{1}{x^2}$};
   
@@ -93,7 +93,7 @@
 % or ELECTRIC FIELD of a CONDUCTING SPHERE with excess charge
 \begin{tikzpicture}
   
-  \def\kQ{13}
+  \def\kQ{10}
   \def\R{2.0}
   \coordinate (O) at (0,0);
   \coordinate (X) at (\xmax,0);
@@ -111,10 +111,10 @@
   % PLOT
   \draw[EField,samples=100,smooth,variable=\x,domain=0:\R]
     plot(\x,\kQ*\x/\R^3);
-  \draw[EField,samples=100,smooth,variable=\x,domain=\R:0.98*\xmax]
+  \draw[EField,samples=100,smooth,variable=\x,domain=\R:0.96*\xmax]
     plot(\x,\kQ/\x^2);
-  \node[scale=0.9] at (0.75,2.5) {$E \sim \dfrac{r}{R^3}$};
-  \node[above right] at (2.8,1.6) {$E \sim \dfrac{1}{r^2}$};
+  \node[scale=0.9] at (0.75,2.0) {$E \sim \dfrac{r}{R^3}$};
+  \node[above right] at (2.7,1.3) {$E \sim \dfrac{1}{r^2}$};
   \draw[dashed]
     (Py) -- (P) -- (Px);
   
@@ -124,7 +124,7 @@
 % ELECTRIC FIELD of a CHARGED SPHERE
 \begin{tikzpicture}
   
-  \def\kQ{13}
+  \def\kQ{10}
   \def\R{2.0}
   \coordinate (O) at (0,0);
   \coordinate (X) at (\xmax,0);
@@ -140,11 +140,11 @@
   \tick{Px}{90} node[below] {$R$};
   
   % PLOT
-  \draw[EField,samples=100,smooth,variable=\x,domain=\R:0.98*\xmax]
+  \draw[EField,samples=100,smooth,variable=\x,domain=\R:0.96*\xmax]
     plot(\x,\kQ/\x^2);
   \draw[EField]
     (0,0.004*\ymax) --++ (Px);
-  \node[above right] at (2.8,1.6) {$E \sim \dfrac{1}{r^2}$};
+  \node[above right] at (2.7,1.3) {$E \sim \dfrac{1}{r^2}$};
   \draw[dashed]
     (Py) -- (P) -- (Px);
   
@@ -154,8 +154,11 @@
 % ELECTRIC FIELD of a CONDUCTING SLAB
 \begin{tikzpicture}
   
-  \def\E{0.76*\ymax}
-  \def\W{0.34*\xmax}
+  \def\xmax{5.9}
+  \def\ymax{2.7}
+  \def\E{0.74*\ymax}
+  \def\W{0.28*\xmax}
+  
   \coordinate (O) at (0,0);
   \coordinate (XL) at (-\xmax/2,0);
   \coordinate (XR) at (\xmax/2,0);
@@ -189,7 +192,7 @@
 % ELECTRIC FIELD of a CONDUCTING SPHERE with a cavity
 \begin{tikzpicture}
   
-  \def\kQ{9}
+  \def\kQ{4}
   \def\Rin{2.1}
   \def\Rout{3.1}
   \coordinate (O) at (0,0);
@@ -211,9 +214,9 @@
     (\Rin,0.01) -- (\Rout,0.01);
   \draw[dashed]
     (\Rout,0.01) -- (\Rout,\kQ/\Rout^2);
-  \draw[EField,samples=100,smooth,variable=\x,domain=\Rout:0.98*\xmax]
+  \draw[EField,samples=100,smooth,variable=\x,domain=\Rout:0.96*\xmax]
     plot (\x,\kQ/\x^2);
-  \node[above right] at (2.1,2.3) {$E \sim \dfrac{1}{r^2}$};
+  \node[above right] at (1.8,2.1) {$E \sim \dfrac{1}{r^2}$};
   
 \end{tikzpicture}
 

@@ -58,8 +58,8 @@
 % POINT CHARGE +1
 \begin{tikzpicture}
   \def\N{7}
-  \def\R{2.8}
-  \def\r{0.85}
+  \def\R{2.2}
+  \def\r{0.8}
   
   % SPHERE BACK
   \begin{scope}
@@ -81,14 +81,14 @@
   
   % SPHERE
   \draw[gauss line,ball color=green!70!black,fill opacity=0.1]
-    (0,0) circle (2.8);
+    (0,0) circle (\R);
   \begin{scope}
     \clip (-\R,0) rectangle ++(2*\R,-\R);
     \draw[gauss line,very thin]
       (0,0) ellipse ({\R} and {0.3*\R});
   \end{scope}
   \draw[<->,gauss line,very thin]
-    (C) -- ({\R*cos(194)},{\r*sin(194)}) node[measure] {$R$}; %{\contour{green!70!black!7}{$R$}};
+    (C) -- (190:{\R} and {\r}) node[measure] {$R$}; %{\contour{green!70!black!7}{$R$}};
   
   % VECTOR
   \draw[gauss dark,name intersections={of={Eline1} and ell,name=ES1}]
@@ -108,21 +108,21 @@
 % NO CHARGE
 \begin{tikzpicture}
   \def\N{8}
-  \def\R{2.2}
-  \def\E{6.8}
+  \def\R{1.8}
+  \def\E{6.6}
   \def\r{0.85}
   
   %% CHARGES
   %\node[charge+,scale=0.8,circle,inner sep=0.24] (C) at (0,0) {$+q$};
   
   % FIELD LINES
-  \path[name path=ell](0,0) ellipse ({0.78*\R} and {\R});
+  %\path[name path=ell] (0,0) ellipse ({0.78*\R} and {\R});
   \foreach \i [evaluate={
-      \y=0.6*(\i-0.7-\N/2);
-      \ang=5*(\i-\N/2);
+      \y=0.51*(\i-0.6-\N/2);
+      \ang=3.5*(\i-\N/2);
       \out=0.8*(\i-\N/2);
-      \in=180+8*(\i-\N/2);
-      \r=2.8*\R-0.14*(\i-\N/2)^2;}] in {1,...,\N}{
+      \in=180+6*(\i-\N/2);
+      \r=2.9*\R-0.14*(\i-\N/2)^2;}] in {1,...,\N}{
     \draw[EFieldLine] (-1.4*\R,\y) to[out=\out,in=\in]++ (\ang:\r); %to[out=\out,in=\in]
   }
   
@@ -131,7 +131,7 @@
     (0,0) circle (\R);
   
   % CHARGE
-  \node[right=-5] at (0,0) {$Q = 0$};
+  \node[right=1] at (-0.1*\R,0) {$Q = 0$};
   \node[right=1] at (\R,0) {$\Phi = 0$};
   
 \end{tikzpicture}
@@ -141,8 +141,8 @@
 \begin{tikzpicture}
   \def\NQ{4} %13}
   \def\NE{7}
-  \def\R{2.0}
-  \def\r{3.0}
+  \def\R{1.5}
+  \def\r{2.6}
   \def\dtheta{50}
   \def\angle{135}
   \coordinate (P) at (\angle:0.83*\r);
@@ -155,15 +155,15 @@
   \draw[ball color=blue!80,fill opacity=0.3]
     (0,0) circle (\R);
   \draw[<->,black,very thin]
-    (0,0) -- (-8:\R) node[midway,right=4,above=-1,black] {$R$};
+    (0,0) -- (-8:\R) node[pos=0.6,above=-1,black] {$R$};
   \draw[vector]
-    (0,0) -- (P) node[midway,right=11,above=-9] {$\vb{r}$};
+    (0,0) -- (P) node[pos=0.36,above=1] {$\vb{r}$};
   \node at (-60:1.25*\R) {$Q = \rho V$};
   
   % CHARGES
   \foreach \i [evaluate={\rc=(\i-0.5)*\R/\NQ; \N=-1+4*\i;}] in {1,...,\NQ}{
     \foreach \j [evaluate={\ang=48+1*\i+\j*360/\N;}] in {1,...,\N}{
-      \node[minuscol,scale=0.8] at (\ang:\rc) {$+$};
+      \node[minuscol,scale=0.6] at (\ang:\rc) {$+$};
     }
   }
   
@@ -188,8 +188,8 @@
 \begin{tikzpicture}
   \def\NE{7}
   \def\NQ{4}
-  \def\R{2.0}
-  \def\r{3.1}
+  \def\R{1.5}
+  \def\r{2.6}
   
   % FIELD LINES
   \foreach \i [evaluate={\ang=-10+\i*360/\NE;}] in {1,...,\NE}{
@@ -205,7 +205,7 @@
   % CHARGES
   \foreach \i [evaluate={\rc=(\i-0.5)*\R/\NQ; \N=-1+4*\i;}] in {1,...,\NQ}{
     \foreach \j [evaluate={\ang=-8*\i+\j*360/\N;}] in {1,...,\N}{
-      \node[minuscol,scale=0.8] at (\ang:\rc) {$+$};
+      \node[minuscol,scale=0.7] at (\ang:\rc) {$+$};
     }
   }
   
@@ -214,7 +214,7 @@
   \draw[<-,very thin] (0,0) -- (R);
   \draw[->,very thin] (R) -- (-40:\R);
   \node[below=0] at (-85:\R) {$Q = \rho V$}; %fill=white,inner sep=1,
-  \draw[vector] (0,0) -- (54:\r) node[midway,left=6,above=-6] {$\vb{r}$};
+  \draw[vector] (0,0) -- (54:\r) node[pos=0.46,left=0] {$\vb{r}$};
   \draw[EField] (55:\r) --++ (55:0.5*\R) node[left=2] {$\vb{E}$};
   \draw[normalvec] (53:\r) --++ (53:0.3*\R) node[right=1] {$\vu{n}$};
   
@@ -225,9 +225,9 @@
 \begin{tikzpicture}
   \def\NE{7}
   \def\NQ{14}
-  \def\Rin{1.80}
-  \def\Rout{2.0}
-  \def\r{3.1}
+  \def\Rin{1.40}
+  \def\Rout{1.60}
+  \def\r{2.6}
   
   % FIELD LINES
   \foreach \i [evaluate={\ang=-10+\i*360/\NE;}] in {1,...,\NE}{
@@ -250,7 +250,7 @@
   \draw[<-,very thin] (0,0) -- (R);
   \draw[->,very thin] (R) -- (-30:\Rin);
   \node[below=1] at (-85:\Rout) {$Q = \sigma A$}; %fill=white,inner sep=1,
-  \draw[vector] (0,0) -- (54:\r) node[midway,left=6,above=-6] {$\vb{r}$};
+  \draw[vector] (0,0) -- (54:\r) node[pos=0.48,left=2] {$\vb{r}$};
   \draw[EField] (55:\r) --++ (55:0.5*\Rout) node[left=2] {$\vb{E}$};
   \draw[normalvec] (53:\r) --++ (53:0.3*\Rout) node[right=1] {$\vu{n}$};
   
@@ -261,8 +261,8 @@
 \begin{tikzpicture}
   \def\NQ{13}
   \def\NE{7}
-  \def\R{2.0}
-  \def\r{3.0}
+  \def\R{1.5}
+  \def\r{2.6}
   \def\dtheta{50}
   \def\angle{135}
   \coordinate (P) at (\angle:0.83*\r);
@@ -305,8 +305,8 @@
 \begin{tikzpicture}
   \def\NQ{13}
   \def\NE{7}
-  \def\R{2.0}
-  \def\r{1.3}
+  \def\R{1.5}
+  \def\r{1.0}
   \def\dthetaI{40}
   \def\dthetaII{50}
   \def\dthetaIII{15}
@@ -363,9 +363,8 @@
   \def\NQsideout{6}
   \def\NQsidein{6}
   \def\NE{8}
-  \def\Rin{1.6}
-  \def\Rout{2.6}
-  \def\r{1.3}
+  \def\Rin{1.2}
+  \def\Rout{2.0}
   \def\E{1.4*\Rout}
   \def\dthetain{40}
   \def\dthetaout{55}
@@ -392,10 +391,10 @@
   
   % CHARGES
   \foreach \i [evaluate={\ang=0+\i*360/\NQout;}] in {1,...,\NQout}{
-    \node[red!70!black,scale=0.9] at (\ang:0.94*\Rout) {$+$};
+    \node[red!70!black,scale=0.8] at (\ang:0.94*\Rout) {$+$};
   }
   \foreach \i [evaluate={\ang=(180-\dthetaout)+(\i-0.7)*2.1*\dthetaout/\NQsideout;}] in {1,...,\NQsideout}{
-    \node[red!70!black,shift={({\Rout/tan(\dthetaout)},0)},scale=0.9] at (\ang:{0.94*\Rout/sin(\dthetaout)}) {$+$};
+    \node[red!70!black,shift={({\Rout/tan(\dthetaout)},0)},scale=0.8] at (\ang:{0.94*\Rout/sin(\dthetaout)}) {$+$};
   }
   \foreach \i [evaluate={\ang=10+\i*360/\NE;}] in {1,...,\NE}{
     \draw[EFieldLine=0.5] (\ang:\Rout) -- (\ang:\E);
@@ -411,14 +410,12 @@
   \def\NQsideout{6}
   \def\NQsidein{6}
   \def\NE{8}
-  \def\Rin{1.6}
-  \def\Rout{2.6}
-  \def\r{1.3}
+  \def\Rin{1.2}
+  \def\Rout{2.0}
   \def\E{1.4*\Rout}
   \def\dthetain{40}
   \def\dthetaout{55}
   \def\angle{135}
-  %\coordinate (P) at (\angle:0.83*\r);
   
   % BACK
   \draw[top color=black!5,bottom color=black!14,shading angle=45]

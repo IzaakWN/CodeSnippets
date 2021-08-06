@@ -20,15 +20,15 @@
 
 % ENGINE
 \def\engine#1{
-  \def\Pw{2}
-  \def\Pl{3}
-  \def\Pt{0.5}
+  \def\Pw{2}   % piston width
+  \def\Pl{3}   % piston length
+  \def\Pt{0.5} % piston thickness
   \def\Cl{5}
   \def\Ct{0.2}
   \def\R{0.2}
-  \def\Sw{3}
-  \def\Sh{1.5}
-  \def\St{.4}
+  \def\Sw{3}   % platform S width
+  \def\St{.4}  % platform S thickness
+  \def\Sh{1.5} % platform height
   \def\hRP{1.32}
   \def\hSR{3.5}
   \coordinate (O) at (0,0);
@@ -52,7 +52,7 @@
   % PLATFORM (S) & ROPE
   \getangle{\a}{R}{F}
   \begin{scope}[shift={(0,{\hRP*(1/sin(\a)-1)})}]
-    \draw[blue!20!black,thick,top color=blue!20!black!40,bottom color=blue!20!black!60,shading angle=0]
+    \draw[blue!20!black!90,thick,top color=blue!20!black!40,bottom color=blue!20!black!60,shading angle=0]
       (-\Sw/2,0) coordinate[above right=0.5] (SL)
       --++ (\Sw,0) coordinate[above left=0.5] (SR) --++ (0,-\St) --++ (-\Sw,0) -- cycle;
     \draw[rope]
@@ -69,9 +69,9 @@
   \draw[thick,mydarkblue,fill=blue!40!black!70] (R) circle (.3*\R);
   
   % PLATFORM
-  \draw[blue!20!black,thick,
-        top color=blue!40!black!50,bottom color=blue!30!black!50,shading angle=10]
-    (-\Sw/2,0) --++ (0,-1) --++ (\Sw,0) --++ (0,1+\Sh) --++ (2.2,0) --++ (0,-2-\Sh) --++ (-\Sw-5.2,0) --++ (0,2) -- cycle;
+  \draw[blue!20!black!80,thick,
+        top color=blue!30!black!25,bottom color=blue!10!black!12,shading angle=10]
+    (-\Sw/2-0.04,0) --++ (0,-1) --++ (\Sw+0.08,0) --++ (0,1+\Sh) --++ (2.2,0) --++ (0,-2-\Sh) --++ (-\Sw-5.2,0) --++ (0,2) -- cycle;
 }
 
 \def\fix{

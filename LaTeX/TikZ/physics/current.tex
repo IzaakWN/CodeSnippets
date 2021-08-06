@@ -2,6 +2,7 @@
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{amsmath}
 \usepackage{physics}
+\usepackage{bm}
 \usepackage{tikz}
 \tikzset{>=latex} % for LaTeX arrow head
 \usetikzlibrary{decorations.markings}
@@ -24,18 +25,19 @@
 
 
 % CONDUCTION MODEL
+\def\R{0.21} % ion radius
+\def\a{0.90} % scale
+\def\Rx{0.2*\a*\Ny}
+\def\Ry{0.5*\a*\Ny}
+\def\Nx{6} % number of ions columns
+\def\Ny{3} % number of ions rows
+\def\L{\a*(\Nx-1)} % length
+\def\electron#1#2#3{
+  \node[charge-,draw=black,circle,fill,inner sep=0.8,scale=0.5,line width=0.3]
+    (e) at (#1*\a,#2*\a) {$\bm-$};
+  \draw[->,green!60!black] (e) --++ (#3*0.7*\a);
+}
 \begin{tikzpicture}
-  \def\R{0.3}
-  \def\a{1.4}
-  \def\Nx{6}
-  \def\Ny{3}
-  \def\L{\a*(\Nx-1)}
-  \def\Rx{0.2*\a*\Ny}
-  \def\Ry{1.0*\a*\Ny/2}
-  \def\electron#1#2#3{
-    \node[charge-,draw=black,circle,fill,inner sep=1,scale=0.8] (e) at (#1*\a,#2*\a) {$-$};
-    \draw[->,green!60!black] (e) --++ (#3);
-  }
   
   \fill[metal] (0,{-\Ry}) arc (270:90:{\Rx} and {\Ry}) --++ ({\L},0) arc (90:-90:{\Rx} and {\Ry});
   \draw[black!80] (0,{-\Ry}) arc (270:90:{\Rx} and {\Ry});
@@ -44,7 +46,7 @@
   % IONS
   \foreach \j [evaluate={\y=\a*(\j-\Ny/2-0.5);}] in {1,...,\Ny}{
     \foreach \i in {1,...,\Nx}{ %[evaluate={\x=\j*\a;}]
-      \draw[charge+] ({(\i-1)*\a},\y) circle (\R) node[scale=1.4] {$+$};
+      \draw[charge+] ({(\i-1)*\a},\y) circle (\R) node[scale=1.4*\a,inner sep=1] {$+$};
     }
   }
   
@@ -83,17 +85,6 @@
 
 % CONDUCTION MODEL
 \begin{tikzpicture}
-  \def\R{0.3}
-  \def\a{1.4}
-  \def\Nx{6}
-  \def\Ny{3}
-  \def\L{\a*(\Nx-1)}
-  \def\Rx{0.2*\a*\Ny}
-  \def\Ry{1.0*\a*\Ny/2}
-  \def\electron#1#2#3{
-    \node[charge-,draw=black,circle,fill,inner sep=1,scale=0.8] (e) at (#1*\a,#2*\a) {$-$};
-    \draw[->,green!60!black] (e) --++ (#3);
-  }
   
   \fill[metal] (0,{-\Ry}) arc (270:90:{\Rx} and {\Ry}) --++ ({\L},0) arc (90:-90:{\Rx} and {\Ry});
   \draw[black!80] (0,{-\Ry}) arc (270:90:{\Rx} and {\Ry});
@@ -102,7 +93,7 @@
   % IONS
   \foreach \j [evaluate={\y=\a*(\j-\Ny/2-0.5);}] in {1,...,\Ny}{
     \foreach \i in {1,...,\Nx}{ %[evaluate={\x=\j*\a;}]
-      \draw[charge+] ({(\i-1)*\a},\y) circle (\R) node[scale=1.4] {$+$};
+      \draw[charge+] ({(\i-1)*\a},\y) circle (\R) node[scale=1.4*\a,inner sep=1] {$+$};
     }
   }
   
@@ -139,7 +130,7 @@
   \electron{ 5.30}{ 0.60}{ -5:0.9}
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
-  \draw[->,green!60!black] ({\L+1.05*\Rx},-0.7*\Ry) --++ (0.7,0) node[above left] {$v_\mathrm{d}$};
+  \draw[->,thick,green!60!black] ({\L+1.05*\Rx},-0.7*\Ry) --++ (0.7,0) node[pos=0.5,above=-1] {$v_\mathrm{d}$};
   \draw[black!80] (0,{-\Ry}) arc (-90:90:{\Rx} and {\Ry}) --++ ({\L},0) arc (90:-90:{\Rx} and {\Ry}) -- cycle;
   
 \end{tikzpicture}
@@ -148,11 +139,11 @@
 % CONDUCTION MODEL
 \begin{tikzpicture}
   \def\NE{3}
-  \def\L{8}
+  \def\L{6}
   \def\a{0.3*\L}
   \def\b{0.7*\L}
-  \def\Rx{0.7}
-  \def\Ry{1.4}
+  \def\Rx{0.4}
+  \def\Ry{1.0}
   
   \fill[metal] (0,-\Ry) arc (270:90:{\Rx} and {\Ry}) --++ ({\L},0) arc (90:-90:{\Rx} and {\Ry});
   \draw[black!80] (0,-\Ry) arc (270:90:{\Rx} and {\Ry});

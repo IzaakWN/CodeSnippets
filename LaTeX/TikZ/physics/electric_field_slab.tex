@@ -43,16 +43,16 @@
 
 % PLANE field with electric field
 \begin{tikzpicture}[x={(1.0cm,0)},y={(0.55cm,0.5cm)},z={(0,1.0cm)}]
-  \def\H{2.8}
-  \def\W{1.0}
-  \def\L{4.4}
+  \def\H{2.0}
+  \def\W{0.7}
+  \def\L{3.5}
   \def\Ny{5}
   \def\Nz{4}
   \def\NEy{4}
   \def\NEz{3}
   \def\oEy{0.08*\W}
   \def\oEz{0.04*\H}
-  \def\E{1.5}
+  \def\E{1.1}
   
   % ELECTRIC FIELD back
   \foreach \i [evaluate={\y=\oEy+(\i-0.5)*(\L-2*\oEy)/\NEy;}] in {1,...,\NEy}{
@@ -62,7 +62,7 @@
   }
   
   % AXIS
-  \draw[->,thick] (1.4*\W,0,0) --++ (1.5*\W,0,0) node[right] {$x$};
+  \draw[->,thick] (1.6*\W,0,0) --++ (1.1*\W,0,0) node[right,scale=0.9] {$x$};
   
   % PLANE
   \draw[metal]
@@ -78,21 +78,20 @@
       \draw[EField,very thick] (\W,\y,\z) --++ (\E,0,0);
     }
   }
-  %\node[Ecol,scale=1.2] at (\W+\E,0.9*\L,0.93*\H) {$\vb{E}_\text{ext}$};
-  \node[Ecol,scale=1.2] at (-1.3*\E,0.9*\L,0.94*\H) {$\vb{E}_\text{ext}$};
-  %\node[Ecol,scale=1.2] at (\W+1.3*\E,0.2*\L,0.1*\H) {$\vb{E}_\text{ext}$};
+  %\node[Ecol,scale=1.05] at (\W+\E,0.9*\L,0.93*\H) {$\vb{E}_\text{ext}$};
+  \node[Ecol,scale=1.05] at (-1.3*\E,0.9*\L,0.94*\H) {$\vb{E}_\text{ext}$};
+  %\node[Ecol,scale=1.05] at (\W+1.3*\E,0.2*\L,0.1*\H) {$\vb{E}_\text{ext}$};
   
 \end{tikzpicture}
 
 
 
-
 % PLANE field with electric field
-\def\H{4.5}
-\def\W{2.1}
+\def\H{3.5}
+\def\W{1.4}
 \def\NE{6}
 \def\NQ{7}
-\def\E{2}
+\def\E{1.8}
 \def\R{0.1}
 \begin{tikzpicture}
   
@@ -109,7 +108,7 @@
   \node[Ecol,above right] at (\E,0.43*\H) {$\vb{E}_\text{ext}$};
   
   % CHARGES
-  \foreach \i [evaluate={\y=-\H/2+(\i-0.7)*(\H+0.3)/\NQ;}] in {1,...,\NQ}{
+  \foreach \i [evaluate={\y=-0.92*\H/2+(\i-1)*0.92*\H/(\NQ-1);}] in {1,...,\NQ}{
     \draw[charge-] (-0.4*\W,\y) circle (\R) node[scale=0.6] {$-$};
     \draw[charge+] ( 0.4*\W,\y) circle (\R) node[scale=0.6] {$+$};
     \draw[EFieldLine=0.54,line width=0.5] (0.35*\W,\y) -- (-0.35*\W,\y);
@@ -134,11 +133,11 @@
   \node[Ecol,above right] at (\E,0.43*\H) {$\vb{E}_\text{ext}$};
   
   % CHARGES
-  \foreach \i [evaluate={\y=-\H/2+(\i-0.7)*(\H+0.3)/\NQ;}] in {1,...,\NQ}{
+  \foreach \i [evaluate={\y=-0.92*\H/2+(\i-1)*0.92*\H/(\NQ-1);}] in {1,...,\NQ}{
     \draw[charge-] (-0.4*\W,\y) circle (\R) node[scale=0.6] {$-$};
     \draw[charge+] ( 0.4*\W,\y) circle (\R) node[scale=0.6] {$+$};
   }
-  \node[Ecol] at (0,0) {$\vb{E}=0$};
+  \node[Ecol] at (0,0.08*\H) {$\vb{E}=0$};
  
 \end{tikzpicture}
 
@@ -148,7 +147,7 @@
 \begin{tikzpicture}
   \def\h{0.38*\H}
   \def\w{0.68*\W}
-  \def\r{0.1*\W}
+  \def\r{0.08*\W}
   
   % SLAB
   \draw[metal] (-\W/2,-\H/2) rectangle ++(\W,\H);
@@ -186,8 +185,6 @@
   \end{scope}
    
 \end{tikzpicture}
-
-
 
 
 

@@ -242,31 +242,34 @@
 
 
 % HYSTERESIS
+\colorlet{myred}{red!60!black}
+\colorlet{myblue}{blue!60!black}
+\colorlet{mygreen}{green!50!black}
 \begin{tikzpicture}
-  \def\xmax{2.4}
-  \def\ymax{2.4}
+  \def\xmax{2.0}
+  \def\ymax{1.8}
   \def\A{0.8*\ymax}
   \def\R{0.06}
-  \coordinate (A) at (1.3*\A,\A);
-  \coordinate (-A) at (-1.3*\A,-\A);
-  \coordinate (T) at (0, 0.85*\A);
-  \coordinate (B) at (0,-0.85*\A);
+  \coordinate (A) at (1.2*\A,\A);
+  \coordinate (-A) at (-1.2*\A,-\A);
+  \coordinate (T) at (0, 0.80*\A);
+  \coordinate (B) at (0,-0.80*\A);
   \draw[->,thick] (0,-\ymax) -- (0,\ymax) node[left] {$M$};
   \draw[->,thick] (-\xmax,0) -- (\xmax,0) node[below] {$B_\text{ext}$};
-  \draw[ArrowLine=0.65,blue!60!black] (A) to[out=-180,in=20] (T);
-  \draw[ArrowLine=0.40,blue!60!black] (T) to[out=-160,in=20] (-A); %node[midway,above] {$1$};
-  \draw[ArrowLine=0.60,green!50!black] (-A) to[out=10,in=-160] (B); %node[midway,left] {$2$};
-  \draw[ArrowLine=0.38,green!50!black] (B) to[out=20,in=-170] (A); %node[midway,below] {$3$};
-  \draw[ArrowLine=0.45,red!60!black] (0,0) to[out=10,in=-180] (A); %node[midway,right] {$4$};
-  \node[left,red!60!black,scale=0.9]    at ( 0.50*\A, 0.45*\A) {$1$};
-  \node[above,blue!60!black,scale=0.9]  at ( 0.40*\A, 0.95*\A) {$2$};
-  \node[left,blue!60!black,scale=0.9]   at (-0.55*\A, 0.30*\A) {$3$};
-  \node[below,green!50!black,scale=0.9] at (-0.50*\A,-0.95*\A) {$4$};
-  \node[right,green!50!black,scale=0.9] at ( 0.46*\A,-0.42*\A) {$5$};
-  \fill[red!60!black] (A) circle (\R);
-  \fill[blue!60!black] (T) circle (\R) node[above=4,left] {$B_\mathrm{r}/\mu_0$};
-  \fill[green!50!black] (-A) circle (\R);
-  \fill[green!50!black] (B) circle (\R) node[below=3,right] {$-B_\mathrm{r}/\mu_0$};
+  \draw[ArrowLine=0.65,myblue] (A) to[out=-180,in=20] (T);
+  \draw[ArrowLine=0.40,myblue] (T) to[out=-160,in=20] (-A); %node[midway,above] {$1$};
+  \draw[ArrowLine=0.60,mygreen] (-A) to[out=10,in=-160] (B); %node[midway,left] {$2$};
+  \draw[ArrowLine=0.38,mygreen] (B) to[out=20,in=-170] (A); %node[midway,below] {$3$};
+  \draw[ArrowLine=0.45,myred] (0,0) to[out=10,in=-180] (A); %node[midway,right] {$4$};
+  \node[left,myred!60!black,scale=0.9]    at ( 0.50*\A, 0.45*\A) {$1$};
+  \node[above,myblue!60!black,scale=0.9]  at ( 0.40*\A, 0.95*\A) {$2$};
+  \node[left,myblue!60!black,scale=0.9]   at (-0.55*\A, 0.30*\A) {$3$};
+  \node[below,mygreen!60!black,scale=0.9] at (-0.50*\A,-0.95*\A) {$4$};
+  \node[right,mygreen!60!black,scale=0.9] at ( 0.46*\A,-0.42*\A) {$5$};
+  \fill[myred!60!black] (A) circle (\R);
+  \fill[myblue!60!black] (T) circle (\R) node[above=4,left] {$B_\mathrm{r}/\mu_0$};
+  \fill[mygreen!60!black] (-A) circle (\R);
+  \fill[mygreen!60!black] (B) circle (\R) node[below=3,right] {$-B_\mathrm{r}/\mu_0$};
 \end{tikzpicture}
 
 

@@ -52,8 +52,8 @@
 
 % PLANE charge distribution
 \begin{tikzpicture}[x={(1,0)},y={(0.5,1)}]%,z={(0.73cm,0.73cm)}
-  \def\H{3}
-  \def\W{5.8}
+  \def\H{2.6}
+  \def\W{5.0}
   \def\Nx{6}
   \def\Ny{4}
   \def\h{0.35}
@@ -86,16 +86,16 @@
 
 % ROUND RING integration
 \begin{tikzpicture}[x={(1,0)},y={(0,0.5)}]
-  \def\r{1.7}
-  \def\dr{0.55}
-  \def\dtu{4}   % upper angle dq segment
-  \def\dtd{-14} % lower angle dq segment
+  \def\r{1.3}
+  \def\dr{0.53}
+  \def\dtu{5}   % upper angle dq segment
+  \def\dtd{-15} % lower angle dq segment
   \def\Ex{0.6}
   \def\Ey{1.1}
   \def\N{10}
   \coordinate (O) at (0,0);
-  \coordinate (P) at (0,5.2);
-  \coordinate (Y) at (0,8.0);
+  \coordinate (P) at (0,4.0);
+  \coordinate (Y) at (0,6.0);
   \coordinate (-Y) at (0,-3.0);
   \coordinate (R) at (\r,0);
   
@@ -106,7 +106,7 @@
   \draw[darkcharged]
     (O) ++ (\dtu:\r) arc (\dtu:\dtd:\r) to[out=60,in=100]++ (\dtd:\dr) arc (\dtd:\dtu:\r+\dr) to[out=130,in=60] cycle;
   \foreach \i [evaluate={\cang=3+\i*360/\N;}] in {1,...,\N}{
-    \node[scale=1.0,rotate=0] at (\cang:\r+\dr/2) {$+$};
+    \node[scale=0.9,rotate=0] at (\cang:\r+\dr/2) {$+$};
   }
   
   % CHARGE
@@ -136,15 +136,15 @@
 
 % ROUND SHEET integration
 \begin{tikzpicture}[x={(1,0)},y={(0,0.5)}]
-  \def\R{3.1}
-  \def\r{1.7}
-  \def\dr{0.55}
+  \def\R{2.6}
+  \def\r{1.35}
+  \def\dr{0.52}
   \def\Ex{0.6}
   \def\Ey{1.1}
   \def\Nx{4}
   \coordinate (O) at (0,0);
-  \coordinate (P) at (0,5.2);
-  \coordinate (Y) at (0,8.0);
+  \coordinate (P) at (0,4.0);
+  \coordinate (Y) at (0,6.0);
   \coordinate (R) at (\r,0);
   
   % PLANE
@@ -153,8 +153,8 @@
   \draw[darkcharged,even odd rule]
     (O) circle (\r+\dr) circle (\r);
   \foreach \i [evaluate={\cr=(\i-0.5)*\R/\Nx; \Ny=7+4*(\i-2);}] in {1,...,\Nx}{
-    \foreach \j [evaluate={\cang=38+\j*360/\Ny;}] in {1,...,\Ny}{
-      \node[scale=1.0,rotate=0] at (\cang:\cr) {$+$};
+    \foreach \j [evaluate={\cang=39+\j*360/\Ny;}] in {1,...,\Ny}{
+      \node[scale=0.8,rotate=0] at (\cang:\cr) {$+$};
     }
   }
   
@@ -171,17 +171,17 @@
   \draw[EField,-,dashed,thin] (P) ++ (0,\Ey) --++ (-\Ex,0) --++ (0,-\Ey);
   \node[fill=blue!60!black,circle,inner sep=1.1] (P') at (P) { };
   \node[above=3,right=1] at (P') {P};
-  \draw[vector,veccol] (R) -- (P') node[right=22,below=5] {$\vb{r}'$};
-  \draw[vector,veccol] (0,0) --++ (0:\r) node[left=15,above] {$\vb{r}$};
-  \draw[<->] (0,0) --++ (-101:\R) node[midway,above=7,right=2] {$R$};
+  \draw[vector,veccol] (R) -- (P') node[pos=0.8,right=3] {$\vb{r}'$};
+  \draw[vector,veccol] (0,0) --++ (0:\r) node[pos=0.7,above=-1] {$\vb{r}$};
+  \draw[<->] (0,0) --++ (-101:\R) node[pos=0.35,right=-2] {$R$};
   
 \end{tikzpicture}
 
 
 % PLANE field with electric field
 \begin{tikzpicture}[x={(1.0cm,0)},y={(0.55cm,0.5cm)},z={(0,1.0cm)}]
-  \def\H{3.2}
-  \def\W{5.5}
+  \def\H{2.5}
+  \def\W{4.8}
   \def\Ny{5}
   \def\Nz{4}
   \def\NEy{4}
@@ -209,7 +209,7 @@
     (0,0,0) --++ (0,\W,0) --++ (0,0,\H) --++ (0,-\W,0) -- cycle;
   \foreach \i [evaluate={\y=(\i-0.5)*\W/\Ny;}] in {1,...,\Ny}{
     \foreach \j [evaluate={\z=(\j-0.5)*\H/\Nz;}] in {1,...,\Nz}{
-      \node[scale=1.0,rotate=0] at (0,\y,\z) {$+$};
+      \node[scale=0.8,rotate=0] at (0,\y,\z) {$+$};
     }
   }
   
@@ -227,8 +227,8 @@
 
 % PLANE field with gaussian surface
 \begin{tikzpicture}[x={(1.0cm,0)},y={(0.55cm,0.5cm)},z={(0,1.0cm)}]
-  \def\H{3.2}
-  \def\W{5.5}
+  \def\H{2.5}
+  \def\W{4.8}
   \def\Ny{5}
   \def\Nz{4}
   \def\R{0.14*\W}
@@ -277,7 +277,7 @@
   \end{scope}
   \foreach \i [evaluate={\y=(\i-0.5)*\W/\Ny;}] in {1,...,\Ny}{
     \foreach \j [evaluate={\z=(\j-0.5)*\H/\Nz;}] in {1,...,\Nz}{
-      \node[scale=1.0,rotate=0] at (0,\y,\z) {$+$};
+      \node[scale=0.8,rotate=0] at (0,\y,\z) {$+$};
     }
   }
   \draw[gauss dark]
@@ -317,9 +317,9 @@
 
 % GAUSSIAN
 \begin{tikzpicture}[x={(1.0cm,0)},y={(0.55cm,0.5cm)},z={(0,1.0cm)}]
-  \def\H{1.9}
-  \def\W{3.1}
-  \def\L{4.8}
+  \def\H{1.2}
+  \def\W{2.5}
+  \def\L{4.0}
   \def\Ny{2}
   \def\Nz{3}
   \def\ER{0.4*\H}
@@ -347,7 +347,7 @@
   \draw[EField,-] (EL23) --++ (-\ER,0,0);
   
   % PLANE
-  \draw[gauss surf,fill opacity=1] (O) --++ (0,\W,0) --++ (0,0,\H) --++ (0,-\W,0) -- cycle;
+  \draw[gauss surf,fill opacity=0.97] (O) --++ (0,\W,0) --++ (0,0,\H) --++ (0,-\W,0) -- cycle;
   
 %  % ELECTRIC FIELDS middle
 %  \begin{scope}
@@ -369,7 +369,7 @@
   \draw[EField,-] (EL23) -- (ER23);
   
   % PLANE
-  \draw[gauss surf,name path=skew,fill opacity=1]
+  \draw[gauss surf,name path=skew,fill opacity=0.97]
     (0,0,\H) --++ (0,\W,0) --++ (\L,0,-\H) --++ (0,-\W,0) -- cycle;
   
   % ELECTRIC FIELDS
@@ -384,8 +384,8 @@
   \draw[normalvec] (ER23) --++ (0.33,0,0.7) node[above] {$\vu{n}$} coordinate (N);
   
   % ANGLES
-  \draw pic[->,"$\theta$",draw=black,angle radius=22,angle eccentricity=1.3] {angle = O--T--R};
-  \draw pic[->,"$\theta$",draw=black,angle radius=12,angle eccentricity=1.6] {angle = ET--ER23--N};
+  \draw pic[->,"$\theta$",draw=black,angle radius=14,angle eccentricity=1.3] {angle = O--T--R};
+  \draw pic[->,"$\theta$",draw=black,angle radius=10,angle eccentricity=1.6] {angle = ET--ER23--N};
   
   % LABELS
   \node[above=2,below right=-2] at (O) {$A_\mathrm{n} = A\cos\theta$};

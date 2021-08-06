@@ -98,7 +98,7 @@
   \draw[axis] (0,0,-\A*1.3) -- (0,0,\A*1.3) node[left] {$y$};
   
   % waves
-  \draw[Ecol,very thick,variable=\t,domain=0:\nNodes*pi/2*1.01,samples=\N]
+  \draw[Ecol,very thick,variable=\t,domain=0:\nNodes*pi/2*1.03,samples=\N]
     plot (\t,{\A*cos(\om*\t*360/pi)},{\A*sin(\om*\t*360/pi)});
   
   % draw vectors

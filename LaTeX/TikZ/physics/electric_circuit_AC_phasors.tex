@@ -70,8 +70,8 @@
   \draw[dashed]
     (Rx) -- (R);
   \draw[vector,Rcol] (O) -- (R) node[above right=-3] {$\VR$};
-  \draw[vector,Rcol!80!black] (O) node[above=2,below right=1,scale=0.9] {$\EMF_0 \cos(\omega t - \delta)$} -- (Rx); %\text{max}
-  \draw pic[-sm,"$\omega t - \delta$"{scale=0.9,below=-4},draw=black,angle radius=15,angle eccentricity=2.1] {angle = X--O--R};
+  \draw[vector,Rcol!80!black] (O) node[above=2,below right=1,scale=0.9] {$\EMF_0 \cos(\omega t - \phi)$} -- (Rx); %\text{max}
+  \draw pic[-sm,"$\omega t - \phi$"{scale=0.9,below=-4},draw=black,angle radius=15,angle eccentricity=2.1] {angle = X--O--R};
   \draw[->] (\ang+6:0.7*\R) arc (\ang:\ang+50:0.4*\R) node[above,scale=0.9] {$\omega$};
   
 \end{tikzpicture}
@@ -96,14 +96,14 @@
   
   % PHASOR
   \draw[dashed] (Rx) -- (R);
-  \draw[vector,Rcol] (O) -- (R) node[left=16,above right=-2] {$Z = \abs{Z} e^{i(\omega t - \delta)}$};
+  \draw[vector,Rcol] (O) -- (R) node[left=16,above right=-2] {$Z = \abs{Z} e^{i(\omega t - \phi)}$};
   %\draw[vector,Rcol] (O) -- (R) node[above right=-2,scale=0.8]
   %  {$\begin{aligned}
-  %     Z &= \abs{Z} e^{i(\omega t + \delta)} \\
-  %       &= \abs{Z} \cos(\omega t + \delta) + \abs{Z} \sin(\omega t + \delta)
+  %     Z &= \abs{Z} e^{i(\omega t + \phi)} \\
+  %       &= \abs{Z} \cos(\omega t + \phi) + \abs{Z} \sin(\omega t + \phi)
   %   \end{aligned}$};
-  \node[Rcol!80!black,above=2,below right=1,scale=0.9] at (O) {$\abs{Z} \cos(\omega t - \delta)$};
-  \draw pic[-sm,"$\omega t - \delta$"{scale=0.9,below=-4},draw=black,angle radius=15,angle eccentricity=2.1] {angle = X--O--R};
+  \node[Rcol!80!black,above=2,below right=1,scale=0.9] at (O) {$\abs{Z} \cos(\omega t - \phi)$};
+  \draw pic[-sm,"$\omega t - \phi$"{scale=0.9,below=-4},draw=black,angle radius=15,angle eccentricity=2.1] {angle = X--O--R};
   \draw[->] (\ang+6:0.7*\R) arc (\ang:\ang+50:0.4*\R) node[above,scale=0.9] {$\omega$};
   
 \end{tikzpicture}
@@ -173,11 +173,11 @@
   \draw[vector,Ccol] (O) -- (C) node[below right=-2] {$\VC$};
   \draw[vector,Icol] (O) -- (E) node[above left=-3] {$\vb*{\EMF}$};
   %\draw pic[draw=white,line width=0.6,angle radius=14,angle eccentricity=1.45] {angle = X--O--E};
-  \draw pic[-sm,"$\omega t$"{scale=0.9,below=-3},draw=black,angle radius=14,angle eccentricity=1.54]
+  \draw pic[-sm,"$\omega t$"{scale=0.9,below=-3},draw=black,angle radius=14,angle eccentricity=1.55]
     {angle = X--O--E};
-  \draw pic[-sm,"$\omega t - \delta$"{scale=0.9,below=-1},draw=black,angle radius=29,angle eccentricity=1.54]
+  \draw pic[-sm,"$\omega t - \phi$"{scale=0.9,below=-1},draw=black,angle radius=29,angle eccentricity=1.55]
     {angle = X--O--R};
-  \draw pic[sm-,"$\delta$"{scale=0.9},draw=black,angle radius=24,angle eccentricity=1.25]
+  \draw pic[sm-,"$\phi$"{scale=0.9},draw=black,angle radius=24,angle eccentricity=1.25]
     {angle = R--O--E};
   
 \end{tikzpicture}
@@ -213,11 +213,11 @@
   \draw[vector,Lcol] (O) -- (L) node[below right=-2] {$\IL$};
   \draw[vector,Ccol] (O) -- (C) node[above left=-3] {$\IC$};
   \draw[vector,Icol] (O) -- (E) node[above left=-3] {$\vb{I}$};
-  \draw pic[-sm,"$\omega t$"{scale=0.9,below=-3},draw=black,angle radius=14,angle eccentricity=1.54]
+  \draw pic[-sm,"$\omega t$"{scale=0.9,below=-3},draw=black,angle radius=14,angle eccentricity=1.55]
     {angle = X--O--E};
-  \draw pic[-sm,"$\omega t - \delta$"{scale=0.9,below=-1},draw=black,angle radius=29,angle eccentricity=1.54]
+  \draw pic[-sm,"$\omega t - \phi$"{scale=0.9,below=-1},draw=black,angle radius=29,angle eccentricity=1.55]
     {angle = X--O--R};
-  \draw pic[sm-,"$\delta$"{scale=0.9},draw=black,angle radius=24,angle eccentricity=1.25]
+  \draw pic[sm-,"$\phi$"{scale=0.9},draw=black,angle radius=24,angle eccentricity=1.25]
     {angle = R--O--E};
   
 \end{tikzpicture}
@@ -242,7 +242,7 @@
   \draw[vector,Lcol] (R) -- (Z) node[midway,right=1,scale=0.9] {$\vb{X}_C + \vb{X}_L$};
   \draw[vector,Rcol] (O) -- (R) node[left=3,below right=-1] {$R$};
   \draw[vector,Icol] (O) -- (Z) node[above left=-2] {$\vb{Z}$};
-  \draw pic[-sm,"$\delta$"{scale=0.9},draw=black,angle radius=26,angle eccentricity=1.25] {angle = R--O--Z};
+  \draw pic[-sm,"$\phi$"{scale=0.9},draw=black,angle radius=26,angle eccentricity=1.25] {angle = R--O--Z};
   
 \end{tikzpicture}
 
