@@ -45,11 +45,11 @@
 }
 
 % BICYCLE WHEEL
+\def\r{0.16}  % axis radius
+\def\Ri{1.18} % wheel rims inside
+\def\Rr{1.30} % wheel rims outside
+\def\Rt{1.45} % wheel tyre
 \def\wheel{
-  \def\r{0.18}  % axis radius
-  \def\Ri{1.35} % wheel rims inside
-  \def\Rr{1.45} % wheel rims outside
-  \def\Rt{1.6}  % wheel tyre
   \def\Ns{11}   % number of spokes
   \def\Nn{34}   % number of tyre stud
   \coordinate (O) at (0,0);
@@ -83,6 +83,7 @@
   \def\F{1.2}  % force size
   \coordinate (O) at (0,0);
   \coordinate (R) at (\ang:\R);
+  \clip (-1.2*\Rr,-1.17*\Rr) rectangle (1.17*\Rr,1.54*\Rr);
   \wheel
   \draw[force] (R) --++ (\ang+90:\F) node[left=-2] {$\vb{F}$};
   \pic[scale=1] at (R) {Tout};
@@ -97,8 +98,9 @@
   \def\F{0.9}  % force size
   \coordinate (O) at (0,0);
   \coordinate (R) at (\ang:\R);
+  \clip (-1.2*\Rr,-1.17*\Rr) rectangle (1.17*\Rr,1.54*\Rr);
   \wheel
-  \node[mypurple,above=2] at (R) {$\vb*\tau = 0$};
+  \node[mypurple,above=0] at (R) {$\vb*\tau = 0$};
   \draw[force] (R)++(\ang+110:0.16) --++ (\ang-180:\F) node[below left=-3] {\contour{white}{$\vb{F}$}};
   \draw[rvec] (O) -- (\ang:0.95*\R) node[midway,above=2,right=-1] {\contour{white}{$\vb{r}$}};
 \end{tikzpicture}
@@ -115,6 +117,7 @@
   \coordinate (R') at (2*\ang-180-\angF:\R);
   \coordinate (F) at ($(R)+(\angF:\F)$);
   \coordinate (FT) at ($(R)+(\ang-90:{\F*sin(\ang-\angF)})$);
+  \clip (-1.2*\Rr,-1.17*\Rr) rectangle (2.04*\Rr,1.54*\Rr);
   \wheel
   \rightAngle{R}{RT}{O}{0.40}
   \rightAngle{R}{FT}{F}{0.35}

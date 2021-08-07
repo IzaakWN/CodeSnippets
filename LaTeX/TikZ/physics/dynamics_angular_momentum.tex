@@ -7,6 +7,7 @@
 \usetikzlibrary{angles,quotes} % for pic
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{patterns}
+\usetikzlibrary{bending} % for arrow head angle
 \tikzset{>=latex} % for LaTeX arrow head
 \contourlength{1.35pt}
 
@@ -60,6 +61,8 @@
   \draw[white,line width=2] (O) -- (L);
   \draw[Lvec] (O) -- (L) node[below right=0] {$\vb{L}$};
   \draw[rvec] (O) -- (R') node[midway,above right=-2] {$\vb{r}$};
+  \draw[-{>[bend]}] (-15:{1.12*\R} and {1.12*\Ry}) arc(-15:20:{1.12*\R} and {1.12*\Ry})
+    node[pos=0.5,right] {$\omega$};
 \end{tikzpicture}
 
 
