@@ -159,7 +159,7 @@
   }
   
   % CHARGE
-  \node[right=0,scale=1.0] at (4:\r+\dr) {$\dd{q}=\sigma \dd{A}$};
+  \node[right=-1.5,scale=0.9] at (4:\r+\dr) {$\dd{q}=\sigma \dd{A}$};
   
   % AXIS
   \draw[->,thick] (0,0) -- (Y) node[above] {$y$};
@@ -225,6 +225,7 @@
 \end{tikzpicture}
 
 
+
 % PLANE field with gaussian surface
 \begin{tikzpicture}[x={(1.0cm,0)},y={(0.55cm,0.5cm)},z={(0,1.0cm)}]
   \def\H{2.5}
@@ -255,7 +256,7 @@
   
   % VECTORS back
   \draw[EField] (EL) --++ (-\E,0,0);
-  \draw[normalvec] (EL) ++(0,-0.1*\R,-0.13*\R) --++ (-0.5,0,0) node[below left=-1] {$\vu{n}$};
+  \draw[normalvec] (EL) ++(0,-0.1*\R,-0.13*\R) --++ (-0.5,0,0) node[below left=-4] {$\vu{n}$};
   \draw[gauss dark]
     (EL)++(0,-0.1*\R,-0.3*\R)
       to[out=0,in=0,looseness=1.2] ++(0,0,0.5*\R)
@@ -298,20 +299,19 @@
   \draw[gauss dark]
     (ER)++(0,0.1*\R,-0.2*\R)
       to[out=0,in=0,looseness=1.2] ++(0,0,0.5*\R)
-      to[out=180,in=180,looseness=1.2] ++(0,0,-0.5*\R) -- cycle node[right=4,below=-1] {$\dd{A}$};
+      to[out=180,in=180,looseness=1.2] ++(0,0,-0.5*\R) -- cycle node[right=2,below=-1] {$\dd{A}$};
   
   % ELECTRIC FIELD
   \draw[EField] (ER) --++ (\E,0,0) node[right] {$\vb{E}$};
   \draw[EField] (NT) --++ (\E,0,0) node[right] {$\vb{E}$};
   
   % VECTORS
-  \draw[normalvec] (ER) ++(0,0.1*\R,0.13*\R) --++ (0.5,0,0) node[above=2,right=-1] {$\vu{n}$};
-  \draw[normalvec] (NT) --++ (0,0,0.5) node[right] {$\vu{n}$};
+  \draw[normalvec] (ER) ++(0,0.1*\R,0.13*\R) --++ (0.5,0,0) node[above=3,right=-2] {$\vu{n}$};
+  \draw[normalvec] (NT) --++ (0,0,0.5) node[below=1,left=-1] {$\vu{n}$};
   %\draw[normalvec] (NB) --++ (0,-0.35,-0.25) node[below right=-2] {$\vu{n}$};
   
   
 \end{tikzpicture}
-
 
 
 
@@ -381,7 +381,7 @@
   \draw[EField] (ER23) --++ (\E,0,0) coordinate (ET);
   
   % VECTORS
-  \draw[normalvec] (ER23) --++ (0.33,0,0.7) node[above] {$\vu{n}$} coordinate (N);
+  \draw[normalvec] (ER23) --++ (0.33,0,0.7) node[above=-1] {$\vu{n}$} coordinate (N);
   
   % ANGLES
   \draw pic[->,"$\theta$",draw=black,angle radius=14,angle eccentricity=1.3] {angle = O--T--R};

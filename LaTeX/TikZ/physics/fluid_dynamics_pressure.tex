@@ -10,7 +10,6 @@
 \contourlength{1.1pt}
 
 \colorlet{mydarkblue}{blue!50!black}
-\colorlet{myblue}{blue!30}
 \colorlet{myred}{red!65!black}
 \colorlet{vcol}{green!45!black}
 \colorlet{watercol}{blue!80!cyan!10!white}
@@ -33,7 +32,7 @@
 % PRESSURE
 \begin{tikzpicture}[x={(1cm,0)},y={(0.65cm,0.6cm)},z={(0,1cm)}]
   \def\L{1.6} % cube side
-  \def\P{0.8} % pressure size
+  \def\P{0.7} % pressure size
   \draw[dark water] (0,0,0) -- (\L,0,0) -- (\L,\L,0) -- ( 0,\L,0) -- cycle;
   \draw[force] (0.5*\L,0.5*\L,1.01*\P) node[right=2,above=3] {$P$} --++ (0,0,-\P);
   \foreach \x/\y in {0.5/0.5,0.5/0.2,0.2/0.5,0.5/0.8,0.8/0.5,0.8/0.8,0.2/0.8,0.2/0.2,0.8/0.2}{
@@ -44,8 +43,8 @@
 
 % PRESSURE DIRECTIONS - Pascal's principle
 \begin{tikzpicture}[x={(1cm,0)},y={(0.5cm,0.4cm)},z={(0,1cm)}]
-  \def\L{0.8} % cube side
-  \def\P{0.6} % pressure size
+  \def\L{0.7} % cube side
+  \def\P{0.5} % pressure size
   \draw[force] (\L/2,\L/2,-1.1*\P) node[below] {$P$} --++ (0,0,\P);
   \draw[force] (-1.1*\P,\L/2,\L/2) node[left] {$P$} --++ ( \P,0,0);
   \draw[force] (\L/2,\L+1.5*\P,\L/2) node[above right=-2] {$P$} --++ (0,-1.4*\P,0);
@@ -60,9 +59,9 @@
 
 % WATER COLUMN WEIGHT
 \begin{tikzpicture}
-  \def\Rx{1.0}      % tank horizontal radius
+  \def\Rx{0.9}      % tank horizontal radius
   \def\Ry{0.3}      % tank vertical radius
-  \def\H{3}         % height tank
+  \def\H{2.6}       % height tank
   \def\h{0.94*\H}   % height water
   \def\y{0.40*\H}   % vertical position piece
   \def\F{0.45*\h}   % force
@@ -85,7 +84,7 @@
   \draw[force] (0.0*\Rx,\h-1.2*\Ry) --++ (0,-0.7*\F) node[midway,right] {$\vb{F}_\mathrm{atm}$};
   \node[right] at (1.1*\Rx,\H) {$P_0=P_\mathrm{atm}$}; %{\contour{watercol}{$P_\mathrm{atm}$}};
   \node[right] at (1.1*\Rx,0) {$P$};
-  \node[above=-5] at (0,\h) {$A$};
+  \node[above=-4] at (0,\h) {$A$};
   \draw[<->] (-1.2*\Rx,0) --++ (0,\h) node[midway,fill=white,inner sep=1] {$h$};
   
 \end{tikzpicture}
@@ -93,11 +92,11 @@
 
 % WATER COLUMN WEIGHT
 \begin{tikzpicture}
-  \def\Rx{1.2}      % tank horizontal radius
+  \def\Rx{1.1}      % tank horizontal radius
   \def\Ry{0.5}      % tank vertical radius
   \def\rx{0.22*\Rx} % column horizontal radius
   \def\ry{0.22*\Ry} % column vertical radius
-  \def\H{3}         % height tank
+  \def\H{2.6}       % height tank
   \def\h{0.94*\H}   % height water
   \def\y{0.40*\H}   % vertical position piece
   \def\dy{0.10*\H}  % height piece
@@ -128,7 +127,7 @@
     (0,\H) ellipse ({\Rx} and {\Ry});
   
   % LABELS
-  \node at ({-0.44*(\Rx+\rx)},1.03*\h) {$P_\mathrm{atm}$}; %{\contour{watercol}{$P_\mathrm{atm}$}};
+  \node[scale=0.98] at ({-0.45*(\Rx+\rx)},1.04*\h) {$P_\mathrm{atm}$}; %{\contour{watercol}{$P_\mathrm{atm}$}};
   \node at ({-0.40*(\Rx+\rx)},{\y-0.5*\dy}) {$P$};
   \node[above=-2] at (0,\y+\ry) {$A$};
   \draw[<->] (1.2*\Rx,\y) --++ (0,\h-\y) node[midway,fill=white,inner sep=1] {$h$};
@@ -138,9 +137,9 @@
 
 % PRESSURE HEIGTH DIFFERENCE
 \begin{tikzpicture}
-  \def\Rx{1.2}      % tank horizontal radius
-  \def\Ry{0.2}      % tank vertical radius
-  \def\H{3}         % height tank
+  \def\Rx{0.9}      % tank horizontal radius
+  \def\Ry{0.16}     % tank vertical radius
+  \def\H{2.6}       % height tank
   \def\h{0.94*\H}   % height water
   \def\ya{0.65*\h}  % vertical position A
   \def\yb{0.20*\h}  % vertical position B
@@ -184,9 +183,9 @@
 
 % PRESSURE HEIGTH DIFFERENCE
 \begin{tikzpicture}
-  \def\Rx{1.2}      % tank horizontal radius
-  \def\Ry{0.2}      % tank vertical radius
-  \def\H{3}         % height tank
+  \def\Rx{0.9}      % tank horizontal radius
+  \def\Ry{0.16}     % tank vertical radius
+  \def\H{2.6}       % height tank
   \def\h{0.94*\H}   % height water
   \def\ya{0.65*\h}  % vertical position A
   \def\yb{0.20*\h}  % vertical position B
@@ -230,8 +229,8 @@
 
 % TORRICELLI
 \begin{tikzpicture}
-  \def\W{1.6}       % tank width
-  \def\H{3.0}       % height tank
+  \def\W{1.4}       % tank width
+  \def\H{2.7}       % height tank
   \def\h{0.94*\H}   % height water
   \def\t{0.06}      % hole size
   \def\ya{0.12*\h}  % lowest hole
@@ -266,12 +265,12 @@
 
 % PRESSURE HEIGTH DIFFERENCE
 \begin{tikzpicture}
-  \def\L{4}          % distance pistons
-  \def\Lx{0.60}      % left piston horizontal radius
-  \def\Ly{0.10}      % left piston vertical radius
-  \def\Rx{1.20}      % right piston horizontal radius
-  \def\Ry{0.20}      % right piston vertical radius
-  \def\H{3.0}        % height tank
+  \def\L{3.5}        % distance pistons
+  \def\Lx{0.50}      % left piston horizontal radius
+  \def\Ly{0.08}      % left piston vertical radius
+  \def\Rx{1.00}      % right piston horizontal radius
+  \def\Ry{0.16}      % right piston vertical radius
+  \def\H{2.6}        % height tank
   \def\d{0.28*\H}    % diameter connecting pipe
   \def\hL{0.86*\H}   % left height water
   \def\hR{0.74*\H}   % right height water
@@ -288,7 +287,7 @@
   \draw[water,rounded corners=2]
     (-\Lx,\hL) |-++ (\L+\Lx+\Rx,-\hL) |-++ (-2*\Rx,\hR) |-++ %arc (360:180:{\Rx} and {\Ry}) --++
     (-\L+\Lx+\Rx,-\hR+\d) |- cycle; %(-2*\Lx,\hL-\t) -- arc (360:180:{\Lx} and {\Ly}) -- cycle;
-  \draw[blue!30!black,dashed] (-\Lx,\hL-\pt-\xL) arc(180:360:{\Lx} and {\Ly});
+  \draw[blue!30!black,dashed,thin] (-\Lx,\hL-\pt-\xL) arc(180:360:{\Lx} and {\Ly});
   
   % PISTON
   \draw[metal]
@@ -296,14 +295,14 @@
     (\L-\Rx,\hR) --++ (0,-\pt) arc (180:360:{\Rx} and {\Ry}) --++ (0,\pt)
     (0,\hL) ellipse ({\Lx} and {\Ly})
     (\L,\hR) ellipse ({\Rx} and {\Ry});
-  \draw[metalcol!20!black,dashed,very thin]
+  \draw[metalcol!20!black,dashed,thin]
     (\L+\Rx,\hR-\pt+\xR) arc(0:180:{\Rx} and {\Ry});
   \draw[metal]
     (-\prx,\hL+\pLl) --++ (0,-\pLl) arc (180:360:{\prx} and {\pry}) --++ (0,\pLl)
     (\L-\prx,\hR+\pRl) --++ (0,-\pRl) arc (180:360:{\prx} and {\pry}) --++ (0,\pRl)
     (0,\hL+\pLl) ellipse ({\prx} and {\pry})
     (\L,\hR+\pRl) ellipse ({\prx} and {\pry});
-  \draw[metalcol!20!black,dashed,very thin]
+  \draw[metalcol!20!black,dashed,thin]
     (\L-\Rx,\hR-\pt+\xR) arc(180:360:{\Rx} and {\Ry});
   
   % CONTAINER
@@ -325,213 +324,6 @@
   \tick{\L+1.2*\Rx,\hR-\pt}{180} node[right=-1] {$0$};
   \tick{\L+1.2*\Rx,{\hR-\pt+\xR}}{180} node[right=-1] {$x_2$};
   
-\end{tikzpicture}
-
-
-% PRESSURE TORRICELLI
-\begin{tikzpicture}
-  \def\Rx{1.0}
-  \def\Ry{0.05*\Rx}
-  \def\rx{0.18*\Rx}
-  \def\ry{0.06*\rx}
-  \def\H{1.0}
-  \def\h{0.72*\H}   % water level height
-  \def\th{2.7*\H}   % tube height
-  \def\ty{0.95*\th} % tube level
-  \def\td{0.6*\h}   % tube depth
-  \def\N{14}
-  
-  % WATER + CONTAINER
-  \draw[vertical water] %rounded corners=2
-    (-\Rx,\h) --++ (0,-\h) arc(180:360:{\Rx} and {\Ry}) --++ (0,\h);
-  \draw[water]
-    (0,\h) ellipse ({\Rx} and {\Ry});
-  \draw[thick] (0,\H) ellipse ({\Rx} and {\Ry});
-  
-  % TUBE
-  \draw[vertical water]
-    (-\rx,\h) |-++ (2*\rx,\ty) --++ (0,-\ty);
-  \draw[water]
-    (0,\h+\ty) ellipse ({\rx} and {\ry});
-  \draw[thick,line cap=round]
-    (-\rx,\h) --++ (0,\th) coordinate (T) arc(180:0:\rx) --++ (0,-\th);
-  \draw[mydarkblue,line cap=round]
-    (-1.09*\rx,\h-0.005) arc(180:360:{1.09*\rx} and 1.12*\ry);
-  \foreach \i [evaluate={\y=1.12*\H+0.84*\th*\i/\N}] in {0,...,\N}{
-    \draw[line cap=round] (\rx,\y) arc(0:-50:{\rx} and \ry);
-  }
-  \begin{scope}
-    \clip (-\Rx,\h) |-++ (2*\Rx,-\h) --++ (0,\h) arc(360:180:{\Rx} and {\Ry}) -- cycle;
-    \draw[thick,line cap=round]
-      (-\rx,\h) --++ (0,-\td) (\rx,\h) --++ (0,-\td);
-      %(-\rx,\h) --++ (0,-\td) arc(180:360:{\rx} and {\ry}) --++ (0,\td);
-    \draw[vertical water,opacity=0.5]
-      (-\Rx,\h) --++ (0,-\h) arc(180:360:{\Rx} and {\Ry}) --++ (0,\h);
-  \end{scope}
-  \draw[mydarkblue]
-    (-\Rx,\h) arc(180:360:{\Rx} and {\Ry});
-  \draw[<->] (0.6*\Rx,\h) --++ (0,\ty) node[midway,fill=white,inner sep=1] {$h$};
-  \draw[very thin,line cap=round]
-    (T)++(130:\rx) node[anchor=-19,inner sep=1] {$P=0$} to[out=-50,in=170]++ (-30:1.5*\rx);
-  \node[above] at (-0.6*\Rx,\H) {$P_\mathrm{atm}$};
-  
-  % CONTAINER
-  \draw[thick]
-    (-\Rx,\H) --++ (0,-\H) arc(180:360:{\Rx} and {\Ry})
-              --++ (0,\H) arc(360:180:{\Rx} and {\Ry}) -- cycle;
-  
-\end{tikzpicture}
-
-
-% OPEN MANOMETER
-\begin{tikzpicture}
-  \def\W{0.8}       % pressure box height
-  \def\H{0.7}       % pressure box height
-  \def\Rx{0.55}     % tube bend radius horizontal
-  \def\Ry{0.2*\Rx}  % tube bend radius vertical
-  \def\rx{0.28*\Rx} % tube radius horizontal
-  \def\ry{0.28*\Ry} % tube radius vertical
-  \def\HL{1.3}      % tube height left
-  \def\HR{2.2}      % stube height right
-  \def\hL{0.40*\HL} % water level height left
-  \def\hR{0.95*\HR} % water level height right
-  %\def\th{2.7*\H}   % tube height
-  %\def\ty{0.93*\th} % tube level
-  \def\N{14}
-  
-  % WATER + CONTAINER
-  \draw[water]
-    (-\Rx,\hL) --++ (0,-\hL) arc(180:360:\Rx) --++ (0,\hR) --++ (2*\rx,0) --++
-    (0,-\hR) arc(360:180:\Rx+2*\rx) --++ (0,\hL);
-  \draw[water]
-    (-\Rx-\rx,\hL) ellipse({\rx} and {\ry})
-    (\Rx+\rx,\hR) ellipse({\rx} and {\ry});
-  \draw[thick]
-    (-\Rx,\HL) --++ (0,-\HL) arc(180:360:\Rx) --++ (0,\HR) coordinate (T) arc(180:0:\rx)
-    --++ (0,-\HR) arc(360:180:\Rx+2*\rx) --++ (0,\HL);
-  \draw[thick]
-    (-\Rx-\rx,\HL) ellipse({\rx} and {\ry});
-  \foreach \i [evaluate={\y=(\hL+\hR)/2+0.8*\HR*(\i-\N/2)/\N;}] in {0,...,\N}{
-    \draw[line cap=round] (\Rx+2*\rx+0.007,\y) arc(0:-50:{\rx} and \ry);
-  }
-  %\draw[line cap=round,myred] (\Rx+2*\rx+0.007,{(\hL+\hR)/2}) arc(0:-70:{\rx} and \ry);
-  \draw[line cap=round,myred] (-\Rx+0.007,\hL+\hR-\HR-\rx) arc(0:-70:{\rx} and \ry);
-  \node at (-\W/2-4*\rx-\Rx,\HL+1.7*\rx) {$P_\mathrm{atm}$};
-  \draw[very thin,line cap=round]
-    (T)++(130:\rx) node[anchor=-19,inner sep=1] {$P=0$} to[out=-50,in=170]++ (-30:1.5*\rx);
-  \draw[dashed] (-\Rx,\hL) --++ (1.3*\Rx,0) (\Rx,\hR) --++ (-1.3*\Rx,0);
-  \draw[<->] (0,\hL) -- (0,\hR) node[midway,fill=white,inner sep=1] {$h$};
-  
-\end{tikzpicture}
-
-
-% MANOMETER
-\begin{tikzpicture}
-  \def\W{0.8}       % pressure box height
-  \def\H{0.7}       % pressure box height
-  \def\Rx{0.55}     % tube bend radius horizontal
-  \def\Ry{0.2*\Rx}  % tube bend radius vertical
-  \def\rx{0.28*\Rx} % tube radius horizontal
-  \def\ry{0.28*\Ry} % tube radius vertical
-  \def\HL{1.3}      % tube height left
-  \def\HR{2.2}      % stube height right
-  \def\hL{0.40*\HL} % water level height left
-  \def\hR{0.80*\HR} % water level height right
-  %\def\th{2.7*\H}   % tube height
-  %\def\ty{0.93*\th} % tube level
-  \def\N{14}
-  \draw[water]
-    (-\Rx,\hL) --++ (0,-\hL) arc(180:360:\Rx) --++ (0,\hR) --++ (2*\rx,0) --++
-    (0,-\hR) arc(360:180:\Rx+2*\rx) --++ (0,\hL);
-  \draw[water]
-    (-\Rx-\rx,\hL) ellipse({\rx} and {\ry})
-    (\Rx+\rx,\hR) ellipse({\rx} and {\ry});
-  \draw[thick]
-    (-\Rx,\HL) --++ (0,-\HL) arc(180:360:\Rx) --++ (0,\HR) arc(180:0:{\rx} and \ry)
-    --++ (0,-\HR) arc(360:180:\Rx+2*\rx) --++ (0,\HL)
-    arc(0:90:\rx) --++ (-\rx,0) --++ (0,0.7*\rx-\H/2) -|++ (-\W,\H) -|++ (\W,0.7*\rx-\H/2)
-    --++ (2*\rx,0) arc(90:0:2*\rx) -- cycle;
-  \draw[thick]
-    (\Rx+\rx,\HR) ellipse({\rx} and \ry);
-  \foreach \i [evaluate={\y=(\hL+\hR)/2+0.8*\HR*(\i-\N/2)/\N;}] in {0,...,\N}{
-    \draw[line cap=round] (\Rx+2*\rx+0.007,\y) arc(0:-50:{\rx} and \ry);
-  }
-  \draw[line cap=round,myred] (\Rx+2*\rx+0.007,{(\hL+\hR)/2}) arc(0:-70:{\rx} and \ry);
-  \draw[line cap=round,myred] (-\Rx+0.007,{(\hL+\hR)/2}) arc(0:-70:{\rx} and \ry);
-  \node at (-\W/2-4*\rx-\Rx,\HL+1.7*\rx) {$P$};
-  \node[above=2] at (\Rx+\rx,\HR+\ry) {$P_\mathrm{atm}$};
-  \draw[dashed] (-\Rx,\hL) --++ (1.3*\Rx,0) (\Rx,\hR) --++ (-1.3*\Rx,0);
-  \draw[<->] (0,\hL) -- (0,\hR) node[midway,fill=white,inner sep=1] {$h$};
-\end{tikzpicture}
-
-
-% ATMOSPHERIC PRESSURE vs. ALTITUDE
-\begin{tikzpicture}
-  \def\xmax{4.9}
-  \def\ymax{2.9}
-  \def\Nx{5}
-  \def\Ny{4}
-  \coordinate (M) at (0.95*\xmax*3.37/2/\Nx,0.9*\ymax*0.88/\Ny); % mount Everest
-  \coordinate (S) at (0.95*\xmax*10.13/2/\Nx,0); % sea level
-  
-  % SKY + MOUNTAIN
-  \fill[top color=blue!80!black!20,bottom color=blue!80!black!5]
-    (0,0) rectangle (\xmax,0.9/\Ny*\ymax);
-  \fill[top color=blue!50!black!50,bottom color=blue!80!black!20]
-    (0,0.9/\Ny*\ymax) rectangle (\xmax,\ymax);
-  \begin{scope}
-    \clip (0.2*\xmax,0) --++ (0.07*\xmax,0.14*\ymax) --++ (0.02*\xmax,-0.03*\ymax) -- (M) -- (0.4*\xmax,0);
-    \fill[white] (0.1*\xmax,0) rectangle (0.4*\xmax,0.5*\ymax);
-    \fill[top color=white,bottom color=green!60!black!90,middle color=brown!80!black!80]
-      (0.1*\xmax,0) rectangle (0.4*\xmax,0.1*\ymax);
-  \end{scope}
-  \draw[thin] (0.2*\xmax,0) --++ (0.07*\xmax,0.14*\ymax) --++ (0.02*\xmax,-0.03*\ymax) -- (M) -- (0.4*\xmax,0);
-  
-  % AXES
-  \draw[->,line width=1] (-0.05*\xmax,0) -- (1.08*\xmax,0) node[right=8,below left=10] {Pressure $P_\mathrm{atm}$ [hPa]};
-  \draw[->,line width=1] (0,-0.05*\xmax) -- (0,1.10*\ymax) node[below=8,above left=13,rotate=90] {Altitude $h$ [km]};
-  
-  % LINE
-  \draw[mydarkblue,very thick]
-    (0.02,0.95*\ymax) to[out=-90,in=150,looseness=0.8]
-    (M) to[out=-30,in=178,looseness=0.8] (S);
-  \fill[green!70!black] (M) circle(0.02*\ymax) node[green!50!black,below=1.7,left=0.8,scale=0.85] {Everest};
-  
-  % TICKS
-  \foreach \i [evaluate={\y=0.9*\ymax*\i/\Ny; \h=int(10*\i)}] in {1,...,\Ny}{
-    \tick{0,\y}{0} node[left=-1,scale=0.9] {\h};
-  }
-  \foreach \i [evaluate={\x=0.95*\xmax*\i/\Nx; \p=int(200*\i)}] in {1,...,\Nx}{
-    \tick{\x,0}{90} node[below=-1,scale=0.9] {\p};
-  }
-  \draw[dashed]
-    (0,0.9/\Ny*\ymax) --++ (\xmax,0)
-    node[left=7,below left=-1] {troposphere}
-    node[left=7,above left=-1] {stratosphere};
-  \draw[dashed]
-    (S) --++ (0,\ymax) % --++ (0,0.05*\ymax) (S)++(0,0.2*\ymax) --++ (0,0.8*\ymax)
-    node[right=15,above left=-1,scale=0.9] {\SI{1013.25}{hPa}};
-\end{tikzpicture}
-
-
-% ATMOSPHERIC PRESSURE vs. ALTITUDE - gas molecules
-% Inverse transform sampling:
-%   pdf f(x) = a*exp(-ax) => cdf F(x) = 1-exp(-ax)
-%                         => F^{-1}(x) = -ln(1-x)/a
-\begin{tikzpicture}
-  \def\xmax{1.6}
-  \def\ymax{2.9}
-  \def\a{6}    % exponential rate parameter
-  \def\N{1200} % number of particles
-  \def\Ny{4}
-  \fill[top color=blue!80!black!20,bottom color=blue!80!black!5]
-    (0,0) rectangle (\xmax,0.9/\Ny*\ymax);
-  \fill[top color=blue!50!black!50,bottom color=blue!80!black!20]
-    (0,0.9/\Ny*\ymax) rectangle (\xmax,\ymax);
-  \foreach \i [evaluate={\x=\xmax*(rand+1)/2;\y=0.008*\ymax+\ymax*min(0.98,-ln(1-(rand+1)/2)/\a);}] in {1,...,\N}{
-    \fill[red!70!black] (\x,\y) circle(0.01);
-  }
-  \draw[thick,black!90!blue] (0,\ymax) -- (0,0) -- (\xmax,0) -- (\xmax,\ymax);
 \end{tikzpicture}
 
 
