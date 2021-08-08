@@ -74,56 +74,56 @@
 \end{tikzpicture}
 
 
-%% CIRCLE OF KEYS
-%\begin{tikzpicture}[scale=1,
-%                    %,node/.style={red},
-%                    dot/.style={draw,circle,inner sep=2pt,fill}]
-%  \def\R{1.4}
-%  \def\d{0.3}
-%  \def\w{2.0}
-%  \coordinate (O) at (0,0);
-%  
-%  % CIRCLE
-%  \draw[mylightblue,fill] (O) circle (\R);
-%  \draw[mydarkblue,line width=\w] (O) circle (\R);
-%  
-%  % COORDINATES
-%  \foreach \i/\k [evaluate={\a=(90+(1-\i)*360/12);}]
-%                 in {1/C,2/Cs,3/D,4/Ds,5/E,6/F,7/Fs,8/G,9/Gs,10/A,11/As,12/B}{
-%    \coordinate (\k)  at ({\R*cos(\a)},{\R*sin(\a)});
-%    \coordinate (l\k) at ([shift=({\a:\d})]\k);
-%  }
-%  
-%  % KEYS
-%  \node[mydarkblue]          at (lC)  {C};
-%  \node[mydarkblue,above right=-8,align=center]
-%                             at (lCs) {C\sh\\[-3pt]D\b};
-%  \node[mydarkblue]          at (lD)  {D};
-%  \node[mydarkblue,right=-8,align=center]
-%                             at (lDs) {D\sh\\[-3pt]E\b};
-%  \node[mydarkblue]          at (lE)  {E};
-%  \node[mydarkblue]          at (lF)  {F};
-%  \node[mydarkblue,below=-8,align=center]
-%                             at (lFs) {F\sh\\[-3pt]G\b};
-%  \node[mydarkblue]          at (lG)  {G};
-%  \node[mydarkblue,above=4,below left=-8,align=right]
-%                             at (lGs) {G\sh\\[-3pt]A\b};
-%  \node[mydarkblue]          at (lA)  {A};
-%  \node[mydarkblue,below=4,above left=-8,align=left]
-%                             at (lAs) {A\sh\\[-3pt]B\b};
-%  \node[mydarkblue]          at (lA)  {A};
-%  \node[mydarkblue]          at (lB)  {B};
-%  
-%  % TUNINGS
-%  \draw[blue!50!black]  (E)--(A)--(D)--(G)--(B)--(E);
-%  \draw[green!50!black] (D)--(A)--(D)--(G)--(G)--(E);
-%  \draw[red!50!black]   (D)--(G)--(D)--(G)--(B)--(D);
-%  
-%  % DOTS
-%  \foreach \k in {C,Cs,D,Ds,E,F,Fs,G,Gs,A,As,B}
-%    \fill[mydarkblue] (\k) circle [radius=0.09];
-%  
-%\end{tikzpicture}
+% CIRCLE OF KEYS
+\begin{tikzpicture}[scale=1,
+                    %,node/.style={red},
+                    dot/.style={draw,circle,inner sep=2pt,fill}]
+  \def\R{1.4}
+  \def\d{0.3}
+  \def\w{2.0}
+  \coordinate (O) at (0,0);
+  
+  % CIRCLE
+  \draw[mylightblue,fill] (O) circle (\R);
+  \draw[mydarkblue,line width=\w] (O) circle (\R);
+  
+  % COORDINATES
+  \foreach \i/\k [evaluate={\a=(90+(1-\i)*360/12);}]
+                 in {1/C,2/Cs,3/D,4/Ds,5/E,6/F,7/Fs,8/G,9/Gs,10/A,11/As,12/B}{
+    \coordinate (\k)  at ({\R*cos(\a)},{\R*sin(\a)});
+    \coordinate (l\k) at ([shift=({\a:\d})]\k);
+  }
+  
+  % KEYS
+  \node[mydarkblue]          at (lC)  {C};
+  \node[mydarkblue,above right=-8,align=center]
+                             at (lCs) {C\sh\\[-3pt]D\b};
+  \node[mydarkblue]          at (lD)  {D};
+  \node[mydarkblue,right=-8,align=center]
+                             at (lDs) {D\sh\\[-3pt]E\b};
+  \node[mydarkblue]          at (lE)  {E};
+  \node[mydarkblue]          at (lF)  {F};
+  \node[mydarkblue,below=-8,align=center]
+                             at (lFs) {F\sh\\[-3pt]G\b};
+  \node[mydarkblue]          at (lG)  {G};
+  \node[mydarkblue,above=4,below left=-8,align=right]
+                             at (lGs) {G\sh\\[-3pt]A\b};
+  \node[mydarkblue]          at (lA)  {A};
+  \node[mydarkblue,below=4,above left=-8,align=left]
+                             at (lAs) {A\sh\\[-3pt]B\b};
+  \node[mydarkblue]          at (lA)  {A};
+  \node[mydarkblue]          at (lB)  {B};
+  
+  % TUNINGS
+  \draw[blue!50!black]  (E)--(A)--(D)--(G)--(B)--(E);
+  \draw[green!50!black] (D)--(A)--(D)--(G)--(G)--(E);
+  \draw[red!50!black]   (D)--(G)--(D)--(G)--(B)--(D);
+  
+  % DOTS
+  \foreach \k in {C,Cs,D,Ds,E,F,Fs,G,Gs,A,As,B}
+    \fill[mydarkblue] (\k) circle [radius=0.09];
+  
+\end{tikzpicture}
 
 
 \end{document}
