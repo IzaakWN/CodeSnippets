@@ -17,39 +17,6 @@
 \begin{document}
 
 
-\begin{tikzpicture}[scale=6]
-
-  \def\isoe{0.15}
-  \def\isomu{0.20}
-  \def\isoSB{0.50}
-  \def\isomax{0.60}
-  
-  % axes
-  \draw[->,thick]
-    (0,0) -- (0,\isomax)
-    node[left=32pt,anchor=north east,rotate=90] {Muon isolation $I_\mu$};
-  \draw[->,thick]
-    (0,0) -- (\isomax,0)
-    node[below=7pt,anchor=north east] {Electron isolation $I_\text{e}$};
-  
-  % boxes
-  \draw[thick,fill=mylightgreen]
-    (0,0) rectangle (\isoSB,\isoSB)
-    node[anchor=north east] {SB};
-  \draw[thick,fill=mylightred]
-    (0,0) rectangle (\isoe,\isomu)
-    node[anchor=north east] {SR};
-  
-  
-  % labels
-  \draw[fill=blue]
-    (0,\isomu)  node[anchor=east]  {\scriptsize$\isomu$}
-    (0,\isoSB)  node[anchor=east]  {\scriptsize$\isoSB$}
-    (\isoe, 0)  node[anchor=north] {\scriptsize$\isoe$}
-    (\isoSB,0)  node[anchor=north] {\scriptsize$\isoSB$};
-
-\end{tikzpicture}
-
 % Behaviour of the stator voltage and the RMS-value of the stator
 % flux as a function of speed in scalar control.
 % Author: Erno Pentzin (2013)
@@ -57,10 +24,12 @@
   
   % horizontal axis
   \draw[->] (0,0) -- (6,0) node[anchor=north] {$f/f_N$};
+  
   % labels
   \draw	(0,0) node[anchor=north] {0}
         (2,0) node[anchor=north] {1}
         (4,0) node[anchor=north] {2};
+  
   % ranges
   \draw (1,3.5) node{{\scriptsize Constant flux}}
         (4,3.5) node{{\scriptsize Field weakening}};

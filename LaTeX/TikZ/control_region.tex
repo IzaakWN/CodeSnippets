@@ -1,5 +1,4 @@
-% Author: Izaak Neutelings (June, 2017)
-
+% Author: Izaak Neutelings (June 2017)
 \documentclass{article}
 \usepackage{amsmath} % for \text
 \usepackage{tikz}
@@ -33,7 +32,7 @@
 
 % ISOLATION REGIONS 1
 \begin{tikzpicture}[scale=6]
-
+  
   % define to change easily 
   \def\isolep{0.15}
   \def\isotau{0.30}
@@ -65,14 +64,14 @@
   \tick{0,\isotau}{0};
   \tick{\isolep,0}{90} node[below=-1] {\scriptsize$\isolep$};
   \tick{\isoSB,0}{90} node[below=-1] {\scriptsize$\isoSB$};
-
+  
 \end{tikzpicture}
 
 
 
 % ISOLATION REGIONS 2
 \begin{tikzpicture}[scale=6]
-
+  
   % define to change easily 
   \def\isoe{0.15}
   \def\isomu{0.20}
@@ -100,16 +99,16 @@
   \tick{0,\isoSB}{0} node[left=-2] {\scriptsize$\isoSB$};
   \tick{\isoe,0}{90} node[below=-1] {\scriptsize$\isoe$};
   \tick{\isoSB,0}{90} node[below=-1] {\scriptsize$\isoSB$};
-
+  
 \end{tikzpicture}
 
 
 
 % CONTROL REGIONS 3
 \begin{tikzpicture}[scale=4]
-
+  
   \def\mx{0.45} %middle
-
+  
   % boxes
   \fill [mylightred] % SR
     (0,0) rectangle (\mx,1);
@@ -144,14 +143,13 @@
   \draw[->,thick] % SB: SS -> OS
     (0.95,0.35) -- (0.95,0.7)
     node[midway,above=8pt,left=-2pt,scale=0.70]{$\left(\frac{\text{OS}}{\text{SS}}\right)^\text{\tiny SB}_\text{\tiny data}$};
-
-
+  
   \begin{scope}[shift={(\mx+0.02,0.54)},scale=0.35]
     \draw[->,thick]
       (0.40,-0.5) -- (-0.45,0.5);
       %node[midway,above=5pt,right=0pt,scale=0.8]{ $F^{\tiny \text{e}\mu}_\text{\tiny sim}$};
   \end{scope}
-
+  
 \end{tikzpicture}
 
 

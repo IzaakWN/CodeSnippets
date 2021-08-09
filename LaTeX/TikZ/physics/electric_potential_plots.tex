@@ -1,4 +1,4 @@
-% Author: Izaak Neutelings (Februari, 2020)
+% Author: Izaak Neutelings (February 2020)
 % page 8 https://archive.org/details/StaticAndDynamicElectricity
 % https://tex.stackexchange.com/questions/56353/extract-x-y-coordinate-of-an-arbitrary-point-on-curve-in-tikz
 % https://tex.stackexchange.com/questions/412899/tikz-calculate-and-store-the-euclidian-distance-between-two-coordinates
@@ -17,8 +17,6 @@
 \colorlet{veccol}{green!45!black}
 \tikzstyle{EField}=[thick,Ecol]
 \tikzstyle{VField}=[thick,Vcol]
-\def\xmax{5.5}
-\def\ymax{4}
 \def\tick#1#2{\draw[thick] (#1) ++ (#2:0.03*\ymax) --++ (#2-180:0.06*\ymax)}
 
 
@@ -27,9 +25,10 @@
 
 % ELECTRIC FIELD of a CHARGED SPHERE
 \begin{tikzpicture}
-  
-  \def\kQ{6.3}
-  \def\R{2.0}
+  \def\xmax{4.4}
+  \def\ymax{2.6}
+  \def\kQ{2.8}
+  \def\R{1.4}
   \coordinate (O) at (0,0);
   \coordinate (X) at (\xmax,0);
   \coordinate (Y) at (0,\ymax);
@@ -38,18 +37,18 @@
   \coordinate (Py) at (0,\kQ/\R);
   
   % PLOT
-  \draw[VField,samples=100,smooth,variable=\x,domain=\R:0.98*\xmax]
+  \draw[VField,samples=100,smooth,variable=\x,domain=\R:0.96*\xmax]
     (Py) -- plot(\x,\kQ/\x);
   \draw[VField]
     (Py) --++ (Px);
-  \node[above right] at (3.5,1.6) {$E \sim \dfrac{1}{r}$};
+  \node[above right] at (2.4,1.2) {$E \sim \dfrac{1}{r}$};
   \draw[dashed]
     (Px) -- (P);
   
   % AXIS
   \draw[<->,thick]
-    (X) node[below] {$r$} -- (O) -- (Y) node[left] {$V$};
-  \tick{Py}{ 0} node[below=-1,left] {$\dfrac{kQ}{R}$};
+    (X) node[below] {$r$} -- (O) -- (Y) node[left=-1] {$V$};
+  \tick{Py}{ 0} node[below=1,left] {$\dfrac{kQ}{R}$};
   \tick{Px}{90} node[below] {$R$};
   
 \end{tikzpicture}
