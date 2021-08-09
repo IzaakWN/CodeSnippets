@@ -1,30 +1,17 @@
 % Author: Izaak Neutelings (January 2021)
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{physics}
-\usepackage{ifthen}
 \usepackage{tikz}
-%\usepackage[outline]{contour} % glow around text
-%\usetikzlibrary{calc} % for pic
 \usetikzlibrary{angles,quotes} % for angle label
-%\usetikzlibrary{patterns,snakes}
 \usetikzlibrary{bending} % for arrow head angle
 \tikzset{>=latex} % for LaTeX arrow head
-%\contourlength{1.2pt}
 
 \colorlet{myred}{red!65!black}
 \colorlet{metalcol}{blue!25!black!30!white}
-\tikzstyle{ground}=[preaction={fill,top color=black!10,bottom color=black!5,shading angle=20},
-                    fill,pattern=north east lines,draw=none,minimum width=0.3,minimum height=0.6]
 \tikzstyle{mass}=[line width=0.6,red!30!black,fill=red!40!black!10,rounded corners=1,
                   top color=red!40!black!20,bottom color=red!40!black!10,shading angle=20]
 \tikzstyle{rod}=[line width=0.5,red!30!black,fill=red!40!black!30,rounded corners=1,
                   top color=red!40!black!60,bottom color=red!40!black!30,shading angle=90]
-\tikzstyle{rope}=[brown!70!black,line width=1.2,line cap=round] %very thick
-
-% FORCES SWITCH
-\tikzstyle{force}=[->,myred,thick,line cap=round]
-\tikzstyle{Fproj}=[force,myred!40]
-\newcommand{\vbF}{\vb{F}}
 
 \begin{document}
 

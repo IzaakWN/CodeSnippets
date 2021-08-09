@@ -5,12 +5,12 @@
 \usepackage{siunitx}
 \usepackage{ifthen}
 \usepackage{tikz}
-\usepackage[outline]{contour} % glow around text
+%\usepackage[outline]{contour} % glow around text
 \usetikzlibrary{calc}
 \usetikzlibrary{angles,quotes} % for pic
-\usetikzlibrary{patterns,snakes}
+\usetikzlibrary{patterns}
 \tikzset{>=latex} % for LaTeX arrow head
-\contourlength{1.4pt}
+%\contourlength{1.4pt}
 
 \colorlet{xcol}{blue!70!black}
 \colorlet{vcol}{green!70!black}
@@ -21,25 +21,16 @@
 \tikzstyle{metal}=[fill,top color=black!40,bottom color=black!20,shading angle=10]
 \tikzstyle{mass}=[line width=0.6,red!30!black,fill=red!40!black!10,rounded corners=1,
                   top color=red!40!black!20,bottom color=red!40!black!10,shading angle=20]
-\tikzstyle{pulcol}=[draw=blue!30!black,%fill=blue!40!black!10
-                    top color=blue!40!black!20,bottom color=blue!40!black!10,shading angle=20]
 \tikzstyle{rope}=[brown!70!black,very thick,line cap=round]
 \def\rope#1{ \draw[black,line width=1.5] #1; \draw[rope] #1; }
-\tikzstyle{mount}=[blue!20!black,fill,top color=blue!20!black!70,bottom color=blue!20!black!40,shading angle=10] %,line width=1.8,line cap=round
-%\tikzstyle{mount}=[color=black!60,line width=1.8,line cap=round]
-\tikzstyle{spring}=[line width=0.8,black!80,snake=coil,segment amplitude=5,segment length=5,line cap=round]
 
 % FORCES SWITCH
 \tikzstyle{force}=[->,myred,very thick,line cap=round]
 \tikzstyle{Fproj}=[force,myred!40]
 \newcommand{\vbF}{\vb{F}}
 \newcommand{\vbT}{\vb{T}}
-\newboolean{showforces}
-\setboolean{showforces}{true}
 
 \begin{document}
-
-
 
 
 % CIRCULAR MOTION - 2D
@@ -60,7 +51,6 @@
   \draw[force,acol] (M)++(-140:0.7*\r) --++ (-0.8*\F,0) node[below left=-3] {$\vb{a}$};
   \draw[force,vcol] (M)++(90:0.8*\r) --++ (0,0.9*\F) node[right=0] {$\vb{v}$};
 \end{tikzpicture}
-
 
 
 % CIRCULAR MOTION string

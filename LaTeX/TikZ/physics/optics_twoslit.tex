@@ -29,11 +29,6 @@
 \tikzstyle{mysmallarr}=[-{Latex[length=3,width=2]}]
 
 
-\tikzset{
-  lend/.style={line width=0.2,decorate,decoration={
-               snake,pre length=0,post length=0,amplitude=0.1,segment length=#1}},
-}
-
 \newcommand\rightAngle[4]{
   \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}{\pgfpointanchor{#3}{center}}
   \coordinate (tmpRA) at ($(#2)+(\pgfmathresult+45:#4)$);

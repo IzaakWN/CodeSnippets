@@ -5,14 +5,12 @@
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{siunitx}
 \usepackage[outline]{contour} % glow around text
-\usetikzlibrary{arrows,arrows.meta}
 \usetikzlibrary{calc}
 \usetikzlibrary{intersections}
 \usetikzlibrary{decorations.markings}
 \usetikzlibrary{fadings}
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \usetikzlibrary{decorations.pathreplacing} % for curly braces
-\usetikzlibrary{decorations.pathmorphing} % for snake lines
 \tikzset{>=latex} % for LaTeX arrow head
 \contourlength{1.7pt}
 \newcommand\degree{^\circ}
@@ -24,9 +22,6 @@
 \tikzstyle{water}=[ball color=watercol]
 \tikzset{
   beam/.style={very thick,line cap=round,line join=round},
-  wave/.style={line width=0.2,decorate,decoration={
-               snake,pre length=0,post length=0,amplitude=0.1,segment length=#1}},
-  wave/.default=2,
 }
 
 
