@@ -18,30 +18,6 @@
 \begin{document}
 
 
-
-%\tdplotsetmaincoords{90}{90} % look straight at yz plane 
-%\begin{tikzpicture}[tdplot_main_coords]
-%  \coordinate (A)  at (0, 3, 3);
-%  \coordinate (O)  at (0, 0, 0);
-%  \coordinate (B)  at (0, 4, 0);
-%  
-%  \coordinate (A2) at (0, 8, 3);
-%  \coordinate (O2) at (0, 5, 0);
-%  \coordinate (B2) at (0, 9, 0);
-%  
-%  \draw[thick] (A) -- (O) -- (B);
-%  \draw[canvas is yz plane at x=0,->]
-%    (1,0,0) arc [start angle=0,end angle=45,radius=1]
-%    node [midway,right] {$\alpha_1$};
-%
-%  \draw[thick] (A2) -- (O2) -- (B2);
-%  \draw[canvas is yz plane at x=0,->]
-%    (O2)+(1,0,0) arc [start angle=0,end angle=45,radius=1]
-%    node [midway,right] {$\alpha_2$};
-%
-%\end{tikzpicture}
-
-
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \begin{tikzpicture}
   
@@ -70,6 +46,29 @@
 \end{tikzpicture}
 
 
+%\tdplotsetmaincoords{100}{90} % look straight at yz plane 
+%\begin{tikzpicture}[tdplot_main_coords]
+%  \coordinate (A)  at (0, 3, 3);
+%  \coordinate (O)  at (0, 0, 0);
+%  \coordinate (B)  at (0, 4, 0);
+%  
+%  \coordinate (A2) at (0, 8, 3);
+%  \coordinate (O2) at (0, 0, 0);
+%  \coordinate (B2) at (9, 0, 0);
+%  
+%  \draw[thick] (A) -- (O) -- (B);
+%  \draw[canvas is yz plane at x=0,->]
+%    (1,0,0) arc [start angle=0,end angle=45,radius=1]
+%    node [midway,right] {$\alpha_1$};
+%
+%  \draw[thick] (A2) -- (O2) -- (B2);
+%  \draw[canvas is yx plane at z=0,->]
+%    (O2)++(0,1,0) arc [start angle=0,end angle=45,radius=1]
+%    node [midway,right] {$\alpha_2$};
+%
+%\end{tikzpicture}
+
+
 %\usetikzlibrary{angles,quotes}
 %\begin{tikzpicture}[tdplot_main_coords]
 %  \coordinate (A)  at (0, 3, 3);
@@ -94,7 +93,5 @@
 %  \pic [draw,"$\alpha_3$",angle radius=20,->,angle eccentricity=1.4] {angle = B--O--A};
 %
 %\end{tikzpicture}
-
-
 
 \end{document}

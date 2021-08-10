@@ -15,13 +15,13 @@
 \colorlet{veccol}{green!45!black}
 \colorlet{Icol}{blue!70!black}
 \colorlet{mucol}{red!90!black}
-\tikzstyle{BField}=[->,thick,Bcol]
+\tikzstyle{BField}=[->,line width=2,Bcol]
 \tikzstyle{current}=[->,Icol] %thick,
-\tikzstyle{force}=[->,thick,BFcol]
-\tikzstyle{vector}=[->,thick,veccol]
-\tikzstyle{thick vector}=[->,veccol,line width=2]
-\tikzstyle{mu vector}=[->,thick,mucol]
-\tikzstyle{velocity}=[->,very thick,veccol]
+\tikzstyle{force}=[->,line width=2,BFcol]
+\tikzstyle{vector}=[->,line width=2,veccol]
+\tikzstyle{thick vector}=[->,line width=2,veccol]
+\tikzstyle{mu vector}=[->,line width=2,mucol]
+\tikzstyle{velocity}=[->,line width=2,veccol]
 \tikzstyle{charge+}=[very thin,draw=black,top color=red!50,bottom color=red!90!black,shading angle=20,circle,inner sep=0.5]
 
 
@@ -378,14 +378,14 @@
   
   % VECTORS
   \def\R{0.32}
-  \draw[force,very thick]
+  \draw[force]
     (O) --++ (82:3.2)
     node[above,scale=1.5] {$\vb{F} \color{black} = q {\color{veccol}\vb{v}} \times {\color{Bcol}\vb{B}}$};
-  \draw[velocity,very thick]
+  \draw[velocity]
     (O) --++ (148:3.3) coordinate (V)
     node[above=2,left=-6,scale=1.5] {$\vb{v}$};
   \draw[charge+] (O) circle (\R) node[scale=1.4] {$+$};
-  \draw[BField,very thick]
+  \draw[BField]
     (O)++(-172:0.7*\R) --++ (-172:3.25) coordinate (B)
     node[above=4,left=-6,scale=1.5] {$\vb{B}$};
   \draw pic[->,"\huge$\theta$",draw=black,angle radius=30,angle eccentricity=1.2] {angle = V--O--B};
@@ -526,13 +526,13 @@
   \draw[very thin] (W2)++(80:1.3) to[out=-180,in=-50]++ (160:1.2); % PALM
   
   % VECTORS
-  \draw[force,very thick]
+  \draw[force]
     (O) --++ (85:3.4)
     node[above,scale=1.5] {$\vb{F} \color{black} = q {\color{veccol}\vb{v}} \times {\color{Bcol}\vb{B}}$};
   \draw[velocity,very thick]
     (O) --++ (145:3.7) coordinate (V)
     node[above=2,left=-7,scale=1.5] {$\vb{v}$};
-  \draw[BField,very thick]
+  \draw[BField]
     (O) --++ (172:3.7) coordinate (B)
     node[above=4,left=-5,scale=1.5] {$\vb{B}$};
   \draw pic[->,"\huge$\theta$",draw=black,angle radius=35,angle eccentricity=1.2] {angle = V--O--B};
@@ -667,7 +667,7 @@
   \def\Ry{0.7}
   \draw[very thick,dash pattern=on 8pt off 8pt,line cap=round]
     (O)++(-108.5:3.6) --++ (78:7.1);
-  \draw[->,veccol,very thick]
+  \draw[vector]
     (O)++(125:0.77) --++ (78:2.7)
     node[midway,above=10,left=-3,scale=1.5] {$\vb*{\omega}$};
   \draw[->,very thick,rotate=-15]
@@ -766,7 +766,7 @@
   \def\Ry{0.7}
   \draw[very thick,dash pattern=on 8pt off 8pt,line cap=round]
     (O)++(-108.5:3.6) --++ (78:7.1);
-  \draw[->,veccol,very thick]
+  \draw[vector]
     (O)++(125:0.77) --++ (78:2.7)
     node[midway,above=10,left=-3,scale=1.5] {$\vb{L} = I\vb*{\omega}$};
   \draw[->,very thick,rotate=-15]
@@ -863,7 +863,7 @@
   % VECTORS
   \def\Rx{2.4}
   \def\Ry{0.7}
-  \draw[mu vector,very thick]
+  \draw[mu vector]
     (O)++(-180:0.35) --++ (78:3.6)
     node[above,scale=1.5] {$\vb*{\mu}$};
   %\draw[thick,rotate=-15]
@@ -1003,7 +1003,7 @@
   \draw[current,very thick]
     (O)++(106:1.2) --++ (78:2.1)
     node[midway,left,scale=1.5] {$\vb{I}$};
-  \draw[BField,very thick,rotate=-15]
+  \draw[BField,rotate=-15]
     (O)++(-250:{\Rx} and {\Ry}) arc (-250:-80:{\Rx} and {\Ry})
     node[below=1,scale=1.5] {$\vb{B}$};
   

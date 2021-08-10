@@ -2,13 +2,11 @@
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{physics}
 \usepackage{tikz}
-\usepackage[outline]{contour} % glow around text
 \usetikzlibrary{calc}
 \usetikzlibrary{angles,quotes} % for pic
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{patterns}
 \tikzset{>=latex} % for LaTeX arrow head
-\contourlength{1.35pt}
 
 \colorlet{xcol}{blue!70!black}
 \colorlet{vcol}{green!60!black}
@@ -19,31 +17,11 @@
 \tikzstyle{vvec}=[->,vcol,very thick,line cap=round]
 \tikzstyle{myarr}=[{Latex[length=3,width=3]}-,xcol]
 \tikzstyle{force}=[->,myred,very thick,line cap=round]
-\tikzstyle{Fproj}=[force,myred!40]
 \tikzstyle{mass}=[line width=0.6,draw=red!30!black, %rounded corners=1,
                   top color=red!40!black!30,bottom color=red!40!black!10,shading angle=30]
 \tikzstyle{ground}=[preaction={fill,top color=black!10,bottom color=black!5,shading angle=20},
                     fill,pattern=north east lines,draw=none,minimum width=0.3,minimum height=0.6]
 \tikzstyle{metal}=[fill,top color=black!40,bottom color=black!20,shading angle=10]
-
-
-\def\r{0.05} % pulley small radius
-\tikzset{
-  pics/Tin/.style={
-    code={
-      \def\R{0.12}
-      \draw[pic actions,line width=0.6,#1,fill=white] % ,thick
-        (0,0) circle (\R) (-135:.75*\R) -- (45:.75*\R) (-45:.75*\R) -- (135:.75*\R);
-  }},
-  pics/Tout/.style={
-    code={
-      \def\R{0.12}
-      \draw[pic actions,line width=0.6,#1,fill=white] (0,0) circle (\R);
-      \fill[pic actions,#1] (0,0) circle (0.3*\R);
-  }},
-  pics/Tin/.default=mypurple,
-  pics/Tout/.default=mypurple,
-}
 
 \begin{document}
 

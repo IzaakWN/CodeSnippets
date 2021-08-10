@@ -3,14 +3,12 @@
 \usepackage{physics}
 \usepackage{siunitx}
 \usepackage{tikz}
-\usepackage[outline]{contour} % glow around text
 \usetikzlibrary{calc}
 \usetikzlibrary{angles,quotes} % for pic
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{bending} % for arrow head angle
 \tikzset{>=latex} % for LaTeX arrow head
 \usetikzlibrary{patterns}
-\contourlength{1.35pt}
 
 \colorlet{xcol}{blue!70!black}
 \colorlet{vcol}{green!60!black}
@@ -59,6 +57,21 @@
       \coordinate (L2) at ($(L1)+(#1:\LL/2)$);
       \coordinate (L3) at ($(L1)+(#1:{\LL-\LR/cos(\ang)})$);
   }},
+  pics/groundwall/.style={
+    code={
+      \draw[ground] ({-0.26*\W},0) rectangle ({1.18*\W},-\D);
+      \draw[thick] ({-0.26*\W},0) -- ({1.18*\W},0);
+      \foreach \i[evaluate={\by=\i*\bh}]  in {0,...,\N}{ %[evaluate={\bh=\H/\N;\by=\i*\bh}] in {0,...,\N}{
+      \draw[red!40!black,fill=red!40!black!40,rounded corners=0.8]
+        ({\W},\by) rectangle++ (1.2*\D,\bh);
+      \begin{scope}
+        \clip ({\W+0.01},\by+0.01) rectangle++ (1.2*\D-0.02,\bh-0.02);
+        \foreach \j in {0,...,\Nd}{
+          \fill[red!40!black] ({\W+(1+rand)*0.6*\D},{\by+(1+rand)*\bh/2}) circle(0.002); % random dots
+        }
+      \end{scope}
+    }
+  }},
   pics/Tin/.default=mypurple,
   pics/Tout/.default=mypurple,
   pics/ladder/.default=45,
@@ -79,24 +92,14 @@
 \def\Nd{30}    % number of dots per brick
 \def\bh{0.125} % brick height
 \begin{tikzpicture}
+  \message{Ladder^^J}
   \coordinate (O) at (0,0);
   \coordinate (M) at (\ang:\LL/2);
   \coordinate (T) at (\ang:\LL);
   \coordinate (R) at ({\W},0);
   
   % GROUND + WALL
-  \draw[ground] ({-0.26*\W},0) rectangle ({1.18*\W},-\D);
-  \draw[thick] ({-0.26*\W},0) -- ({1.18*\W},0);
-  \foreach \i[evaluate={\by=\i*\bh}]  in {0,...,\N}{ %[evaluate={\bh=\H/\N;\by=\i*\bh}] in {0,...,\N}{
-    \draw[red!40!black,fill=red!40!black!40,rounded corners=0.8]
-      ({\W},\by) rectangle++ (1.2*\D,\bh);
-    \begin{scope}
-      \clip ({\W+0.01},\by+0.01) rectangle++ (1.2*\D-0.02,\bh-0.02);
-      \foreach \j in {0,...,\Nd}{
-        \fill[red!40!black] ({\W+(1+rand)*0.6*\D},{\by+(1+rand)*\bh/2}) circle(0.002); % random dots
-      }
-    \end{scope}
-  }
+  \pic at (O) {groundwall};
   \draw[myarr2,thick] (-0.3*\F,{0.85*\H}) node[left,scale=0.8] {$y$} |-++ (0.65*\F,-0.65*\F) node[below,scale=0.8] {$x$};
   \draw[myarr,thick] (0.38*\F,{0.9*\H}) arc(100:10:0.35*\F) node[right=1,below=-1,scale=0.7] {$+$};
   
@@ -116,6 +119,7 @@
 
 % LADDER + person
 \begin{tikzpicture}
+  \message{Ladder + person^^J}
   \def\h{1.2} % human height
   \coordinate (O) at (0,0);
   \coordinate (T) at (\ang:\LL);
@@ -123,18 +127,7 @@
   \coordinate (S) at ($(\ang:0.28*\LL)+(0,1.4*\LR)$);
   
   % GROUND + WALL
-  \draw[ground] ({-0.26*\W},0) rectangle ({1.18*\W},-\D);
-  \draw[thick] ({-0.26*\W},0) -- ({1.18*\W},0);
-  \foreach \i[evaluate={\by=\i*\bh}]  in {0,...,\N}{ %[evaluate={\bh=\H/\N;\by=\i*\bh}] in {0,...,\N}{
-    \draw[red!40!black,fill=red!40!black!40,rounded corners=0.8]
-      ({\W},\by) rectangle++ (1.2*\D,\bh);
-    \begin{scope}
-      \clip ({\W+0.01},\by+0.01) rectangle++ (1.2*\D-0.02,\bh-0.02);
-      \foreach \j in {0,...,\Nd}{
-        \fill[red!40!black] ({\W+(1+rand)*0.6*\D},{\by+(1+rand)*\bh/2}) circle(0.002); % random dots
-      }
-    \end{scope}
-  }
+  \pic at (O) {groundwall};
   
   % PERSON
   \draw[thick] (S)++(0,\h) circle(0.22) coordinate (H);
@@ -160,6 +153,7 @@
 
 % LADDER + person
 \begin{tikzpicture}
+  \message{Ladder + person, shifted CM^^J}
   \def\h{1.2} % human height
   \coordinate (O) at (0,0);
   \coordinate (T) at (\ang:\LL);
@@ -167,18 +161,7 @@
   \coordinate (S) at ($(\ang:0.28*\LL)+(0,1.4*\LR)$);
   
   % GROUND + WALL
-  \draw[ground] ({-0.26*\W},0) rectangle ({1.18*\W},-\D);
-  \draw[thick] ({-0.26*\W},0) -- ({1.18*\W},0);
-  \foreach \i[evaluate={\by=\i*\bh}]  in {0,...,\N}{ %[evaluate={\bh=\H/\N;\by=\i*\bh}] in {0,...,\N}{
-    \draw[red!40!black,fill=red!40!black!40,rounded corners=0.8]
-      ({\W},\by) rectangle++ (1.2*\D,\bh);
-    \begin{scope}
-      \clip ({\W+0.01},\by+0.01) rectangle++ (1.2*\D-0.02,\bh-0.02);
-      \foreach \j in {0,...,\Nd}{
-        \fill[red!40!black] ({\W+(1+rand)*0.6*\D},{\by+(1+rand)*\bh/2}) circle(0.002); % random dots
-      }
-    \end{scope}
-  }
+  \pic at (O) {groundwall};
   
   % PERSON
   \draw[thick] (S)++(0,\h) circle(0.22) coordinate (H);
@@ -204,6 +187,7 @@
 
 % LADDER - tan
 \begin{tikzpicture}
+  \message{Plot numerical solution^^J}
   \def\xmax{2.8}
   \def\ymax{1.8}
   \def\A{0.13*\ymax}   % yscale
@@ -230,6 +214,7 @@
 
 % LADDER - plot
 \begin{tikzpicture}
+  \message{Minimum angle vs. mu_s^^J}
   \def\xmax{3.2}
   \def\ymax{2.4}
   \def\A{0.8*\ymax}   % yscale
@@ -260,6 +245,7 @@
 
 % LADDER + PERSON - plot
 \begin{tikzpicture}
+  \message{Minimum angle vs. r^^J}
   \def\xmax{3.2}
   \def\ymax{2.4}
   \coordinate (O) at (0,0);
