@@ -88,8 +88,9 @@
   
   % boxes
   \draw[thick,fill=mylightgreen]
-    (0,\isomu) rectangle (\isoSB,\isoSB)
-    node[anchor=north east] {SB};
+    (0,0) rectangle (\isoSB,\isoSB)
+    %(0,\isomu) rectangle (\isoSB,\isoSB)
+    node[anchor=north east] {isolation SB};
   \draw[thick,fill=mylightred]
     (0,0) rectangle (\isoe,\isomu)
     node[anchor=north east] {SR};
@@ -105,6 +106,47 @@
 
 
 % CONTROL REGIONS 3
+\begin{tikzpicture}[scale=4]
+  
+  \def\mx{0.45} %middle
+  
+  % boxes
+  \fill [mylightred] % SR
+    (0,0) rectangle (\mx,1);
+  \fill [mylightgreen] % SB
+    (\mx,0) rectangle (1,1);
+  \draw[thick]
+    (0,0) rectangle (1,1);
+  
+  % dashed lines
+  \draw[dashed,thick]
+    (\mx,-0.1) -- (\mx,1);
+  \draw[dashed,thick]
+    (-0.1,0.5) -- (1,0.5);
+  
+  % labels
+  \draw
+    (0,0.75) node[anchor=east]  {OS}
+    (0,0.25) node[anchor=east]  {SS}
+    (\mx/2,0) node[anchor=north] {SR}
+    (0.5+\mx/2,0) node[anchor=north] {SB}
+    (0,0.50) node[rotate=90,above=16pt] {Lepton charges}
+    (0.50,0) node[below=10pt] {Lepton isolations};
+  \node[align=center,scale=1,inner sep=3] (SB) at (\mx/2,0.25) {QCD\\\small shape};
+  \node[align=center,scale=1,inner sep=3] (SR) at (\mx/2,0.75) {QCD};
+  
+  % arrows
+  \draw[->,thick] % SB: SS -> OS
+    (SB) -- (SR);
+  \draw[->,thick] % SB: SS -> OS
+    (1.2*\mx,0.38) --++ (0,0.3)
+    node[pos=0.8,right=-1,scale=1.2]{$\left(\frac{\text{OS}}{\text{SS}}\right)^\text{\tiny SB}_\text{\tiny data}$};
+  
+\end{tikzpicture}
+
+
+
+% CONTROL REGIONS 4
 \begin{tikzpicture}[scale=4]
   
   \def\mx{0.45} %middle

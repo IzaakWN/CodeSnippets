@@ -13,18 +13,21 @@
 \colorlet{xcol}{blue!70!black}
 \colorlet{vcol}{green!60!black}
 \colorlet{myred}{red!65!black}
+\colorlet{mydarkred}{red!40!black}
 \colorlet{mypurple}{blue!60!red!80}
+\colorlet{mydarkgreen}{green!20!black}
 \colorlet{acol}{red!50!blue!80!black!80}
 \tikzstyle{rvec}=[->,xcol,very thick,line cap=round]
 \tikzstyle{vvec}=[->,vcol,very thick,line cap=round]
 \tikzstyle{myarr}=[{Latex[length=3,width=3]}-,xcol]
-\tikzstyle{myarr2}=[{Latex[length=2,width=3]}-{Latex[length=2,width=3]}]
+\tikzstyle{myarr2}=[{Latex[length=2,width=2.5]}-{Latex[length=2,width=2.5]}]
 \tikzstyle{force}=[->,myred,very thick,line cap=round]
 \tikzstyle{Fproj}=[force,myred!40]
+\tikzstyle{CM}=[mydarkred,fill=red!80!black!80]
 \tikzstyle{mass}=[line width=0.6,draw=red!30!black, %rounded corners=1,
-                  top color=red!40!black!30,bottom color=red!40!black!10,shading angle=30]
+                  top color=mydarkred!30,bottom color=mydarkred!10,shading angle=30]
 \tikzstyle{dark mass}=[line width=0.3,red!30!black, %rounded corners=1,
-                       top color=red!40!black!40,bottom color=red!40!black!60,shading angle=30]
+                       top color=mydarkred!40,bottom color=mydarkred!60,shading angle=30]
 \tikzstyle{ground}=[preaction={fill,top color=black!10,bottom color=black!5,shading angle=20},
                     fill,pattern=north east lines,draw=none,minimum width=0.3,minimum height=0.6]
 \tikzstyle{metal}=[fill,top color=black!40,bottom color=black!20,shading angle=10]
@@ -33,7 +36,6 @@
 \tikzstyle{rope}=[brown!70!black,very thick,line cap=round]
 \def\rope#1{ \draw[black,line width=1.5] #1; \draw[rope] #1; }
 \tikzstyle{mount}=[blue!20!black,fill,top color=blue!20!black!70,bottom color=blue!20!black!40,shading angle=10]
-
 
 \def\r{0.05} % pulley small radius
 \tikzset{
@@ -52,7 +54,7 @@
   pics/rotarr/.style={
     code={
       \draw[white,very thick] ({#1*cos(200)},0) arc(-200:30:{#1} and {#1/2}) --++ (125:0.1);
-      \draw[->] ({#1*cos(200)},0) coordinate (W1) arc(-200:20:{#1} and {#1/2}) node[midway] (W2) {} --++ (125:0.1) coordinate (W3);
+      \draw[->,mydarkgreen] ({#1*cos(200)},0) coordinate (W1) arc(-200:20:{#1} and {#1/2}) node[midway] (W2) {} --++ (125:0.1) coordinate (W3);
   }},
   pics/pulley/.style={
     code={
@@ -124,7 +126,7 @@
   \coordinate (R) at ( \R/2,0);
   \draw[dashed] (0,-0.5*\R) -- (0,0.55*\R) coordinate (T);
   \pic[scale=1] at ($(T)+(0,-0.1*\R)$) {rotarr};
-  \node[below right=1] at (W3) {$\omega$};
+  %\node[mydarkgreen,below right=1] at (W3) {$\omega$};
   \draw[line width=1.8,red!25!black] (L) -- (R);
   \node[mass,circle,inner sep=\r] (L') at (L) {$m$};
   \node[mass,circle,inner sep=\r] (R') at (R) {$m$};
@@ -143,7 +145,7 @@
   \coordinate (R) at ( \R/2,0);
   \draw[dashed] (-\R/2,-0.5*\R) --++ (0,1.05*\R) coordinate (T);
   \pic[scale=1] at ($(T)+(0,-0.1*\R)$) {rotarr};
-  \node[below right=1] at (W3) {$\omega$};
+  %\node[mydarkgreen,below right=1] at (W3) {$\omega$};
   \draw[line width=1.8,red!25!black] (L) -- (R);
   \node[mass,circle,inner sep=\r] (L') at (L) {$m$};
   \node[mass,circle,inner sep=\r] (R') at (R) {$m$};
@@ -161,7 +163,7 @@
   \coordinate (R) at ( \R/2,0);
   \draw[dashed] (-0.9*\R,0) -- (0.9*\R,0) coordinate (T);
   \pic[scale=1,rotate=90] at ($(T)+(-0.2*\R,0)$) {rotarr};
-  \node[above=10,right=-1] at (W2) {$\omega$};
+  %\node[mydarkgreen,above=10,right=-1] at (W2) {$\omega$};
   \draw[line width=1.8,red!25!black] (L) -- (R);
   \node[mass,circle,inner sep=\r] (L') at (L) {$m$};
   \node[mass,circle,inner sep=\r] (R') at (R) {$m$};
@@ -188,42 +190,62 @@
 \end{tikzpicture}
 
 
-% MOMENT OF INERTIA - HOLLOW CYLINDER
-\begin{tikzpicture}
-  \Large
-  \def\L{3.0} % cylinder length
-  \def\R{1.4}
-  \def\dr{0.15}
-  \def\ang{8}
-  \def\angp{40} % perspective
-  \def\angdr{14}
+% MOMENT OF INERTIA - RING 3D
+\def\Rx{1.6}   % horizontal radius
+\def\Ry{0.8}   % vertical radius
+\def\sx{0.90}  % inner horizontal radius
+\def\sy{0.80}  % inner vertical radius
+\def\ang{-25}  % angle figure
+\def\angr{20}  % vector angle
+\def\angdr{28} % infinitesimal arc segment angle (dtheta)
+\begin{tikzpicture}[rotate=\ang]
   \coordinate (O) at (0,0);
-  \coordinate (R) at (\ang:\R);
-  \draw[thick] (\angp:\L) --++ (\angp:1.5*\R);
-  \draw[mass,
-    top color=red!40!black!50,bottom color=red!40!black!50,middle color=red!40!black!10,shading angle=\angp]
-    (\angp+90:\R+\dr) --++ (\angp:\L) arc(\angp+90:\angp-90:\R+\dr) --++ (\angp-180:\L) arc(\angp-90:\angp-270:\R+\dr);
-  \draw[mass,even odd rule]
-    (O) circle(\R) circle(\R+\dr);
-  %\draw[dashed,thick] (\angp:0.98*\R) -- (\angp-180:1.7*\R);
-  \draw[->,thick] (\angp:0.98*\R) -- (\angp-180:1.7*\R) node[left] {$z$};
-  %\draw[dark mass]
-  %  (\ang:\R) arc(\ang:\ang+\angdr/2:\R) --++ (\ang+\angdr/2:\dr)
-  %            arc(\ang+\angdr/2:\ang-\angdr/2:\R+\dr)
-  %            %node[midway,above=1,right=1] {$\dd{m}$}
-  %            --++ (\ang-\angdr/2-180:\dr) arc(\ang-\angdr/2:\ang:\R);
-  %\draw[dark mass]
-  %  (\ang-\angdr/2:\R+\dr) --++ (\angp:\L) node[midway,above left=5] {$\dd{m}$}
-  %  arc(\ang-\angdr/2:\ang+\angdr/2:\R+\dr) --++ (\angp-180:\L) arc(\ang+\angdr/2:\ang-\angdr/2:\R+\dr);
-  \draw[dark mass]
-    (\ang:\R+\dr)++(\angp:0.25*\L) coordinate (DM1) arc(\ang:\ang+\angdr:\R+\dr) node[above left=-3] {$\dd{m}$}
-    --++ (\angp-180:0.1*\L) arc(\ang+\angdr:\ang:\R+\dr) -- cycle;
-  \draw[myarr2] (DM1)++(-70:0.08) --++ (\angp-180:0.1*\L) node[midway,below right=-3,scale=0.9] {$\dd{z}$};
-  \draw[myarr2] (DM1)++(20:0.08) arc(\ang:\ang+\angdr:\R+\dr) node[midway,above=2,right=-1,scale=0.9] {$r\dd{\theta}$};
-  %\draw[rvec] (O) -- (R) node[midway,right=3,above=-1] {$\vb{r}$};
-  \draw[->] (O) -- (-40:\R+\dr/2) node[midway] {\contour{red!40!black!20}{$R$}}; %,fill=red!40!black!40,inner sep=1
-  \pic[xscale=1.5,rotate=90] at (\angp-180:1.5*\R) {rotarr};
-  %\node[left=-1] at (W3) {$\omega$};
+  \coordinate (R1) at (\angr+4:{1.05*\sx*\Rx} and {1.05*\sy*\Ry});
+  \coordinate (R2) at (\angr+3+\angdr:{1.08*\sx*\Rx} and {1.08*\sy*\Ry});
+  \draw[thick,line cap=round] (0,0.9*\Ry) -- (0,-1.6*\Ry);
+  \draw[line width=0.5,draw=red!30!black,even odd rule,
+        top color=mydarkred!30,bottom color=mydarkred!30,middle color=mydarkred!20,shading angle=30]
+    (O) ellipse({\Rx} and \Ry) ellipse({\sx*\Rx} and \sy*\Ry);
+  \draw[->,thick,line cap=round] (O) --++ (0,2.5*\Ry) node[left] {$z$};
+  \pic[xscale=1,rotate=\ang] at (0,2.0*\Ry) {rotarr={0.3}}; % rotation arrow
+  %\node[mydarkgreen,right=0] at (W3) {$\omega$};
+  \draw[dark mass] % infinitesimal line segment (ds = R.dtheta, dm)
+    (\angr:{\sx*\Rx} and {\sy*\Ry}) to[out=90,in=100] (\angr:{\Rx} and {\Ry})
+    arc(\angr:\angr+\angdr:{\Rx} and {\Ry})
+    to[out=160,in=90] (\angr+\angdr:{\sx*\Rx} and {\sy*\Ry})
+    arc(\angr+\angdr:\angr:{\sx*\Rx} and {\sy*\Ry});
+  \draw[dashed] (R2) -- (O)
+    node[pos=0.6,above=-1,scale=1] {$R$};
+  \draw[-{Latex[length=3,width=2]}]
+    (\angr:{0.5*\Rx} and {0.5*\Ry}) arc(\angr:\angr+\angdr:{0.5*\Rx} and {0.5*\Ry})
+    node[pos=0.55,right=-0.9,scale=0.8] {$\dd{\theta}$};
+  \draw[myarr2] % line segment length s = R.dtheta
+    (\angr+2:{1.06*\Rx} and {1.06*\Ry})
+    node[above=2,below right=-3,red!30!black] {$\dd{m}$}
+    arc(\angr+2:\angr+\angdr:{1.06*\Rx} and {1.06*\Ry})
+    node[pos=0.7,right=0] {$R\dd{\theta}$};
+  \draw[rvec] (O) -- (R1) % vector r
+    node[pos=0.55,below=0,scale=0.9] {$\vb{r}$};
+\end{tikzpicture}
+
+
+% MOMENT OF INERTIA - RING 3D - parallel axis / Steiner's theorem
+\begin{tikzpicture}[rotate=\ang]
+  \def\Rxx{0.5*(1+\sx)*\Rx}
+  \coordinate (O) at (0,0);
+  \draw[line cap=round] (0,0.9*\Ry) -- (0,-1.6*\Ry) node[above left=-1] {$I_\text{cm}$};
+  \draw[line cap=round] ({\Rxx},0.9*\Ry) -- ({\Rxx},-1.3*\Ry) node[above=4,right=2] {$I$};
+  \draw[CM] (O) circle(0.06) node[above left=-1,scale=0.9] {CM};
+  \draw[line width=0.5,draw=red!30!black,even odd rule,
+        top color=mydarkred!30,bottom color=mydarkred!30,middle color=mydarkred!20,shading angle=30]
+    (O) ellipse({\Rx} and \Ry) ellipse({\sx*\Rx} and \sy*\Ry);
+  \draw[line cap=round] (0,0.05) --++ (0,2.5*\Ry); %node[left] {$z$};
+  \fill[red!80!black] ({\Rxx},0.04) circle(0.02);
+  \draw[line cap=round] ({\Rxx},0.05) --++ (0,2.5*\Ry); %node[left] {$z$};
+  \pic[rotate=\ang] at ({\Rxx},2.0*\Ry) {rotarr={0.3}}; % rotation arrow
+  %\node[mydarkgreen,right=0] at (W3) {$\omega$};
+  \draw[<->] (0,1.38*\Ry) --++ ({\Rxx},0) % distance/radius R
+    node[pos=0.5] {\contour{white}{$R$}};
 \end{tikzpicture}
 
 
@@ -239,21 +261,55 @@
   \coordinate (R) at (50:\r);
   \coordinate (DR1) at (\angdr:\r);
   \coordinate (DR2) at (\angdr:\r+\dr);
-  \draw[dashed,thick] (0,0) --++ (\angp:1.4*\R);
+  \draw[thick] (0,0) --++ (\angp:1.4*\R);
   \draw[mass,
-    top color=red!40!black!50,bottom color=red!40!black!50,middle color=red!40!black!10,shading angle=\angp]
+    top color=mydarkred!50,bottom color=mydarkred!50,middle color=mydarkred!10,shading angle=\angp]
     (\angp+90:\R) --++ (\angp:\t) arc(\angp+90:\angp-90:\R) --++ (\angp-180:\t) arc(\angp-90:\angp-270:\R);
   \draw[mass]
     (O) circle(\R);
   \draw[dark mass,even odd rule]
     (O) circle(\r+\dr) circle(\r);
-  \draw[->] (O) -- (-30:\R) node[midway] {\contour{red!40!black!15}{$R$}}; %,fill=red!40!black!13,inner sep=1
+  \draw[->] (O) -- (-30:\R) node[midway] {\contour{mydarkred!15}{$R$}}; %,fill=mydarkred!13,inner sep=1
   \draw[rvec] (O) -- (R) node[midway,above left=-2] {$\vb{r}$};
-  \draw[dashed,thick] (0,0) -- (\angp-180:1.45*\R);
+  \draw[->,thick] (0,0) -- (\angp-180:1.45*\R) node[left] {$z$};
   \draw[myarr] (DR1) node[below=3,right=-3,scale=0.9]
-    {\contour{red!40!black!15}{$\dd{r}$}} --++ (\angdr-180:1.1*\dr);
+    {\contour{mydarkred!15}{$\dd{r}$}} --++ (\angdr-180:1.1*\dr);
   \draw[myarr] (DR2) --++ (\angdr:1.1*\dr);
   \pic[xscale=1.5,rotate=90] at (\angp-180:1.35*\R) {rotarr};
+  %\node[left=-1] at (W3) {$\omega$};
+\end{tikzpicture}
+
+
+% MOMENT OF INERTIA - HOLLOW CYLINDER
+\begin{tikzpicture}
+  \Large
+  \def\L{3.0} % cylinder length
+  \def\R{1.4}
+  \def\dr{0.15}
+  \def\ang{8}
+  \def\angp{40} % perspective
+  \def\angdr{14}
+  \coordinate (O) at (0,0);
+  \coordinate (R) at (\ang:\R);
+  \draw[thick] (\angp:\L) --++ (\angp:1.5*\R);
+  \draw[mass,
+    top color=mydarkred!50,bottom color=mydarkred!50,middle color=mydarkred!10,shading angle=\angp]
+    (\angp+90:\R+\dr) --++ (\angp:\L) arc(\angp+90:\angp-90:\R+\dr) --++ (\angp-180:\L) arc(\angp-90:\angp-270:\R+\dr);
+  \draw[mass,even odd rule]
+    (O) circle(\R) circle(\R+\dr);
+  %\draw[dashed,thick] (\angp:0.98*\R) -- (\angp-180:1.7*\R);
+  \draw[->,thick] (\angp:\R-0.01) -- (\angp-180:1.7*\R) node[left] {$z$};
+  \draw[dark mass]
+    (\ang:\R+\dr)++(\angp:0.25*\L) coordinate (DM1)
+    arc(\ang:\ang+\angdr:\R+\dr) node[above left=-3] {$\dd{m}$}
+    --++ (\angp-180:0.1*\L) arc(\ang+\angdr:\ang:\R+\dr) -- cycle;
+  \draw[myarr2] (DM1)++(-70:0.08) --++ (\angp-180:0.1*\L)
+    node[midway,below right=-3,scale=0.9] {$\dd{z}$};
+  \draw[myarr2] (DM1)++(20:0.08) arc(\ang:\ang+\angdr:\R+\dr)
+    node[midway,above=2,right=-1,scale=0.9] {$r\dd{\theta}$};
+  %\draw[rvec] (O) -- (R) node[midway,right=3,above=-1] {$\vb{r}$};
+  \draw[->] (O) -- (-40:\R+\dr/2) node[midway] {\contour{mydarkred!20}{$R$}};
+  \pic[xscale=1.5,rotate=90] at (\angp-180:1.5*\R) {rotarr};
   %\node[left=-1] at (W3) {$\omega$};
 \end{tikzpicture}
 
@@ -295,7 +351,7 @@
   % DISK (FLYWHEEL)
   \draw[mass] (O) circle(\RD);
   \draw[metal] (O) circle(0.1*\RD); %node[right=2,above left=3] {$M$};
-  \draw[->] (O) --++ (-60:\RD) node[midway] {\contour{red!40!black!15}{$R$}} node[right=3] {$M$};
+  \draw[->] (O) --++ (-60:\RD) node[midway] {\contour{mydarkred!15}{$R$}} node[right=3] {$M$};
   \pic[scale=1] at (TD) {Tout};
   \node[mypurple,right=2] at (TD) {$\vb*\tau$};
   \draw[rvec] (O) -- (TD') node[midway,above] {$\vb{r}$};

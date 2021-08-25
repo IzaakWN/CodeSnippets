@@ -1,19 +1,21 @@
 % Author: Izaak Neutelings (June 2017)
 % taken from https://tex.stackexchange.com/questions/159445/draw-in-cylindrical-and-spherical-coordinates
-
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{physics}
 \usepackage{tikz}
 \usepackage{tikz-3dplot}
 \usepackage[outline]{contour} % glow around text
 \usepackage{xcolor}
+
 \colorlet{veccol}{green!50!black}
 \colorlet{projcol}{blue!70!black}
 \colorlet{myblue}{blue!70!black}
+\colorlet{mydarkblue}{blue!50!black}
 \tikzset{>=latex} % for LaTeX arrow head
 \tikzstyle{proj}=[projcol!80,line width=0.08] %very thin
 \tikzstyle{area}=[draw=veccol,fill=veccol!80,fill opacity=0.6]
 \tikzstyle{vector}=[->,veccol,thick]
+\tikzstyle{darkvector}=[->,veccol!70!black,thick]
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \contourlength{1.3pt}
 
@@ -57,7 +59,7 @@
 \begin{tikzpicture}[scale=1.8,tdplot_main_coords]
   
   % VARIABLES
-  \def\l{0.3}
+  \def\l{0.3} % length scale unit vector
   \def\rvec{1.2}
   \def\thetavec{46}
   \def\phivec{50}
@@ -74,17 +76,63 @@
   \draw[vector] (0,0,0) -- (0,0,\l) node[left,scale=0.8]{$\vu{z}$};
   
   % VECTORS
+  \draw[dashed,mydarkblue] (P)  -- (Pxy);
+  \draw[dashed,mydarkblue] (P)  -- (Pz);
+  \draw[dashed,mydarkblue] (Py) -- (Pxy) -- (Px);
   \node[circle,inner sep=0.9,fill=myblue]
     (P') at ({\rvec*sin(\thetavec)*cos(\phivec)},{\rvec*sin(\thetavec)*sin(\phivec)},{\rvec*cos(\thetavec)}) {};
   \draw[-stealth,thick,myblue] (O)  -- (P') node[above right=-2] {P};
-  \draw[dashed,myblue] (P)  -- (Pxy);
-  \draw[dashed,myblue] (P)  -- (Pz);
-  \draw[dashed,myblue] (Py) -- (Pxy) -- (Px);
   
   % ARCS
   \tdplotsetthetaplanecoords{\phivec}
   \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.4}{0}{\thetavec}
     {right=2,above}{$\theta$}
+
+\end{tikzpicture}
+
+
+% 3D AXIS with polar coordinates
+\tdplotsetmaincoords{60}{110}
+\begin{tikzpicture}[scale=2.2,tdplot_main_coords]
+  
+  % VARIABLES
+  \def\l{0.30} % length scale unit vector
+  \def\rtheta{0.7*\l} % length theta arc
+  \def\rvec{1.2}
+  \def\phivec{46}
+  \def\thetavec{48}
+  
+  % AXES
+  \coordinate (O) at (0,0,0);
+  \tdplotsetcoord{P}{\rvec}{\phivec}{\thetavec}
+  \draw[dashed,myblue] (O)  -- (Pxy);
+  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-2]{$x$};
+  \draw[thick,->] (0,0,0) -- (0,1,0) node[right=-1]{$y$};
+  \draw[thick,->] (0,0,0) -- (0,0,1) node[above=-1]{$z$};
+  \draw (Pxy)++(0,0,0.12) --++ (\thetavec+180:0.12) --++ (0,0,-0.12);
+  
+  % VECTORS & DASHED
+  %\draw[dashed,mydarkblue] (P)  -- (Pxy);
+  \draw[dashed,mydarkblue] (P)  -- (Pz);
+  \draw[dashed,mydarkblue] (Py) -- (Pxy) -- (Px);
+  
+  % UNITT VECTORS
+  %\draw[->,veccol] (0,0,0) -- (\thetavec:{\rvec*sin(\phivec)}) node[pos=0.75,above=0,scale=0.9]{$r$};
+  \draw[->,veccol] (0,0,0) -- (\thetavec:{\rvec*sin(\phivec)})
+    node[pos=0.65,scale=0.9]{\contour{white}{$r$}};
+  \draw[<->,veccol] (\thetavec:{\rvec*sin(\phivec)}) --++ (0,0,{\rvec*cos(\phivec)})
+    node[pos=0.55,scale=0.9]{\contour{white}{$z$}};
+  \draw[->] (\rtheta,0,0) arc(0:\thetavec:\rtheta) node[pos=0.4,below=-1,scale=0.9] {$\theta$};
+  \draw[darkvector] (0,0,0) -- (\thetavec:1.2*\l) node[left=3,below=-3,scale=0.8]{$\vu{r}$};
+  \draw[darkvector] (0,0,0) -- (\thetavec+90:\l) node[above=2,right=-2,scale=0.8]{$\vu*{\theta}$};
+  \draw[darkvector] (0,0,0) -- (0,0,\l) node[left,scale=0.8]{$\vu{z}$};
+  
+  % VECTORS
+  \node[circle,inner sep=0.9,fill=myblue]
+    (P') at ({\rvec*sin(\phivec)*cos(\thetavec)},{\rvec*sin(\phivec)*sin(\thetavec)},{\rvec*cos(\phivec)}) {};
+  \draw[-stealth,thick,myblue] (O)  -- (P')
+    node[right=1,above right=-3] {$\mathrm{P} = (r;\theta;z)$}
+    node[pos=0.5,above left=-4] {$\rho$};
 
 \end{tikzpicture}
 
@@ -179,8 +227,11 @@
   \coordinate (Pr) at (\ang:\R-0.25);
   
   % SURFACE
-  \draw[blue!80!black!80,top color=white,bottom color=blue!20,middle color=white,shading angle=\angII+95]
-    (\ang+20:0.8*\R) to[out=-20,in=130] (\ang:1.1*\R) to[out=-50,in=80] (\ang-15:1.2*\R);
+  \fill[top color=white,bottom color=blue!20,middle color=white,shading angle=\angII+95]
+    (\ang+20:0.8*\R) to[out=-15,in=130] (\ang:1.1*\R) to[out=-50,in=80]
+    (\ang-15:1.2*\R) to[out=150,in=-70] cycle;
+  \draw[blue!80!black!80]
+    (\ang+20:0.8*\R) to[out=-15,in=130] (\ang:1.1*\R) to[out=-50,in=80] (\ang-15:1.2*\R);
   
   % CONE
   \draw[vector]

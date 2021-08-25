@@ -18,16 +18,17 @@
 \colorlet{mygrey}{black!15}
 \colorlet{mydarkgrey}{black!50}
 
-\tikzstyle{piston}=[blue!50!black,top color=blue!30,bottom color=blue!50,middle color=blue!20,shading angle=0]
-\tikzstyle{walldark}=[blue!20!black,top color=black!10!white!90!blue,bottom color=black!20!white!90!blue,shading angle=-30]
-\tikzstyle{wall}=[blue!20!black,top color=black!5!white!90!blue,bottom color=black!10!white!85!blue,shading angle=30]
+\tikzstyle{piston}=[blue!40!black,top color=blue!40!black!30,bottom color=blue!40!black!30,
+                    middle color=blue!50!black!15,shading angle=0]
+\tikzstyle{walldark}=[blue!25!black,top color=blue!20!black!12,bottom color=blue!20!black!20,shading angle=-30]
+\tikzstyle{wall}=[blue!20!black,top color=blue!35!black!6,bottom color=blue!25!black!12,shading angle=30]
 
 % GAS MOLECULE with vector
 \tikzset{
   gasparticle/.pic={
     \tikzset{/gasparticle/.cd,#1}
     \draw[-{Latex[length=4,width=3]},green!60!black,thick] (0,0) -- (\vec);
-    \node[circle,fill,inner sep=1.5,fill=black!80!blue] at (0,0) {};
+    \node[circle,fill,inner sep=1.5,ball color=black!80!blue] at (0,0) {};
   }
   /gasparticle/.search also={/tikz},
   /gasparticle/.cd,
@@ -36,17 +37,18 @@
 
 \begin{document}
 
+
 % PISTON
 \begin{tikzpicture}
-  \def\Ra{0.6}
-  \def\Rb{1.2}
+  \def\Ra{0.5}
+  \def\Rb{1.0}
   \def\ra{0.1}
   \def\rb{0.2}
-  \def\w{0.10} % wall thickness
-  \def\x{3.2}  % piston position
-  \def\L{4}    % container length
-  \def\l{2.5}  % piston length
-  \def\v{0.7}  % piston length
+  \def\w{0.08} % wall thickness
+  \def\x{2.9}  % piston position
+  \def\L{3.7}  % container length
+  \def\l{2.2}  % piston arm length
+  \def\v{0.68} % velocity
   
   % WALL
   \draw[wall]
@@ -79,35 +81,34 @@
     node[below=3,above left] {$A$};
   
   % GAS PARTICLE
-  \pic at (-0.15*\x, 0.2*\Rb) {gasparticle={vec={ -40:0.9*\v}}};
-  \pic at (-0.10*\x,-0.5*\Rb) {gasparticle={vec={  48:0.8*\v}}};
+  \pic at (-0.12*\x, 0.2*\Rb) {gasparticle={vec={ -40:0.7*\v}}};
+  \pic at (-0.07*\x,-0.5*\Rb) {gasparticle={vec={  48:0.6*\v}}};
   \pic at ( 0.00*\x, 0.3*\Rb) {gasparticle={vec={ 105:0.6*\v}}};
   \pic at ( 0.05*\x,-0.5*\Rb) {gasparticle={vec={-100:0.6*\v}}};
-  \pic at ( 0.08*\x, 0.0*\Rb) {gasparticle={vec={  60:0.5*\v}}};
-  \pic at ( 0.10*\x, 0.7*\Rb) {gasparticle={vec={ -10:0.9*\v}}};
+  \pic at ( 0.08*\x, 0.0*\Rb) {gasparticle={vec={  70:0.5*\v}}};
+  \pic at ( 0.07*\x, 0.7*\Rb) {gasparticle={vec={ -10:0.9*\v}}};
   \pic at ( 0.15*\x,-0.2*\Rb) {gasparticle={vec={  30:0.7*\v}}};
   \pic at ( 0.20*\x,-0.8*\Rb) {gasparticle={vec={ -10:0.6*\v}}};
   \pic at ( 0.35*\x, 0.6*\Rb) {gasparticle={vec={-110:0.7*\v}}};
   \pic at ( 0.35*\x,-0.6*\Rb) {gasparticle={vec={ 140:0.4*\v}}};
-  \pic at ( 0.40*\x, 0.9*\Rb) {gasparticle={vec={ -40:0.8*\v}}};
-  \pic at ( 0.45*\x,-0.1*\Rb) {gasparticle={vec={  75:0.9*\v}}};
+  \pic at ( 0.40*\x, 0.9*\Rb) {gasparticle={vec={ -40:0.7*\v}}};
+  \pic at ( 0.43*\x,-0.2*\Rb) {gasparticle={vec={  75:0.8*\v}}};
   \pic at ( 0.50*\x, 0.5*\Rb) {gasparticle={vec={-170:0.5*\v}}};
-  \pic at ( 0.52*\x,-0.7*\Rb) {gasparticle={vec={ 120:0.7*\v}}};
+  \pic at ( 0.52*\x,-0.7*\Rb) {gasparticle={vec={ 120:0.6*\v}}};
   \pic at ( 0.60*\x, 0.4*\Rb) {gasparticle={vec={ -80:0.5*\v}}};
-  \pic at ( 0.62*\x,-0.6*\Rb) {gasparticle={vec={  42:0.5*\v}}};
+  \pic at ( 0.63*\x,-0.6*\Rb) {gasparticle={vec={  42:0.5*\v}}};
   \pic at ( 0.65*\x,-0.2*\Rb) {gasparticle={vec={ 150:0.6*\v}}};
   \pic at ( 0.68*\x,-0.8*\Rb) {gasparticle={vec={ 190:0.5*\v}}};
-  \pic at ( 0.70*\x, 0.8*\Rb) {gasparticle={vec={ 160:0.5*\v}}};
-  \pic at ( 0.70*\x, 0.3*\Rb) {gasparticle={vec={  80:0.7*\v}}};
+  \pic at ( 0.72*\x, 0.8*\Rb) {gasparticle={vec={ 160:0.5*\v}}};
+  \pic at ( 0.72*\x, 0.3*\Rb) {gasparticle={vec={  80:0.6*\v}}};
   
 \end{tikzpicture}
 
 
-
 % PISTON
 \begin{tikzpicture}
-  \def\Ra{0.5}
-  \def\Rb{1.2}
+  \def\Ra{0.45}
+  \def\Rb{1.10}
   \def\ra{0.20}
   \def\rb{0.25}
   \def\w{0.12}  % wall thickness
@@ -129,10 +130,9 @@
     (\ang:\p) node[left=1] {$\vb{p}_\text{i} = m\vb{v}_\text{i}$} coordinate (I) -- (0,0);
   \draw[->,very thick,red!80!black]
     (0,0) -- (-\ang:\p) node[left] {$\vb{p}_\text{f} = m\vb{v}_\text{f}$};
-  \node[circle,fill,inner sep=2,fill=black!80!blue] at (I) {};
+  \node[circle,fill,inner sep=2,ball color=black!80!blue] at (I) {};
   
 \end{tikzpicture}
-
 
 
 \end{document}

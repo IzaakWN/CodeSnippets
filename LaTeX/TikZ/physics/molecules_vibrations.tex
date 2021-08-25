@@ -2,11 +2,9 @@
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{tikz}
 \usepackage{ifthen}
-\usepackage{pgfplots} % for the axis
 \tikzset{>=latex} % for LaTeX arrow head
 \usetikzlibrary{calc} 
 \usetikzlibrary{patterns,snakes,decorations.pathmorphing,intersections,arrows.meta}
-\pgfplotsset{compat=1.13} % TikZ coordinates <-> axes coordinates
 \begin{document}
 
 \tikzstyle{atom}=[ball color=blue!50!black]
@@ -30,14 +28,6 @@
   \draw[bound] (1,1,0) -- (1,1,1);
   \draw[bound] (0,1,1) -- (1,1,1);
   \draw[bound] (1,0,1) -- (1,1,1);
-%  \fill[atom] (0,0,0) circle (4pt);
-%  \fill[atom] (1,0,0) circle (4pt);
-%  \fill[atom] (0,1,0) circle (4pt);
-%  \fill[atom] (0,0,1) circle (4pt);
-%  \fill[atom] (1,1,0) circle (4pt);
-%  \fill[atom] (1,0,1) circle (4pt);
-%  \fill[atom] (0,1,1) circle (4pt);
-%  \fill[atom] (1,1,1) circle (4pt);
   \fill[atom] (\z,\z,\z) circle (4pt);
   \fill[atom] (\o,\z,\z) circle (4pt);
   \fill[atom] (\z,\o,\z) circle (4pt);
@@ -50,40 +40,38 @@
 \end{tikzpicture}
 
 
-
 % MORSE POTENTIAL
 \begin{tikzpicture}
-  \def\A{2.4}
-  \def\a{1}
-  \def\r{1.5}
+  \def\A{1.9}
+  \def\a{1.1}
+  \def\r{1.2}
   \def\m{1}
   \def\N{30}
-  \def\xlow{{0.45*\r}}
-  \def\xmax{6}
-  \def\ymax{4}
-  \def\Emin{0.3}
-  \def\yA{-.6}
+  \def\xlow{{0.39*\r}}
+  \def\xmax{4.8}
+  \def\ymax{3.0}
+  \def\Emin{0.28}
+  \def\yA{-.5}
   \def\E#1{{\Emin*(#1+1/2) - (\Emin*(#1+1/2))^2/(4*\A)}}
-  \def\morse{plot (\x,{\A*(1-exp(-\a*(\x-\r)))^2})}
   
   % AXIS
-  \draw[->,thick] (0,-0.05*\ymax) -- (0,\ymax)
-       node[left=2,anchor=south east,rotate=90,scale=0.9] {potential $U$};
+  \draw[->,thick] (0,-0.04*\xmax) -- (0,\ymax)
+       node[left=2,anchor=south east,rotate=90,scale=0.9] {Potential $U$};
   \draw[->,thick] (-0.05*\xmax,0) -- (\xmax,0)
-       node[left=2,anchor=north east,scale=0.9] {separation $x$};
+       node[left=2,anchor=north east,scale=0.9] {Separation $x$};
   
   % MORSE POTENTIAL
-  \draw[very thick,blue!50!black,variable=\x,domain=\xlow:\xmax,samples=\N,smooth,name path=morse]
-    \morse;
+  \draw[very thick,blue!50!black,variable=\x,domain=\xlow:0.97*\xmax,samples=\N,smooth,name path=morse]
+    plot (\x,{\A*(1-exp(-\a*(\x-\r)))^2});
   
   \path[name path=line1] (0,\E{0}) --++ (\xmax,0);
       
   % ENERGY LEVEL
-  \foreach \i in {0,...,10}{
+  \foreach \i in {0,...,8}{
     \path[name path=level\i] (0,\E{\i}) --++ (\xmax,0);
     \draw[thick,red!50!black,name intersections={of=morse and level\i,name=E\i}]
       (E\i-1) -- (E\i-2);
-    \ifthenelse{\i < 5}{ \node[right=2pt,red!50!black,scale=0.8] at (E\i-2) {$T_\i$}; }{}
+    \ifthenelse{\i < 5}{ \node[right=2.2,red!50!black,scale=0.75] at (E\i-2) {$T_\i$}; }{}
     \fill[red]
       ($(E\i-1)!0.5!(E\i-2)$) circle (1pt) coordinate (E\i);
   }
@@ -92,16 +80,15 @@
   \def\i{2}
   \draw[dashed,red] (E\i) -- (E\i |- 0,\yA) coordinate (A\i) --++ (0,.4*\yA);
     %node [below,red!90!black,scale=0.8] {$\langle r \rangle$};
-  \draw[thick,black!80,decorate,decoration={coil,amplitude=4pt,segment length=4pt}]
+  \draw[thick,black!80,decorate,decoration={coil,amplitude=3.3pt,segment length=3.3pt}]
     (0.08,\yA) -- ($(0,\yA)!0.95!(A\i)$);
-  \fill[atom] (0,\yA) circle (5pt);
-  \fill[atom] (A\i) circle (5pt)
+  \fill[atom] (0,\yA) circle (0.14);
+  \fill[atom] (A\i) circle (0.14)
     node[right=5,red!50!black,scale=0.8] {at $T_\i$};
   \draw[{Stealth[scale=1,length=3,width=4]}-{Stealth[scale=1,length=3,width=4]},very thick,red!50!black]
     (E\i-1 |- 0,.4*\yA) -- (E\i-2 |- 0,.4*\yA);
   
 \end{tikzpicture}
-
 
 
 %% MORSE POTENTIAL (PGF)
@@ -144,7 +131,6 @@
 %    
 %  \end{axis}
 %\end{tikzpicture}
-
 
 
 \end{document}

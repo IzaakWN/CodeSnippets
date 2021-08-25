@@ -3,20 +3,15 @@
 % https://tex.stackexchange.com/questions/56353/extract-x-y-coordinate-of-an-arbitrary-point-on-curve-in-tikz
 % https://tex.stackexchange.com/questions/412899/tikz-calculate-and-store-the-euclidian-distance-between-two-coordinates
 \documentclass[border=3pt,tikz]{standalone}
-\usepackage{amsmath} % for \dfrac
-\usepackage{mathabx} % for \Earth
-\usepackage{bm} % \bm
 \usepackage{physics}
+\usepackage{bm}
 \usetikzlibrary{3d}
 \usepackage{tikz,pgfplots}
-\usepackage[outline]{contour} % glow around text
-\usepackage{ifthen}
 \usetikzlibrary{calc}
 \usetikzlibrary{intersections}
 \usetikzlibrary{decorations.markings}
 \tikzset{>=latex} % for LaTeX arrow head
 \pgfplotsset{compat=1.13}
-\contourlength{1.2spt}
 \usepackage{xcolor}
 \colorlet{Ecol}{orange!90!black}
 \colorlet{EcolFL}{orange!80!black}

@@ -5,8 +5,6 @@
 \usepackage{physics}
 \usepackage{siunitx}
 \usepackage[outline]{contour} % glow around text
-%\usetikzlibrary{intersections}
-%\usetikzlibrary{decorations.markings}
 \usetikzlibrary{angles,quotes} % for pic
 \usetikzlibrary{calc}
 \contourlength{1.3pt}
@@ -18,15 +16,13 @@
 \colorlet{xcol}{blue!70!black}
 \colorlet{vcol}{green!70!black}
 \colorlet{acol}{red!50!blue!80!black!80}
-%\colorlet{unitcol}{xcol!60!black!85}
-%\colorlet{unitcol2}{vcol!60!black!85}
+\colorlet{omcol}{vcol!60!black}
 \colorlet{myblue}{blue!70!black}
 \colorlet{myred}{red!70!black}
 \tikzstyle{vector}=[->,very thick,xcol,line cap=round]
 \tikzstyle{mydashed}=[dash pattern=on 2pt off 2pt]
 \tikzstyle{mass}=[line width=0.6,red!30!black,fill=red!40!black!10,rounded corners=1,
                   top color=red!40!black!20,bottom color=red!40!black!10,shading angle=20]
-%\def\tick#1#2{\draw[thick] (#1) ++ (#2:0.1) --++ (#2-180:0.2)} %0.03*\xmax
 \newcommand\rightAngle[4]{
   \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}{\pgfpointanchor{#3}{center}}
   \coordinate (tmpRA) at ($(#2)+(\pgfmathresult+45:#4)$);
@@ -55,7 +51,7 @@
   \draw[vector,acol]
     (R) --++ (\ang+180:0.6) node[midway,below=0,above left=-1] {$\vb{a}$};
   \fill[red!50!black] (R) circle (0.1);
-  \draw[->,vcol!70!black] (\ang+30:0.6*\R) arc(\ang+20:\ang+70:0.4*\R) node[midway,above] {$\omega$};
+  \draw[->,omcol] (\ang+30:0.6*\R) arc(\ang+20:\ang+70:0.4*\R) node[midway,above] {$\omega$};
 \end{tikzpicture}
 
 
@@ -73,7 +69,7 @@
   \draw[vector,acol]
     (R) --++ (\ang+180:2.4) node[midway,below=0,below left=-1] {$4\vb{a}$};
   \fill[red!50!black] (R) circle (0.1);
-  \draw[->,vcol!70!black] (\ang+30:0.5*\R) arc(\ang+20:\ang+70:0.4*\R) node[midway,above left=-2] {$2\omega$};
+  \draw[->,omcol] (\ang+30:0.5*\R) arc(\ang+20:\ang+70:0.4*\R) node[midway,above left=-2] {$2\omega$};
 \end{tikzpicture}
 
 
@@ -91,7 +87,7 @@
   \draw[vector,acol]
     (R) --++ (\ang+180:1.2) node[midway,below=0,below left=-1] {$2\vb{a}$};
   \fill[red!50!black] (R) circle (0.1);
-  \draw[->,vcol!70!black] (\ang+60:1.4*\R) arc(\ang+60:\ang+100:1.1*\R) node[midway,left=-1] {$\omega$};
+  \draw[->,omcol] (\ang+60:1.4*\R) arc(\ang+60:\ang+100:1.1*\R) node[midway,left=-1] {$\omega$};
 \end{tikzpicture}
 
 

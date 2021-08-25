@@ -3,7 +3,6 @@
 \usepackage{ifthen}
 \usepackage{siunitx}
 \usepackage{tikz}
-%\usepackage{pgfplots}
 \usetikzlibrary{hobby} % for ..
 \usetikzlibrary{arrows.meta} % to control arrow size
 \tikzset{>={Latex[length=4,width=4]}} % for LaTeX arrow head
@@ -33,6 +32,7 @@
 % PHASE TRANSITIONS
 \begin{tikzpicture}[arrow/.style={->,thick,mydarkblue,shorten <=2,shorten >=2},
                     box/.style={thick,rounded corners=4,inner xsep=6,inner ysep=3}]
+  \message{Phase transitions^^J}
   
   \node[blue!10!white,draw=mydarkblue,fill=blue!50!gray!80!black,box] (S) at (-2.4,0) {\strut solid};
   \node[blue!10!white,draw=mydarkblue,fill=blue!80!white,box] (L) at (2.4,0) {\strut liquid};
@@ -50,9 +50,9 @@
 \end{tikzpicture}
 
 
-
 % PHASE DIAGRAM
 \begin{tikzpicture}[scale=0.4]
+  \message{Phase diagrams^^J}
   
   \def\xtick#1#2{\draw[thick] (#1)++(0,.2) --++ (0,-.4) node[below=-.5pt,scale=0.7] {#2};}
   \def\ytick#1#2{\draw[thick] (#1)++(.2,0) --++ (-.4,0) node[left=-.5pt,scale=0.7] {#2};}
@@ -123,9 +123,9 @@
 \end{tikzpicture}
 
 
-
 % PHASE DIAGRAM
 \begin{tikzpicture}[scale=0.4]
+  \message{Phase diagrams 2^^J}
   
   \def\xtick#1#2{\draw[thick] (#1)++(0,.2) --++ (0,-.4) node[below=-.5pt,scale=0.7] {#2};}
   \def\ytick#1#2{\draw[thick] (#1)++(.2,0) --++ (-.4,0) node[left=-.5pt,scale=0.7] {#2};}
@@ -180,9 +180,9 @@
 \end{tikzpicture}
 
 
-
 % PV diagram - isotherms
 \begin{tikzpicture}
+  \message{PV diagram - isotherms^^J}
   \def\tick{0.05*\xmax}
   \def\xmax{4}
   \def\ymax{3}
@@ -212,9 +212,9 @@
 \end{tikzpicture}
 
 
-
 % PV diagram - van der Waals isotherms
 \begin{tikzpicture}
+  \message{PV diagram - van der Waals isotherms^^J}
   \def\tick{0.05*\xmax}
   \def\xmax{4}
   \def\ymax{3}
@@ -259,9 +259,9 @@
 \end{tikzpicture}
 
 
-
 % PV diagram - Maxwell construction
 \begin{tikzpicture}
+  \message{PV diagram - Maxwell construction^^J}
   \def\xmax{4}
   \def\ymax{3}
   \def\N{110}
@@ -293,7 +293,8 @@
   
   \begin{scope}
     \clip (0,0) rectangle (.96*\xmax,.96*\ymax);
-    \fill[myblue!10,draw=mydarkblue!40,thin,use Hobby shortcut]
+    \fill[top color=myblue!10,bottom color=myred!10,middle color=myred!10,shading angle=110,
+          draw=mydarkblue!40,thin,use Hobby shortcut]
       (.06*\xmax,0) -- (pe0-1) -- (pe1-1) -- (pe2-1) -- (pe3-1) --
       (pe4-1) to[out=80,in=180]
       (C) to[out=0,in=135]
@@ -303,7 +304,17 @@
       (pe1-3) to[out=-15,in=170]
       (pe0-3) to[out=-10,in=172]
       (.97*\xmax,.144*\ymax) |- (0,0);
+    \draw[mydarkred!40,thin,use Hobby shortcut]
+      (C) to[out=0,in=135]
+      (pe4-3) to[out=-42,in=145]
+      (pe3-3) to[out=-35,in=155]
+      (pe2-3) to[out=-25,in=165]
+      (pe1-3) to[out=-15,in=170]
+      (pe0-3) to[out=-10,in=172]
+      (.97*\xmax,.144*\ymax) |- (0,0);
   \end{scope}
+  \node[blue!40!black!90,below right=-1,scale=0.6] at (pe0-1) {\strut liquid};
+  \node[red!40!black!90,below=-1,scale=0.6] at (pe0-3) {\strut gas};
   
   % MAXWELL CONSTRUCTION
   \fill (C) circle (1pt);
@@ -320,7 +331,6 @@
     node[anchor=north east,inner sep=4,scale=0.8] {$V$};
   
 \end{tikzpicture}
-
 
 
 %%% PV diagram - van der Waals isotherms (PGF)
@@ -351,8 +361,9 @@
 %%\end{tikzpicture}
 
 
-% PHASE TRANSITIONS
+% PHASE TRANSITIONS - ice -> water -> steam
 \begin{tikzpicture}
+  \message{Phase transition of ice -> water -> steam^^J}
   \def\ymin{-0.8}
   \def\ymax{3}
   \def\xmin{-0.2}
@@ -389,7 +400,7 @@
   \draw[dashed] (Ex) -- (E) --++ (0,0.1*\ymax);
   \draw[dashed] (Ey) -- (E);
   \draw[dashed] (Sx) -- (S) --++ (0,0.1*\ymax);
-  \tick{I}{0} node[left=-1] {$20$};
+  \tick{I}{0} node[left=-1] {$-20$};
   \tick{Ey}{0} node[left=-1] {$100$};
   
   \draw[dashed] (E) -- (Ex);
@@ -397,13 +408,14 @@
     (I) -- (M) -- (W)
       node[midway,above=-1,scale=0.8] {melt}
       node[midway,below=-1,scale=0.8] {$mL_\mathrm{f}$} --
-    (E) -- (S)
+    (E)
+      node[pos=0.6,left=1,scale=0.8] {$mc\Delta T$} --
+    (S)
       node[midway,above=-1,scale=0.8] {evaporate (cook)}
       node[midway,below=-1,scale=0.8] {$mL_\mathrm{v}$} --
     (F);
   
 \end{tikzpicture}
-
 
 
 \end{document}

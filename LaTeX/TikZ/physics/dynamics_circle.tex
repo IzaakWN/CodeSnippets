@@ -44,12 +44,13 @@
   \coordinate (F0) at ($(M)+(104:0.8*\r)$);
   \coordinate (F) at ($(F0)+(90:\F)$);
   \draw[very thin,xcol] (O) circle (\R);
-  \draw[->,dashed] (O) -- (60:\R) node[midway,above left=-2] {$r$};
+  \draw[->,dashed] (O) -- (70:\R) node[midway,above left=-2] {$r$};
   \draw[thick,line cap=round] (O) -- (\R,0); %node[midway,above left=-2] {$r$};
   \draw[thin,mass] (M) circle (\r) node[right=5] {$m$};
   \draw[force] (M)++(140:0.7*\r) --++ (-\F,0) node[below=1,above left=-4] {$\vb{F}_\mathrm{c}$};
   \draw[force,acol] (M)++(-140:0.7*\r) --++ (-0.8*\F,0) node[below left=-3] {$\vb{a}$};
   \draw[force,vcol] (M)++(90:0.8*\r) --++ (0,0.9*\F) node[right=0] {$\vb{v}$};
+  \draw[->,vcol!50!black] (15:0.9*\R) arc(15:40:0.85*\R) node[above left=-3] {$\omega$};
 \end{tikzpicture}
 
 

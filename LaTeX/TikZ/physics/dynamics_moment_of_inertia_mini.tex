@@ -16,6 +16,7 @@
 \tikzstyle{rvec}=[->,xcol,very thick,line cap=round]
 \tikzstyle{mass line}=[line width=0.5,draw=red!30!black]
 \tikzstyle{myarr}=[-{Latex[length=3,width=2]},blue!40!black]
+\tikzstyle{myarr2}=[{Latex[length=3,width=2]}-{Latex[length=3,width=2]},blue!40!black]
 \tikzstyle{mass}=[mass line, %rounded corners=1,
                   top color=red!40!black!30,bottom color=red!40!black!10,shading angle=30]
 \tikzstyle{middle mass}=[mass line,top color=red!40!black!50,bottom color=red!40!black!50,
@@ -25,7 +26,7 @@
 \tikzset{
   pics/rotarr/.style={
     code={
-      %\draw[white,very thick] ({#1*cos(200)},0) arc(-200:30:{#1} and {#1/2}) --++ (125:0.1);
+      \draw[white,line width=0.8] ({#1*cos(210)},0) arc(-210:35:{#1} and {0.35*#1});
       \draw[-{>[flex'=1]}] ({#1*cos(210)},0) coordinate (W1) arc(-210:35:{#1} and {0.35*#1})
         node[midway] (W2) {} --++ (150:0.1) coordinate (W3);
   }},
@@ -36,25 +37,27 @@
 \begin{document}
 \LARGE
 
-%% MOMENT OF INERTIA - masses on rods
-%\begin{tikzpicture}
-%  \def\R{1.9}   % circle radius
-%  \def\r{1.4}   % mass radius (inner sep)
-%  \def\ang{40}  % mass anglular position
-%  \coordinate (O) at (0,0);
-%  \coordinate (L) at (-\R/2,0);
-%  \coordinate (R) at ( \R/2,0);
-%  \draw[dashed] (0,-0.5*\R) -- (0,0.55*\R) coordinate (T);
-%  \pic[scale=1] at ($(T)+(0,-0.1*\R)$) {rotarr};
-%  \node[below right=1] at (W3) {$\omega$};
-%  \draw[line width=1.8,red!25!black] (L) -- (R);
-%  \node[mass,circle,inner sep=\r] (L') at (L) {$m$};
-%  \node[mass,circle,inner sep=\r] (R') at (R) {$m$};
-%  \draw[<->] (L)++(0,-0.2*\R) --++ ( \R/2,0) node[midway,fill=white,inner sep=1] {$r$}; %\frac{r}{2}
-%  \draw[<->] (R)++(0,-0.2*\R) --++ (-\R/2,0) node[midway,fill=white,inner sep=1] {$r$};
-%\end{tikzpicture}
-%
-%
+% MOMENT OF INERTIA - masses on rods
+\def\ang{-20} % angle of whole picture
+\begin{tikzpicture}[rotate=\ang]
+  \def\h{0.9}   % length z axis
+  \def\L{3.0}   % length rod
+  \def\R{1.9}   % circle radius
+  \def\r{1.4}   % mass radius (inner sep)
+  \coordinate (O) at (0,0);
+  \coordinate (L) at (-\R/2,0);
+  \coordinate (R) at ( \R/2,0);
+  \draw (0,-\h) -- (0,\h) coordinate (T);
+  \pic[xscale=1,rotate=\ang] at (0,0.7*\h) {rotarr};
+  \node[below=1,right=1] at (W3) {$\omega$};
+  \draw[line width=1.8,red!25!black] (L) -- (R);
+  \node[mass,circle,inner sep=\r,scale=0.8] (L') at (L) {$m$};
+  \node[mass,circle,inner sep=\r,scale=0.8] (R') at (R) {$m$};
+  \draw[<->] (L)++(0,-0.2*\R) --++ ( \R/2,0) node[midway,below=-1] {$r$}; %\frac{r}{2}
+  \draw[<->] (R)++(0,-0.2*\R) --++ (-\R/2,0) node[midway,below=-1] {$r$};
+\end{tikzpicture}
+
+
 %% MOMENT OF INERTIA - masses on rods - shifted
 %\begin{tikzpicture}
 %  \def\R{1.9}   % circle radius
@@ -71,44 +74,51 @@
 %  \node[mass,circle,inner sep=\r] (R') at (R) {$m$};
 %  \draw[<->] (L)++(0,-0.2*\R) --++ (\R,0) node[midway,fill=white,inner sep=1] {$r$};
 %\end{tikzpicture}
-%
-%
-%% MOMENT OF INERTIA - masses on rods
-%\begin{tikzpicture}
-%  \def\R{1.9}   % circle radius
-%  \def\r{1.4}   % mass radius (inner sep)
-%  \def\ang{40}  % mass anglular position
-%  \coordinate (O) at (0,0);
-%  \coordinate (L) at (-\R/2,0);
-%  \coordinate (R) at ( \R/2,0);
-%  \draw[dashed] (-0.9*\R,0) -- (0.9*\R,0) coordinate (T);
-%  \pic[scale=1,rotate=90] at ($(T)+(-0.2*\R,0)$) {rotarr};
-%  \node[above=10,right=-1] at (W2) {$\omega$};
-%  \draw[line width=1.8,red!25!black] (L) -- (R);
-%  \node[mass,circle,inner sep=\r] (L') at (L) {$m$};
-%  \node[mass,circle,inner sep=\r] (R') at (R) {$m$};
-%\end{tikzpicture}
 
 
-%% MOMENT OF INERTIA - RING 2D
-%\begin{tikzpicture}
-%  \def\R{1.4}
-%  \def\dr{0.15}
-%  \def\ang{40}
-%  \def\angdr{14}
-%  \coordinate (O) at (0,0);
-%  \coordinate (R) at (\ang:\R+\dr/2);
-%  \draw[mass,even odd rule]
-%    (O) circle(\R) circle(\R+\dr);
-%  \draw[->] (O) -- (-20:\R+\dr/2) node[midway,fill=white,inner sep=1] {$R$};
-%\end{tikzpicture}
+% MOMENT OF INERTIA - ROD
+\def\h{0.8}   % length z axis
+\def\L{3.0}   % length rod
+\def\Ry{0.12} % horizontal radius
+\def\Rx{0.04} % vertical radius
+\def\ang{-20} % angle of whole picture
+\def\rod{
+  \draw[middle mass,shading angle=\ang+30]
+    (-\L/2,-\Ry) coordinate (BL) -++ (\L,0)
+    arc(270:90:{\Rx} and {\Ry}) --++ (-\L,0)
+    arc(90:270:{\Rx} and {\Ry});
+  \draw[middle mass,shading angle=\ang+30]
+    (\L/2,0) ellipse({\Rx} and {\Ry});
+}
+\begin{tikzpicture}[rotate=\ang]
+  \draw[line cap=round] (0,0) --++ (0,-\h);
+  \rod
+  \draw[line cap=round] (0,0.8*\Ry) --++ (0,\h);
+  \pic[xscale=1,rotate=\ang] at (0,0.7*\h) {rotarr};
+  \node[right=0] at (W3) {$\omega$};
+  \draw[white,line width=0.7] (BL)++(0,-1.8*\Ry) --++ (\L,0);
+  \draw[myarr2] (BL)++(0,-1.8*\Ry) --++ (\L,0)
+    node[pos=0.3,below=-1,scale=0.9] {$L$};
+\end{tikzpicture}
 
 
-% MOMENT OF INERTIA - RING
+% MOMENT OF INERTIA - ROD (axis through end)
+\begin{tikzpicture}[rotate=\ang]
+  \rod
+  \draw[line cap=round] (\L/2,-0.8*\h) --++ (0,2*\h);
+  \pic[xscale=1,rotate=\ang] at (\L/2,0.7*\h) {rotarr};
+  \node[right=0] at (W3) {$\omega$};
+  \draw[white,line width=0.7] (BL)++(0,-1.8*\Ry) --++ (\L,0);
+  \draw[myarr2] (BL)++(0,-1.8*\Ry) --++ (\L,0)
+    node[midway,below=-1,scale=0.9] {$L$};
+\end{tikzpicture}
+
+
+% MOMENT OF INERTIA - DISK
 \def\H{0.12}  % thickness
 \def\Rx{0.90} % horizontal radius
 \def\Ry{0.35} % vertical radius
-\def\ang{-35}
+\def\ang{-35} % angle of whole picture
 \begin{tikzpicture}[rotate=\ang]
   \coordinate (O) at (0,\H);
   \draw[line cap=round] (0,0) --++ (0,-2.0*\Ry);
@@ -149,7 +159,7 @@
 \end{tikzpicture}
 
 
-% MOMENT OF INERTIA - SOLID DISK
+% MOMENT OF INERTIA - RING
 \begin{tikzpicture}[rotate=\ang]
   \def\sx{0.85}
   \def\sy{0.68}
@@ -235,7 +245,7 @@
   \coordinate (O) at (0,0);
   \draw (O) -- (0,-1.3*\R);
   \draw[ball color=myred] (O) circle(\R);
-  \draw[line width=0.6,draw=red!30!black,fill=red!40!black!10,fill opacity=0.80]
+  \draw[line width=0.6,draw=red!30!black,fill=red!40!black!10,fill opacity=0.76]
     (O) circle(\R);
   \draw[line cap=round] (0,0.85*\R) -- (0,1.45*\R);
   \pic[xscale=1,rotate=\ang] at (0,1.3*\R) {rotarr};
@@ -251,7 +261,7 @@
   \draw[ball color=myred] (O) circle(\R);
   \draw[opacity=0.3] (0,-\R) -- (0,-0.85*\R);
   \draw[line cap=round] (0,-0.85*\R) -- (0,0.9*\R);
-  \draw[line width=0.6,draw=red!30!black,fill=red!40!black!10,fill opacity=0.80]
+  \draw[line width=0.6,draw=red!30!black,fill=red!40!black!10,fill opacity=0.76]
     (O) circle(\R);
   \draw[line cap=round] (0,0.85*\R) -- (0,1.45*\R);
   \pic[xscale=1,rotate=\ang] at (0,1.3*\R) {rotarr};

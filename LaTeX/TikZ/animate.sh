@@ -5,11 +5,11 @@
 
 function peval { echo -e ">>> $@"; eval "$@"; }
 
-RESO="1000" # GIF DPI resolution
+RESO="1200" # GIF DPI resolution
 DELAY="200" # GIF delay
 FIRST=0 # first index
 WHITE=0 # deactivate alpha, white background
-NPAGES=-1
+MAXNPAGES=-1
 OPEN=0
 VERBOSE=0
 while getopts 'd:i:n:or:vw' option; do
@@ -17,7 +17,7 @@ while getopts 'd:i:n:or:vw' option; do
     w) WHITE=1;;
     d) DELAY=${OPTARG};;
     i) FIRST=${OPTARG};;
-    n) NPAGES=${OPTARG};;
+    n) MAXNPAGES=${OPTARG};;
     o) OPEN=1;;
     r) RESO=${OPTARG};;
     v) VERBOSE=1;;
@@ -41,7 +41,8 @@ GIFS=""
 for pdf in $PDFS; do
   echo ">>> "
   [[ ! $pdf = *".pdf" ]] && echo ">>> Warning! Invalid input: $pdf! Ignoring..." && continue
-  if [[ $NPAGES -lt 2 ]]; then
+  NPAGES=$MAXNPAGES
+  if [[ $NPAGES -lt 1 ]]; then # get npages from file
     NPAGES="$(identify $pdf | wc -l | xargs)" #`identify -format "%n" $pdf` # number of pages
     [[ ! "$NPAGES" ]] && echo ">>> Warning! Could not get PDF pages! Ignoring..." && continue
     [[ $NPAGES -lt 2 ]] && echo ">>> Warning! Not enough pages ($NPAGES) in $pdf! Ignoring..." && continue

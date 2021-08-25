@@ -56,23 +56,20 @@
 \begin{document}
 
 
-% DISK - no angular momentum
+% DISK 3D
 \begin{tikzpicture}
   \def\h{1.6}  % pivot height
-  \def\w{0.6}  % pivot width
+  \def\w{0.5}  % pivot width
   \def\t{0.2}  % wheel thickness
   \def\R{1.2}  % wheel radius
-  \def\b{0.5}  % wheel radius horizontal scale
-  \def\L{0.8}  % handle length
+  \def\b{0.6}  % wheel radius horizontal scale
+  \def\L{0.9}  % handle length
   \def\r{0.08} % handle radius
-  \def\ang{15}
+  \def\ang{8}
   \coordinate (O) at (0,0);
   \coordinate (T) at (-40:1.8*\t);
-  \coordinate (F) at (-\L+0.05,0);
-  \draw[thick,rounded corners=2,blue!20!black,
-        top color=blue!40!black!50,bottom color=blue!40!black!15,shading angle=20]
-    (\ang-180:\L-0.05)++(0,-\r+0.04) --++ (-\w/2,-\h) to[out=-20,in=-160]++ (\w,0) -- cycle;
-  \draw[metal]
+  %\coordinate (F) at (-\L+0.05,0);
+  \draw[metal] % handle back
     (\ang:\t)++(0,\r)
       arc(90+\ang/2:-90+\ang/2:{\r*\b} and \r) --++ (\ang:\L) coordinate (P)
       arc(-90+\ang/2:90+\ang/2:{\r*\b} and \r) -- cycle;
@@ -81,7 +78,10 @@
     arc(90+\ang/2:-90+\ang/2:{\b*\R} and \R) --++ (\ang-180:\t)
     arc(-90+\ang/2:90+\ang/2:{\b*\R} and \R);
   \draw[mass,rounded corners=0.9] (O) ellipse ({\b*\R} and \R);
-  \draw[metal]
+  \draw[thick,rounded corners=2,blue!20!black, % pivot
+        top color=blue!40!black!50,bottom color=blue!40!black!15,shading angle=20]
+    (\ang-180:\L-0.05)++(0,-\r+0.04) --++ (-\w/2,-\h) to[out=-20,in=-160]++ (\w,0) -- cycle;
+  \draw[metal] % handle front
     (0,\r) arc(90+\ang/2:-90+\ang/2:{\r*\b} and \r) --++ (\ang-180:\L) coordinate (P)
            arc(-90+\ang/2:90+\ang/2:{\r*\b} and \r) coordinate (F) -- cycle;
   \draw[metal] (P) arc(-90+\ang/2:270+\ang/2:{\r*\b} and \r);
@@ -159,14 +159,14 @@
   \draw[mass,rounded corners=0.9] (O)++(-\t/2,-\R) rectangle++ (\t,2*\R);
   \draw[CM] (O) circle(0.35*\t); %node[above right=2,scale=0.9] {$M$};
   \draw[dashed,xcol] (F) circle(\L-0.05);
-  \draw[force,vcol!80!black!50] (O) --++ (20:1.9*\L) coordinate (DL); 
+  \draw[force,vcol!80!black!50] (O) --++ (17:1.9*\L) coordinate (DL); 
   \draw[force,vcol!80!black!50] (L) -- (DL) node[right=-1] {$\dd{\vb{L}}$};
   \draw[force,vcol] (O) -- (L) node[below=-1] {$\vb{L}$};
   \draw[force,acol] (O) --++ (0,0.7*\R) node[below right=1] {$\vb*{\tau}$};
   %\pic[scale=1] at (T) {Tin};
   %\node[mypurple,below=2,right=1] at (T) {$\vb*\tau$};
   \draw[->] (F)++(110:1.3*\L) arc(110:160:1*\L) node[midway,above left=-3] {$\omega_\mathrm{p}$};
-  \draw pic["$\dd{\theta}$",draw,angle radius=24.5,angle eccentricity=1.28] {angle=L--O--DL};
+  \draw pic["$\dd{\theta}$"{scale=0.9},draw,angle radius=26.5,angle eccentricity=1.24] {angle=L--O--DL};
 \end{tikzpicture}
 
 
@@ -175,7 +175,7 @@
   \def\L{1.8}
   \coordinate (O) at (0,0);
   \coordinate (L) at (\L,0);
-  \draw[force,vcol!80!black!50] (O) --++ (20:\L) coordinate (DL); 
+  \draw[force,vcol!80!black!50] (O) --++ (15:\L) coordinate (DL); 
   \draw[force,vcol!80!black!50] (L) -- (DL) node[midway,above=1,right=-1] {$\dd{\vb{L}}$};
   \draw[force,vcol] (O) -- (L) node[below=-1] {$\vb{L}$};
   \draw[force,acol] (O) --++ (0,0.5*\L) node[below right=1] {$\vb*{\tau}$};

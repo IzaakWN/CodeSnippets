@@ -45,11 +45,9 @@
 
 
 
-
-
-
 % GAUSSIANs: basic properties
 \begin{tikzpicture}
+  \message{Cumulative probability^^J}
   
   \def\B{11};
   \def\Bs{3.0};
@@ -93,14 +91,15 @@
 
 
 
-% GAUSSIANs: basic properties
+% GAUSSIANs: 68-95-99 rule
 \begin{tikzpicture}
+  \message{68-95-99 rule^^J}
   
   \def\B{11};
   \def\Bs{3.0};
   \def\xmax{\B+3.2*\Bs};
   \def\ymin{{-0.1*gauss(\B,\B,\Bs)}};
-  \def\h{0.1*gauss(\B,\B,\Bs)};
+  \def\h{0.08*gauss(\B,\B,\Bs)};
   
   \begin{axis}[every axis plot post/.append style={
                mark=none,domain={-0.05*(\xmax)}:{1.08*\xmax},samples=\N,smooth},
@@ -129,28 +128,26 @@
     
     % LINES
     \addplot[black,dashed,thick]
-      coordinates {({\B-3*\Bs},{18*gauss(\B-3*\Bs,\B,\Bs)}) ({\B-3*\Bs},{-\h})};
+      coordinates {({\B-3*\Bs},{20*gauss(\B-3*\Bs,\B,\Bs)}) ({\B-3*\Bs},{-\h})}
+      node[below=-3pt,scale=0.8] {\strut$\mu-3\sigma$};
     \addplot[black,dashed,thick]
-      coordinates {({\B-2*\Bs},{3*gauss(\B-2*\Bs,\B,\Bs)}) ({\B-2*\Bs},{-\h})};
+      coordinates {({\B-2*\Bs},{4*gauss(\B-2*\Bs,\B,\Bs)}) ({\B-2*\Bs},{-\h})}
+      node[below=-3pt,scale=0.8] {\strut$\mu-2\sigma$};
     \addplot[black,dashed,thick]
-      coordinates {({\B-1*\Bs},{1.2*gauss(\B-\Bs,\B,\Bs)}) ({\B-1*\Bs},{-\h})};
+      coordinates {({\B-1*\Bs},{1.3*gauss(\B-\Bs,\B,\Bs)}) ({\B-1*\Bs},{-\h})}
+      node[below=-3pt,scale=0.8] at ({\B-\Bs},{-\h}) {\strut$\mu-\sigma$};
     \addplot[black,dashed,line width=0.7pt]
-      coordinates {(\B,{1.05*gauss(\B,\B,\Bs)}) (\B,{-\h})};
+      coordinates {(\B,{1.05*gauss(\B,\B,\Bs)}) (\B,{-\h})}
+      node[below=-3pt,scale=0.8] {\strut$\mu$};
     \addplot[black,dashed,thick]
-      coordinates {({\B+1*\Bs},{1.2*gauss(\B+\Bs,\B,\Bs)}) ({\B+1*\Bs},{-\h})};
+      coordinates {({\B+1*\Bs},{1.3*gauss(\B+\Bs,\B,\Bs)}) ({\B+1*\Bs},{-\h})}
+      node[below=-3pt,scale=0.8] at ({\B+\Bs},{-\h}) {\strut$\mu+\sigma$};
     \addplot[black,dashed,thick]
-      coordinates {({\B+2*\Bs},{3*gauss(\B+2*\Bs,\B,\Bs)}) ({\B+2*\Bs},{-\h})};
+      coordinates {({\B+2*\Bs},{4*gauss(\B+2*\Bs,\B,\Bs)}) ({\B+2*\Bs},{-\h})}
+      node[below=-3pt,scale=0.8] at ({\B+2*\Bs},{-\h}) {\strut$\mu+2\sigma$};
     \addplot[black,dashed,thick]
-      coordinates {({\B+3*\Bs},{18*gauss(\B+3*\Bs,\B,\Bs)}) ({\B+3*\Bs},{-\h})};
-    
-    % LABELS
-    \node[below=-2pt,scale=0.8] at ({\B-3*\Bs},{-\h}) {\strut$\mu-3\sigma$};
-    \node[below=-2pt,scale=0.8] at ({\B-2*\Bs},{-\h}) {\strut$\mu-2\sigma$};
-    \node[below=-2pt,scale=0.8] at ({\B-\Bs},{-\h}) {\strut$\mu-\sigma$};
-    \node[below=-2pt,scale=0.8] at (\B,{-\h}) {\strut$\mu$};
-    \node[below=-2pt,scale=0.8] at ({\B+\Bs},{-\h}) {\strut$\mu+\sigma$};
-    \node[below=-2pt,scale=0.8] at ({\B+2*\Bs},{-\h}) {\strut$\mu+2\sigma$};
-    \node[below=-2pt,scale=0.8] at ({\B+3*\Bs},{-\h}) {\strut$\mu+3\sigma$};
+      coordinates {({\B+3*\Bs},{20*gauss(\B+3*\Bs,\B,\Bs)}) ({\B+3*\Bs},{-\h})}
+      node[below=-3pt,scale=0.8] at ({\B+3*\Bs},{-\h}) {\strut$\mu+3\sigma$};
     
     % AREAS
     \addplot[<->,mydarkblue,thick]
@@ -173,6 +170,7 @@
 
 % GAUSSIANs: error bands
 \begin{tikzpicture}
+  \message{Error bands^^J}
   
   \def\B{10};
   \def\Bs{3.0};
@@ -228,6 +226,7 @@
 
 % GAUSSIANs: confidence level
 \begin{tikzpicture}
+  \message{Confidence level^^J}
   
   \def\q{5};
   \def\B{3};
@@ -281,6 +280,7 @@
 
 % GAUSSIANs: p-value
 \begin{tikzpicture}[inner frame sep=0]
+  \message{p-value^^J}
   
   \def\q{5};
   \def\B{3};
@@ -327,6 +327,7 @@
 
 % GAUSSIANs: p-value, PLR
 \begin{tikzpicture}
+  \message{p-value, PLR^^J}
   
   \def\q{4.8}
   \def\Bs{2.6}
@@ -370,6 +371,7 @@
 
 % GAUSSIANs: p-value, PLR f(q|mu)
 \begin{tikzpicture}
+  \message{p-value, PLR f(q|mu)^^J}
   
   \def\q{4.8}
   \def\S{1}
@@ -403,6 +405,7 @@
 
 % GAUSSIANs: expected sensitivity / p-value
 \begin{tikzpicture}
+  \message{Expected sensitivty & p-value^^J}
   
   \def\q{4.8}
   \def\Bs{2.6}
@@ -449,8 +452,9 @@
 
 
 
-% GAUSSIANs: bias, variance
+% GAUSSIANs: bias & systematic error (variance)
 \begin{tikzpicture}[inner frame sep=0]
+  \message{Bias & systematic error^^J}
   
   \def\B{8};
   \def\T{4};
@@ -500,8 +504,9 @@
 
 
 
-% GAUSSIANs: broading from nuisance parameter
+% GAUSSIANs: broadening from nuisance parameter
 \begin{tikzpicture}
+  \message{Nuisance parameter^^J}
   
   \def\B{3};
   \def\S{8};
@@ -538,6 +543,7 @@
 
 % GAUSSIANs: p-value normal distributions
 \begin{tikzpicture}[inner frame sep=0]
+  \message{Normal distrubution p-value^^J}
   
   \def\q{5};
   \def\B{3};
@@ -592,6 +598,7 @@
 
 % GAUSSIANs: test statistics
 \begin{tikzpicture}
+  \message{Test statistics^^J}
   
   \def\q{6.3};
   \def\B{8.3};
@@ -639,8 +646,9 @@
 
 
 
-% GAUSSIANs: normal distributions
+% GAUSSIANs: normal distributions, different mu
 \begin{tikzpicture}
+  \message{Normal distributions, different mu^^J}
   
   \def\q{5};
   \def\B{3};
@@ -694,8 +702,9 @@
 
 
 
-% GAUSSIANs: cdf
+% GAUSSIANs: power (cdf)
 \begin{tikzpicture}
+  \message{Power (CDF)^^J}
   
   \def\q{3};
   \def\B{3};
@@ -739,6 +748,7 @@
 
 % GAUSSIANs: low sensitivity 1
 \begin{tikzpicture}
+  \message{Low sensitivity 1^^J}
   
   \def\q{5.5};
   \def\B{-1.0};
@@ -795,6 +805,7 @@
 
 % GAUSSIANs: low sensitivity 2
 \begin{tikzpicture}
+  \message{Low sensitivity 2^^J}
   
   \def\q{17.0};
   \def\B{-1.0};
@@ -846,8 +857,9 @@
 
 
 
-% GAUSSIANs: p-value
+% GAUSSIANs: CLs, p-value
 \begin{tikzpicture}
+  \message{CLs, p-value^^J}
   
   \def\q{6.3};
   \def\B{8.3};
@@ -895,8 +907,9 @@
 
 
 
-% GAUSSIANs: p-value large overlap
+% GAUSSIANs: CLs, p-value large overlap
 \begin{tikzpicture}
+  \message{CLs, p-value overlap^^J}
   
   \def\q{6.8};
   \def\B{6};
