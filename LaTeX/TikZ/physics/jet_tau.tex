@@ -1,0 +1,172 @@
+% Author: Izaak Neutelings (November 2021)
+% Description: jet cones for taus & others
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{xcolor}
+\usetikzlibrary{calc}
+\usetikzlibrary{math} % for \tikzmath
+\tikzset{>=latex} % for LaTeX arrow head
+\usetikzlibrary{decorations.pathreplacing} % for curly braces
+
+\colorlet{myblue}{blue!70!black}
+%\colorlet{mydarkblue}{blue!50!black}
+\colorlet{mygreen}{green!60!black}
+\colorlet{myred}{red!75!black}
+\colorlet{isocol}{blue!70!black} % color isolation cone
+\colorlet{sigcol}{red!90!black} % color isolation cone
+\tikzstyle{track}=[->,line width=0.6,myred]
+\tikzstyle{dashed track}=[->,mygreen,line width=0.6,line cap=round,
+                          dash pattern=on 2.3 off 2.0]
+
+\newcommand\jetcone[6][sigcol]{{
+  \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}{\pgfpointanchor{#3}{center}}
+  \pgfmathsetmacro\ang{#4/2} % half-opening angle
+  \edef\e{#5} % ratio a/b
+  \def\tmpL{tmpL-#2-#3} % unique coordinate name
+  \edef\vang{\pgfmathresult} % angle of vector OV
+  \tikzmath{
+    coordinate \C;
+    \C = (#2)-(#3);
+    \x = veclen(\Cx,\Cy)*\e*sin(\ang)^2; % x coordinate P
+    \y = tan(\ang)*(veclen(\Cx,\Cy)-\x); % y coordinate P
+    \a = veclen(\Cx,\Cy)*sqrt(\e)*sin(\ang); % vertical radius
+    \b = veclen(\Cx,\Cy)*tan(\ang)*sqrt(1-\e*sin(\ang)^2); % horizontal radius
+    \angb = acos(sqrt(\e)*sin(\ang)); % angle of P in ellipse
+  }
+  \coordinate (\tmpL) at ($(#3)-(\vang:\x pt)+(\vang+90:\y pt)$); % tangency
+  \draw[thin,#1!50!black,fill=#1!80!black!50,rotate=\vang] % cone back
+    (\tmpL) arc(180-\angb:180+\angb:{\a pt} and {\b pt})
+    -- ($(#2)+(0.01,0)$) -- cycle;
+  \draw[thin,#1!50!black,rotate=\vang, % cone inside
+        top color=#1!60!black!60,bottom color=#1!50!black!75,shading angle=\vang]
+    (#3) ellipse({\a pt} and {\b pt});
+  #6 % extra tracks
+  \draw[thin,#1!50!black,rotate=\vang,fill opacity=0.80, % cone front
+        top color=#1!90!black!20,bottom color=#1!50!black!50,shading angle=\vang]
+    (\tmpL) arc(180-\angb:180+\angb:{\a pt} and {\b pt})
+    -- ($(#2)+(0.01,0)$) -- cycle;
+}}
+
+
+\begin{document}
+
+
+% TAU JET - ONE PRONG, PI ZERO
+\def\ang{90} % angle of all cones
+\begin{tikzpicture}[scale=2.2]
+  
+  \edef\angiso{44} % opening angle of isolation cone
+  \edef\angsig{22} % opening angle of isolation cone
+  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
+  \coordinate (O)  at (0,0);
+  \coordinate (O') at (\ang:-0.01); % shifted
+  \coordinate (I)  at (\ang:0.92); % isolation cone
+  \coordinate (S)  at (\ang:1.00); % signal cone
+  \coordinate (T)  at (\ang:0.02); % tau vertex
+  
+  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+      \draw[dashed track] (T) -- (82:1.20) node[right=4,above=-2] {$\pi^0$};
+      \draw[dashed track] (T) -- (97:1.18) node[above=2,left=-3] {$\pi^0$};
+      \draw[track] (T) to[out=88,in=-70] (94:1.33) node[right=2,above=-2] {$\pi^-$};
+    }
+  }
+  
+\end{tikzpicture}
+
+
+% TAU JET - THREE PRONG, PI ZERO
+\begin{tikzpicture}[scale=2.2]
+  
+  \edef\angiso{44} % opening angle of isolation cone
+  \edef\angsig{22} % opening angle of isolation cone
+  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
+  \coordinate (O)  at (0,0);
+  \coordinate (O') at (\ang:-0.01); % shifted
+  \coordinate (I)  at (\ang:0.92); % isolation cone
+  \coordinate (S)  at (\ang:1.00); % signal cone
+  \coordinate (T)  at (\ang:0.02); % tau vertex
+  
+  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+      \draw[dashed track] (T) -- (92:1.18) node[left=0,above=-1] {$\pi^0$};
+      \draw[track] (T) to[out=90,in=-55] (103:1.33) node[right=2,above=-1] {$\pi^-$};
+      \draw[track] (T) to[out=93,in=-110] (83:1.29) node[above right=-2] {$\pi^+$};
+      \draw[track] (T) to[out=88,in=-117] (80:1.16) node[above=1,right=-1] {$\pi^+$};
+    }
+  }
+  
+\end{tikzpicture}
+
+
+% ELECTRON JET
+\begin{tikzpicture}[scale=2.2]
+  
+  \edef\angiso{44} % opening angle of isolation cone
+  \edef\angsig{22} % opening angle of isolation cone
+  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
+  \coordinate (O)  at (0,0);
+  \coordinate (O') at (\ang:-0.01); % shifted
+  \coordinate (I)  at (\ang:0.92); % isolation cone
+  \coordinate (S)  at (\ang:1.00); % signal cone
+  \coordinate (T)  at (\ang:0.02); % tau vertex
+  
+  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+      \draw[dashed track] (T) to[out=88,in=-70] (96:1.26) node[right=0,above=-2] {$\mathrm{e}^-$};
+    }
+  }
+  
+\end{tikzpicture}
+
+
+% MUON JET
+\begin{tikzpicture}[scale=2.2]
+  
+  \edef\angiso{44} % opening angle of isolation cone
+  \edef\angsig{22} % opening angle of isolation cone
+  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
+  \coordinate (O)  at (0,0);
+  \coordinate (O') at (\ang:-0.01); % shifted
+  \coordinate (I)  at (\ang:0.92); % isolation cone
+  \coordinate (S)  at (\ang:1.00); % signal cone
+  \coordinate (T)  at (\ang:0.02); % tau vertex
+  
+  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+      \draw[track] (T) to[out=88,in=-70] (93:1.33) node[right=2,above=-2] {$\mu^-$};
+    }
+  }
+  
+\end{tikzpicture}
+
+
+% QUARK/GLUON JET
+\begin{tikzpicture}[scale=2.2]
+  
+  \edef\angiso{44} % opening angle of isolation cone
+  \edef\angsig{22} % opening angle of isolation cone
+  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
+  \coordinate (O)  at (0,0);
+  \coordinate (O') at (\ang:-0.01); % shifted
+  \coordinate (I)  at (\ang:0.92); % isolation cone
+  \coordinate (S)  at (\ang:1.00); % signal cone
+  \coordinate (T)  at (\ang:0.02); % tau vertex
+  
+  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+      \draw[dashed track] (T) -- (105:1.18);
+      \draw[dashed track] (T) -- (94:1.22);
+      \draw[dashed track] (T) -- (84:1.22);
+      \draw[track] (T) to[out=105,in=-50] (113:1.18);
+      \draw[track] (T) to[out=90,in=-55] (103:1.33);
+      \draw[track] (T) to[out=98,in=-105] (87:1.29);
+      \draw[track] (T) to[out=68,in=-92] (79:1.20);
+    }
+  }
+  
+\end{tikzpicture}
+
+
+\end{document}

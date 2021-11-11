@@ -13,8 +13,6 @@
 \colorlet{mydarkblue}{blue!40!black}
 \colorlet{mygreen}{green!40!black}
 \colorlet{myred}{red!65!black}
-\tikzstyle{vector}=[->,very thick,myblue,line cap=round]
-\tikzstyle{ptmiss}=[->,dashed,thick,myred,line cap=round]
 \tikzstyle{cone}=[thin,blue!50!black,fill=blue!50!black!30] %,fill opacity=0.8
 \tikzstyle{conebase}=[cone,fill=blue!50!black!50] %,fill opacity=0.8
 
@@ -39,7 +37,7 @@
   \draw[thin,#1!40!black,rotate=\vang,%fill=#1!80!black!40,
   top color=#1!90!black!20,bottom color=#1!50!black!50,shading angle=\vang]
     (tmpL) arc(180-\angb:180+\angb:{\a pt} and {\b pt})
-    -- ($(#2)+(\vang:0.018)$) -- cycle;
+    -- ($(#2)+(0.018,0)$) -- cycle;
 }}
 
 
@@ -47,29 +45,28 @@
 
 
 % RESOLVED TOP JETS
-\def\R{2.3}
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=2.3]
   \coordinate (O) at (0,0);
-  \coordinate (BJ) at ( 65:1.1*\R); % b jet 1
-  \coordinate (J1) at ( 15:1.0*\R); % q jet 1
-  \coordinate (J2) at (-20:1.0*\R); % q jet 2
+  \coordinate (BJ) at ( 65:1.1); % b jet 1
+  \coordinate (J1) at ( 15:1.0); % q jet 1
+  \coordinate (J2) at (-20:1.0); % q jet 2
   \jetcone[green!80!black]{O}{BJ}{14}{0.10}
   \jetcone{O}{J1}{16}{0.08}
   \jetcone{O}{J2}{16}{0.10}
-  \node[green!50!black] at (65:1.26*\R) {b};
-  \node[blue!80!black,right] at (-5:1.00*\R) {$\mathrm{W} \to qq$};
+  \node[green!50!black] at (65:1.26) {b};
+  \node[blue!80!black,right] at (-5:1.00) {$\mathrm{W} \to qq$};
 \end{tikzpicture}
 
 
 % BOOSTED TOP JETS, partially merged
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=2.3]
   \edef\ang{28}
   \edef\e{0.05}
   \coordinate (O) at (0,0);
-  \coordinate (BJ) at ( 56:1.1*\R); % b jet 1
-  \coordinate (J1) at ( 12:1.0*\R); % q jet 1
-  \coordinate (J2) at (-12:1.0*\R); % q jet 2
-  \coordinate (M) at (0:0.85*\R); % merged
+  \coordinate (BJ) at ( 56:1.1); % b jet 1
+  \coordinate (J1) at ( 12:1.0); % q jet 1
+  \coordinate (J2) at (-12:1.0); % q jet 2
+  \coordinate (M) at (0:0.85); % merged
   \edef\vang{\pgfmathresult} % angle of vector OV
   \tikzmath{
     coordinate \C;
@@ -92,22 +89,22 @@
   \draw[thin,red!40!black,fill opacity=0.9,rotate=\vang, %,fill=red!90!black!40
         top color=red!90!black!40,bottom color=red!80!black!50,shading angle=\vang]
     (ML) arc(180-\angb:180+\angb:{\a pt} and {\b pt})
-    -- ($(O)-(\vang:0.03)$) -- cycle;
+    -- ($(O)-(0.01,0)$) -- cycle;
   
-  \node[green!50!black] at (56:1.26*\R) {b};
-  \node[blue!80!black,right] at (0:1.05*\R) {${\color{red!80!black}\mathrm{W} \to}\; qq$};
+  \node[green!50!black] at (56:1.26) {b};
+  \node[blue!80!black,right] at (0:1.05) {${\color{red!80!black}\mathrm{W} \to}\; qq$};
 \end{tikzpicture}
 
 
 % BOOSTED TOP JETS, fully merged
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=2.3]
   \edef\ang{35}
   \edef\e{0.05}
   \coordinate (O) at (0,0);
-  \coordinate (BJ) at ( 31:1.15*\R); % b jet 1
-  \coordinate (J1) at (  9:1.00*\R); % q jet 1
-  \coordinate (J2) at (-11:1.00*\R); % q jet 2
-  \coordinate (M) at (13:0.80*\R); % merged
+  \coordinate (BJ) at ( 31:1.15); % b jet 1
+  \coordinate (J1) at (  9:1.00); % q jet 1
+  \coordinate (J2) at (-11:1.00); % q jet 2
+  \coordinate (M) at (13:0.80); % merged
   \edef\vang{\pgfmathresult} % angle of vector OV
   \tikzmath{
     coordinate \C;
@@ -130,10 +127,10 @@
   \draw[thin,red!40!black,fill opacity=0.9,rotate=\vang, %,fill=red!90!black!40
         top color=red!90!black!40,bottom color=red!80!black!50,shading angle=\vang]
     (ML) arc(180-\angb:180+\angb:{\a pt} and {\b pt})
-    -- ($(O)-(\vang:0.03)$) -- cycle;
+    -- ($(O)-(0.01,0)$) -- cycle;
   
-  \node[green!50!black] at (31:1.3*\R) {b};
-  \node[blue!80!black,right] at (0:1.05*\R) {$\mathrm{W} \to qq$};
+  \node[green!50!black] at (31:1.3) {b};
+  \node[blue!80!black,right] at (0:1.05) {$\mathrm{W} \to qq$};
 \end{tikzpicture}
 
 

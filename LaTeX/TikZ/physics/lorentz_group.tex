@@ -110,7 +110,6 @@
   \end{scope}
   
   % LABELS Dirac spinor
-  \draw[dashed,opacity=0.6] (-1.1*\N/2,1.1*\N) -- (0,0) -- (1.1*\N/2,1.1*\N);
   \draw[mydarkgreen,fill=mygreen,fill opacity=0.05,rounded corners=2]
     (-0.9,0.7) rectangle (0.9,1.75)
     node[mydarkgreen,below right,align=left,opacity=1,scale=0.75] {Weyl\\spinors};
@@ -135,8 +134,9 @@
       \left(\frac{1}{2},0\right)\otimes\left(0,\frac{1}{2}\right)$};
   
   % DOTS
+  \draw[dashed,opacity=0.5] (-1.1*\N/2,1.1*\N) -- (0,0) -- (1.1*\N/2,1.1*\N);
   \foreach \j [evaluate={\y=\j;}] in {0,...,\N}{
-    \draw (-\j/2,\y) --++ (\j,0);
+    \draw[blue!15!black!70] (-\j/2,\y) --++ (\j,0); % horizontal lines
     \foreach \i [evaluate={
       \m=\i-\j/2;
       \L=\i/2; % left representation

@@ -51,28 +51,30 @@
 
 % REFLECTION & REFRACTION
 \begin{tikzpicture}
-  \def\L{3.8}   % width interface
-  \def\l{2.1}   % length ray
-  \def\t{0.5}   % depth glass gradient
-  \def\h{2.1}   % bisector height
-  \def\f{0.4}   % fraction of interface to the left
-  \def\na{1.0}  % air
-  \def\ng{1.5}  % glass
-  \def\anga{30} % angle of incident ray
-  \def\angg{asin(\na/\ng*sin(\anga))}
-  \coordinate (O) at (0,0);            % point of contact
+  
+  \def\W{3.8}   % width of glass/interface
+  \def\h{2.1}   % depth of glass / height of bisector
+  \def\t{0.5}   % thickness of gradient in glass top layer
+  \def\l{2.1}   % length of light ray
+  \def\f{0.4}   % point of incidence as fraction of width
+  \def\na{1.0}  % refractive index of air
+  \def\ng{1.5}  % refractive index of glass
+  \def\anga{30} % angle of incidence/reflection
+  
+  \def\angg{asin(\na/\ng*sin(\anga))} % angle of refraction
+  \coordinate (O) at (0,0);            % point of contact/incidence
   \coordinate (I) at (90+\anga:\l);    % point incident (top left)
   \coordinate (M) at (90-\anga:\l);    % point reflected (top right)
   \coordinate (F) at ({-90+\angg}:\l); % point refracted (bottom)
-  \coordinate (L) at (-\f*\L,0);       % left point interface
-  \coordinate (R) at ({(1-\f)*\L},0);  % right point interface
+  \coordinate (L) at (-\f*\W,0);       % left point interface
+  \coordinate (R) at ({(1-\f)*\W},0);  % right point interface
   \coordinate (T) at (0,\h);           % top middle point (bisector)
-  \coordinate (B) at (0,-1.0*\h);      % bottom middle point (bisector)
+  \coordinate (B) at (0,-\h);          % bottom middle point (bisector)
   
   % MEDIUM
-  \fill[glass] (L) rectangle++ (\L,-\t); % glass gradient
-  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h); % glass bulk
-  %\fill[glass] (L) rectangle (\L/2,-\h);
+  \fill[glass] (L) rectangle++ (\W,-\t); % glass gradient
+  \fill[glasscol] (-\f*\W,-0.99*\t) rectangle ({1-\f)*\W},-\h); % glass bulk
+  %\fill[glass] (L) rectangle (\W/2,-\h);
   \node[above left=1] at (R) {$n_1$};
   \node[below left=1] at (R) {$n_2>n_1$};
   
@@ -94,6 +96,7 @@
 % REFRACTION: Hughens' principle
 \begin{tikzpicture}
   \small
+  
   \def\N{6}    % number of wavefronts
   \def\r{0.4}  % wavefront radius
   \def\w{3.5}  % width
@@ -110,6 +113,7 @@
   \def\anga{20}
   \def\angg{asin(\na/\ng*\h/sqrt(\h^2+\w^2))}
   \def\sangg{\na/\ng*\h/sqrt(\h^2+\w^2)}
+  
   \coordinate (O) at (0,0);
   \coordinate (WR) at (\w,0);
   \coordinate (WT) at (\w,\h);
@@ -172,28 +176,30 @@
 
 % INTERNAL REFLECTION: almost
 \begin{tikzpicture}
-  \def\L{4.0}
-  \def\l{2.3}
-  \def\t{0.5}
-  \def\h{2.0}
-  \def\f{0.5}
-  \def\na{1.0} % air
-  \def\ng{1.5} % glass
-  \def\angg{40} % asin(1/1.5)*180/pi
-  \def\anga{asin(\ng/\na*sin(\angg))}
-  \coordinate (O) at (0,0);
-  \coordinate (I) at (-90-\angg:\l);
-  \coordinate (M) at (-90+\angg:\l);
-  \coordinate (F) at ({90-\anga}:0.8*\l);
-  \coordinate (L) at (-\f*\L,0);
-  \coordinate (R) at ({(1-\f)*\L},0);
-  \coordinate (T) at (0,0.7*\h);
-  \coordinate (B) at (0,-\h);
+  
+  \def\W{4.0}   % width of glass/interface
+  \def\h{2.0}   % depth of glass / height of bisector
+  \def\t{0.5}   % thickness of gradient in glass top layer
+  \def\l{2.3}   % length of light ray
+  \def\f{0.5}   % point of incidence as fraction of width
+  \def\na{1.0}  % refractive index of air
+  \def\ng{1.5}  % refractive index of glass
+  \def\angg{40} % angle of incidence/reflection
+  \def\anga{asin(\ng/\na*sin(\angg))} % angle of refraction
+  
+  \coordinate (O) at (0,0);               % point of contact/incidence
+  \coordinate (I) at (-90-\angg:\l);      % point incident (top left)
+  \coordinate (M) at (-90+\angg:\l);      % point reflected (top right)
+  \coordinate (F) at ({90-\anga}:0.8*\l); % point refracted (bottom)
+  \coordinate (L) at (-\f*\W,0);          % left point interface
+  \coordinate (R) at ({(1-\f)*\W},0);     % right point interface
+  \coordinate (T) at (0,0.7*\h);          % top middle point (bisector)
+  \coordinate (B) at (0,-\h);             % bottom middle point (bisector)
   
   % MEDIUM
-  \fill[glass] (L) rectangle++ (\L,-\t); % glass gradient
-  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h);
-  %\fill[glass] (L) rectangle (\L/2,-\h);
+  \fill[glass] (L) rectangle++ (\W,-\t); % glass gradient
+  \fill[glasscol] (-\f*\W,-0.99*\t) rectangle ({1-\f)*\W},-\h);
+  %\fill[glass] (L) rectangle (\W/2,-\h);
   \node[above right=1] at (L) {$n_2$};
   \node[below right=1] at (L) {$n_1>n_2$};
   
@@ -214,28 +220,30 @@
 
 % INTERNAL REFLECTION: critical
 \begin{tikzpicture}
-  \def\L{4.0}
-  \def\l{2.3}
-  \def\t{0.5}
-  \def\h{2.0}
-  \def\f{0.5}
-  \def\na{1.0} % air
-  \def\ng{1.5} % glass
-  \def\angg{41.804} % asin(1/1.5)*180/pi
-  \def\anga{asin(\ng/\na*sin(\angg))}
-  \coordinate (O) at (0,0);
-  \coordinate (I) at (-90-\angg:\l);
-  \coordinate (M) at (-90+\angg:\l);
-  \coordinate (F) at ({90-\anga}:0.8*\l);
-  \coordinate (L) at (-\f*\L,0);
-  \coordinate (R) at ({(1-\f)*\L},0);
-  \coordinate (T) at (0,0.7*\h);
-  \coordinate (B) at (0,-\h);
+  
+  \def\W{4.0}   % width of glass/interface
+  \def\h{2.0}   % depth of glass / height of bisector
+  \def\t{0.5}   % thickness of gradient in glass top layer
+  \def\l{2.3}   % length of light ray
+  \def\f{0.5}   % point of incidence as fraction of width
+  \def\na{1.0}  % refractive index of air
+  \def\ng{1.5}  % refractive index of glass
+  \def\angg{41.804} % angle of incidence/reflection, critical: asin(1/1.5)*180/pi
+  \def\anga{asin(\ng/\na*sin(\angg))} % angle of refraction
+  
+  \coordinate (O) at (0,0);               % point of contact/incidence
+  \coordinate (I) at (-90-\angg:\l);      % point incident (top left)
+  \coordinate (M) at (-90+\angg:\l);      % point reflected (top right)
+  \coordinate (F) at ({90-\anga}:0.8*\l); % point refracted (bottom)
+  \coordinate (L) at (-\f*\W,0);          % left point interface
+  \coordinate (R) at ({(1-\f)*\W},0);     % right point interface
+  \coordinate (T) at (0,0.7*\h);          % top middle point (bisector)
+  \coordinate (B) at (0,-\h);             % bottom middle point (bisector)
   
   % MEDIUM
-  \fill[glass] (L) rectangle++ (\L,-\t);
-  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h);
-  %\fill[glass] (L) rectangle (\L/2,-\h);
+  \fill[glass] (L) rectangle++ (\W,-\t);
+  \fill[glasscol] (-\f*\W,-0.99*\t) rectangle ({1-\f)*\W},-\h);
+  %\fill[glass] (L) rectangle (\W/2,-\h);
   \node[above right=1] at (L) {$n_2$};
   \node[below right=1] at (L) {$n_1>n_2$};
   
@@ -256,25 +264,27 @@
 
 % BREWSTER/POLARIZATION ANGLE
 \begin{tikzpicture}
-  \def\A{0.2}
-  \def\L{3.8}
-  \def\l{2.1}
-  \def\t{0.5}
-  \def\h{2.1}
-  \def\f{0.4}
-  \def\na{1.0} % air
-  \def\ng{1.5} % glass
-  \def\anga{56} % atan(1.5)*180/pi
-  \def\angg{asin(\na/\ng*sin(\anga))}
-  \def\N{5}
-  \coordinate (O) at (0,0);
-  \coordinate (I) at (90+\anga:\l);
-  \coordinate (M) at (90-\anga:\l);
-  \coordinate (F) at ({-90+\angg}:\l);
-  \coordinate (L) at (-\f*\L,0);
-  \coordinate (R) at ({(1-\f)*\L},0);
-  \coordinate (T) at (0,\h);
-  \coordinate (B) at (0,-1.0*\h);
+  
+  \def\W{3.9}   % width of glass
+  \def\h{2.1}   % height/depth of glass
+  \def\t{0.5}   % thickness of darker top layer
+  \def\l{2.1}   % length of ray
+  \def\f{0.5}   % point of incidence as fraction of width
+  \def\na{1.0}  % refractive index of air
+  \def\ng{1.5}  % refractive index of glass
+  \def\anga{56} % angle of incidence/reflection, Brewster = atan(1.5)*180/pi
+  \def\angg{asin(\na/\ng*sin(\anga))} % angle of incidence,
+  \def\N{5}     % number of polarization vectors
+  \def\A{0.2}   % length of polarization vectors
+  
+  \coordinate (O) at (0,0);            % point of contact/incidence
+  \coordinate (I) at (90+\anga:\l);    % point incident (top left)
+  \coordinate (M) at (90-\anga:\l);    % point reflected (top right)
+  \coordinate (F) at ({-90+\angg}:\l); % point refracted (bottom)
+  \coordinate (L) at (-\f*\W,0);       % left point interface
+  \coordinate (R) at ({(1-\f)*\W},0);  % right point interface
+  \coordinate (T) at (0,\h);           % top middle point (bisector)
+  \coordinate (B) at (0,-\h);          % bottom middle point (bisector)
   \def\dot#1{
     \fill[Ecol] (#1) circle (0.05);
     \fill[Ecol!60!black] (#1) circle (0.007);
@@ -282,11 +292,11 @@
   }
   
   % MEDIUM
-  \fill[glass] (L) rectangle++ (\L,-\t);
-  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h);
-  %\fill[glass] (L) rectangle (\L/2,-\h);
-  \node[above left=1] at (R) {$n_1$};
-  \node[below left=1] at (R) {$n_2>n_1$};
+  \fill[glass] (L) rectangle++ (\W,-\t);
+  \fill[glasscol] (-\f*\W,-0.99*\t) rectangle ({1-\f)*\W},-\h);
+  %\fill[glass] (L) rectangle (\W/2,-\h);
+  \node[above right=1] at (L) {$n_1$};
+  \node[below right=1] at (L) {$n_2>n_1$};
   
   % LINES
   \draw[dashed] (T) -- (B);
@@ -317,7 +327,8 @@
 
 % REFLECTION & REFRACTION - Brewster angle
 \begin{tikzpicture}
-  \def\L{4.9}   % width interface
+  
+  \def\W{4.9}   % width interface
   \def\l{2.1}   % length ray
   \def\t{0.5}   % depth glass gradient
   \def\h{2.1}   % bisector height
@@ -326,18 +337,19 @@
   \def\ng{1.5}  % glass
   \def\anga{56} % angle of incident ray
   \def\angg{asin(\na/\ng*sin(\anga))}
+  
   \coordinate (O) at (0,0);            % point of contact
   \coordinate (I) at (90+\anga:\l);    % point incident (top left)
   \coordinate (M) at (90-\anga:\l);    % point reflected (top right)
   \coordinate (F) at ({-90+\angg}:\l); % point refracted (bottom)
-  \coordinate (L) at (-\f*\L,0);       % left point interface
-  \coordinate (R) at ({(1-\f)*\L},0);  % right point interface
+  \coordinate (L) at (-\f*\W,0);       % left point interface
+  \coordinate (R) at ({(1-\f)*\W},0);  % right point interface
   \coordinate (T) at (0,\h);           % top middle point (bisector)
-  \coordinate (B) at (0,-1.0*\h);      % bottom middle point (bisector)
+  \coordinate (B) at (0,-\h);          % bottom middle point (bisector)
   
   % MEDIUM
-  \fill[glass] (L) rectangle++ (\L,-\t); % glass gradient
-  \fill[glasscol] (-\f*\L,-0.99*\t) rectangle ({1-\f)*\L},-\h); % glass bulk
+  \fill[glass] (L) rectangle++ (\W,-\t); % glass gradient
+  \fill[glasscol] (-\f*\W,-0.99*\t) rectangle ({1-\f)*\W},-\h); % glass bulk
   \node[above right=1,scale=0.8] at (L) {air ($n_1=1$)};
   \node[below right=1,scale=0.8] at (L) {glass ($n_2=1.5$)};
   

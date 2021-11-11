@@ -1,14 +1,13 @@
 % Author: Izaak Neutelings (June, 2018)
 \documentclass[border=3pt,tikz]{standalone}
-\usepackage{ifthen}
 \usepackage{tikz}
-%\usepackage{pgfplots}
-\usetikzlibrary{hobby} % for ..
+\usepackage{amsmath} % for \text
+\usepackage[outline]{contour} % glow around text
 \usetikzlibrary{arrows.meta} % to control arrow size
 \tikzset{>={Latex[length=4,width=4]}} % for LaTeX arrow head
 \usetikzlibrary{calc,decorations.markings,arrows.meta}
-\usepackage{siunitx}
 \usepackage{xcolor} % for colored text
+\contourlength{1.2pt}
 
 \colorlet{mylightblue}{blue!20}
 \colorlet{myblue}{blue!80!black}
@@ -30,8 +29,8 @@
 \begin{document}
 
 
-
 % PV diagram - constant P
+\def\N{40} % number of plot samples
 \def\xmax{3}
 \def\ymax{2.5}
 \begin{tikzpicture}
@@ -45,16 +44,15 @@
   % LINE
   \draw[very thick,midarr=.55,myred] (A) -- (B);
   \draw[very thick,midarr=.55,blue] (B) -- (C);
-  \fill (A) circle (2pt) node[right=5,above=2] {$P_1$, $V_1$};
-  \fill (B) circle (2pt);
-  \fill (C) circle (2pt) node[right=2] {$P_2$, $V_2$};
+  \fill (A) circle(0.07) node[right=5,above=2] {$P_1$, $V_1$};
+  \fill (B) circle(0.07);
+  \fill (C) circle(0.07) node[right=2] {$P_2$, $V_2$};
   
   % AXIS
   \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax) node[anchor=north east] {$P$};
   \draw[->,thick] (-0.1*\xmax,0) -- (\xmax,0) node[anchor=north east] {$V$};
   
 \end{tikzpicture}
-
 
 
 % PV diagram - constant V
@@ -69,9 +67,9 @@
   % LINE
   \draw[very thick,midarr=.55,blue] (A) -- (B);
   \draw[very thick,midarr=.55,myred] (B) -- (C);
-  \fill (A) circle (2pt) node[right=5,above=2] {$P_1$, $V_1$};
-  \fill (B) circle (2pt);
-  \fill (C) circle (2pt) node[right=2] {$P_2$, $V_2$};
+  \fill (A) circle(0.07) node[right=5,above=2] {$P_1$, $V_1$};
+  \fill (B) circle(0.07);
+  \fill (C) circle(0.07) node[right=2] {$P_2$, $V_2$};
   
   % AXIS
   \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax) node[anchor=north east] {$P$};
@@ -80,9 +78,7 @@
 \end{tikzpicture}
 
 
-
 % PV diagram - isotherm
-\def\N{40}
 \begin{tikzpicture}
   \def\isotherm{(A) to[out=-60,in=170] (B)}
   \def\T{1.2}
@@ -100,8 +96,8 @@
   % LINE
   \draw[myred,very thick,midarr=.58,samples=\N,domain={\xa}:{\xb}]
     plot(\x,{\T/\x});
-  \fill (A) circle (2pt) node[right=5,above=2] {$P_1$, $V_1$};
-  \fill (B) circle (2pt) node[right=2] {$P_2$, $V_2$};
+  \fill (A) circle(0.07) node[right=5,above=2] {$P_1$, $V_1$};
+  \fill (B) circle(0.07) node[right=2] {$P_2$, $V_2$};
   
   % AXIS
   \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax) node[anchor=north east] {$P$};
@@ -110,10 +106,9 @@
 \end{tikzpicture}
 
 
-
-% PV diagram - simple
-\def\xmax{4}
-\def\ymax{3.5}
+% PV diagram - simple engine
+\def\xmax{3.5}
+\def\ymax{3.0}
 \begin{tikzpicture}
   
   % AREA
@@ -146,35 +141,121 @@
   
   % HEAT
   \fill[mydarkblue]
-    (A) circle (2pt)
-    (B) circle (2pt) 
-    (C) circle (2pt) 
-    (D) circle (2pt);
+    (A) circle (0.07)
+    (B) circle (0.07) 
+    (C) circle (0.07) 
+    (D) circle (0.07);
   \draw[>={LaTeX[width=8,length=5]},->,line width=4,mydarkred]
-    ($(D)!.26!(A)$)++(-.2,0) --++ (.6,0) node[near end,left=10,scale=.9] {$Q_1$};
+    ($(D)!.26!(A)$)++(-.2,0) --++ (.6,0) node[pos=0,left=-4,scale=.9] {$Q_1$};
   \draw[>={LaTeX[width=8,length=5]},->,line width=4,mydarkred]
     ($(A)!.27!(B)$)++(0,.2) --++ (0,-.6) node[near end,above=11,scale=.9] {$Q_2$};
   \draw[>={LaTeX[width=8,length=5]},->,line width=4,mydarkblue]
     ($(B)!.25!(C)$)++(-.2,0) --++ (.6,0) node[right=-2,scale=.9] {$Q_3$};
   \draw[>={LaTeX[width=8,length=5]},->,line width=4,mydarkblue]
-    ($(C)!.28!(D)$)++(0,.2) --++ (0,-.6) node[right=0,scale=.9] {$Q_4$};
+    ($(C)!.30!(D)$)++(0,.2) --++ (0,-.6) node[right=-1,scale=.9] {$Q_4$};
   
 \end{tikzpicture}
 
 
+% PV diagram - different heat paths
+\def\isotherm#1#2{{ #2/(#1) }}
+\begin{tikzpicture}
+  \def\Th{2.7}
+  \def\Tc{.85}
+  \coordinate (A) at ({0.30*\xmax},{\isotherm{0.30*\xmax}{\Tc}});
+  \coordinate (B) at ({0.29*\xmax},{\isotherm{0.29*\xmax}{\Th}});
+  \coordinate (C) at ({0.58*\xmax},{\isotherm{0.58*\xmax}{\Th}});
+  \coordinate (D) at ({0.82*\xmax},{\isotherm{0.82*\xmax}{\Th}});
+  
+  % AXIS
+  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax+0.1)
+    node[anchor=north east,inner sep=4,scale=1] {$P$};
+  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax+0.1,0)
+    node[anchor=north east,inner sep=4,scale=1] {$V$};
+  
+  % ISOTHERMS
+  \draw[mydarkblue,thick,
+        domain={\isotherm{\ymax}{\Th}}:{.95*\xmax},samples=\N,smooth]
+    plot (\x,\isotherm{\x}{\Th});
+  \draw[mydarkblue,thick,
+        domain={\isotherm{\ymax}{\Tc}}:{.95*\xmax},samples=\N,smooth]
+    plot (\x,\isotherm{\x}{\Tc});
+  
+  % PATHS
+  \draw[mydarkred,thick,midarr=.5] (A) to[out=100,in=-95] (B);
+  \draw[mydarkred,thick,midarr=.6] (A) to[out=50,in=-170] (C);
+  \draw[mydarkred,thick,midarr=.5] (A) to[out=10,in=175] (D);
+  \path (A) -- (B) node[mydarkred,scale=0.9,pos=0.70,left=-1] {$Q_1$};
+  \path (A) -- (C) node[mydarkred,scale=0.9,pos=0.40,above=4] {$Q_2$};
+  \path (A) -- (D) node[mydarkred,scale=0.9,pos=0.60,below=-3] {$Q_3$};
+  
+  % POINTS
+  \node[mydarkblue,above=2,right=-5,scale=0.9]
+    at (\xmax,{\isotherm{\xmax}{\Th}}) {$T+\Delta T$};
+  \node[mydarkblue,above=1,right=-5,scale=0.9]
+    at (\xmax,{\isotherm{\xmax}{\Tc}}) {$T$};
+  \fill[mydarkblue]
+     (A) circle(0.05)
+     (B) circle(0.05)
+     (C) circle(0.05)
+     (D) circle(0.05); % node[right=5,above right=-2,scale=0.9] {$P_2$, $V_2$};
+  
+\end{tikzpicture}
+
+
+% PV diagram - specific heat capacities
+\begin{tikzpicture}
+  \def\Th{2.6}
+  \def\Tc{.85}
+  \def\Vc{0.28*\xmax}
+  \def\Vh{\Vc*\Th/\Tc}
+  \coordinate (A) at (\Vc,{\isotherm{\Vc}{\Tc}});
+  \coordinate (B) at (\Vc,{\isotherm{\Vc}{\Th}});
+  \coordinate (C) at (\Vh,{\isotherm{\Vh}{\Th}});
+  
+  % AXIS
+  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax+0.1)
+    node[anchor=north east,inner sep=4,scale=1] {$P$};
+  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax+0.1,0)
+    node[anchor=north east,inner sep=4,scale=1] {$V$};
+  
+  % ISOTHERMS
+  \draw[mydarkblue,thick,
+        domain={\isotherm{\ymax}{\Th}}:{.95*\xmax},samples=\N,smooth]
+    plot (\x,\isotherm{\x}{\Th});
+  \draw[mydarkblue,thick,
+        domain={\isotherm{\ymax}{\Tc}}:{.95*\xmax},samples=\N,smooth]
+    plot (\x,\isotherm{\x}{\Tc});
+  
+  % PATHS
+  \path (A) -- (B) node[mydarkred,scale=0.85,pos=0.45,left=-1.5]
+    {\contour{white}{$C_\mathrm{V}\Delta T$}};
+  \path (A) -- (C) node[mydarkred,scale=0.85,pos=0.60,below=0]
+    {$C_\mathrm{P}\Delta T$};
+  \draw[mydarkred,thick,midarr=.48] (A) -- (B);
+  \draw[mydarkred,thick,midarr=.58] (A) -- (C);
+  
+  % POINTS
+  \node[mydarkblue,above=2,right=-5,scale=0.9]
+    at (\xmax,{\isotherm{\xmax}{\Th}}) {$T+\Delta T$};
+  \node[mydarkblue,above=1,right=-5,scale=0.9]
+    at (\xmax,{\isotherm{\xmax}{\Tc}}) {$T$};
+  \fill[mydarkblue]
+    (A) circle(0.05)
+    (B) circle(0.05)
+    (C) circle(0.05);
+  
+\end{tikzpicture}
+
 
 % PV diagram - adiabatic + isotherms
-\def\xmax{4}
-\def\ymax{3.5}
+\def\gam{2}
+\def\isotherm#1#2{{ #2/(#1) }}
+\def\adiabatic#1#2{{ #2/(#1)^(\gam) }}
 \begin{tikzpicture}
-  \def\tick{0.05*\xmax}
-  \def\Th{2.7}
-  \def\Tc{.8}
-  \def\Ch{2.4}
-  \def\N{40}
-  \def\gam{2}
-  \def\isotherm#1#2{{ #2/#1 }}
-  \def\adiabatic#1#2{{ #2/(#1)^(\gam) }}
+  \def\Th{2.6}
+  \def\Tc{.85}
+  \def\Ch{2.5}
   \def\A{ (\Th/\Ch)^(1/(1-\gam)) }
   \def\B{ (\Tc/\Ch)^(1/(1-\gam)) }
   %\def\intersect#1#2{ (#1/#2)^(1/(1-\gam) }
@@ -182,17 +263,17 @@
   \coordinate (B) at ({\B},{\isotherm{\B}{\Tc}});
   
   % AXIS
-  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax)
-    node[anchor=north east,inner sep=4,scale=0.8] {$P$};
-  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax,0)
-    node[anchor=north east,inner sep=4,scale=0.8] {$V$};
+  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax+0.1)
+    node[anchor=north east,inner sep=4,scale=1] {$P$};
+  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax+0.1,0)
+    node[anchor=north east,inner sep=4,scale=1] {$V$};
   
   % ISOTHERMS
   \draw[mydarkblue,thick,
-        domain={\isotherm{\ymax}{\Th}}:{.96*\xmax},samples=\N,smooth]
+        domain={\isotherm{\ymax}{\Th}}:{.95*\xmax},samples=\N,smooth]
     plot (\x,\isotherm{\x}{\Th});
   \draw[mydarkblue,thick,
-        domain={\isotherm{\ymax}{\Tc}}:{.96*\xmax},samples=\N,smooth]
+        domain={\isotherm{\ymax}{\Tc}}:{.95*\xmax},samples=\N,smooth]
     plot (\x,\isotherm{\x}{\Tc});
   
   % ADIABATIC
@@ -201,29 +282,21 @@
     plot (\x,\adiabatic{\x}{\Ch});
   
   % POINTS
-  \node at (.44*\xmax,.60*\ymax) {$T_1$};
-  \node at (.12*\xmax,.25*\ymax) {$T_2$};
+  \node[mydarkblue,above right=-2] at (.48*\xmax,{\isotherm{.48*\xmax}{\Th}}) {$T_1$};
+  \node[mydarkblue,below left=-2] at (.30*\xmax,{\isotherm{.30*\xmax}{\Tc}}) {$T_2$};
   \fill[mydarkblue]
-     (A) circle (1.5pt) node[right=2,scale=0.9] {$P_1$, $V_1$};
+     (A) circle(0.05) node[right=2,scale=0.9] {$P_1$, $V_1$};
   \fill[mydarkblue]
-     (B) circle (1.5pt) node[right=5,above right=-2,scale=0.9] {$P_2$, $V_2$};
+     (B) circle(0.05) node[right=2,above right=-2,scale=0.9] {$P_2$, $V_2$};
   
 \end{tikzpicture}
 
 
-
 % PV diagram - adiabatic + isotherms + work
-\def\xmax{4}
-\def\ymax{3.5}
 \begin{tikzpicture}
-  \def\tick{0.05*\xmax}
-  \def\Th{2.7}
+  \def\Th{2.5}
   \def\Tc{.8}
   \def\Ch{2.4}
-  \def\N{40}
-  \def\gam{2}
-  \def\isotherm#1#2{{ #2/#1 }}
-  \def\adiabatic#1#2{{ #2/(#1)^(\gam) }}
   \def\A{ (\Th/\Ch)^(1/(1-\gam)) }
   \def\B{ (\Tc/\Ch)^(1/(1-\gam)) }
   %\def\intersect#1#2{ (#1/#2)^(1/(1-\gam) }
@@ -247,31 +320,27 @@
     plot (\x,\adiabatic{\x}{\Ch});
   
   % POINTS
-  \fill[mydarkblue] (A) circle (1.5pt);
-  \fill[mydarkblue] (B) circle (1.5pt);
+  \fill[mydarkblue] (A) circle(0.05);
+  \fill[mydarkblue] (B) circle(0.05);
   
   % AXIS
-  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax)
-    node[anchor=north east,inner sep=4,scale=0.8] {$P$};
-  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax,0)
-    node[anchor=north east,inner sep=4,scale=0.8] {$V$};
+  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax+0.1)
+    node[anchor=north east,inner sep=4,scale=1] {$P$};
+  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax+0.1,0)
+    node[anchor=north east,inner sep=4,scale=1] {$V$};
   
 \end{tikzpicture}
 
 
-
 % PV diagram - Otto cycle
-\def\xmax{4}
-\def\ymax{3.5}
 \begin{tikzpicture}
-  \def\tick{0.05*\xmax}
-  \def\Ch{2.7}
-  \def\Cc{1.0}
+  \def\Ch{2.5}
+  \def\Cc{0.9}
   \def\N{40}
   \def\gam{1.0}
   \def\adiabatic#1#2{{ #2/(#1)^(\gam) }}
-  \def\xA{.2*\xmax}
-  \def\xB{.8*\xmax}
+  \def\xA{.24*\xmax}
+  \def\xB{.90*\xmax}
   \coordinate (A) at ({\xA},{\adiabatic{\xA}{\Ch}});
   \coordinate (B) at ({\xB},{\adiabatic{\xB}{\Ch}});
   \coordinate (C) at ({\xB},{\adiabatic{\xB}{\Cc}});
@@ -295,7 +364,7 @@
   \draw[blue!80!black,thick,midarr=.55]
     (E)++(0,-.03) -- ($(C)+(0,-.03)$);
   \node[blue,above=2,right,scale=0.75] at (B) {exhaust};
-  \node[blue!80!black,right=14,below=-.8,scale=0.75] at (E) {intake};
+  \node[blue!80!black,right=12,below=-1,scale=0.75] at (E) {intake};
   \node[myred,above left,scale=0.75] at (D) {spark};
   
   % HEAT
@@ -306,28 +375,25 @@
   
   % POINTS
   \fill[mydarkblue]
-     (A) circle (1.5pt)
-     (B) circle (1.5pt)
-     (C) circle (1.5pt)
-     (D) circle (1.5pt)
-     (E) circle (1.5pt);
+     (A) circle(0.05)
+     (B) circle(0.05)
+     (C) circle(0.05)
+     (D) circle(0.05)
+     (E) circle(0.05);
   
   % AXIS
-  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax)
-    node[anchor=north east,inner sep=4,scale=0.8] {$P$};
-  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax,0)
-    node[anchor=north east,inner sep=4,scale=0.8] {$V$};
+  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax+0.1)
+    node[anchor=north east,inner sep=4,scale=1] {$P$};
+  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax+0.1,0)
+    node[anchor=north east,inner sep=4,scale=1] {$V$};
   
 \end{tikzpicture}
 
 
 % PV diagram - Carnot cycle
-\def\xmax{4}
-\def\ymax{3.5}
 \begin{tikzpicture}
-  \def\tick{0.05*\xmax}
-  \def\Th{1.3}
-  \def\Tc{0.4}
+  \def\Th{1.20}
+  \def\Tc{0.45}
   \def\Ch{0.4}
   \def\Cc{1.9}
   \def\N{40}
@@ -343,7 +409,7 @@
   \coordinate (C) at ({\xC},{\isotherm{\xC}{\Tc}});
   \coordinate (D) at ({\xD},{\isotherm{\xD}{\Tc}});
   
-  \clip (-0.1*\xmax,-0.1*\ymax) rectangle (1.05*\xmax,1.1*\ymax);
+  %\clip (-0.1*\xmax,-0.12*\ymax) rectangle (1.05*\xmax,1.1*\ymax);
   
   % WORK
   \fill[mylightblue,samples=\N]
@@ -368,22 +434,22 @@
   
   % POINTS
   \fill[mydarkblue]
-     (A) circle (1.5pt) node[above=1,scale=.8] {1}
-     (B) circle (1.5pt) node[above right,scale=.8] {2}
-     (C) circle (1.5pt) node[above=1,scale=.8] {3}
-     (D) circle (1.5pt) node[below left,scale=.8] {4};
+     (A) circle(0.05) node[above=1,scale=.8] {1}
+     (B) circle(0.05) node[above right,scale=.8] {2}
+     (C) circle(0.05) node[above=1,scale=.8] {3}
+     (D) circle(0.05) node[below left,scale=.8] {4};
   
   % HEAT
   \draw[>={LaTeX[width=6,length=4]},->,line width=2,mydarkred]
-    (.09*\xmax,.28*\ymax) --++ (0:.6) node[near end,below left=1,scale=.9] {$Q_\text{in}$};
+    (.14*\xmax,.30*\ymax) --++ (3:.5) node[pos=0,below=4,left=-6,scale=.9] {$Q_\text{in}$};
   \draw[>={LaTeX[width=6,length=4]},->,line width=2,mydarkblue]
-    (.38*\xmax,.17*\ymax) --++ (0:.6) node[above=1,right=-2,scale=.9] {$Q_\text{out}$};
+    (.47*\xmax,.18*\ymax) --++ (3:.5) node[above=1,right=-2,scale=.9] {$Q_\text{out}$};
   
   % AXIS
-  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax)
-    node[anchor=north east,inner sep=4,scale=0.8] {$P$};
-  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax,0)
-    node[anchor=north east,inner sep=4,scale=0.8] {$V$};
+  \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax+0.1)
+    node[anchor=north east,inner sep=4,scale=1] {$P$};
+  \draw[->,thick] (-0.1*\xmax,0) -- (\xmax+0.1,0)
+    node[anchor=north east,inner sep=4,scale=1] {$V$};
   
 \end{tikzpicture}
 
