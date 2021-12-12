@@ -16,8 +16,8 @@
 
 \newcommand\EMF{\mathcal{E}}
 \tikzstyle{EMF}=[battery1,l=$\EMF$,thin]
-\tikzstyle{internal R}=[R,color=Rcol,Rcol,l=$r$,/tikz/circuitikz/bipoles/length=25pt]
-\tikzstyle{thick R}=[R,color=Rcol,thick,Rcol,l=$R$,/tikz/circuitikz/bipoles/length=35pt]
+\tikzstyle{internal R}=[R,color=Rcol,Rcol,l=$r$,bipoles/length=25pt]
+\tikzstyle{thick R}=[R,color=Rcol,thick,Rcol,l=$R$,bipoles/length=35pt]
 \tikzstyle{small <->}=[{Latex[length=4,width=3]}-{Latex[length=4,width=3]},thick]
 \def\tick#1#2{\draw[thick] (#1) ++ (#2:0.1) --++ (#2:-0.2)}
 
@@ -175,8 +175,8 @@
   
   % FILL AREA
   \fill[Icol!15] (0.09,-1.8) rectangle (0.90,\Vmax+0.2);
-  \fill[Rcol!15] (1.80,-1.5) rectangle (2.90,\Vmax+0.2);
-  \fill[Rcol!15] (3.10,-1.5) rectangle (4.20,\Vmax+0.2);
+  \fill[Rcol!15] (1.80,-1.1) rectangle (2.90,\Vmax+0.2);
+  \fill[Rcol!15] (3.10,-1.9) rectangle (4.20,\Vmax+0.2);
   
   % AXIS
   \begin{scope}[shift={(-0.5,0)}]
@@ -198,7 +198,7 @@
     -- (0.7,\Vmax) -- (1.9,\Vmax)
     -- (2.8,0) -- (5.05,0);
   \draw[<->,thick,Rcol]
-    (4.5,0) --++ (0,\Vmax) node[midway,right] {$RI$};
+    (4.45,0) --++ (0,\Vmax) node[midway,right] {$R_1I_1=R_2I_2$};
   
   % CIRCUIT
   \begin{scope}[shift={(0,-0.8)}]
@@ -206,10 +206,10 @@
       (5,0) -- (4.5,0)
       (1.5,0) -- (1,0) to[EMF] (0,0) -- (-0.3,0);
     \draw[Icol,thick]
-      (4.5,0) |- (3.2,0.4) to[thick R,/tikz/circuitikz/bipoles/length=28pt]
+      (4.5,0) |- (3.2,0.4) to[thick R,l=$R_1$,bipoles/length=28pt]
       (1.5,0.4) -| (1.5,0);
     \draw[myred,thick]
-      (4.5,0) -- (4.5,-0.4) to[thick R,/tikz/circuitikz/bipoles/length=28pt]
+      (4.5,0) -- (4.5,-0.4) to[thick R,l=$R_2$,bipoles/length=28pt]
       (2.8,-0.4) -| (1.5,0);
     \fill[black] (-0.3,0) circle (2pt) node[below] {a};
     \fill[black] (5,0) circle (2pt) node[below] {a};
