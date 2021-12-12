@@ -4,18 +4,17 @@
 %   with the purpose of finding a nice way to draw a 3D cone.
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{amsmath}
-\usepackage{siunitx}
+\usepackage{mathtools} % for \eqcolon
 \usepackage{physics}
+\usepackage{siunitx}
 \usepackage{xcolor}
 \usepackage{etoolbox} %ifthen
 \usepackage[outline]{contour} % glow around text
-%\usetikzlibrary{arrows,arrows.meta}
 \usetikzlibrary{calc}
 \usetikzlibrary{math} % for \tikzmath
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \tikzset{>=latex} % for LaTeX arrow head
 \contourlength{1.6pt}
-\usetikzlibrary{decorations.pathreplacing} % for curly braces
 
 \colorlet{myblue}{blue!70!black}
 \colorlet{mygreen}{green!40!black}
@@ -29,32 +28,6 @@
   %\draw[white,line width=0.6] ($(#2)!(tmpRA)!(#1)$) -- (tmpRA) -- ($(#2)!(tmpRA)!(#3)$);
   \draw[blue!40!black] ($(#2)!(tmpRA)!(#1)$) -- (tmpRA) -- ($(#2)!(tmpRA)!(#3)$);
 }
-
-%\newcommand\cone[4]{
-%  \pgfmathanglebetweenpoints{\pgfpointanchor{#1}{center}}{\pgfpointanchor{#2}{center}}
-%  \coordinate (tmpR) at ($(#2)+(\pgfmathresult+90:#3)$);
-%  \coordinate (tmpL) at ($(#2)+(\pgfmathresult-90:#3)$);
-%  \draw[blue!80!black] (tmpL) -- (#1) -- (tmpR);
-%  %\draw[red] (#2)++(\pgfmathresult:#4) circle({sqrt(#3^2+#4^2)});
-%  \draw[blue!80!black,rotate=\pgfmathresult] (#2) ellipse({#4} and {#3});
-%}
-%
-%\newcommand\jetcone[4]{
-%  \pgfmathanglebetweenpoints{\pgfpointanchor{#1}{center}}{\pgfpointanchor{#2}{center}}
-%  \edef\tmpang{\pgfmathresult}
-%  \coordinate (tmpC) at ($(#2)+(\tmpang-180:{abs(#4)+0.4})$); % center
-%  \coordinate (tmpL) at ($(tmpC)+(\tmpang+90:#3)$); % left corner
-%  \coordinate (tmpR) at ($(tmpC)+(\tmpang-90:#3)$); % right corner
-%  \draw[cone,rotate=\tmpang]
-%    %(tmpR) arc(90:-90:{#4} and {#3});
-%    (tmpC) ellipse({#4} and {#3});
-%  \begin{scope}
-%    \clip[rotate=\tmpang] (tmpR) -- (#1) -- (tmpL) arc(90:-90:{#4+0.6} and {#3});
-%    \draw[vector] (#1) -- (#2);
-%  \end{scope}
-%  \draw[cone,rotate=\tmpang]
-%    (tmpL) arc(90:270:{#4} and {#3}) -- (#1) -- cycle;
-%}
 
 
 \begin{document}
@@ -104,6 +77,26 @@
 \end{tikzpicture}
 
 
+% EQUATIONS, known: r (or a, b), q
+\begin{tikzpicture}[scale=1]
+  \node[align=left] at (0,0) {
+    Circle with radius $r$:\\[2mm]$\quad
+    \begin{aligned}
+      \abs{\mathrm{OQ}} &\eqqcolon q \\
+      \abs{\mathrm{PQ}} &= \sqrt{q^2-r^2} \\
+      \sin{\alpha} &= \frac{r}{q} \\
+      \mathrm{P} &= \left( \frac{r^2}{q}, r\sqrt{1-\frac{r^2}{q^2}} \right) \\
+    \end{aligned}$\\[6mm]
+    Ellipse with horizontal radius $a$ and vertical radius $b$:\\[2mm]$\quad
+    \begin{aligned}
+      \abs{\mathrm{OQ}} &\eqqcolon q \\
+      \abs{\mathrm{PQ}} &= \sqrt{\left(q^2+b^2-a^2\right)\left(1-\frac{a^2}{q^2}\right) } \\
+      \sin{\alpha} &= \frac{a}{q} \\
+      \mathrm{P} &= \left( \frac{a^2}{q}, b\sqrt{1-\frac{a^2}{q^2}} \right) \\
+    \end{aligned}$};
+\end{tikzpicture}
+
+
 % TANGENT to CIRCLE - known: r, alpha
 \begin{tikzpicture}
   \def\r{1.5} % radius
@@ -150,11 +143,31 @@
   \draw pic[<-,"$\alpha$"{above=1,left=0},draw=black,angle radius=28,angle eccentricity=1.0]
     {angle = P--Q--O};
   \node[right,align=left] at ({0.85*\q},\b+0.6)
-    {$a=\a$\\
-     $b=\b$\\
-     $\alpha=\SI{\ang}{\degree}$};
+    {$\begin{aligned}
+       a &= \a\\
+       b &= \b\\
+       \alpha &= \SI{\ang}{\degree}
+     \end{aligned}$};
 \end{tikzpicture}
 }}
+
+
+% EQUATIONS, known: r (or a, b), alpha
+\begin{tikzpicture}[scale=1]
+  \node[align=left] at (0,0) {
+    Circle with radius $r$:\\[2mm]$\quad
+    \begin{aligned}
+      \abs{\mathrm{OQ}} &= \frac{r}{\sin\alpha} \\
+      \abs{\mathrm{PQ}} &= r\abs{\cot\alpha} \\
+      \mathrm{P} &= (r;90-\alpha) = (r\sin\alpha,r\cos\alpha) \\
+    \end{aligned}$\\[6mm]
+    Ellipse with horizontal radius $a$ and vertical radius $b$:\\[2mm]$\quad
+    \begin{aligned}
+      \abs{\mathrm{OQ}} &= \frac{a}{\sin\alpha} \\
+      \abs{\mathrm{PQ}} &= \sqrt{\frac{a^2}{\sin^2\alpha}+b^2-a^2}\abs{\cos\alpha} \\
+      \mathrm{P} &= (a\sin\alpha,b\cos\alpha) \\
+    \end{aligned}$};
+\end{tikzpicture}
 
 
 % TANGENT to CIRCLE - known: vector, alpha
@@ -252,10 +265,11 @@
   \fill[myred] (R) circle(0.05) node[below=0] {R};
   %\fill[myred] (L') circle(0.05) node[above right=-1] {L$'$};
   %\fill[myred] (R') circle(0.05) node[below right] {R$'$};
-  \node[right,align=left] at (-0.2,2.5)
-    {$\alpha=\SI{\ang}{\degree}$\\
-     $\theta=\angb$\\
-     $e=\e$};
+  \node[right,align=left] at (-0.2,2.5) {$\begin{aligned}
+       \alpha &= \SI{\ang}{\degree} \\
+       \theta &= \angb \\
+       e &= \e
+     \end{aligned}$};
 \end{tikzpicture}
 }}
 

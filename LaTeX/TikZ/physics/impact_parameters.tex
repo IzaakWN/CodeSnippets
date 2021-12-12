@@ -31,11 +31,13 @@
 %  }
 %}
 
+%\tikzstyle{mydashed}=[dash pattern=on 1.5pt off 1.5pt]
 \colorlet{beamcol}{orange!40!yellow!95!black}
 \colorlet{SVcol}{green!50!blue!80!white}
 \colorlet{Bccol}{green!80!blue!90!black}
 \colorlet{Jpsicol}{red!90!black}
 \colorlet{taucol}{orange!95!black}
+\colorlet{mygreen}{green!70!black}
 \tikzset{
   ext/.style={shorten >=-#1,shorten <=-#1},
   ext/.default=1cm,
@@ -48,7 +50,7 @@
 \begin{document}
 
 
-%% Simple projection
+%% TEST: Simple projection
 %\begin{tikzpicture}
 %  \coordinate (A) at (0,0);
 %  \coordinate (B) at (4,3);
@@ -66,6 +68,7 @@
   \coordinate (BR) at ( 3,0);
   \coordinate (PV) at ( 0,0);
   \coordinate (SV) at ( 2.0,1.8);
+  \coordinate (T) at ($(SV)+(20:0.6)$);
   \coordinate (Jp1) at ($(SV)+({\angJpsi-180}:2.6)$);
   \coordinate (Jp2) at ($(SV)+(\angJpsi:2.8)$);
   
@@ -73,23 +76,30 @@
   \draw[beamcol,dashed,name path=beam]
     (BL) -- (BR);
   \draw[SVcol,dashed]
-    (PV) -- (SV) -- ($(PV)!1.50!(SV)$);
+    (PV) -- (SV) -- ($(PV)!1.54!(SV)$);
   \draw[->,Jpsicol,dashed,line width=1,name path=mumu]
     (Jp1) -- (Jp2) node[right=9,above] {$\vec{p}_{\mu\mu} = \vec{p}_\Jpsi$};
   
   % MUONS
   \draw[->,red,line width=1]
-    (SV) to[out=\angJpsi+5,in=-80] ++(\angJpsi+15:2.5) node[above left=-4] {$\mu^+$};
+    (SV) to[out=\angJpsi+5,in=\angJpsi-160] ++(\angJpsi+15:2.5) node[above left=-4] {$\mu^+$};
   \draw[->,red,line width=1]
-    (SV) to[out=\angJpsi-5,in=-140] ++(\angJpsi-20:2.4) node[above right] {$\mu^-$};
+    (SV) to[out=\angJpsi-5,in=\angJpsi-220] ++(\angJpsi-20:2.4) node[above right] {$\mu^-$};
+  
+  % TAU
+  \draw[thick,taucol] %,mydashed]
+    (SV) to[out=11,in=-148,looseness=0.6] (T);
+  \path (SV) -- (T) node[taucol,pos=0.4,below right=-3] {$\tau^\pm$};
   
   % PIONS
   \draw[->,taucol,line width=1]
-    (SV) to[out=28,in=-130] ++(38:2.0) node[above right] {$\pi^\pm$};
+    (T) to[out=28,in=-130] ++(38:2.4) node[above right] {$\pi^\pm$};
   \draw[->,taucol,line width=1]
-    (SV) to[out=20,in=-150] ++(24:2.6) node[above right] {$\pi^\pm$};
+    (T) to[out=20,in=-150] ++(24:3.0) node[above right] {$\pi^\pm$};
   \draw[->,taucol,line width=1]
-    (SV) to[out=16,in=170] ++( 2:2.0) node[above right] {$\pi^\mp$};
+    (T) to[out=16,in=170] ++( 2:2.4) node[right] {$\pi^\mp$};
+  \fill[taucol!80!black]
+    (T) circle (0.06);
   
   % BLOBS
   \fill[beamcol]
@@ -104,6 +114,55 @@
   
   %\draw[smallarr,shorten <=4,Jpsicol] %,dashed
   %  (PV) -- ($(Jp1)!(PV)!(Jp2)$) node[scale=0.85,left=3,midway,below=1] {$\delta(\Jpsi)$};
+  
+\end{tikzpicture}
+
+
+% Bc -> J/psi tau nu - no J/psi pT
+\begin{tikzpicture}
+  
+  \def\angJpsi{95}
+  \coordinate (BL) at (-1,0);
+  \coordinate (BR) at ( 3,0);
+  \coordinate (PV) at ( 0,0);
+  \coordinate (SV) at ( 2.0,1.8);
+  \coordinate (T) at ($(SV)+(20:0.6)$);
+  \coordinate (Jp1) at ($(SV)+({\angJpsi-180}:2.6)$);
+  \coordinate (Jp2) at ($(SV)+(\angJpsi:2.8)$);
+  
+  % DASHES
+  \draw[beamcol,dashed,name path=beam]
+    (BL) -- (BR);
+  \draw[SVcol,dashed]
+    (PV) -- (SV) -- ($(PV)!1.54!(SV)$);
+  
+  % MUONS
+  \draw[->,red,line width=1]
+    (SV) to[out=\angJpsi+5,in=\angJpsi-160] ++(\angJpsi+15:2.5) node[above left=-4] {$\mu^+$};
+  \draw[->,red,line width=1]
+    (SV) to[out=\angJpsi-5,in=\angJpsi-220] ++(\angJpsi-20:2.4) node[above right] {$\mu^-$};
+  
+  % TAU
+  \draw[thick,taucol] %,mydashed]
+    (SV) to[out=11,in=-148,looseness=0.6] (T);
+  \path (SV) -- (T) node[taucol,pos=0.4,below right=-3] {$\tau^\pm$};
+  
+  % PIONS
+  \draw[->,taucol,line width=1]
+    (T) to[out=28,in=-130] ++(38:2.4) node[above right] {$\pi^\pm$};
+  \draw[->,taucol,line width=1]
+    (T) to[out=20,in=-150] ++(24:3.0) node[above right] {$\pi^\pm$};
+  \draw[->,taucol,line width=1]
+    (T) to[out=16,in=170] ++( 2:2.4) node[right] {$\pi^\mp$};
+  \fill[taucol!80!black]
+    (T) circle (0.06);
+  
+  % BLOBS
+  \fill[beamcol]
+    (PV) ellipse (9pt and 4.5pt)
+    node[beamcol!95!black,above left=3] {$\mathrm{b}\overline{\mathrm{b}}$ PV};
+  \fill[SVcol]
+    (SV) circle (4pt) node[above=2,left=1] {SV};
   
 \end{tikzpicture}
 
@@ -123,8 +182,7 @@
   \draw[beamcol,dashed,name path=beam]
     (BL) -- (BR);
   \draw[SVcol,dashed]
-    (PV) -- (SV) -- ($(PV)!1.50!(SV)$);
-    
+    (PV) -- (SV) -- ($(PV)!1.54!(SV)$);
   
   % MUONS
   \draw[Jpsicol,line width=1,dashed,name path=mumu]
@@ -138,7 +196,7 @@
   \draw[->,taucol,line width=1]
     (SV) to[out=20,in=-150] ++(24:2.6) node[above right] {$\pi^\pm$};
   \draw[->,taucol,line width=1]
-    (SV) to[out=16,in=170] ++( 2:2.0) node[above right] {$\pi^\mp$};
+    (SV) to[out=16,in=170] ++( 2:2.0) node[right] {$\pi^\mp$};
   
   % BLOBS
   \fill[beamcol]
@@ -157,7 +215,7 @@
 \end{tikzpicture}
 
 
-% Bc -> J/psi tau nu
+% Bc -> J/psi + 3rd mu
 \begin{tikzpicture}
   
   \def\angJpsi{70}
@@ -172,7 +230,7 @@
   \draw[beamcol,dashed,name path=beam]
     (BL) -- (BR);
   \draw[SVcol,dashed]
-    (PV) -- (SV) -- ($(PV)!1.50!(SV)$);
+    (PV) -- (SV) -- ($(PV)!1.54!(SV)$);
   \draw[->,Jpsicol,dashed,line width=1,name path=mumu]
     (Jp1) -- (Jp2) node[right=9,above] {$\vec{p}_{\mu\mu} = \vec{p}_\Jpsi$};
   \draw[Jpsicol,dashed]
@@ -180,9 +238,9 @@
   
   % MUONS
   \draw[->,red,line width=1]
-    (SV) to[out=\angJpsi+5,in=-80] ++(\angJpsi+20:2.1) node[above left=-4] {$\mu^+$};
+    (SV) to[out=\angJpsi+5,in=\angJpsi-150] ++(\angJpsi+20:2.1) node[above left=-4] {$\mu^+$};
   \draw[->,red,line width=1]
-    (SV) to[out=\angJpsi-5,in=-140] ++(\angJpsi-20:2) node[above right] {$\mu^-$};
+    (SV) to[out=\angJpsi-5,in=\angJpsi-220] ++(\angJpsi-20:2) node[above right] {$\mu^-$};
   \draw[->,taucol,line width=1]
     (SV) to[out=30,in=-170] ++(20:2.4) node[above left] {$\mu^\text{3rd}$};
   
@@ -203,8 +261,7 @@
 \end{tikzpicture}
 
 
-
-% Bc -> J/psi tau nu
+% Bc -> J/psi + 3rd mu
 \begin{tikzpicture}
   
   \def\angJpsi{78}
@@ -288,6 +345,7 @@
   \coordinate (BR) at ( 3,0);
   \coordinate (PV) at ( 0,0);
   \coordinate (SV) at ( 2.0,1.8);
+  \coordinate (T) at ($(SV)+(20:0.6)$);
   \coordinate (Jp1) at ($(SV)+({\angJpsi-180}:1.2)$);
   \coordinate (Jp2) at ($(SV)+(\angJpsi:2.8)$);
   
@@ -295,29 +353,30 @@
   \draw[dashed,name path=beam]
     (BL) -- (BR);
   \draw[dashed]
-    (PV) -- (SV) -- ($(PV)!1.50!(SV)$);
+    (PV) -- (SV) -- ($(PV)!1.54!(SV)$);
   \draw[->,dashed,line width=1,name path=mumu]
     (Jp1) -- (Jp2) node[right=9,above] {$\vec{p}_{\mu\mu} = \vec{p}_\Jpsi$};
   
   % MUONS
   \draw[->,line width=1]
-    (SV) to[out=\angJpsi+5,in=-80] ++(\angJpsi+15:2.5) node[above left=-4] {$\mu^+$};
+    (SV) to[out=\angJpsi+5,in=\angJpsi-160] ++(\angJpsi+15:2.5) node[above left=-4] {$\mu^+$};
   \draw[->,line width=1]
-    (SV) to[out=\angJpsi-5,in=-140] ++(\angJpsi-20:2.4) node[above right] {$\mu^-$};
+    (SV) to[out=\angJpsi-5,in=\angJpsi-220] ++(\angJpsi-20:2.4) node[above right] {$\mu^-$};
   
   % TAU
-  \draw[thick,green!70!black]
-    (SV) --++ (23:0.6) coordinate (T) node[midway,below right=-2] {$\tau^+$};
-  \fill[green!70!black]
-    (T) circle (0.06);
+  \draw[thick,mygreen] %,mydashed]
+    (SV) to[out=11,in=-148,looseness=0.6] (T);
+  \path (SV) -- (T) node[mygreen,pos=0.4,below right=-3] {$\tau^\pm$};
   
   % PIONS
-  \draw[->,green!70!black,line width=1]
-    (T) to[out=28,in=-130] ++(38:2.0) node[above right] {$\pi^\pm$};
-  \draw[->,green!70!black,line width=1]
-    (T) to[out=20,in=-150] ++(24:2.6) node[above right] {$\pi^\pm$};
-  \draw[->,green!70!black,line width=1]
-    (T) to[out=16,in=170] ++( 2:2.0) node[above right] {$\pi^\mp$};
+  \draw[->,mygreen,line width=1]
+    (T) to[out=28,in=-130] ++(38:2.4) node[above right] {$\pi^\pm$};
+  \draw[->,mygreen,line width=1]
+    (T) to[out=20,in=-150] ++(24:3.0) node[above right] {$\pi^\pm$};
+  \draw[->,mygreen,line width=1]
+    (T) to[out=16,in=170] ++( 2:2.4) node[above right] {$\pi^\mp$};
+  \fill[mygreen]
+    (T) circle (0.06);
   
   % BLOBS
   \fill[]

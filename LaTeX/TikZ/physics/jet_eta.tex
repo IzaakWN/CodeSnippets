@@ -55,16 +55,16 @@
   \readlist\cols{blue,green,myorange,red,mypurple} % list of colors
   
   % GRIDS
-  \foreach \i [evaluate={\y=\i-0.5; \Nx=\N-\i+1; \e=0.5*\i}] in {1,...,\N}{
+  \foreach \i [evaluate={\y=\i-0.5; \ym=0.5*(\i-1); \Nx=\N-\i+1; \e=0.5*\i}] in {1,...,\N}{
     \draw[very thin,dashed,black!50] (0,\i) --++ (\Nx,0);
     \draw[very thin,dashed,black!50] (\i,0) --++ (0,\Nx);
-    \tick{0,\i}{0} node[left=-1,scale=0.9] {\e};
-    \tick{\i,0}{90} node[below=-1,scale=0.9] {\e};
     \draw[mygray]
       (\i-1,0) --++ (135:{sqrt(2)*(\i+0.2)}) coordinate (T\i) --++ (45:{sqrt(2)/2});
-    \draw[mygray] (T\i) --++ (135:0.06) node[above=-2,rotate=45] {\y};
+    \draw[mygray] (T\i) --++ (135:0.06) node[above=-2,rotate=45] {\ym};
+    \tick{0,\i}{0} node[left=-1,scale=0.9] {\e};
+    \tick{\i,0}{90} node[below=-1,scale=0.9] {\e};
   }
-  \draw[mygray] (\N,0) --++ (135:{sqrt(2)*(\N+0.75)});
+  \draw[mygray] (\N,0) --++ (135:{sqrt(2)*(\N+0.75)}) node[right=3,above=0,rotate=45] {2.5};
   
   % JETS
   \foreach \i [evaluate={\y=\i-0.5; \Nx=\N-\i+1; \e=0.5*\i}] in {1,...,\N}{
@@ -84,7 +84,7 @@
   % AXIS
   \draw[<->,thick]
     (0,1.1*\N) %node[left] {\contour{white}{$y*$}} --
-    node[left=6,above right=-4] {$y* = \frac{1}{2}|y_1-y_2|$} --
+    node[left=6,above right=-3] {$y^* = \frac{1}{2}|y_1-y_2|$} --
     (0,0) -- (1.1*\N,0) node[right] {$y_\text{b} = \frac{1}{2}|y_1+y_2|$};
   \draw[->,thick,mygray]
     (135:4.0) --++ (45:1.3)

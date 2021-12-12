@@ -13,7 +13,7 @@
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \usetikzlibrary{fadings}
 \tikzset{>=latex} % for LaTeX arrow head
-\contourlength{1.6pt}
+\contourlength{1.4pt}
 
 \colorlet{wall}{blue!30!black}
 \colorlet{myblue}{blue!70!black}
@@ -56,7 +56,6 @@
 \begin{document}
 
 
-
 % INTERFERENCE FADING
 \begin{tikzpicture}
   \def\a{2}  % distance sources
@@ -69,7 +68,6 @@
     (0,-\H/2) rectangle ++(\W,\H);
   %\draw (0,0) --++ (0,\H);
 \end{tikzpicture}
-
 
 
 % TWO SPLIT
@@ -96,7 +94,7 @@
   \def\A{1.6}       % amplitude
   %\def\r{0.06}      % point source radius
   %\def\nmax{10}
-  \def\nsamples{40}
+  \def\nsamples{100}
   \def\ang{62}
   
   \begin{scope}
@@ -155,15 +153,20 @@
     (\t/2,-\a/2-\d/2) rectangle (-\t/2,-\H/2)
     (\L,-\H/2) rectangle (\L+\t,\H/2);
   
-  %% POINTS
-  %\fill[myblue] (0,\a/2) circle (\r); %node[left] {\contour{white}{S$_1$}};
-  %\fill[myred] (0,-\a/2) circle (\r); %node[left] {\contour{white}{S$_2$}};
-  
   % SHADES
   \begin{scope}[shift={(1.08*\L,0)}]
+    \def\yz{\L/sqrt((\a/\lambd)^2-1)} % m = +- 1/2
+    \def\yZ{\L/sqrt((\a/\lambd/2)^2-1)} % m = +- 1
     \clip (0,-\H/2) rectangle (1.1*\A,\H/2);
-    \def\yz{\L/sqrt((\a/\lambd)^2-1)}
-    \path [left color=myshadow,right color=myshadow,middle color=white,shading angle={180}]
+    \fill[white] (0,-\H/2) rectangle++ (\A,\H); % to fill seams
+    \foreach \i [evaluate={\n=0.5*\i;\yn=\L/sqrt((\a/(2*\lambd*\n))^2-1);
+                 }] in {1,...,\Nlines}{
+      \ifodd\i % if even
+        \fill[myshadow] (0,{-\yn-0.1}) rectangle++ (\A,0.2); % to fill seams
+        \fill[myshadow] (0,{ \yn-0.1}) rectangle++ (\A,0.2); % to fill seams
+      \fi
+    }
+    \path[left color=myshadow,right color=myshadow,middle color=white,shading angle={180}]
       (0,{-\yz}) rectangle (\A,{\yz});
     \foreach \i [evaluate={
                   \n=0.5*\i;
@@ -172,9 +175,9 @@
                   \ym=\L/sqrt((\a/(2*\lambd*\m))^2-1);
                   \dang=mod(\i,2)*180;
                  }] in {1,...,\Nlines}{
-      \path [left color=myshadow,right color=white,shading angle={\dang}]
+      \path[left color=myshadow,right color=white,shading angle={\dang}]
         (0,\yn) rectangle (\A,\ym);
-      \path [left color=myshadow,right color=white,shading angle={180+\dang}]
+      \path[left color=myshadow,right color=white,shading angle={180+\dang}]
         (0,-\yn) rectangle (\A,-\ym);
     }
   \end{scope}
@@ -313,7 +316,6 @@
     (0,-\a/2-\d/2) rectangle (-\t,-\H/2);
   
 \end{tikzpicture}
-
 
 
 \end{document}

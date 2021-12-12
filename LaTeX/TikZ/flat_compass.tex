@@ -1,0 +1,31 @@
+% Author: Izaak Neutelings (December 2021)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{arrows.meta} % for arrow size
+\usetikzlibrary{3d} % for canvas is
+
+\tikzset{>=latex} % for LaTeX arrow head
+\tikzstyle{axis}=[->,thick,line cap=round]
+
+\begin{document}
+
+\tdplotsetmaincoords{70}{120} % to reset previous setting
+\begin{tikzpicture}[scale=2.7,tdplot_main_coords,rotate around x=0]
+  \def\R{1.2}
+  \def\w{0.3}
+  
+  \draw[axis] (0,0,0) -- (0,1,0) node[below right]{$y$};
+  \draw[axis] (0,0,0) -- (0,0,1) node[below right]{$z$};
+  \draw[axis] (0,0,0) -- (1,0,0) node[below left]{$x$};
+  
+  \begin{scope}[shift={(0.6,0.6,0)},
+                canvas is yx plane at z=0,transform shape]
+    \pgflowlevelsynccm
+    \draw[{Latex[length=3,width=2]}-{Latex[length=3,width=2]},black!50] (-\w,0) -- (\w,0);
+    \draw[{Latex[length=3,width=2]}-{Latex[length=3,width=2]},black!50] (0,-\w) -- (0,\w);
+    \node[below=1,black!50,scale=0.4,xscale=-1,rotate=90] at (-\w,0) {N};
+  \end{scope}
+  
+\end{tikzpicture}
+
+\end{document}

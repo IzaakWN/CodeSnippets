@@ -5,6 +5,8 @@
 \usepackage{physics}
 \usepackage{tikz}
 \usepackage{tikz-3dplot}
+\usetikzlibrary{arrows.meta} % for arrow size
+\usetikzlibrary{3d} % for canvas is
 \usepackage{xcolor}
 \usepackage[outline]{contour} % glow around text
 \contourlength{0.9pt}
@@ -60,7 +62,7 @@
     {above=2,right=-1,anchor=mid west}{$\phi$}
   \tdplotdrawarc[->,rotate around z=\phivec-90,rotate around y=-90]{(O)}{0.4}{0}{\thetavec}
     {anchor=mid east}{$\theta$}
-
+  
 \end{tikzpicture}
 
 
@@ -104,7 +106,16 @@
     \draw[<->,black!50] (0,0,-\w) -- (0,0,\w);
     \node[above=1,left,black!50,scale=0.6] at (-\w,0,0) {N};
   \end{scope}
-
+  
+  %% COMPASS - CMS-ATLAS axis has a ~12° declination (http://googlecompass.com) (flat
+  %\begin{scope}[shift={(1.1*\R,0,1.65*\R)},rotate around y=12,
+  %              canvas is xz plane at y=0,transform shape]
+  %  \pgflowlevelsynccm
+  %  \draw[{Latex[length=3,width=2]}-{Latex[length=3,width=2]},black!50] (-\w,0) -- (\w,0);
+  %  \draw[{Latex[length=3,width=2]}-{Latex[length=3,width=2]},black!50] (0,-\w) -- (0,\w);
+  %  \node[below=1,black!50,scale=0.4,xscale=-1,rotate=90] at (-\w,0) {N};
+  %\end{scope}
+  
   % NODES
   \node[left,align=center] at (0,0,1.1) {Jura};
   \node[right,mydarkblue] at (\R,0,0) {LHC};

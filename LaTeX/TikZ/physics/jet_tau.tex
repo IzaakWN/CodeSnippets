@@ -1,13 +1,9 @@
 % Author: Izaak Neutelings (November 2021)
 % Description: jet cones for taus & others
 \documentclass[border=3pt,tikz]{standalone}
-\usepackage{amsmath}
-\usepackage{physics}
-\usepackage{xcolor}
 \usetikzlibrary{calc}
 \usetikzlibrary{math} % for \tikzmath
 \tikzset{>=latex} % for LaTeX arrow head
-\usetikzlibrary{decorations.pathreplacing} % for curly braces
 
 \colorlet{myblue}{blue!70!black}
 %\colorlet{mydarkblue}{blue!50!black}
@@ -53,8 +49,10 @@
 
 
 % TAU JET - ONE PRONG, PI ZERO
+\small
+\tikzset{every picture/.append style={scale=2.4}} % set scale for all figures
 \def\ang{90} % angle of all cones
-\begin{tikzpicture}[scale=2.2]
+\begin{tikzpicture} %[scale=\scale]
   
   \edef\angiso{44} % opening angle of isolation cone
   \edef\angsig{22} % opening angle of isolation cone
@@ -77,7 +75,7 @@
 
 
 % TAU JET - THREE PRONG, PI ZERO
-\begin{tikzpicture}[scale=2.2]
+\begin{tikzpicture} %[scale=\scale]
   
   \edef\angiso{44} % opening angle of isolation cone
   \edef\angsig{22} % opening angle of isolation cone
@@ -101,7 +99,7 @@
 
 
 % ELECTRON JET
-\begin{tikzpicture}[scale=2.2]
+\begin{tikzpicture} %[scale=\scale]
   
   \edef\angiso{44} % opening angle of isolation cone
   \edef\angsig{22} % opening angle of isolation cone
@@ -122,7 +120,7 @@
 
 
 % MUON JET
-\begin{tikzpicture}[scale=2.2]
+\begin{tikzpicture} %[scale=\scale]
   
   \edef\angiso{44} % opening angle of isolation cone
   \edef\angsig{22} % opening angle of isolation cone
@@ -143,7 +141,7 @@
 
 
 % QUARK/GLUON JET
-\begin{tikzpicture}[scale=2.2]
+\begin{tikzpicture} %[scale=\scale]
   
   \edef\angiso{44} % opening angle of isolation cone
   \edef\angsig{22} % opening angle of isolation cone

@@ -30,7 +30,7 @@
 \tikzstyle{world line t}=[mypurple!60,line width=0.4]
 \tikzstyle{world line'}=[mydarkred!60,line width=0.4]
 \tikzstyle{mysmallarr}=[-{Latex[length=3,width=2]},thin]
-\tikzstyle{mydashed}=[dash pattern=on 2 off 2]
+\tikzstyle{mydashed}=[dash pattern=on 3 off 3]
 \tikzstyle{vector}=[->,line width=1,line cap=round]
 \tikzstyle{vector'}=[vector,shorten >=1.2]
 %\tikzstyle{measure}=[{Latex[length=3,width=2]}-{Latex[length=3,width=2]},thin]
@@ -744,12 +744,12 @@
   \draw[->,thick,mydarkred] (\ang:-\xmin) -- (X') node[right=-1] {$x'$};
   
   % EVENTS
-  \draw[mygreen,mydashed,very thin]
+  \draw[mygreen,mydashed,thin]
     (90-\ang:3*\D) coordinate (A) ++ (-0.23*\xmaxp,0) --++ (1.13*\xmaxp,0);
-  \draw[myblue,mydashed,very thin]
+  \draw[myblue,mydashed,thin]
     (\ang:5*\D)++(90-\ang:2*\D) coordinate (B)++(-1.04*\xmaxp,0) --++ (1.13*\xmaxp,0);
   \draw[mysmallarr,mydarkred] (B)++(\ang:0.07) --++ (90-\ang:\D)
-    node[pos=0.46,right=-2] {$c\Delta t'>0$}; %\contour{mydarkred!5}{
+    node[pos=0.46,right=-2] {$c\Delta t'>0$};
   \draw[mysmallarr] (B)++(0.07,0) --++ (0,-0.29)
     node[pos=0.5,right=-2] {$c\Delta t<0$};
   \fill[mydarkgreen] (A) circle(0.04); % event A
@@ -938,6 +938,7 @@
   
   \def\xmax{2}
   \def\Nlines{4} % number of world lines (at constant x/t)
+  \pgfmathsetmacro\w{\xmax/(\Nlines+1)}
   
   % AXES
   \draw[->,thick] (0,-\xmax) -- (0,\xmax+0.2) node[left=-1] {$ct$};
@@ -970,12 +971,28 @@
     {spacelike separation\\[-1]$s^2 = c^2t^2 - x^2 < 0$};
   
   % VECTORS
-  \fill[mydarkgreen] ({\xmax*1.5/(\Nlines+1)},{(\xmax/(\Nlines+1)*sqrt(1.5^2+3^2)}) coordinate (A) circle(0.03);
-  \fill[mydarkblue] ({(\xmax/(\Nlines+1)*sqrt(1.5^2+3^2)},{\xmax*1.5/(\Nlines+1)}) coordinate (B) circle(0.03);
+  \def\xa{0.5}
+  \def\xb{2.7}
+  \def\ta{-0.7}
+  \def\tb{1.7}
+  \draw[mydarkgreen,very thick,decoration={markings,mark=at position 0.55 with {\arrow{latex}}},
+        postaction={decorate},samples=20,variable=\x,domain=\xa:\xb]
+    plot({\w*\x},{\w*sqrt((\x)^2+3^2)});
+  \draw[mydarkblue,very thick,decoration={markings,mark=at position 0.6 with {\arrow{latex}}},
+        postaction={decorate},samples=20,variable=\x,domain=\ta:\tb]
+    plot({\w*sqrt((\x)^2+3^2)},{\w*\x});
+  \fill[mydarkgreen] ({\w*\xa},{\w*sqrt(\xa^2+3^2)}) coordinate (A) circle(0.03);
+  \fill[mydarkgreen] ({\w*\xb},{\w*sqrt(\xb^2+3^2)}) coordinate (A') circle(0.03);
+  \fill[mydarkblue] ({(\w*sqrt((\ta)^2+3^2)},{\w*\ta}) coordinate (B) circle(0.03);
+  \fill[mydarkblue] ({(\w*sqrt((\tb)^2+3^2)},{\w*\tb}) coordinate (B') circle(0.03);
   \draw[vector',mydarkgreen] (0,0) -- (A)
-    node[pos=0.55,right=-2] {$s$};
+    node[pos=0.53,right=-2] {$s$};
+  \draw[vector',mydarkgreen] (0,0) -- (A')
+    node[pos=0.57,right=-2] {$s$};
   \draw[vector',mydarkblue] (0,0) -- (B)
-    node[pos=0.50,below=-2] {$s$};
+    node[pos=0.53,below=-1] {$s$};
+  \draw[vector',mydarkblue] (0,0) -- (B')
+    node[pos=0.53,above=-1] {$s$};
   
 \end{tikzpicture}
 

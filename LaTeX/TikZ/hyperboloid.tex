@@ -19,17 +19,21 @@
 	% https://tex.stackexchange.com/questions/39889/tikz-how-to-get-a-few-smooth-grid-lines-for-surface-plots
     \def\r{1.5}
     \def\h{4}
+    \def\hs{3.6}
     \def\c{3.8}
     \def\w{1.1}
     \def\redge{100} % angle
     \def\ledge{180+\redge} % angle
     % patch,patch type=triangle quadr,domain=-2:2,shader=faceted interp,colormap/gray,fill=black, color=red,surf
-    \addplot3[domain=-\h:\h,y domain=0:360,z buffer=sort,surf,
+    \addplot3[domain=-\hs:\hs,y domain=90:270,z buffer=sort,surf,
               colormap name={myblue},shader=interp,fill opacity=0.60]
              ({sqrt(x^2+\r^2)*cos(y)},{sqrt(x^2+\r^2)*sin(y)},x); % spacetime hyperboloid
     \addplot3[domain=-\c:\c,y domain=0:360,z buffer=sort,surf,
               colormap name={myyellow},shader=interp,fill opacity=1.0]
              ({x*cos(y)},{x*sin(y)},x); % light cone
+    \addplot3[domain=-\hs:\hs,y domain=90:-90,z buffer=sort,surf,
+              colormap name={myblue},shader=interp,fill opacity=0.50]
+             ({sqrt(x^2+\r^2)*cos(y)},{sqrt(x^2+\r^2)*sin(y)},x); % spacetime hyperboloid
 %    \addplot3[variable=t,domain=0:360,samples y=0,
 %              colormap name={myblue},line width=0.5]
 %             ({\r*cos(t)},{\r*sin(t)},0); % circle

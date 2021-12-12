@@ -1,0 +1,86 @@
+% Author: Izaak Neutelings (December 2021)
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath} % for \text
+\usepackage{listofitems} % for \readlist to create arrays
+\tikzset{>=latex} % for LaTeX arrow head
+
+% colors
+\colorlet{mylightred}{red!50!black!15}
+\colorlet{mylightblue}{blue!50!black!15}
+\colorlet{mylightgreen}{green!50!black!15}
+
+\def\tick#1#2{\draw[thick] (#1) ++ (#2:0.05) --++ (#2-180:0.1)}
+\newlength\s
+\setlength\s{2cm}
+\newcommand\grid[2]{
+  
+  % BINS
+  \readlist\pts{20,30,40,50,70,Inf}
+  \readlist\dms{11,10,1,0}
+  \pgfmathsetmacro\Nx{\ptslen-1}
+  \pgfmathsetmacro\Ny{\dmslen}
+  
+  % GRID
+  \fill [mylightblue] (0,0) rectangle (\Nx+0.02,\Ny);
+  \foreach \y in {1,...,\Ny}{
+    \ifodd\y
+      \fill [mylightred] (0,\y) rectangle (\Nx+0.02,\y-1);
+    \fi
+  }
+  \foreach \y in {1,...,\Ny}{
+    \draw[thick] (0,\y) -- (\Nx+0.05,\y);
+    \node[left] at (0,\y-0.5) {DM\dms[\y]};
+  }
+  \foreach \x in {1,...,\Nx}{
+    \draw[thick] (\x-1,0) -- (\x-1,\Ny);
+    \tick{\x-1,0}{90} node[below] {\pts[\x]};
+  }
+  
+  % AXES
+  \draw[->,thick] (0,0) -- (\Nx+0.2,0);
+  \draw[thick] (0,0) rectangle (\Nx-1,\Ny);
+  \node[below=2,scale=1.2] at (\Nx,0) {$\tau_\mathrm{h}$ $p_\mathrm{T}$};
+  
+  % FIGURES
+  \foreach \x [evaluate={\xup=int(\x+1);}] in {1,...,\Nx}{ %count=\xup,remember=\x as \xlow (initially 1)
+    \foreach \y in {1,...,\Ny}{
+      \node at (\x-0.5,\y-0.5) {
+        \includegraphics[trim=0 0 5 0,clip,width=0.96\s,height=0.94\s]{fig/#1_mt-#2_pt\pts[\x]-\pts[\xup]_dm\dms[\y]-UL2018.pdf}};
+    }
+  }
+}
+
+\begin{document}
+
+
+% PASS REGION - mvis
+\begin{tikzpicture}[x=\s,y=\s]
+  \grid{mvis_coarse}{Medium}
+\end{tikzpicture}
+
+
+% FAIL REGION - mvis
+\begin{tikzpicture}[x=\s,y=\s]
+  \grid{mvis_coarse}{VVVLoose-notMedium}
+\end{tikzpicture}
+
+
+% PASS REGION - mtau
+\begin{tikzpicture}[x=\s,y=\s]
+  \grid{m_2}{Medium}
+\end{tikzpicture}
+
+
+% 0b REGION - mvis
+\begin{tikzpicture}[x=\s,y=\s]
+  \grid{mvis_coarse}{0b-Medium}
+\end{tikzpicture}
+
+
+% >=1b REGION - mvis
+\begin{tikzpicture}[x=\s,y=\s]
+  \grid{mvis_coarse}{geq1b-Medium}
+\end{tikzpicture}
+
+
+\end{document}

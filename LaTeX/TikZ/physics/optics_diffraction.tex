@@ -306,6 +306,7 @@
   % SHADES
   \begin{scope}[shift={(1.08*\L,0)}]
     \clip (0,-\H/2) rectangle (1.1*\A,\H/2);
+    \fill[myshadow] (0,-\H/2) rectangle (\A,\H/2); % to fill seams
     \def\yz{\L/sqrt((\a/\lambd)^2-1)} %\L/sqrt((\a/\lambd)^2-1)
     \path [left color=myshadow,right color=myshadow,middle color=white,shading angle={180}]
       (0,{-\yz}) rectangle (\A,{\yz});

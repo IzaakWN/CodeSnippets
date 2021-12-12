@@ -2,7 +2,6 @@
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{physics}
 \usepackage{graphicx}
-\usepackage{tikz}
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \tikzset{>=latex}
 
@@ -64,7 +63,7 @@
 \end{tikzpicture}
 
 
-% PRESSURE
+% BOOK 3D
 \begin{tikzpicture}[x={(1cm,0)},y={(0.35cm,0.23cm)},z={(0,1cm)}]
   \def\L{3.0}  % total length
   \def\Dw{0.8} % sheared
@@ -118,28 +117,6 @@
   };
   
 \end{tikzpicture}
-
-
-%% TURBULENCE - REYNOLDS
-%\begin{tikzpicture}
-%  \def\xmax{4.8}
-%  \def\ymax{3.0}
-%  \def\xa{0.40*0.7*\xmax}
-%  \def\xb{0.55*0.7*\xmax}
-%  \fill[myblue!8] (0,0) rectangle (\xa,\ymax);
-%  \fill[myorange!10] (\xa,0) rectangle (\xb,\ymax);
-%  \fill[myred!8] (\xb,0) rectangle (\xmax,\ymax);
-%  \draw[->,thick] (-0.05*\xmax,0) -- (1.05*\xmax,0) node[below left=0] {Pressure difference $\Delta P$};
-%  \draw[->,thick] (0,-0.05*\xmax) -- (0,1.10*\ymax) node[above left=0,rotate=90] {Flow};
-%  \draw[thick] ({(\xa+\xb)/2},0.035*\ymax) --++ (0,-0.07*\ymax);
-%  \draw[thick,myblue,dashed] (0,0) -- (0.7*\xmax,\ymax);
-%  \draw[very thick,myblue] (0,0) -- (\xa,0.40*\ymax) coordinate (T1);
-%  \draw[very thick,myorange] (T1) to[out=40,in=-155] (\xb,0.51*\ymax) coordinate (T2);
-%  \draw[very thick,myred] (T2) to[out=25,in=180] (\xmax,0.67*\ymax);
-%  \node[right,myblue] at (0,0.54*\ymax) {laminar};
-%  \node[right,myred] at (0.53*\xmax,0.50*\ymax) {turbulent};
-%  %\draw[dashed] ({(\xa+\xb)/2},0) --++ (0,\ymax) node[above] {$\mathrm{Re}\sim2300$};
-%\end{tikzpicture}
 
 
 \end{document}
