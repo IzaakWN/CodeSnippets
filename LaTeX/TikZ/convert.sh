@@ -28,7 +28,7 @@ while getopts 'Aad:fi:n:o:r:vW:w' option; do
     i) PAGE=${OPTARG};;
     n) MAXNPAGES=${OPTARG};;
     o) OUTPUT=${OPTARG};;
-    r) RESO=${OPTARG};;
+    r) PNG_RESO=${OPTARG}; GIF_RESO=${OPTARG};;
     v) VERBOSE=1;;
     w) WHITE=1;; # remove transparancy
     W) WIDTH=${OPTARG};;
