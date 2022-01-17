@@ -6,7 +6,7 @@
 \usepackage{amsmath} % for aligned
 %\usepackage{amssymb} % for \mathbb
 \usepackage{tikz}
-\usepackage{etoolbox} % for \ifthen
+%\usepackage{etoolbox} % for \ifthen
 \usepackage{listofitems} % for \readlist to create arrays
 \usetikzlibrary{arrows.meta} % for arrow size
 \usepackage[outline]{contour} % glow around text
@@ -56,12 +56,12 @@
       %\draw[node] (N\lay-\i) circle (\R);
       
       % CONNECTIONS
-      \ifnumcomp{\lay}{>}{1}{ % connect to previous layer
+      \ifnum\lay>1 % connect to previous layer
         \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
           \draw[connect arrow] (N\prev-\j) -- (N\lay-\i); % connect arrows directly
           %\draw[connect arrow] (N\prev-\j) -- (N\lay-\i'); % connect arrows to shifted node
         }
-      }{} % else: nothing to connect first layer
+      \fi % else: nothing to connect first layer
       
     }
     
@@ -73,6 +73,38 @@
   \node[above=8,align=center,myred!60!black] at (N\Nnodlen-1.90) {output\\[-0.2em]layer};
   
 \end{tikzpicture}
+
+
+%% NEURAL NETWORK using \foreach's remember instead of \readlist
+%\begin{tikzpicture}[x=2.2cm,y=1.4cm]
+%  \message{^^JNeural network with arrows}
+%  \def\Ntot{5} % total number of indices
+%  \def\nstyle{int(\lay<\Ntot?min(2,\lay):3)} % map layer number onto 1, 2, or 3
+%  
+%  \message{^^J  Layer}
+%  \foreach \N [count=\lay,remember={\N as \Nprev (initially 0);}]
+%               in {4,5,5,5,3}{ % loop over layers
+%    \message{\lay,}
+%    \foreach \i [evaluate={\y=\N/2-\i; \x=\lay; \n=\nstyle; \prev=int(\lay-1);}]
+%                 in {1,...,\N}{ % loop over nodes
+%      \node[node \n] (N\lay-\i) at (\x,\y) {$a_\i^{(\prev)}$};
+%      
+%      % CONNECTIONS
+%      \ifnum\Nprev>0 % connect to previous layer
+%        \foreach \j in {1,...,\Nprev}{ % loop over nodes in previous layer
+%          \draw[connect arrow] (N\prev-\j) -- (N\lay-\i); % connect arrows directly
+%        }
+%      \fi
+%      
+%    }
+%  }
+%  
+%  % LABELS
+%  \node[above=5,align=center,mygreen!60!black] at (N1-1.90) {input\\[-0.2em]layer};
+%  \node[above=2,align=center,myblue!60!black] at (N3-1.90) {hidden layers};
+%  \node[above=8,align=center,myred!60!black] at (N\Ntot-1.90) {output\\[-0.2em]layer};
+%  
+%\end{tikzpicture}
 
 
 % NEURAL NETWORK with coefficients, uniform arrows
@@ -97,7 +129,7 @@
       \node[node \n] (N\lay-\i) at (\x,\y) {$a_\i^{(\prev)}$};
       
       % CONNECTIONS
-      \ifnumcomp{\lay}{>}{1}{ % connect to previous layer
+      \ifnum\lay>1 % connect to previous layer
         \setAngles{N\prev-1}{N\lay-\i}{N\prev-\Nnod[\prev]} % angles in current node
         %\draw[red,thick] (N\lay-\i)++(\angmin:0.2) --++ (\angmin:-0.5) node[right,scale=0.5] {\dang};
         %\draw[blue,thick] (N\lay-\i)++(\angmax:0.2) --++ (\angmax:-0.5) node[right,scale=0.5] {\angmin, \angmax};
@@ -108,7 +140,7 @@
           %\draw[connect arrow,white,line width=1.1] (N\prev-\j.{\angout}) -- (N\lay-\i.{\ang});
           \draw[connect arrow] (N\prev-\j.{\angout}) -- (N\lay-\i.{\ang}); % connect arrows uniformly
         }
-      }{} % else: nothing to connect first layer
+      \fi % else: nothing to connect first layer
       
     }
   }
@@ -137,13 +169,13 @@
       \node[node \n] (N\lay-\i) at (\x,\y) {$a_\i^{(\prev)}$};
       
       % CONNECTIONS
-      \ifnumcomp{\lay}{>}{1}{ % connect to previous layer
+      \ifnum\lay>1 % connect to previous layer
         \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
           \draw[connect,white,line width=1.2] (N\prev-\j) -- (N\lay-\i);
           \draw[connect] (N\prev-\j) -- (N\lay-\i);
           %\draw[connect] (N\prev-\j.0) -- (N\lay-\i.180); % connect to left
         }
-      }{} % else: nothing to connect first layer
+      \fi % else: nothing to connect first layer
       
     }
   }
@@ -176,13 +208,13 @@
       \node[node \n] (N\lay-\i) at (\x,\y) {$\Cstr[\lay]_{\index}$};
       
       % CONNECTIONS
-      \ifnumcomp{\lay}{>}{1}{ % connect to previous layer
+      \ifnum\lay>1 % connect to previous layer
         \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
           \draw[connect,white,line width=1.2] (N\prev-\j) -- (N\lay-\i);
           \draw[connect] (N\prev-\j) -- (N\lay-\i);
           %\draw[connect] (N\prev-\j.0) -- (N\lay-\i.180); % connect to left
         }
-      }{} % else: nothing to connect first layer
+      \fi % else: nothing to connect first layer
       
     }
     \path (N\lay-\N) --++ (0,1+\yshift) node[midway,scale=1.5] {$\vdots$};
@@ -212,13 +244,13 @@
       \node[node \n] (N\lay-\i) at (\x,\y) {};
       
       % CONNECTIONS
-      \ifnumcomp{\lay}{>}{1}{ % connect to previous layer
+      \ifnum\lay>1 % connect to previous layer
         \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
           \draw[connect,white,line width=1.2] (N\prev-\j) -- (N\lay-\i);
           \draw[connect] (N\prev-\j) -- (N\lay-\i);
           %\draw[connect] (N\prev-\j.0) -- (N\lay-\i.180); % connect to left
         }
-      }{} % else: nothing to connect first layer
+      \fi % else: nothing to connect first layer
       
     }
   }
@@ -249,7 +281,7 @@
       \coordinate (N\lay-\i) at (\x,\y);
       
       % CONNECTIONS
-      \ifnumcomp{\lay}{>}{1}{ % connect to previous layer
+      \ifnum\lay>1 % connect to previous layer
         \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
           \draw[connect,white,line width=1.2] (N\prev-\j) -- (N\lay-\i);
           \draw[connect] (N\prev-\j) -- (N\lay-\i);
@@ -259,7 +291,7 @@
         \ifnum \lay=\Nnodlen % draw last node over lines
           \node[node \n,minimum size=18] at (N\lay-\i) {};
         \fi
-      }{} % else: nothing to connect first layer
+      \fi % else: nothing to connect first layer
       
     }
   }
@@ -303,8 +335,8 @@
       \node[node \n,outer sep=0.6] (N\lay-\i) at (\x,\y) {};
       
       % CONNECTIONS
-      \ifnumcomp{\lay}{>}{1}{ % connect to previous layer
-        \ifnumcomp{\lay}{<}{\NC}{ % connect to previous layer
+      \ifnum\lay>1 % connect to previous layer
+        \ifnum\lay<\NC % convolutional layers
           \foreach \j [evaluate={\jprev=int(\i-\j); \cconv=int(\Nnod[\prev]>\N); \ctwo=(\cconv&&\j>0);
                        \c=int((\jprev<1||\jprev>\Nnod[\prev]||\ctwo)?0:1);}]
                        in {-1,0,1}{
@@ -316,13 +348,13 @@
             \fi
           }
           
-        }{
+        \else % fully connected layers
           \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
             \draw[connect,white,line width=1.2] (N\prev-\j) -- (N\lay-\i);
             \draw[connect] (N\prev-\j) -- (N\lay-\i);
           }
-        }
-      }{} % else: nothing to connect first layer
+        \fi
+      \fi % else: nothing to connect first layer
       
     }
   }
@@ -359,13 +391,13 @@
       \node[node \n,outer sep=0.6] (N\lay-\i) at (\x,\y) {};
       
       % CONNECTIONS
-      \ifnumcomp{\lay}{>}{1}{ % connect to previous layer
+      \ifnum\lay>1 % connect to previous layer
         \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
           \draw[connect,white,line width=1.2] (N\prev-\j) -- (N\lay-\i);
           \draw[connect] (N\prev-\j) -- (N\lay-\i);
           %\draw[connect] (N\prev-\j.0) -- (N\lay-\i.180); % connect to left
         }
-      }{} % else: nothing to connect first layer
+      \fi % else: nothing to connect first layer
       
     }
   }

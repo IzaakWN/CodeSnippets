@@ -17,18 +17,18 @@
 
 \newcommand\jetcone[6][sigcol]{{
   \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}{\pgfpointanchor{#3}{center}}
-  \pgfmathsetmacro\ang{#4/2} % half-opening angle
+  \pgfmathsetmacro\oang{#4/2} % half-opening angle
   \edef\e{#5} % ratio a/b
   \def\tmpL{tmpL-#2-#3} % unique coordinate name
   \edef\vang{\pgfmathresult} % angle of vector OV
   \tikzmath{
     coordinate \C;
     \C = (#2)-(#3);
-    \x = veclen(\Cx,\Cy)*\e*sin(\ang)^2; % x coordinate P
-    \y = tan(\ang)*(veclen(\Cx,\Cy)-\x); % y coordinate P
-    \a = veclen(\Cx,\Cy)*sqrt(\e)*sin(\ang); % vertical radius
-    \b = veclen(\Cx,\Cy)*tan(\ang)*sqrt(1-\e*sin(\ang)^2); % horizontal radius
-    \angb = acos(sqrt(\e)*sin(\ang)); % angle of P in ellipse
+    \x = veclen(\Cx,\Cy)*\e*sin(\oang)^2; % x coordinate P
+    \y = tan(\oang)*(veclen(\Cx,\Cy)-\x); % y coordinate P
+    \a = veclen(\Cx,\Cy)*sqrt(\e)*sin(\oang); % vertical radius
+    \b = veclen(\Cx,\Cy)*tan(\oang)*sqrt(1-\e*sin(\oang)^2); % horizontal radius
+    \angb = acos(sqrt(\e)*sin(\oang)); % angle of P in ellipse
   }
   \coordinate (\tmpL) at ($(#3)-(\vang:\x pt)+(\vang+90:\y pt)$); % tangency
   \draw[thin,#1!50!black,fill=#1!80!black!50,rotate=\vang] % cone back
@@ -47,124 +47,123 @@
 
 \begin{document}
 
-
-% TAU JET - ONE PRONG, PI ZERO
+% COMMON SETTINGS
 \small
-\tikzset{every picture/.append style={scale=2.4}} % set scale for all figures
-\def\ang{90} % angle of all cones
-\begin{tikzpicture} %[scale=\scale]
-  
-  \edef\angiso{44} % opening angle of isolation cone
-  \edef\angsig{22} % opening angle of isolation cone
-  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
-  \coordinate (O)  at (0,0);
-  \coordinate (O') at (\ang:-0.01); % shifted
-  \coordinate (I)  at (\ang:0.92); % isolation cone
-  \coordinate (S)  at (\ang:1.00); % signal cone
-  \coordinate (T)  at (\ang:0.02); % tau vertex
-  
-  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
-    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
-      \draw[dashed track] (T) -- (82:1.20) node[right=4,above=-2] {$\pi^0$};
-      \draw[dashed track] (T) -- (97:1.18) node[above=2,left=-3] {$\pi^0$};
-      \draw[track] (T) to[out=88,in=-70] (94:1.33) node[right=2,above=-2] {$\pi^-$};
-    }
+\def\angiso{44} % opening angle of isolation cone
+\def\angsig{22} % opening angle of isolation cone
+\def\e{0.11}    % a/b ratio of ellipse minor and major radii
+
+\foreach \ang [evaluate={\ang; \anang=\ang-90;}] in {90,\angiso/2,0,180}{ % rotate each cone
+  \tikzset{
+    every picture/.append style={scale=2.4,rotate=\ang-90}, % set scale for all figures
+    every node/.style={inner sep=1,circle} %,draw=black!9,very thin}
   }
   
-\end{tikzpicture}
-
-
-% TAU JET - THREE PRONG, PI ZERO
-\begin{tikzpicture} %[scale=\scale]
   
-  \edef\angiso{44} % opening angle of isolation cone
-  \edef\angsig{22} % opening angle of isolation cone
-  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
-  \coordinate (O)  at (0,0);
-  \coordinate (O') at (\ang:-0.01); % shifted
-  \coordinate (I)  at (\ang:0.92); % isolation cone
-  \coordinate (S)  at (\ang:1.00); % signal cone
-  \coordinate (T)  at (\ang:0.02); % tau vertex
-  
-  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
-    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
-      \draw[dashed track] (T) -- (92:1.18) node[left=0,above=-1] {$\pi^0$};
-      \draw[track] (T) to[out=90,in=-55] (103:1.33) node[right=2,above=-1] {$\pi^-$};
-      \draw[track] (T) to[out=93,in=-110] (83:1.29) node[above right=-2] {$\pi^+$};
-      \draw[track] (T) to[out=88,in=-117] (80:1.16) node[above=1,right=-1] {$\pi^+$};
+  % TAU JET - ONE PRONG
+  \begin{tikzpicture}
+    \coordinate (O)  at (0,0);
+    \coordinate (O') at (0,-0.01); % shifted
+    \coordinate (I)  at (0,0.92); % isolation cone
+    \coordinate (S)  at (0,1.00); % signal cone
+    \coordinate (T)  at (0,0.02); % tau vertex
+    \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+      \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+        \draw[track] (T) to[out=88,in=-70] (93:1.33)
+          node[anchor=-70+\anang,inner sep={2.5*cos(\ang)^2-1.5}] {$\pi^-$};
+      }
     }
-  }
+  \end{tikzpicture}
   
-\end{tikzpicture}
-
-
-% ELECTRON JET
-\begin{tikzpicture} %[scale=\scale]
   
-  \edef\angiso{44} % opening angle of isolation cone
-  \edef\angsig{22} % opening angle of isolation cone
-  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
-  \coordinate (O)  at (0,0);
-  \coordinate (O') at (\ang:-0.01); % shifted
-  \coordinate (I)  at (\ang:0.92); % isolation cone
-  \coordinate (S)  at (\ang:1.00); % signal cone
-  \coordinate (T)  at (\ang:0.02); % tau vertex
-  
-  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
-    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
-      \draw[dashed track] (T) to[out=88,in=-70] (96:1.26) node[right=0,above=-2] {$\mathrm{e}^-$};
+  % TAU JET - ONE PRONG, 2 PI ZEROS
+  \begin{tikzpicture}
+    \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+      \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+        \draw[dashed track] (T) -- (97:1.18)
+          node[anchor=-40+\anang,inner sep={2*cos(\ang)^2-1.0}] {$\pi^0$};
+        \draw[dashed track] (T) -- (82:1.20)
+          node[anchor=-110+\anang,inner sep=0.0] {$\pi^0$};
+        \draw[track] (T) to[out=88,in=-70] (94:1.33)
+          node[anchor=-100+\anang,inner sep={-sin(\ang)^2}] {$\pi^-$};
+      }
     }
-  }
+  \end{tikzpicture}
   
-\end{tikzpicture}
-
-
-% MUON JET
-\begin{tikzpicture} %[scale=\scale]
   
-  \edef\angiso{44} % opening angle of isolation cone
-  \edef\angsig{22} % opening angle of isolation cone
-  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
-  \coordinate (O)  at (0,0);
-  \coordinate (O') at (\ang:-0.01); % shifted
-  \coordinate (I)  at (\ang:0.92); % isolation cone
-  \coordinate (S)  at (\ang:1.00); % signal cone
-  \coordinate (T)  at (\ang:0.02); % tau vertex
-  
-  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
-    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
-      \draw[track] (T) to[out=88,in=-70] (93:1.33) node[right=2,above=-2] {$\mu^-$};
+  % TAU JET - THREE PRONG
+  \begin{tikzpicture}
+    \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+      \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+        \draw[track] (T) to[out=90,in=-55] (103:1.33)
+          node[anchor=-70+\anang,inner sep={2.5*cos(\ang)^2-1.5}] {$\pi^-$};
+        \draw[track] (T) to[out=90,in=-112] (87:1.29)
+          node[anchor=-110+\anang,inner sep={0.6*sin(\ang)^2}] {$\pi^+$};
+        \draw[track] (T) to[out=88,in=-117] (82:1.16)
+          node[anchor=-145+\anang,inner sep={0.6*sin(\ang)^2}] {$\pi^+$};
+      }
     }
-  }
+  \end{tikzpicture}
   
-\end{tikzpicture}
-
-
-% QUARK/GLUON JET
-\begin{tikzpicture} %[scale=\scale]
   
-  \edef\angiso{44} % opening angle of isolation cone
-  \edef\angsig{22} % opening angle of isolation cone
-  \edef\e{0.11} % a/b ratio of ellipse minor and major radii
-  \coordinate (O)  at (0,0);
-  \coordinate (O') at (\ang:-0.01); % shifted
-  \coordinate (I)  at (\ang:0.92); % isolation cone
-  \coordinate (S)  at (\ang:1.00); % signal cone
-  \coordinate (T)  at (\ang:0.02); % tau vertex
-  
-  \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
-    \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
-      \draw[dashed track] (T) -- (105:1.18);
-      \draw[dashed track] (T) -- (94:1.22);
-      \draw[dashed track] (T) -- (84:1.22);
-      \draw[track] (T) to[out=105,in=-50] (113:1.18);
-      \draw[track] (T) to[out=90,in=-55] (103:1.33);
-      \draw[track] (T) to[out=98,in=-105] (87:1.29);
-      \draw[track] (T) to[out=68,in=-92] (79:1.20);
+  % TAU JET - THREE PRONG, PI ZERO
+  \begin{tikzpicture}
+    \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+      \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+        \draw[dashed track] (T) -- (92:1.18)
+          node[anchor=-85+\anang,inner sep=0.5] {$\pi^0$};
+        \draw[track] (T) to[out=90,in=-55] (103:1.33)
+          node[anchor=-70+\anang,inner sep={2.5*cos(\ang)^2-1.5}] {$\pi^-$};
+        \draw[track] (T) to[out=93,in=-110] (84:1.29)
+          node[anchor=-110+\anang,inner sep={0.6*sin(\ang)^2}] {$\pi^+$};
+        \draw[track] (T) to[out=88,in=-117] (80:1.16)
+          node[anchor=-145+\anang,inner sep={0.6*sin(\ang)^2}] {$\pi^+$};
+      }
     }
-  }
+  \end{tikzpicture}
   
-\end{tikzpicture}
+  
+  % ELECTRON JET
+  \begin{tikzpicture}
+    \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+      \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+        %\draw[dashed track] (T) to[out=88,in=-70] (96:1.26)
+        %  node[right=0,above=-2] {$\mathrm{e}^-$};
+        \draw[dashed track] (T) to[out=88,in=-70] (96:1.26)
+          node[anchor=-70+\anang,inner sep={2.5*cos(\ang)^2-1.5}]  {$\mathrm{e}^-$};
+      }
+    }
+  \end{tikzpicture}
+  
+  
+  % MUON JET
+  \begin{tikzpicture}
+    \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+      \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+        \draw[track] (T) to[out=88,in=-70] (93:1.33)
+          node[anchor=-70+\anang,inner sep={2.5*cos(\ang)^2-1.5}] {$\mu^-$};
+      }
+    }
+  \end{tikzpicture}
+  
+  
+  % QUARK/GLUON JET
+  \begin{tikzpicture}
+    \jetcone[isocol]{O'}{I}{\angiso}{\e}{ % isolation cone
+      \jetcone[sigcol]{O}{S}{\angsig}{\e}{ % signal cone
+        \draw[dashed track] (T) -- (105:1.18);
+        \draw[dashed track] (T) -- (94:1.22);
+        \draw[dashed track] (T) -- (84:1.22);
+        \draw[track] (T) to[out=105,in=-50] (113:1.18);
+        \draw[track] (T) to[out=90,in=-55] (103:1.33);
+        \draw[track] (T) to[out=98,in=-105] (87:1.29);
+        \draw[track] (T) to[out=68,in=-92] (79:1.20);
+      }
+    }
+  \end{tikzpicture}
+  
+  
+} % end \foreach
 
 
 \end{document}
