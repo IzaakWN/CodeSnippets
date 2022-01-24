@@ -9,13 +9,15 @@
 
 \colorlet{veccol}{green!50!black}
 \colorlet{projcol}{blue!70!black}
-\colorlet{myblue}{blue!70!black}
+\colorlet{myblue}{blue!80!black}
+\colorlet{myred}{red!90!black}
 \colorlet{mydarkblue}{blue!50!black}
 \tikzset{>=latex} % for LaTeX arrow head
 \tikzstyle{proj}=[projcol!80,line width=0.08] %very thin
 \tikzstyle{area}=[draw=veccol,fill=veccol!80,fill opacity=0.6]
-\tikzstyle{vector}=[->,veccol,thick]
-\tikzstyle{darkvector}=[->,veccol!70!black,thick]
+\tikzstyle{vector}=[-stealth,myblue,thick,line cap=round]
+\tikzstyle{unit vector}=[->,veccol,thick,line cap=round]
+\tikzstyle{dark unit vector}=[unit vector,veccol!70!black]
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \contourlength{1.3pt}
 
@@ -33,16 +35,16 @@
   
   % AXES
   \coordinate (O) at (0,0,0);
-  \draw[thick,->] (0,0,0) -- (1,0,0) node[anchor=north east]{$x$};
-  \draw[thick,->] (0,0,0) -- (0,1,0) node[anchor=north west]{$y$};
-  \draw[thick,->] (0,0,0) -- (0,0,1) node[anchor=south]{$z$};
+  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-3]{$x$};
+  \draw[thick,->] (0,0,0) -- (0,1,0) node[right=-1]{$y$};
+  \draw[thick,->] (0,0,0) -- (0,0,1) node[above=-1]{$z$};
   
   % VECTORS
   \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
-  \draw[-stealth,red] (O)  -- (P) node[above right=-2] {P};
-  \draw[dashed,red]   (O)  -- (Pxy);
-  \draw[dashed,red]   (P)  -- (Pxy);
-  \draw[dashed,red]   (Py) -- (Pxy);
+  \draw[vector,red] (O)  -- (P) node[above right=-2] {P};
+  \draw[dashed,myred]   (O)  -- (Pxy);
+  \draw[dashed,myred]   (P)  -- (Pxy);
+  \draw[dashed,myred]   (Py) -- (Pxy);
   
   % ARCS
   \tdplotdrawarc[->]{(O)}{0.2}{0}{\phivec}
@@ -59,7 +61,7 @@
 \begin{tikzpicture}[scale=1.8,tdplot_main_coords]
   
   % VARIABLES
-  \def\l{0.3} % length scale unit vector
+  \def\l{0.3} % length scale dark unit vector
   \def\rvec{1.2}
   \def\thetavec{46}
   \def\phivec{50}
@@ -67,13 +69,13 @@
   % AXES
   \coordinate (O) at (0,0,0);
   \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
-  \draw[dashed,myblue] (O)  -- (Pxy);
-  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-2]{$x$};
+  \draw[dashed,mydarkblue] (O)  -- (Pxy);
+  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-3]{$x$};
   \draw[thick,->] (0,0,0) -- (0,1,0) node[right=-1]{$y$};
   \draw[thick,->] (0,0,0) -- (0,0,1) node[above=-1]{$z$};
-  \draw[vector] (0,0,0) -- (1.3*\l,0,0) node[above=3,left=-1,scale=0.8]{$\vu{x}$};
-  \draw[vector] (0,0,0) -- (0,.9*\l,0) node[right=2,above=-1,scale=0.8]{$\vu{y}$};
-  \draw[vector] (0,0,0) -- (0,0,\l) node[left,scale=0.8]{$\vu{z}$};
+  \draw[unit vector] (0,0,0) -- (1.3*\l,0,0) node[above=3,left=-1,scale=0.8]{$\vu{x}$};
+  \draw[unit vector] (0,0,0) -- (0,.9*\l,0) node[right=2,above=-1,scale=0.8]{$\vu{y}$};
+  \draw[unit vector] (0,0,0) -- (0,0,\l) node[left,scale=0.8]{$\vu{z}$};
   
   % VECTORS
   \draw[dashed,mydarkblue] (P)  -- (Pxy);
@@ -81,22 +83,65 @@
   \draw[dashed,mydarkblue] (Py) -- (Pxy) -- (Px);
   \node[circle,inner sep=0.9,fill=myblue]
     (P') at ({\rvec*sin(\thetavec)*cos(\phivec)},{\rvec*sin(\thetavec)*sin(\phivec)},{\rvec*cos(\thetavec)}) {};
-  \draw[-stealth,thick,myblue] (O)  -- (P') node[above right=-2] {P};
+  \draw[vector] (O)  -- (P') node[above right=-2] {P};
   
   % ARCS
   \tdplotsetthetaplanecoords{\phivec}
   \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.4}{0}{\thetavec}
     {right=2,above}{$\theta$}
-
+  
 \end{tikzpicture}
 
 
-% 3D AXIS with polar coordinates
+% 3D AXIS with cylindrical coordinates
 \tdplotsetmaincoords{60}{110}
 \begin{tikzpicture}[scale=2.2,tdplot_main_coords]
   
   % VARIABLES
-  \def\l{0.30} % length scale unit vector
+  \def\rtheta{0.25} % length theta arc
+  \def\rvec{1.2}
+  \def\phivec{46}
+  \def\thetavec{48}
+  
+  % AXES
+  \coordinate (O) at (0,0,0);
+  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-3]{$x$};
+  \draw[thick,->] (0,0,0) -- (0,1,0) node[right=-1]{$y$};
+  \draw[thick,->] (0,0,0) -- (0,0,1) node[above=-1]{$z$};
+  
+  % POINT P
+  \tdplotsetcoord{P}{\rvec}{\phivec}{\thetavec}
+  \draw (Pxy)++(0,0,0.12) --++ (\thetavec+180:0.12) --++ (0,0,-0.12);
+  \node[circle,inner sep=0.9,fill=myblue]
+    (P') at ({\rvec*sin(\phivec)*cos(\thetavec)},{\rvec*sin(\phivec)*sin(\thetavec)},{\rvec*cos(\phivec)}) {};
+  
+  % VECTORS & DASHED
+  \draw[dashed,mydarkblue] (P)  -- (Pz)
+    node[pos=0.55,above right=-6] {\contour{white}{$\rho$}};
+  \draw[dashed,mydarkblue] (Py) -- (Pxy) -- (Px);
+  
+  % MEASURES
+  \draw[<->,veccol] (0,0,0) -- (\thetavec:{\rvec*sin(\phivec)})
+    node[pos=0.5,scale=0.9]{\contour{white}{$\rho$}};
+  \draw[<->,veccol] (\thetavec:{\rvec*sin(\phivec)}) -- (P')
+    node[pos=0.55,scale=0.9]{\contour{white}{$z$}};
+  \draw[->] (\rtheta,0,0) arc(0:\thetavec:\rtheta)
+    node[pos=0.35,below=-2,scale=0.9] {$\theta$};
+  
+  % VECTORS
+  \draw[vector] (O)  -- (P')
+    node[pos=0.5,above left=-4] {$r$}
+    node[right=1,above right=-3] {$\mathrm{P} = (\rho;\theta;z)$};
+  
+\end{tikzpicture}
+
+
+% 3D AXIS with cylindrical coordinates with dark unit vectors
+\tdplotsetmaincoords{60}{110}
+\begin{tikzpicture}[scale=2.2,tdplot_main_coords]
+  
+  % VARIABLES
+  \def\l{0.30} % length scale dark unit vector
   \def\rtheta{0.7*\l} % length theta arc
   \def\rvec{1.2}
   \def\phivec{46}
@@ -106,33 +151,91 @@
   \coordinate (O) at (0,0,0);
   \tdplotsetcoord{P}{\rvec}{\phivec}{\thetavec}
   \draw[dashed,myblue] (O)  -- (Pxy);
-  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-2]{$x$};
+  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-3]{$x$};
+  \draw[thick,->] (0,0,0) -- (0,1,0) node[right=-1]{$y$};
+  \draw[thick,->] (0,0,0) -- (0,0,1) node[above=-1]{$z$};
+  \draw (Pxy)++(0,0,0.12) --++ (\thetavec+180:0.12) --++ (0,0,-0.12);
+  
+  % VECTORS & DASHED
+  \draw[dashed,mydarkblue] (P)  -- (Pz)
+    node[pos=0.55,above right=-6] {\contour{white}{$\rho$}};
+  \draw[dashed,mydarkblue] (Py) -- (Pxy) -- (Px);
+  
+  % MEASURES
+  \draw[->,veccol] (0,0,0) -- (\thetavec:{\rvec*sin(\phivec)})
+    node[myblue,pos=0.65,scale=0.9]{\contour{white}{$\rho$}};
+  \draw[<->,veccol] (\thetavec:{\rvec*sin(\phivec)}) -- (P')
+    node[myblue,pos=0.55,scale=0.9]{\contour{white}{$z$}};
+  \draw[->] (\rtheta,0,0) arc(0:\thetavec:\rtheta)
+    node[pos=0.35,below=-2,scale=0.9] {$\theta$};
+  
+  % UNITT VECTORS
+  \draw[dark unit vector] (0,0,0) -- (\thetavec:1.2*\l)
+    node[left=3,below=-3,scale=0.8]{$\vu*{\rho}$};
+  \draw[dark unit vector] (0,0,0) -- (\thetavec+90:\l)
+    node[above=2.5,right=-2.5,scale=0.8]{$\vu*{\theta}$};
+  \draw[dark unit vector] (0,0,0) -- (0,0,\l)
+    node[left,scale=0.8]{$\vu{z}$};
+  
+  % VECTORS
+  \node[circle,inner sep=0.9,fill=myblue]
+    (P') at ({\rvec*sin(\phivec)*cos(\thetavec)},{\rvec*sin(\phivec)*sin(\thetavec)},{\rvec*cos(\phivec)}) {};
+  \draw[vector] (O)  -- (P')
+    node[pos=0.5,above left=-4] {$r$}
+    node[right=1,above right=-3] {$\mathrm{P} = (\rho;\theta;z)$};
+
+\end{tikzpicture}
+
+
+% 3D AXIS with polar coordinates
+\tdplotsetmaincoords{60}{110}
+\begin{tikzpicture}[scale=2.2,tdplot_main_coords]
+  
+  % VARIABLES
+  \def\l{0.30} % length scale dark unit vector
+  \def\rtheta{0.7*\l} % length theta arc
+  \def\rvec{1.2}
+  \def\phivec{46}
+  \def\thetavec{48}
+  
+  % AXES
+  \coordinate (O) at (0,0,0);
+  \tdplotsetcoord{P}{\rvec}{\phivec}{\thetavec}
+  \draw[dashed,myblue] (O)  -- (Pxy);
+  \draw[thick,->] (0,0,0) -- (1,0,0) node[below left=-3]{$x$};
   \draw[thick,->] (0,0,0) -- (0,1,0) node[right=-1]{$y$};
   \draw[thick,->] (0,0,0) -- (0,0,1) node[above=-1]{$z$};
   \draw (Pxy)++(0,0,0.12) --++ (\thetavec+180:0.12) --++ (0,0,-0.12);
   
   % VECTORS & DASHED
   %\draw[dashed,mydarkblue] (P)  -- (Pxy);
-  \draw[dashed,mydarkblue] (P)  -- (Pz);
+  \draw[dashed,mydarkblue] (P)  -- (Pz)
+    node[pos=0.55,above right=-5] {\contour{white}{$r$}};
   \draw[dashed,mydarkblue] (Py) -- (Pxy) -- (Px);
   
-  % UNITT VECTORS
+  % MEASURES
   %\draw[->,veccol] (0,0,0) -- (\thetavec:{\rvec*sin(\phivec)}) node[pos=0.75,above=0,scale=0.9]{$r$};
   \draw[->,veccol] (0,0,0) -- (\thetavec:{\rvec*sin(\phivec)})
-    node[pos=0.65,scale=0.9]{\contour{white}{$r$}};
-  \draw[<->,veccol] (\thetavec:{\rvec*sin(\phivec)}) --++ (0,0,{\rvec*cos(\phivec)})
-    node[pos=0.55,scale=0.9]{\contour{white}{$z$}};
-  \draw[->] (\rtheta,0,0) arc(0:\thetavec:\rtheta) node[pos=0.4,below=-1,scale=0.9] {$\theta$};
-  \draw[darkvector] (0,0,0) -- (\thetavec:1.2*\l) node[left=3,below=-3,scale=0.8]{$\vu{r}$};
-  \draw[darkvector] (0,0,0) -- (\thetavec+90:\l) node[above=2,right=-2,scale=0.8]{$\vu*{\theta}$};
-  \draw[darkvector] (0,0,0) -- (0,0,\l) node[left,scale=0.8]{$\vu{z}$};
+    node[myblue,pos=0.65,scale=0.9]{\contour{white}{$r$}};
+  %\draw[<->,veccol] (\thetavec:{\rvec*sin(\phivec)}) --++ (0,0,{\rvec*cos(\phivec)})
+  \draw[<->,veccol] (\thetavec:{\rvec*sin(\phivec)}) -- (P')
+    node[myblue,pos=0.55,scale=0.9]{\contour{white}{$z$}};
+  \draw[->] (\rtheta,0,0) arc(0:\thetavec:\rtheta)
+    node[pos=0.35,below=-2,scale=0.9] {$\theta$};
+  
+  % UNITT VECTORS
+  \draw[dark unit vector] (0,0,0) -- (\thetavec:1.2*\l)
+    node[left=2,below=-3,scale=0.8]{$\vu{r}$};
+  \draw[dark unit vector] (0,0,0) -- (\thetavec+90:\l)
+    node[above=2.5,right=-2.5,scale=0.8]{$\vu*{\theta}$};
+  \draw[dark unit vector] (0,0,0) -- (0,0,\l)
+    node[left,scale=0.8]{$\vu{z}$};
   
   % VECTORS
   \node[circle,inner sep=0.9,fill=myblue]
     (P') at ({\rvec*sin(\phivec)*cos(\thetavec)},{\rvec*sin(\phivec)*sin(\thetavec)},{\rvec*cos(\phivec)}) {};
-  \draw[-stealth,thick,myblue] (O)  -- (P')
-    node[right=1,above right=-3] {$\mathrm{P} = (r;\theta;z)$}
-    node[pos=0.5,above left=-4] {$\rho$};
+  \draw[vector] (O)  -- (P')
+    node[right=1,above right=-3] {$\mathrm{P} = (r;\theta;z)$};
 
 \end{tikzpicture}
 
@@ -148,6 +251,7 @@
   \def\dtheta{10}
   \def\dphi{16}
   \def\sphere#1#2#3{plot[domain=#1]({\rvec*sin(#2)*cos(#3)},{\rvec*sin(#2)*sin(#3)},{\rvec*cos(#2)})}
+  \contourlength{0.8pt}
   
   % AXES
   \coordinate (O) at (0,0,0);
@@ -162,8 +266,8 @@
   \tdplotsetcoord{PBR}{\rvec}{\thetavec+\dtheta}{\phivec+\dphi}
   
   % CONE
-  \draw[veccol!10,very thin] (O)  -- (PBR);
-  \draw[veccol!10,very thin] (O)  -- (PR);
+  \draw[veccol!20,very thin] (O)  -- (PBR);
+  \draw[veccol!20,very thin] (O)  -- (PR);
   \draw[->,veccol] (O)  -- (P) node[below=5,left=2] {$\vb{r}$};
   \draw[veccol,very thin] (O)  -- (PB);
   
@@ -203,14 +307,14 @@
     
   % ANGLES
   \tdplotdrawarc[->]{(O)}{0.35*\rvec}{0}{\phivec}
-    {anchor=north}{$\phi$}
+    {below=-2}{$\phi$}
   \tdplotdrawarc[->]{(O)}{0.45*\rvec}{\phivec}{\phivec+\dphi}
-    {above=0.5,anchor=123}{\contour{white}{$\dd{\phi}$}}
+    {anchor=145,inner sep=1}{\contour{white}{$\dd{\phi}$}}
   \tdplotsetthetaplanecoords{\phivec}
   \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.36*\rvec}{0}{\thetavec}
-    {right=3,above}{$\theta$}
+    {right=2,above=-1}{$\theta$}
   \tdplotdrawarc[->,tdplot_rotated_coords]{(0,0,0)}{0.54*\rvec}{\thetavec}{\thetavec+\dtheta}
-    {above right=-2}{\contour{white}{$\dd{\theta}$}}
+    {left=0.2,above right=-2}{\contour{white}{$\dd{\theta}$}}
   
 \end{tikzpicture}
 
@@ -234,7 +338,7 @@
     (\ang+20:0.8*\R) to[out=-15,in=130] (\ang:1.1*\R) to[out=-50,in=80] (\ang-15:1.2*\R);
   
   % CONE
-  \draw[vector]
+  \draw[unit vector]
     (0,0) -- (P); % node[left=3,below left=2] {$\vb{r}$};
   %\begin{scope}
   %  \clip[shift={(P)},rotate around={22:(P)}]
@@ -259,9 +363,9 @@
   \node[veccol,left=11,below=10,scale=0.8] at (Pr) {$\cos\theta\dd{A}$};
   
   % VECTORS
-  \draw[vector,blue!80]
+  \draw[unit vector,blue!80]
     (P) --++ (\angII:0.28*\R) coordinate (N) node[above=1,right] {$\vu{n}$};
-  \draw[vector]
+  \draw[dark unit vector]
     (P) --++ (\ang:0.28*\R) coordinate (R) node[right] {$\vu{r}$};
   \draw pic[->,"$\theta$",draw=black,angle radius=16,angle eccentricity=1.4] {angle = R--P--N};
   %\draw pic[->,"$\Delta\Omega$",draw=black,angle radius=26,angle eccentricity=1.4] {angle = PB--O--PT};

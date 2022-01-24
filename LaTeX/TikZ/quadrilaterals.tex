@@ -23,7 +23,7 @@
 \tikzstyle{myshape}=[
   thick,draw=mydarkblue,fill=mylightblue,rounded corners=0.01,
   blur shadow={shadow blur steps=40,shadow xshift=1pt,shadow yshift=-1pt}]
-\tikzstyle{myset}=[draw=mydarkred,fill=mydarkred!3,rounded corners=4,line width=0.55]
+\tikzstyle{myset}=[draw=mydarkred,fill=mydarkred!3,rounded corners=6,line width=0.55]
 \tikzstyle{mygreenset}=[myset,draw=mydarkgreen,fill=mydarkgreen!3]
 \tikzstyle{myorangeset}=[myset,draw=mydarkorange,fill=mydarkorange!3]
 \tikzstyle{mydashed}=[very thin,dashed,draw=black!50,opacity=0.4]
@@ -135,10 +135,10 @@
     \coordinate (SE) at ( \a/2, 0);
     \coordinate (square) at (0,\a/2);
     \draw[myshape] (SW) rectangle (NE);
-    \pic[angcol=myblue] {right angle={(SE)-(SW)-(NW):0.25}};
-    \pic[angcol=myblue] {right angle={(SW)-(NW)-(NE):0.25}};
-    \pic[angcol=myblue] {right angle={(NW)-(NE)-(SE):0.25}};
-    \pic[angcol=myblue] {right angle={(NE)-(SE)-(SW):0.25}};
+    \pic[angcol=myblue] {right angle={(SE)-(SW)-(NW):0.22}};
+    \pic[angcol=myblue] {right angle={(SW)-(NW)-(NE):0.22}};
+    \pic[angcol=myblue] {right angle={(NW)-(NE)-(SE):0.22}};
+    \pic[angcol=myblue] {right angle={(NE)-(SE)-(SW):0.22}};
     \pic[myblue] {mark line={(NE)-(NW):90}};
     \pic[myblue] {mark line={(NW)-(SW):90}};
     \pic[myblue] {mark line={(SW)-(SE):90}};
@@ -157,20 +157,20 @@
     %\coordinate (NW) at ($(SW)+(\ang:\a)$);
     %\coordinate (NE) at ($(SE)+(\ang:\a)$);
     %\draw[myshape] (SW) -- (SE) -- (NE) -- (NW) -- cycle;
-    %\pic[nmarks=1,angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.25}};
-    %\pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.25}};
-    %\pic[nmarks=1,angcol=myred]   {mark angle={(NW)-(NE)-(SE):0.25}};
-    %\pic[nmarks=2,angcol=mygreen] {mark angle={(NE)-(SE)-(SW):0.25}};
+    %\pic[nmarks=1,angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.20}};
+    %\pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.20}};
+    %\pic[nmarks=1,angcol=myred]   {mark angle={(NW)-(NE)-(SE):0.20}};
+    %\pic[nmarks=2,angcol=mygreen] {mark angle={(NE)-(SE)-(SW):0.20}};
     \coordinate (S) at (0,0);
     \coordinate (E) at (\ang/2:\a);
     \coordinate (W) at (180-\ang/2:\a);
     \coordinate (N) at (0,\h);
     \coordinate (rhombus) at (0,\h/2);
     \draw[myshape] (S) -- (W) -- (N) -- (E) -- cycle;
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(W)-(N)-(E):0.25}};
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(E)-(S)-(W):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(N)-(E)-(S):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(S)-(W)-(N):0.25}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(W)-(N)-(E):0.20}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(E)-(S)-(W):0.20}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(N)-(E)-(S):0.20}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(S)-(W)-(N):0.20}};
     \pic[myblue] {mark line={(S)-(E):90}};
     \pic[myblue] {mark line={(E)-(N):90}};
     \pic[myblue] {mark line={(N)-(W):90}};
@@ -189,10 +189,10 @@
     \coordinate (rectangle) at (0,\a/2);
     \draw[myshape] (SW) rectangle (NE);
     \draw[purple line] (SW) -- (NW) (SE) -- (NE);
-    \pic[angcol=myblue] {right angle={(SE)-(SW)-(NW):0.25}};
-    \pic[angcol=myblue] {right angle={(SW)-(NW)-(NE):0.25}};
-    \pic[angcol=myblue] {right angle={(NW)-(NE)-(SE):0.25}};
-    \pic[angcol=myblue] {right angle={(NE)-(SE)-(SW):0.25}};
+    \pic[angcol=myblue] {right angle={(SE)-(SW)-(NW):0.22}};
+    \pic[angcol=myblue] {right angle={(SW)-(NW)-(NE):0.22}};
+    \pic[angcol=myblue] {right angle={(NW)-(NE)-(SE):0.22}};
+    \pic[angcol=myblue] {right angle={(NE)-(SE)-(SW):0.22}};
     \pic[nmarks=1,markshift=0.07,myblue] {mark line={(NW)-(NE):90}};
     \pic[nmarks=1,markshift=0.03,myblue] {mark line={(SW)-(SE):90}};
     \pic[nmarks=2,mypurple] {mark line={(NW)-(SW):90}};
@@ -212,10 +212,10 @@
     \coordinate (SE) at ({\a*(cos(\ang)+0.5)},0);
     \coordinate (3 trapezium) at (0,\a/2);
     \draw[myshape] (SW) -- (SE) -- (NE) -- (NW) -- cycle;
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.25}};
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(NW)-(NE)-(SE):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(NE)-(SE)-(SW):0.25}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.20}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(NW)-(NE)-(SE):0.20}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.21}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(NE)-(SE)-(SW):0.21}};
     \pic[myblue,markshift=-0.07] {mark line={(NE)-(NW):90}};
     \pic[myblue,markshift= 0.0]  {mark line={(NW)-(SW):90}};
     \pic[myblue,markshift= 0.0]  {mark line={(NE)-(SE):90}};
@@ -236,10 +236,10 @@
     \coordinate (parallelogram) at (0,{\a*sin(\ang)/2});
     \draw[myshape] (SW) -- (SE) -- (NE) -- (NW) -- cycle;
     \draw[purple line] (SW) -- (NW) (SE) -- (NE);
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.25}};
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(NE)-(SE)-(SW):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(NW)-(NE)-(SE):0.25}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.20}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(NE)-(SE)-(SW):0.20}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.22}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(NW)-(NE)-(SE):0.22}};
     \pic[nmarks=1,markshift=0.02,myblue] {mark line={(NW)-(NE):90}};
     \pic[nmarks=1,markshift=0.05,myblue] {mark line={(SW)-(SE):90}};
     \pic[nmarks=2,mypurple] {mark line={(NW)-(SW):90}};
@@ -260,8 +260,8 @@
     \coordinate (SE) at (\b/2,0);
     \coordinate (right trapezium) at (0,\h/2);
     \draw[myshape] (SW) -- (SE) -- (NE) -- (NW) -- cycle;
-    \pic[angcol=myblue] {right angle={(SE)-(SW)-(NW):0.25}};
-    \pic[angcol=myblue] {right angle={(SW)-(NW)-(NE):0.25}};
+    \pic[angcol=myblue] {right angle={(SE)-(SW)-(NW):0.22}};
+    \pic[angcol=myblue] {right angle={(SW)-(NW)-(NE):0.22}};
   \end{scope}
   
   % ISOSCELES TRAPEZIUM
@@ -278,10 +278,10 @@
     \coordinate (SE) at ( \b/2,0);
     \coordinate (2 trapezium) at (0,\h/2);
     \draw[myshape] (SW) -- (SE) -- (NE) -- (NW) -- cycle;
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.25}};
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(NW)-(NE)-(SE):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(NE)-(SE)-(SW):0.25}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.20}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(NW)-(NE)-(SE):0.20}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.21}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(NE)-(SE)-(SW):0.21}};
     \pic[myblue,markshift= 0.0] {mark line={(NW)-(SW):90}};
     \pic[myblue,markshift= 0.0] {mark line={(NE)-(SE):90}};
   \end{scope}
@@ -316,8 +316,8 @@
     \coordinate (right kite) at (0,\a/2);
     \draw[myshape] (S) -- (E) -- (N) -- (W) -- cycle;
     \draw[purple line] (E) -- (N) -- (W);
-    \pic[angcol=myblue]  {right angle={(S)-(W)-(N):0.25}};
-    \pic[angcol=myblue]  {right angle={(N)-(E)-(S):0.25}};
+    \pic[angcol=myblue]  {right angle={(S)-(W)-(N):0.20}};
+    \pic[angcol=myblue]  {right angle={(N)-(E)-(S):0.20}};
     \pic[nmarks=2,mypurple] {mark line={(E)-(N):90}};
     \pic[nmarks=2,mypurple] {mark line={(N)-(W):90}};
     \pic[nmarks=1,myblue]   {mark line={(S)-(E):90}};
@@ -349,8 +349,8 @@
     \coordinate (kite) at (0,\h/2);
     \draw[myshape] (S) -- (E) -- (N) -- (W) -- cycle;
     \draw[purple line] (E) -- (N) -- (W);
-    \pic[nmarks=1,angcol=myred] {mark angle={(S)-(W)-(N):0.25}};
-    \pic[nmarks=1,angcol=myred] {mark angle={(N)-(E)-(S):0.25}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(S)-(W)-(N):0.22}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(N)-(E)-(S):0.22}};
     \pic[nmarks=2,mypurple] {mark line={(E)-(N):90}};
     \pic[nmarks=2,mypurple] {mark line={(N)-(W):90}};
     \pic[nmarks=1,myblue]   {mark line={(S)-(E):90}};
@@ -380,10 +380,10 @@
     \coordinate (SE) at (\b/2,0);
     \coordinate (obtuse trapezium) at (0,\h/2);
     \draw[myshape] (SW) -- (SE) -- (NE) -- (NW) -- cycle;
-    \pic[angcol=mygreen] {mark angle={(SE)-(SW)-(NW):0.25}};
-    \pic[angcol=mygreen] {mark angle={(NW)-(NE)-(SE):0.25}};
-    \pic[angcol=myred]   {mark angle={(SW)-(NW)-(NE):0.25}};
-    \pic[angcol=myred]   {mark angle={(NE)-(SE)-(SW):0.25}};
+    \pic[angcol=mygreen] {mark angle={(SE)-(SW)-(NW):0.20}};
+    \pic[angcol=mygreen] {mark angle={(NW)-(NE)-(SE):0.20}};
+    \pic[angcol=myred]   {mark angle={(SW)-(NW)-(NE):0.20}};
+    \pic[angcol=myred]   {mark angle={(NE)-(SE)-(SW):0.22}};
   \end{scope}
   
   % ACUTE-ANGLED TRAPEZIUM
@@ -400,10 +400,10 @@
     \coordinate (SE) at (\b/2,0);
     \coordinate (acute trapezium) at (0,\h/2);
     \draw[myshape] (SW) -- (SE) -- (NE) -- (NW) -- cycle;
-    \pic[angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.25}};
-    \pic[angcol=mygreen] {mark angle={(NW)-(NE)-(SE):0.25}};
-    \pic[angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.25}};
-    \pic[angcol=myred]   {mark angle={(NE)-(SE)-(SW):0.25}};
+    \pic[angcol=mygreen] {mark angle={(SW)-(NW)-(NE):0.20}};
+    \pic[angcol=mygreen] {mark angle={(NW)-(NE)-(SE):0.20}};
+    \pic[angcol=myred]   {mark angle={(SE)-(SW)-(NW):0.20}};
+    \pic[angcol=myred]   {mark angle={(NE)-(SE)-(SW):0.21}};
   \end{scope}
   
 }
@@ -483,6 +483,8 @@
   %%%% LEVEL 3.5 %%%%%%%%%%%%%%%%%%%%%%%%
   
   % BICENTRIC
+  % Construct bicentric quadrilateral for given incircle, circumcircle and one vertex
+  % https://tikz.net/quadrilaterals_bicentric/
   % http://dynamicmathematicslearning.com/new-bicentric-construction.html
   \def\r{0.46}   % inradius = radius of incircle
   \def\R{0.68}   % circumradius = radius of circumcircle
@@ -508,9 +510,9 @@
       \coordinate (\P) at (\angP:\R); % corner
     }
     \coordinate (SW) at (\angA:\R); % overwrite for precision
-    \draw[mydarkgreen] (Oout) circle(\R+0.015);
+    \draw[mydarkgreen] (Oout) circle(\R);
     \draw[myshape] (SW) -- (SE) -- (NE) -- (NW) -- cycle;
-    \draw[mydarkorange] (Oin) circle(\r-0.014);
+    \draw[mydarkorange] (Oin) circle(\r-0.01);
     \fill[mydarkorange] (Oin) circle(0.02);
     \fill[mydarkgreen] (Oout) circle(0.02);
   \end{scope}
@@ -519,6 +521,7 @@
   
   % TANGENTIAL QUADRILATERAL
   % Construct tangential trapezoid from four points of tangency on the incircle
+  % https://tikz.net/quadrilaterals_bicentric/
   \def\R{0.5}  % inradius = radius of incircle
   \def\angW{-110} % polar angle of point W
   \begin{scope}[shift={(\xkite*\W,\ytangent*\H+\R)}]
@@ -534,7 +537,7 @@
       \coordinate (\P) at (\angP:\r); % vertex
     }
     \draw[myshape] (S) -- (W) -- (N) -- (E) -- cycle;
-    \draw[mydarkorange] (O) circle(\R-0.015);
+    \draw[mydarkorange] (O) circle(\R-0.01);
     \fill[mydarkorange] (O) circle(0.02);
   \end{scope}
   
@@ -542,6 +545,7 @@
   
   % CYCLIC QUADRILATERAL
   % Construct cyclic quadrilateral four points on the circumcircle
+  % https://tikz.net/quadrilaterals_bicentric/
   \def\R{0.7} % circumradius = radius of circumcircle
   \begin{scope}[shift={(\xcyclic*\W,\ycyclic*\H+\R)}]
     \ifdim \ycyclic pt=2.85 pt % for full version
@@ -560,18 +564,18 @@
     \coordinate (NW) at (120:\R);
     \coordinate (NE) at ( 45:\R);
     \coordinate (SE) at (320:\R);
-    \draw[myshape] (SW) -- (NW) -- (NE) -- (SE) -- cycle;
     \draw[mydarkgreen] (O) circle(\R);
+    \draw[myshape] (SW) -- (NW) -- (NE) -- (SE) -- cycle;
     \fill[mydarkgreen] (O) circle(0.02);
   \end{scope}
   
   % DART
   \begin{scope}[shift={(\xkite*\W,\ydart*\H)}]
-    \node[below=-6,align=center] at (0,0) {dart};
+    \node[below=-6,align=center] at (0,0) {\contour{white}{dart}};
     %\node[below=-3,align=center] at (0,0) {
     %  \contour{white}{dart}\\[-0.3em]
     %  \contour{white}{(concave) kite}};
-    \def\w{1.6} % width
+    \def\w{1.7} % width
     \def\h{0.6} % height
     \coordinate (E) at (-\w/2,0);
     \coordinate (S) at (0,0.4*\h);
@@ -581,8 +585,8 @@
     %\draw[mydashed] (W) -- (E);
     \draw[myshape] (E) -- (S) -- (W) -- (N) -- cycle;
     \draw[purple line] (E) -- (N) -- (W);
-    \pic[nmarks=1,angcol=myred] {mark angle={(S)-(E)-(N):0.34}};
-    \pic[nmarks=1,angcol=myred] {mark angle={(N)-(W)-(S):0.34}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(S)-(E)-(N):0.32}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(N)-(W)-(S):0.32}};
     \pic[nmarks=2,markshift= 0.12,mypurple] {mark line={(E)-(N):90}};
     \pic[nmarks=2,markshift=-0.12,mypurple] {mark line={(N)-(W):90}};
     \pic[nmarks=1,markshift=-0.10,myblue]   {mark line={(S)-(E):90}};
@@ -634,7 +638,8 @@
     \node[below=-1,align=center] at (0,0) {\contour{white}{complex}};
     \def\w{1.6} % width
     \def\h{0.8} % height
-    \coordinate (complex-W) at (-0.1*\w,\h/2);
+    \coordinate (complex-W) at (-0.10*\w,\h/2);
+    \coordinate (complex-E) at ( 0.05*\w,\h/2);
     \coordinate (complex) at (0.1*\w,\h/2);
     \draw[myshape]
       (-\w/2,0.1*\h) -- (\w/2,\h) --
@@ -667,11 +672,11 @@
 %   QUADRILATERAL HASSE DIAGRAM (trapezia only)   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}
   \message{^^JTrapezia only}
   
-  \def\H{2.0}     % height of each row
-  \def\W{2.2}     % width of column
+  \def\H{2.2}     % height of each row
+  \def\W{2.4}     % width of column
   \def\ytrap{3.0} % y position of general trapezia
   
   % LAYERS
@@ -703,11 +708,11 @@
 %   QUADRILATERAL HASSE DIAGRAM (trapezia only, incl. obtuse & acute)   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}
   \message{^^JTrapezia only, incl. obtuse & acute}
   
-  \def\H{2.0}          % height of each row
-  \def\W{2.2}          % width of column
+  \def\H{2.2}          % height of each row
+  \def\W{2.4}          % width of column
   \def\ysquare{0.2}    % y position square
   \def\yrectangle{1.2} % y position rectangle
   \def\yrighttrap{3}   % y position right-angled trapezium
@@ -745,11 +750,11 @@
 %   QUADRILATERAL HASSE DIAGRAM (trapezia only, incl. obtuse & acute)   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}
   \message{^^JTrapezia only, incl. obtuse & acute}
   
-  \def\H{2.0}          % height of each row
-  \def\W{2.2}          % width of column
+  \def\H{2.2}          % height of each row
+  \def\W{2.4}          % width of column
   \def\ysquare{0.2}    % y position square
   \def\yrectangle{1.2} % y position rectangle
   \def\yrighttrap{3}   % y position right-angled trapezium
@@ -772,9 +777,9 @@
   % CONNECTIONS
   \begin{pgfonlayer}{back} % draw on back
     \draw[mygreenset] (parallelogram) -- (obtuse trapezium);
-    \draw[mygreenset] (parallelogram)++(-1.1,0.7) rectangle++ (2.2,-1.85*\H);
+    \draw[mygreenset] (parallelogram)++(-1.2,0.7) rectangle++ (2.4,-1.8*\H);
     \draw[myset] (2 trapezium) -- (acute trapezium);
-    \draw[myset] (2 trapezium)++(-1.1,0.7) rectangle++ (2.2,-2.0*\H);
+    \draw[myset] (2 trapezium)++(-1.2,0.7) rectangle++ (2.4,-1.95*\H);
     \draw[black]
       (square) -- (rhombus) -- (parallelogram) %--
       (obtuse trapezium) -- (trapezium)
@@ -793,11 +798,11 @@
 %   QUADRILATERAL HASSE DIAGRAM (incl. kites)   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}
   \message{^^JTrapezia only, incl. kites}
   
-  \def\H{2.4}     % height of each row
-  \def\W{2.4}     % width of column
+  \def\H{2.5}     % height of each row
+  \def\W{2.5}     % width of column
   \def\xsquare{0} % x position square
   \def\ytrap{3.0} % y position trapezia
   
@@ -830,11 +835,11 @@
 %   QUADRILATERAL HASSE DIAGRAM (incl. kites, irr.)   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}
   \message{^^JTrapezia only, incl. kites & irregular}
   
-  \def\H{2.4}     % height of each row
-  \def\W{2.4}     % width of column
+  \def\H{2.5}     % height of each row
+  \def\W{2.5}     % width of column
   \def\xsquare{0} % x position square
   \def\ytrap{3.2} % y position of general trapezia
   \def\colkite{mydarkred!3} % contour color for kites
@@ -854,7 +859,7 @@
   % CONNECTIONS
   \begin{pgfonlayer}{back} % draw on back
     \draw[myset] (kite) -- (irregular);
-    \draw[myset] (kite)++(-1.0,0.9) rectangle++ (2.0,-1.85*\H);
+    \draw[myset] (kite)++(-0.95,0.8) rectangle++ (1.9,-1.78*\H);
     \draw[black]
       (square) -- (right kite) -- (kite)
       (square) -- (rhombus) -- (parallelogram) -- (trapezium)
@@ -873,11 +878,11 @@
 %   QUADRILATERAL HASSE DIAGRAM (trapezia only, incl. kites, obtuse acute)   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}
   \message{^^JTrapezia only, incl. kites, obtuse & acute}
   
-  \def\H{2.0}          % height of each row
-  \def\W{2.2}          % width of column
+  \def\H{2.2}          % height of each row
+  \def\W{2.4}          % width of column
   \def\xsquare{-0.1}   % x position square
   \def\ysquare{0.0}    % y position square
   \def\yrectangle{1.0} % y position rectangle
@@ -905,11 +910,11 @@
   % CONNECTIONS
   \begin{pgfonlayer}{back} % draw on back
     \draw[myorangeset] (kite) -- (irregular);
-    \draw[myorangeset] (kite)++(-0.9,0.7) rectangle++ (1.8,-1.85*\H);
+    \draw[myorangeset] (kite)++(-0.95,0.7) rectangle++ (1.9,-1.85*\H);
     \draw[mygreenset] (parallelogram) -- (obtuse trapezium);
-    \draw[mygreenset] (parallelogram)++(-1.1,0.7) rectangle++ (2.2,-1.82*\H);
+    \draw[mygreenset] (parallelogram)++(-1.2,0.7) rectangle++ (2.4,-1.8*\H);
     \draw[myset] (2 trapezium) -- (acute trapezium);
-    \draw[myset] (2 trapezium)++(-1.1,0.7) rectangle++ (2.2,-2.0*\H);
+    \draw[myset] (2 trapezium)++(-1.2,0.7) rectangle++ (2.4,-1.95*\H);
     \draw[black]
       (square) -- ($(right kite)-(0,0.2)$) -- (kite)
       (square) -- (rhombus) -- (parallelogram) %--
@@ -932,16 +937,18 @@
 %   https://en.wikipedia.org/wiki/Quadrilateral#Taxonomy
 %   https://commons.wikimedia.org/wiki/File:Quadrilateral_hierarchy_svg.svg
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}
   \message{^^JFull Hasse diagram}
   
-  \def\H{2.4}        % height of each row
-  \def\W{2.4}        % width of column
-  \def\xsquare{0}    % x position square
-  \def\xkite{-1.6}   % x position kites
-  \def\xtrap{0.0}    % x position trapezia
-  \def\ytrap{3.2}    % y position trapezia
-  \def\ycyclic{2.75} % y position cyclic
+  \def\H{2.5}             % height of each row
+  \def\W{2.6}             % width of column
+  \def\xsquare{0}         % x position square
+  \def\xkite{-1.6}        % x position kites
+  \def\xtrap{0.0}         % x position trapezia
+  \def\ytrap{3.2}         % y position trapezia
+  \def\ycyclic{2.75}      % y position cyclic
+  \def\xycomplex{1.0,4.7} % xy position complex
+  \def\xyquad{0.2,5.3}    % xy position complex
   
   % LAYERS
   \pgfdeclarelayer{back}
@@ -963,7 +970,8 @@
       (rhombus) -- (kite)
       (tangential) -- (convex) -- (simple) -- (concave) -- (dart)
       (trapezium) -- (convex) -- (cyclic)
-      (simple) -- (quadrilateral) -- (complex);
+      (simple) -- (quadrilateral-W)
+      (complex-W) -- (quadrilateral-E);
     \draw[white,double=black,double distance=0.4,line width=0.5]
       (cyclic) -- (bicentric)
       (right kite) -- (bicentric) -- (tangential);
@@ -982,11 +990,11 @@
 %   https://en.wikipedia.org/wiki/Quadrilateral#Taxonomy
 %   https://commons.wikimedia.org/wiki/File:Quadrilateral_hierarchy_svg.svg
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}
   \message{^^JFull Hasse diagram, incl. obtuse & acute}
   
-  \def\H{2.2}             % height of each row
-  \def\W{2.4}             % width of column
+  \def\H{2.4}             % height of each row
+  \def\W{2.6}             % width of column
   \def\xsquare{0.5}       % x  position square
   \def\xkite{-2.4}        % x  position kites
   \def\ykite{2.0}         %  y position kite
@@ -1026,11 +1034,11 @@
   \begin{pgfonlayer}{back} % draw on back
     \draw[myorangeset] (kite) -- (irregular);
     \draw[myorangeset]
-      (tangential)++(-1.2,0.8) rectangle++ (1.76*\W,-2.7*\H);
+      (tangential)++(-1.25,0.8) rectangle++ (1.7*\W,-2.7*\H);
     \draw[mygreenset] (parallelogram) -- (obtuse trapezium);
-    \draw[mygreenset] (parallelogram)++(-1.1,0.7) rectangle++ (2.2,-1.74*\H);
+    \draw[mygreenset] (parallelogram)++(-1.2,0.7) rectangle++ (2.4,-1.7*\H);
     \draw[myset] (2 trapezium) -- (acute trapezium);
-    \draw[myset] (2 trapezium)++(-1.1,0.7) rectangle++ (2.2,-1.9*\H);
+    \draw[myset] (2 trapezium)++(-1.2,0.7) rectangle++ (2.4,-1.85*\H);
     \draw[black]
       (square) -- (right kite) -- (kite) -- (tangential)
       (square) -- (rhombus) -- (parallelogram)
@@ -1062,11 +1070,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % https://en.wikipedia.org/wiki/Quadrilateral#Complex_quadrilaterals
 
-\begin{tikzpicture}[scale=1.1]
+\begin{tikzpicture}
   \message{^^JExtended Hasse diagram}
   
-  \def\H{2.4}             % height of each row
-  \def\W{2.4}             % width of column
+  \def\H{2.5}             % height of each row
+  \def\W{2.5}             % width of column
   \def\xsquare{0}         % x position square
   \def\xkite{-1.6}        % shift kite column
   \def\xcyclic{1.5}       % x position cyclic
@@ -1077,8 +1085,8 @@
   \def\yconcave{4.2}      %  y position concave
   \def\yconvex{4.0}       %  y position convex
   \def\xysimple{0.0,4.8}  % xy position simple
-  \def\xycomplex{3.6,4.8} % xy position complex
-  \def\xyquad{2.0,5.5}    % xy position complex
+  \def\xycomplex{3.5,4.8} % xy position complex
+  \def\xyquad{1.9,5.5}    % xy position complex
   
   % LAYERS
   \pgfdeclarelayer{back}
@@ -1103,12 +1111,12 @@
     \draw[mydashed] (SW) -- (SE) (NW) -- (NE);
     \draw[myshape] (SW) -- (NE) -- (SE) -- (NW) -- cycle;
     \draw[purple line] (SW) -- (NW) (SE) -- (NE);
-    \pic[nmarks=1,angcol=myred] {mark angle={(SW)-(NW)-(O):0.25}};
-    \pic[nmarks=1,angcol=myred] {mark angle={(O)-(NE)-(SE):0.25}};
-    \pic[nmarks=1,angcol=myred] {mark angle={(O)-(SW)-(NW):0.25}};
-    \pic[nmarks=1,angcol=myred] {mark angle={(NE)-(SE)-(O):0.25}};
-    \pic[angcol=myblue] {right angle={(NW)-(O)-(SW):0.25}};
-    \pic[angcol=myblue] {right angle={(SE)-(O)-(NE):0.25}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(SW)-(NW)-(O):0.20}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(O)-(NE)-(SE):0.20}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(O)-(SW)-(NW):0.20}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(NE)-(SE)-(O):0.20}};
+    \pic[angcol=myblue] {right angle={(NW)-(O)-(SW):0.20}};
+    \pic[angcol=myblue] {right angle={(SE)-(O)-(NE):0.20}};
     \pic[nmarks=1,markshift=0.08,myblue] {mark line={(NW)-(SE):90}};
     \pic[nmarks=1,markshift=0.08,myblue] {mark line={(SW)-(NE):90}};
     \pic[nmarks=2,mypurple] {mark line={(NW)-(SW):90}};
@@ -1134,10 +1142,10 @@
     \draw[mydashed] (SW) -- (SE) (NW) -- (NE);
     \draw[myshape] (SW) -- (NW) -- (SE) -- (NE) -- cycle;
     \draw[purple line] (SW) -- (NW) (SE) -- (NE);
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(O):0.25}};
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(NE)-(SE)-(O):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(SW)-(NW):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(NE)-(SE):0.25}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(O):0.20}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(NE)-(SE)-(O):0.20}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(SW)-(NW):0.23}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(NE)-(SE):0.23}};
     \pic[nmarks=1,markshift=0.08,myblue] {mark line={(NW)-(SE):90}};
     \pic[nmarks=1,markshift=0.08,myblue] {mark line={(SW)-(NE):90}};
     \pic[nmarks=1,myblue] {mark line={(NW)-(SW):90}};
@@ -1160,12 +1168,12 @@
     \draw[mydashed] (SW) -- (SE) (NW) -- (NE);
     \draw[myshape] (SW) -- (NE) -- (SE) -- (NW) -- cycle;
     \draw[purple line] (SW) -- (NW) (SE) -- (NE);
-    \pic[nmarks=1,angcol=myred] {mark angle={(SW)-(NW)-(O):0.25}};
-    \pic[nmarks=1,angcol=myred] {mark angle={(O)-(NE)-(SE):0.25}};
-    \pic[nmarks=1,angcol=myred] {mark angle={(O)-(SW)-(NW):0.25}};
-    \pic[nmarks=1,angcol=myred] {mark angle={(NE)-(SE)-(O):0.25}};
-    %\pic[nmarks=2,angcol=mygreen] {mark angle={(SE)-(O)-(NE):0.25}};
-    %\pic[nmarks=2,angcol=mygreen] {mark angle={(NW)-(O)-(SW):0.25}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(SW)-(NW)-(O):0.20}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(O)-(NE)-(SE):0.20}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(O)-(SW)-(NW):0.20}};
+    \pic[nmarks=1,angcol=myred] {mark angle={(NE)-(SE)-(O):0.20}};
+    %\pic[nmarks=2,angcol=mygreen] {mark angle={(SE)-(O)-(NE):0.20}};
+    %\pic[nmarks=2,angcol=mygreen] {mark angle={(NW)-(O)-(SW):0.20}};
     \pic[nmarks=1,markshift=0.08,myblue] {mark line={(NW)-(SE):90}};
     \pic[nmarks=1,markshift=0.08,myblue] {mark line={(SW)-(NE):90}};
     \pic[nmarks=2,mypurple] {mark line={(NW)-(SW):90}};
@@ -1191,10 +1199,10 @@
     \draw[mydashed] (SW) -- (SE) (NW) -- (NE);
     \draw[myshape] (SW) -- (NW) -- (SE) -- (NE) -- cycle;
     \draw[purple line] (SW) -- (NW) (SE) -- (NE);
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(O):0.25}};
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(NE)-(SE)-(O):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(SW)-(NW):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(NE)-(SE):0.25}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(O):0.20}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(NE)-(SE)-(O):0.20}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(SW)-(NW):0.23}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(NE)-(SE):0.23}};
     \pic[nmarks=1,mypurple] {mark line={(NW)-(SW):90}};
     \pic[nmarks=1,mypurple] {mark line={(NE)-(SE):90}};
   \end{scope}
@@ -1218,10 +1226,10 @@
     \draw[mydashed] (SW) -- (NW) (SE) -- (NE);
     \draw[myshape] (SW) -- (SE) -- (NW) -- (NE) -- cycle;
     \draw[purple line] (SW) -- (NE) (SE) -- (NW);
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(SE)-(SW)-(O):0.25}};
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(O)-(SE)-(SW):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(NW)-(NE)-(O):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(NW)-(NE):0.25}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(SE)-(SW)-(O):0.24}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(O)-(SE)-(SW):0.24}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(NW)-(NE)-(O):0.23}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(NW)-(NE):0.23}};
     \pic[nmarks=1,markshift=0.06,mypurple] {mark line={(SE)-(NW):90}};
     \pic[nmarks=1,markshift=0.06,mypurple] {mark line={(SW)-(NE):90}};
   \end{scope}
@@ -1243,10 +1251,10 @@
     \draw[mydashed] (SW) -- (SE) (NW) -- (NE);
     \draw[myshape] (SW) -- (NW) -- (SE) -- (NE) -- cycle;
     \draw[purple line] (SW) -- (NW) (SE) -- (NE);
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(O):0.25}};
-    \pic[nmarks=2,angcol=mygreen] {mark angle={(O)-(NE)-(SE):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(NE)-(SE)-(O):0.25}};
-    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(SW)-(NW):0.25}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(SW)-(NW)-(O):0.20}};
+    \pic[nmarks=2,angcol=mygreen] {mark angle={(O)-(NE)-(SE):0.20}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(NE)-(SE)-(O):0.23}};
+    \pic[nmarks=1,angcol=myred]   {mark angle={(O)-(SW)-(NW):0.23}};
     \pic[nmarks=1,markshift=0.06,myblue] {mark line={(SE)-(NW):90}};
     \pic[nmarks=1,markshift=0.06,myblue] {mark line={(SW)-(NE):90}};
     \pic[nmarks=2,mypurple] {mark line={(NW)-(SW):90}};
@@ -1290,8 +1298,8 @@
     \coordinate (NE) at ( 40:\R);
     \coordinate (SE) at (325:\R);
     \coordinate (concave cyclic) at (60:0.2*\R);
-    \draw[myshape] (SW) -- (NE) -- (NW) -- (SE) -- cycle;
     \draw[mydarkgreen] (O) circle(\R);
+    \draw[myshape] (SW) -- (NE) -- (NW) -- (SE) -- cycle;
     \fill[mydarkgreen] (O) circle(0.02);
   \end{scope}
   
@@ -1308,8 +1316,8 @@
     \coordinate (NE) at ( 45:\R);
     \coordinate (SE) at (320:\R);
     \coordinate (cyclic) at (O);
-    \draw[myshape] (SW) -- (NW) -- (NE) -- (SE) -- cycle;
     \draw[mydarkgreen] (O) circle(\R);
+    \draw[myshape] (SW) -- (NW) -- (NE) -- (SE) -- cycle;
     \fill[mydarkgreen] (O) circle(0.02);
   \end{scope}
   
@@ -1338,7 +1346,7 @@
       -- (crossed trapezium)
       (crossed rectangle) -- (crossed parallelogram)
       (crossed rectangle) -- (antiparallelogram) -- (concave cyclic)
-      (crossed 2 trapezium) -- (concave cyclic) -- (complex-W);
+      (crossed 2 trapezium) -- (concave cyclic) -- (complex-E);
     \draw[white,double=black,double distance=0.4,line width=0.5]
       (convex cyclic-W) -- (bicentric) -- (right kite)
       (bicentric-N) -- (tangential);
