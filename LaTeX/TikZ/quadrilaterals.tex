@@ -105,6 +105,8 @@
   }
 }
 %\def\name#1#2{\node[below=-1,align=center] at (#1) {\contour{white}{#2}};}
+\pgfdeclarelayer{back} % to draw on background
+\pgfsetlayers{back,main} % set order
 
 \begin{document}
 
@@ -679,10 +681,6 @@
   \def\W{2.4}     % width of column
   \def\ytrap{3.0} % y position of general trapezia
   
-  % LAYERS
-  \pgfdeclarelayer{back}
-  \pgfsetlayers{back,main}
-  
   % QUADRILATERALS
   \commontraps
   \commonirreg
@@ -719,10 +717,6 @@
   \def\ytrap{4.0}      % y position of general trapezia
   \def\colpara{mydarkgreen!3} % contour color for parallelograms
   \def\coltrap{mydarkred!3}   % contour color for isosceles trapezia
-  
-  % LAYERS
-  \pgfdeclarelayer{back}
-  \pgfsetlayers{back,main}
   
   % QUADRILATERALS
   \commontraps
@@ -761,10 +755,6 @@
   \def\ytrap{4.0}      % y position of general trapezia
   \def\colpara{mydarkgreen!3} % contour color for parallelograms
   \def\coltrap{mydarkred!3}   % contour color for isosceles trapezia
-  
-  % LAYERS
-  \pgfdeclarelayer{back}
-  \pgfsetlayers{back,main}
   
   % QUADRILATERALS
   \commontraps
@@ -806,11 +796,6 @@
   \def\xsquare{0} % x position square
   \def\ytrap{3.0} % y position trapezia
   
-  % LAYERS
-  \pgfdeclarelayer{back}
-  \pgfsetlayers{back,main}
-  
-  
   % QUADRILATERALS
   \commontraps
   \commonkites
@@ -843,10 +828,6 @@
   \def\xsquare{0} % x position square
   \def\ytrap{3.2} % y position of general trapezia
   \def\colkite{mydarkred!3} % contour color for kites
-  
-  % LAYERS
-  \pgfdeclarelayer{back}
-  \pgfsetlayers{back,main}
     
   % QUADRILATERALS
   \commontraps
@@ -893,10 +874,6 @@
   \def\colpara{mydarkgreen!3}  % contour color for parallelograms
   \def\coltrap{mydarkred!3}    % contour color for isosceles trapezia
   \def\colkite{mydarkorange!3} % contour color for kites
-  
-  % LAYERS
-  \pgfdeclarelayer{back}
-  \pgfsetlayers{back,main}
   
   % QUADRILATERALS
   \commontraps
@@ -949,10 +926,6 @@
   \def\ycyclic{2.75}      % y position cyclic
   \def\xycomplex{1.0,4.7} % xy position complex
   \def\xyquad{0.2,5.3}    % xy position complex
-  
-  % LAYERS
-  \pgfdeclarelayer{back}
-  \pgfsetlayers{back,main}
   
   % QUADRILATERALS
   \commontraps
@@ -1016,10 +989,6 @@
   \def\coltrap{mydarkred!3}    % contour color for isosceles trapezia
   \def\colkite{mydarkorange!3} % contour color for kites
   \def\colcirc{mydarkorange!3} % contour color for tangential/cyclic/bicentric
-  
-  % LAYERS
-  \pgfdeclarelayer{back}
-  \pgfsetlayers{back,main}
   
   % QUADRILATERALS
   \commontraps
@@ -1087,10 +1056,6 @@
   \def\xysimple{0.0,4.8}  % xy position simple
   \def\xycomplex{3.5,4.8} % xy position complex
   \def\xyquad{1.9,5.5}    % xy position complex
-  
-  % LAYERS
-  \pgfdeclarelayer{back}
-  \pgfsetlayers{back,main}
   
   %%%% LEVEL 1 %%%%%%%%%%%%%%%%%%%%%%%%%%
   

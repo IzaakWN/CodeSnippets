@@ -11,7 +11,9 @@
 \tikzset{>=latex} % for LaTeX arrow head
 
 \colorlet{xcol}{blue!85!black}
+\colorlet{vcol}{green!60!black}
 \colorlet{myred}{red!65!black}
+\tikzstyle{vvec}=[->,vcol,thick,line cap=round]
 \tikzstyle{ground}=[preaction={fill,top color=black!10,bottom color=black!5,shading angle=20},
                     fill,pattern=north east lines,draw=none,minimum width=0.3,minimum height=0.6]
 \tikzstyle{metal}=[fill,top color=black!40,bottom color=black!20,shading angle=10]
@@ -24,6 +26,8 @@
 \tikzstyle{mount}=[blue!20!black,fill,top color=blue!20!black!70,bottom color=blue!20!black!40,shading angle=10] %,line width=1.8,line cap=round
 %\tikzstyle{mount}=[color=black!60,line width=1.8,line cap=round]
 \tikzstyle{spring}=[line width=0.8,black!80,snake=coil,segment amplitude=5,segment length=5,line cap=round]
+\pgfdeclarelayer{back} % to draw on background
+\pgfsetlayers{back,main} % set order
 
 % FORCES SWITCH
 \tikzstyle{force}=[->,myred,thick,line cap=round]
@@ -49,7 +53,13 @@
   }},
   pics/mount/.style args={#1:#2}{ % angle, length
     code={
-      \draw [mount] (0,0)++(#1-90:0.9*\r) arc (#1-90:#1-270:0.9*\r) --++ (#1:#2) --++ (#1-90:1.8*\r) -- cycle;
+      \draw[mount] (0,0)++(#1-90:0.9*\r) arc (#1-90:#1-270:0.9*\r) --++ (#1:#2) --++ (#1-90:1.8*\r) -- cycle;
+  }},
+  pics/weight/.style args={#1,#2,#3}{ % bottom width, top width, height
+    code={
+      \draw[mass] (0,0) -- (#2/2,0) -- (#1/2,-0.7*#3)
+        |- (-#1/2,-#3) -- (-#1/2,-0.7*#3) -- (-#2/2,0) -- cycle;
+      \path[mass] (0,0) -- (0,-#3) node[pos=0.52] {$m$};
   }},
   pics/pulley/.default=0.3,
 }
@@ -177,7 +187,7 @@
 \end{tikzpicture}
 
 
-% CEILING PULLEY 2
+% CEILING PULLEY + ROPE
 \begin{tikzpicture}
   \def\W{2.0}  % ceiling width
   \def\H{2.5}  % ceiling height
@@ -214,10 +224,10 @@
   \def\h{0.6}  % mass height
   \def\w{0.9}  % mass width
   \def\t{0.1}  % peg thickness
-  \def\px{0.40*\W} % pulley x position
-  \def\py{0.80*\H} % pulley y position
+  \def\px{0.40*\W}  % pulley x position
+  \def\py{0.80*\H}  % pulley y position
   \def\mx{\px+2*\R} % mass x position
-  \def\my{0.25*\H} % mass y position
+  \def\my{0.25*\H}  % mass y position
   \def\Mh{\my+1.3*\R} % pulley mount height
   \coordinate (P)  at (\px,\py); % pulley
   \coordinate (PM) at (\mx,\Mh); % pulley on mass
@@ -237,7 +247,138 @@
 \end{tikzpicture}
 
 
-% CEILING PULLEY 4
+% CEILING PULLEY - person
+\begin{tikzpicture}
+  \def\W{2.8}  % ground width
+  \def\H{2.3}  % ground height
+  \def\D{0.3}  % ground depth
+  \def\h{0.50} % mass height
+  \def\w{0.75} % mass width
+  \def\L{0.7}  % rope length
+  \def\t{0.1}  % peg thickness
+  \def\R{0.30} % pulley radius
+  \def\F{0.8}  % force magnitude
+  \def\v{0.40} % velocity magnitude
+  \def\ang{-100}      % pull angle
+  \def\px{0.58*\W}    % pulley x position
+  \def\py{0.80*\H}    % pulley y position
+  \def\my{0.30*\H}    % mass y position
+  \def\rx{\px-1.0*\R} % rope-peg x position
+  \def\Hh{2.4}        % human height
+  \def\Hw{0.8}        % human width
+  \def\Hy{-0.4*\H}    % human y position
+  \def\Hx{0.21*\W}    % human x position
+  \coordinate (P)  at (\px,\py);    % pulley
+  \coordinate (M)  at (\px+\R,\my); % mass
+  \coordinate (T)  at ({\px+\R*sin(\ang)},{\py-\R*cos(\ang)}); % mass
+  \coordinate (RH) at ($(T)+(\ang:1.3)$); % right hand
+  
+  % PULLEY & MASS
+  \rope{ %draw[rope,line cap=round]
+    (RH) -- (T) arc(\ang+270:0:\R) --++ (0,\my-\py)}
+  \pic at (P) {pulley={\R}};
+  \pic at (P) {mount={90:\H-\py}};
+  %\pic at (M) {weight={\w,0.5*\w,\h}};
+  \draw[mass] (M)++(-\w/2,0) rectangle++ (\w,-\h) node[midway] {$m$};
+  \draw[ground] (0,\H) rectangle++ (\W,\D);
+  \draw (0,\H) --++ (\W,0);
+  
+  % PERSON
+  \draw[thick] (\Hx,\Hy+\Hh) circle (0.4) coordinate (H); % head
+  \draw[thick,line cap=round] % body
+    (H)++(-117:0.4) coordinate (N) to[out=-100,in=110]++ (0,-0.40*\Hh) coordinate (B);
+  \begin{pgfonlayer}{back} % draw on back
+    \draw[thick,line cap=round] % left arm
+      (N)++(-85:0.03) to[out=-70,in=220,looseness=1.2] ($(RH)!0.12!(T)+(0.03,0)$);
+  \end{pgfonlayer}
+  \draw[thick,line cap=round] % right arm
+    (N)++(-85:0.03) to[out=-105,in=220,looseness=1.25] ($(RH)!0.02!(T)+(0.03,0.02)$);
+  \draw[thick] (B) to[out=-65,in=72] (\Hx+0.04*\Hw,\Hy); % left leg
+  \draw[thick] (B) to[out=-55,in=95] (\Hx+0.39*\Hw,\Hy); % right leg
+  
+  % FORCES
+  \draw[vvec] (M)++(0.7*\w,-0.3*\h) --++ (0,\v) node[above=2,right=-2] {$v$};
+  \ifthenelse{\boolean{showforces}}{
+    \draw[vvec] (T)++(\ang-16:0.4) --++ (\ang:\v) node[anchor=65,inner sep=1] {$v$};
+    \draw[force] (RH)++(\ang+165:0.6*\F) --++ (\ang:\F) node[below=-2] {$\vbT$}; % hand
+    \draw[force] (M)++(0.2*\w,0.3*\h) --++ (0,\F) node[right=-2] {$\vbT$};
+    \draw[force] (M)++(-0.3*\w,-0.8*\h) --++ (0,-\F) node[below=-3] {$-mg\vu{y}$};
+  }{}
+  
+\end{tikzpicture}
+ 
+
+% BLOCK & TACKLE with snatch block & person
+% https://en.wikipedia.org/wiki/Block_and_tackle
+% https://www.youtube.com/watch?v=M2w3NZzPwOM
+\begin{tikzpicture}
+  \def\W{3.0}  % ceiling width
+  \def\H{2.6}  % ceiling height
+  \def\D{0.3}  % ceiling depth
+  \def\h{0.50} % mass height
+  \def\w{0.75} % mass width
+  \def\L{0.7}  % rope length
+  \def\t{0.08} % peg thickness
+  \def\F{0.45} % force magnitude
+  \def\v{0.35} % velocity magnitude
+  \def\ang{-97}       % pull angle
+  \def\R{0.27}        % pulley radius
+  \def\px{0.55*\W}    % pulley x position
+  \def\py{0.8*\H}     % pulley y position
+  \def\mx{\px+2*\R}   % mass x position
+  \def\my{0.25*\H}    % mass y position
+  \def\Mh{\my+1.3*\R} % pulley mount height
+  \def\Hh{2.6}        % human height
+  \def\Hw{0.8}        % human width
+  \def\Hy{-0.3*\H}    % human y position
+  \def\Hx{ 0.19*\W}   % human x position
+  \coordinate (P)  at (\px,\py); % pulley
+  \coordinate (PM) at (\mx,\Mh); % pulley on mass
+  \coordinate (M)  at (\mx,\my); % mass
+  \coordinate (T)  at ({\px+\R*sin(\ang)},{\py-\R*cos(\ang)}); % mass
+  \coordinate (RH) at ($(T)+(\ang:1.45)$); % right hand
+  
+  % PULLEY & MASS
+  \rope{ %[rope,line cap=round]
+    (RH) -- (T) arc(\ang+270:0:\R) -- (\mx-\R,\Mh)
+    arc(-180:0:\R) -- (\mx+\R,\H)}
+  \pic at (P) {pulley={\R}};
+  \pic at (P) {mount={90:\H-\py}};
+  \pic at (PM) {pulley={\R}};
+  \pic at (PM) {mount={-90:1.3*\R}};
+  %\pic at (M) {weight={\w,0.5*\w,\h}};
+  \draw[mass] (M)++(-\w/2,0) rectangle++ (\w,-\h) node[midway] {$m$};
+  \draw[ground] (0,\H) rectangle++ (\W,\D);
+  \draw (0,\H) --++ (\W,0);
+  
+  % PERSON
+  \draw[thick] (\Hx,\Hy+\Hh) circle (0.4) coordinate (H); % head
+  \draw[thick] % body
+    (H)++(0,-0.4) coordinate (N) to[out=-95,in=95]++ (0,-0.40*\Hh) coordinate (B);
+  \begin{pgfonlayer}{back} % draw in back
+    \draw[thick,line cap=round] % left arm
+      (N)++(-85:0.03) to[out=-70,in=190,looseness=1.1] ($(RH)!0.1!(T)+(0.03,0)$);
+  \end{pgfonlayer}
+  \draw[thick,line cap=round] % right arm
+    (N)++(-85:0.03) to[out=-100,in=190,looseness=1.2] ($(RH)!0.02!(T)+(0.03,0.02)$);
+  \draw[thick] (B) to[out=-85,in=82] (\Hx-0.03*\Hw,\Hy); % left leg
+  \draw[thick] (B) to[out=-80,in=85] (\Hx+0.15*\Hw,\Hy); % right leg
+  
+  % FORCES
+  \draw[vvec] (M)++(0.7*\w,-0.4*\h) --++ (0,\v) node[above=2,right=-2] {$v$};
+  \ifthenelse{\boolean{showforces}}{
+    \draw[vvec] (T)++(\ang-40:0.2) --++ (\ang:2*\v) node[anchor=40,inner sep=-1] {$2v$};
+    \draw[force] (RH)++(\ang+153:0.5*\F) --++ (\ang:\F) node[below=-2] {$\vbT$}; % hand
+    \draw[force] (\mx-1.4*\R,\Mh) --++ (0,\F) node[left=-2] {$\vbT$};  % mass pulley left
+    \draw[force] (\mx+1.4*\R,\Mh) --++ (0,\F) node[right=-2] {$\vbT$}; % mass pulley right
+    \draw[force] (\mx+1.4*\R,0.98*\H) --++ (0,-\F) node[pos=0.6,right=-1] {$\vbT$}; % hand
+    \draw[force] (M)++(-0.3*\w,-0.8*\h) --++ (0,-2*\F) node[below=-3] {$-mg\vu{y}$};
+  }{}
+  
+\end{tikzpicture}
+
+
+% CEILING PULLEY - two masses
 \begin{tikzpicture}
   \def\W{3.7}  % ceiling width
   \def\H{2.4}  % ceiling height
@@ -275,47 +416,47 @@
 \end{tikzpicture}
 
 
-% CEILING PULLEY - three masses
+% CEILING PULLEY - three masses with joint
+\def\W{4.9}      % ceiling width
+\def\H{1.6}      % ceiling height
+\def\D{0.3}      % ceiling depth
+\def\R{0.30}     % pulley radius
+\def\px{0.31*\W} % pulley x position
+\def\py{0.80*\H} % pulley y position
+\def\mx{\px+\R}  % mass x position
+\def\my{0.28*\H} % mass y position
 \begin{tikzpicture}
-  \def\W{4.9}  % ceiling width
-  \def\H{2.5}  % ceiling height
-  \def\D{0.3}  % ceiling depth
-  \def\px{0.31*\W} % pulley x position
-  \def\py{0.80*\H} % pulley y position
-  \def\mx{\px+\R}  % mass x position
-  \def\my{0.20*\H} % mass y position
+  \def\h{0.53}   % mass height
+  \def\ang{48}   % rope angle
   \coordinate (PL) at (-\px,\py); % pulley
   \coordinate (PR) at ( \px,\py); % pulley
   \coordinate (ML) at ({-(\mx)},\my); % mass
   \coordinate (MR) at ( \mx,\my);     % mass
-  \coordinate (X)  at (0,1.1*\my);    % mass
+  \coordinate (X)  at (0,1.1*\my);    % rope joint
   \coordinate (M)  at (0,0);          % mass
   \draw[ground] (-\W/2,\H) rectangle++ (\W,\D);
   \draw (-\W/2,\H) --++ (\W,0);
   \rope{ %[rope]
-     (ML) -- (-\px-\R,\py) arc (180:40:\R)
-     -- (X) -- ({\px-\R*cos(40)},{\py+\R*sin(40)}) arc (140:0:\R) -- (MR)
+     (ML) -- (-\px-\R,\py) arc (180:\ang:\R)
+     -- (X) -- ({\px-\R*cos(\ang)},{\py+\R*sin(\ang)}) arc (180-\ang:0:\R) -- (MR)
      (X) -- (M)}
   \pic at (PL) {pulley};
   \pic at (PR) {pulley};
   \pic at (PR) {mount={90:\H-\py}};
   \pic at (PL) {mount={90:\H-\py}};
-  \draw[mass] (ML)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m$};
-  \draw[mass] (MR)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m$};
-  \draw[mass] (M)++(-\w/2,0) rectangle++ (\w,-\h) node[midway] {$m$};
+  \pic at (ML) {weight={\w,0.5*\w,\h}};
+  \pic at (MR) {weight={\w,0.5*\w,\h}};
+  \pic at (M)  {weight={\w,0.5*\w,\h}};
+  %\draw[mass] (ML)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m$};
+  %\draw[mass] (MR)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m$};
+  %\draw[mass] (M)++(-\w/2,0) rectangle++ (\w,-\h) node[midway] {$m$};
 \end{tikzpicture}
 
 
-% CEILING PULLEY - three masses 2
+% CEILING PULLEY - three masses without joint
 \begin{tikzpicture}
-  \def\W{4.9}  % ceiling width
-  \def\H{2.2}  % ceiling height
-  \def\D{0.3}  % ceiling depth
-  \def\px{0.31*\W} % pulley x position
-  \def\py{0.80*\H} % pulley y position
-  \def\mx{\px+\R}  % mass x position
-  \def\my{0.20*\H} % mass y position
-  \def\My{0} % mass y position
+  \def\h{0.53} % mass height
+  \def\ang{42} % rope angle
   \coordinate (PL) at (-\px,\py); % pulley
   \coordinate (PR) at ( \px,\py); % pulley
   \coordinate (ML) at ({-(\mx)},\my); % mass
@@ -324,15 +465,18 @@
   \draw[ground] (-\W/2,\H) rectangle++ (\W,\D);
   \draw (-\W/2,\H) --++ (\W,0);
   \rope{ %[rope]
-     (ML) -- (-\px-\R,\py) arc (180:35:\R)
-     -- (M) -- ({\px-\R*cos(35)},{\py+\R*sin(35)}) arc (145:0:\R) -- (MR)}
+     (ML) -- (-\px-\R,\py) arc (180:\ang:\R)
+     -- (M) -- ({\px-\R*cos(\ang)},{\py+\R*sin(\ang)}) arc (180-\ang:0:\R) -- (MR)}
   \pic at (PL) {pulley};
   \pic at (PR) {pulley};
   \pic at (PR) {mount={90:\H-\py}};
   \pic at (PL) {mount={90:\H-\py}};
-  \draw[mass] (ML)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m$};
-  \draw[mass] (MR)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m$};
-  \draw[mass] (M)++(-\w/2,0) rectangle++ (\w,-\h) node[midway] {$m$};
+  \pic at (ML) {weight={\w,0.5*\w,\h}};
+  \pic at (MR) {weight={\w,0.5*\w,\h}};
+  \pic at (M)  {weight={\w,0.5*\w,\h}};
+  %\draw[mass] (ML)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m$};
+  %\draw[mass] (MR)++(-\w/2,-\h/2) rectangle++ (\w,\h) node[midway] {$m$};
+  %\draw[mass] (M)++(-\w/2,0) rectangle++ (\w,-\h) node[midway] {$m$};
 \end{tikzpicture}
 
 
