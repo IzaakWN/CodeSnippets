@@ -178,7 +178,7 @@ yticks(-pi:pi/4:3.5)
 yticklabels({'-\pi','-3\pi/4','-\pi/2','-\pi/4',...
              '0','\pi/4','\pi/2','3\pi/4','\pi'})
 leg = legend(tls,'NumColumns',1, ...  %'Location', 'northoutside', ...
-             'Position',[0.49 0.16 0.1 0.3], ... 
+             'Position',[0.49 0.17 0.1 0.3], ... 
              'Interpreter','latex','FontSize',14);
 leg.ItemTokenSize = [13,100];
 grid on
@@ -239,7 +239,7 @@ for x0 = [ ... % amplitude theta(0) = x0
            3.0 3.1 ...
          ]
   w0 = 1; % angular frequency for s.h.o.
-  k = sin(x0/2);
+  k = sin(x0/2); % elliptic modulus
   m = k^2;
   T = 4*ellipke(m)/w0; % period
   w = 2*pi/T; %pi/(2*ellipke(sin(x0/2)^2)); omega

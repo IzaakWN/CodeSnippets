@@ -4,21 +4,30 @@ clear all; close all; clc
 
 disp("1) Extended arcsin")
 figure(1)
+tmax = 2.0;
+t = linspace(-pi/2,tmax,200);
 x = linspace(-1,1,200);
 tls = "sin"; % legend titles
 hold on
-plot(x,sin(x),'--','LineWidth',0.8);
+plot(t,sin(t),'--','LineWidth',1.0);
 for n = [ 0 1 2 3 ]
   y = asin_ext(x,n);
   plot(x,y,'LineWidth',1.6);
   tls{end+1} = sprintf('asin, $n=%d$',n);
 end
-leg = legend(tls,'Location','north', ...
+xlim([-pi/2 tmax]);
+ylim([-2 11.3]);
+xticks([-pi/2 -1 0 1 pi/2])
+yticks([-pi/2 -1 0 1 pi/2:pi/2:11])
+xticklabels({'-\pi/2','-1','0','1','\pi/2'}) 
+yticklabels({'-\pi/2','-1','0','1','\pi/2','\pi','3\pi/2','2\pi',...
+             '5\pi/2','3\pi','7\pi/2'}) 
+leg = legend(tls,'Position',[0.76 0.49 0.1 0.04], ...
              'Interpreter','latex','FontSize',13);
 leg.ItemTokenSize = [13,100];
 grid on
 hold off
-mysaveas("fig/asin_ext")
+mysaveas("fig/asin_ext",3.5,0.06)
 
 disp("2) ARCSIN(A*SIN)")
 figure(2)
@@ -31,10 +40,8 @@ for A = [ -1 0.25 0.5 0.75 1 ] % amplitude
   plot(t,y,'LineWidth',1.3);
   tls{end+1} = sprintf('$A=%.2g$',A);
 end
-leg = legend(tls, ...
-             'Location', 'north', ...
-             'Interpreter', 'latex', ...
-             'FontSize', 11 );
+leg = legend(tls,'Location','north', ...
+             'Interpreter','latex','FontSize',12);
 leg.ItemTokenSize = [13,100];
 grid on
 hold off
@@ -55,10 +62,8 @@ for T = [ 0.5 1 2 ] % period
   tls(2*i-1) = sprintf('$T=%g$',T);
   i = i+1;
 end
-leg = legend(tls, ...
-             'Location', 'northwest', ...
-             'Interpreter', 'latex', ...
-             'FontSize', 11 );
+leg = legend(tls,'Location','northwest', ...
+             'Interpreter','latex','FontSize',12);
 leg.ItemTokenSize = [13,100];
 grid on
 hold off
@@ -75,10 +80,8 @@ for T = [ 1 2 4 ] % period
   plot(t,y,'LineWidth',1.3);
   tls{end+1} = sprintf('$T=%.2g$',T);
 end
-leg = legend(tls, ...
-             'Location', 'northwest', ...
-             'Interpreter', 'latex', ...
-             'FontSize', 11 );
+leg = legend(tls,'Location','northwest', ...
+             'Interpreter','latex','FontSize',12);
 leg.ItemTokenSize = [13,100];
 grid on
 hold off
@@ -99,10 +102,8 @@ for T = [ 1 2 4 ] % period
   tls(2*i) = sprintf('$T=%.2g$',T);
   i = i+1;
 end
-leg = legend(tls, ...
-             'Location', 'northwest', ...
-             'Interpreter', 'latex', ...
-             'FontSize', 11 );
+leg = legend(tls,'Location','northwest', ...
+             'Interpreter','latex','FontSize',12);
 leg.ItemTokenSize = [13,100];
 grid on
 hold off
@@ -121,7 +122,7 @@ function mysaveas(fname,width,rmarg)
   set(gcf,'PaperPosition',[0 0 width 5]); % position plot at left hand corner with width w and height 5
   set(gcf,'PaperSize',[width 5]); % set the paper to have width w and height 5
   Tight = get(gca,'TightInset');  % gives you the bording spacing between plot box and any axis labels
-  Tight = [0.02/width 0.005 rmarg 0.02]+Tight; % [Left Bottom Right Top] spacing
+  Tight = [0.2/width 0.005 rmarg 0.02]+Tight; % [Left Bottom Right Top] spacing
   set(gca,'Position',[Tight(1) Tight(2) 1-Tight(1)-Tight(3) 1-Tight(2)-Tight(4)]);
   %return % skip saving figures
   saveas(gcf,fname,'pdf') % save figure as PDF

@@ -17,8 +17,11 @@ The solutions are divided into two main cases:
 The pendulum swings back and forth along an arc.
 We assume initial conditions &theta;(0) = &theta;<sub>0</sub> < &pi; and &theta;'(0) = 0.
 ```
-T = 4*ellipke(k^2)/w0; % period
-[sn,cn,dn] = ellipj(w0*(T/4-t),k^2); % Jacobi elliptic functions
+w0 = 1; % angular frequency for s.h.o.
+k = sin(x0/2); % elliptic modulus
+m = k^2;
+T = 4*ellipke(m)/w0; % period
+[sn,cn,dn] = ellipj(w0*(T/4-t),m); % Jacobi elliptic functions
 x = 2*asin(k*sn); % theta (exact pendulum solution)
 v = -2*k*w0.*cn.*dn./sqrt(1-(k*sn).^2); % dtheta/dt
 ```
@@ -38,11 +41,12 @@ where &omega;<sub>0</sub> is the angular frequency for a simple harmonic oscilla
 For a simple pendulum with a mass suspended from a wire with length L, &omega;<sub>0</sub> = sqrt(g/L).
 
 With these initial conditions, the solution &theta;(t) increases monotonically.
-To get this result, one needs to naturally extend the `arcsin` function by shifting it every half-period.
+To get this result, one needs to naturally extend the `arcsin`
+function by shifting it every half-period ([plot](fig/asin_ext.png)).
 This is done by the help function [`asin_ext.m`](asin_ext.m).
 ```
 w0 = 1; % angular frequency for s.h.o.
-k = W0/(2*w0);
+k = W0/(2*w0); % elliptic modulus
 m = k^2;
 T = 4*ellipke(1/m)/W0; % period
 [sn,~,dn] = ellipj(W0*t/2,1/m); % Jacobi elliptic functions
