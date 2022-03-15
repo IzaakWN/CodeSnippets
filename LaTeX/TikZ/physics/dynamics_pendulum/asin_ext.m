@@ -1,10 +1,9 @@
-
-% ASIN_EXT  Extend arcsin.
-%   y = asin_ext(x) arcsin of x in [-pi/2,pi/2].
-%   y = asin_ext(x,n) arcsin of x in [(n-1)*pi/2,(n+1)*pi/2].
-%   y = asin_ext(x,t,T) arcsin of x in [(n-1)*T/4,(n+1)*T/4].
-
 function [y,n] = asin_ext(x,varargin)
+  % ASIN_EXT  Naturally extend arcsin.
+  %   Author: Izaak Neutelings (March 2022)
+  %   y = asin_ext(x) arcsin of x in [-pi/2,pi/2].
+  %   y = asin_ext(x,n) arcsin of x in [(n-1)*pi/2,(n+1)*pi/2].
+  %   y = asin_ext(x,t,T) arcsin of x in [(n-1)*T/4,(n+1)*T/4].
   if nargin==1
     n = 0;
   elseif nargin==2

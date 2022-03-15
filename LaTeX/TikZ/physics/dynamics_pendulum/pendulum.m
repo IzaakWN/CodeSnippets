@@ -1,8 +1,16 @@
 % Author: Izaak Neutelings (Februari 2021)
-% Source: https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?lang=en
-%         https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?format=pdf&lang=en
-% Adapted from http://matlab.cheme.cmu.edu/2011/08/09/phase-portraits-of-a-system-of-odes/
+% Description: Produce plots and data for the exact solution of a pendulum,
+%              using Jacobi elliptic functions.
+% Source:
+%   https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?lang=en
+%   https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?format=pdf&lang=en
 clear all; close all; clc
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%   PHASE PORTRAIT   %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Adapted from http://matlab.cheme.cmu.edu/2011/08/09/phase-portraits-of-a-system-of-odes/
 
 disp("1) omega vs. theta - phase portrait")
 w0 = 1; % angular frequency for s.h.o.
@@ -55,8 +63,8 @@ for v0 = [ ...
   end
   i = i+1;
 end
-leg = legend(tls,'Position', [0.86 0.27 0.1 0.5], ...
-             'Interpreter','latex','FontSize',10);
+leg = legend(tls,'Position', [0.88 0.35 0.06 0.40], ...
+             'Interpreter','latex','FontSize',11);
 leg.ItemTokenSize = [11,100];
 xlabel("$\theta$ [rad]",'Interpreter','latex','FontSize',14)
 ylabel("$\dot{\theta}/\omega_0$",'Interpreter','latex','FontSize',14)
@@ -68,7 +76,15 @@ xticklabels({'-2\pi','-3\pi/2','-\pi','-\pi/2',...
 %axis tight equal
 grid on
 hold off
-mysaveas("fig/pendulum_phase_portrait")
+mysaveas("fig/pendulum_phase_portrait",8,0.07)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  CLOSE TRAJECTORIES   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Initial conditions
+% * theta(0) = x0, with 0 < x0 < pi
+% * dtheta/dt(0) = 0
 
 disp("2) theta vs. time")
 figure(2)
@@ -88,12 +104,13 @@ for x0 = [ ... % amplitude theta(0) = x0
            3.1 ...
          ]
   w0 = 1; % angular frequency for s.h.o.
-  k = sin(x0/2);
-  T = 4*ellipke(k^2)/w0; % period
+  k = sin(x0/2); % elliptic modulus
+  m = k^2;
+  T = 4*ellipke(m)/w0; % period
   f = 1./T; % frequency
-  w = 2*pi*f; %pi/(2*ellipke(sin(x0/2)^2)); omega
+  w = 2*pi*f; % average angular frequency, omega
   fprintf("  %4.2f %7.4f %7.4f %7.4f\n",x0,w,f,T)
-  [sn,cn,dn] = ellipj(w0*(T/4-t),k^2); % Jacobi elliptic functions
+  [sn,cn,dn] = ellipj(w0*(T/4-t),m); % Jacobi elliptic functions
   x = 2*asin(k*sn); % theta (exact pendulum solution)
   v = -2*k*w0.*cn.*dn./sqrt(1-(k*sn).^2); % dtheta/dt
   plot([T T],[-3.5 1.1*x0],'Color',colors(i,:),'LineWidth',0.5); % vertical line at t=T
@@ -110,13 +127,13 @@ for x0 = [ ... % amplitude theta(0) = x0
 end
 xlabel("$t$ [s]",'Interpreter','latex','FontSize',14)
 ylabel("$\theta$ [rad]",'Interpreter','latex','FontSize',14)
-ylim([-3.5 3.7])
-yticks(-pi:pi/4:3.5)
+ylim([-3.5 3.95])
+yticks(-pi:pi/4:4)
 yticklabels({'-\pi','-3\pi/4','-\pi/2','-\pi/4',...
-             '0','\pi/4','\pi/2','3\pi/4','\pi'})
+             '0','\pi/4','\pi/2','3\pi/4','\pi','5\pi/4'})
 leg = legend(tls,'NumColumns',3, ... %'Location', 'northoutside', ...
-             'Position',[0.5 0.86 0.4 0.1], ... 
-             'Interpreter', 'latex','FontSize',11);
+             'Position',[0.54 0.9 0.3 0.07], ... 
+             'Interpreter','latex','FontSize',12);
 leg.ItemTokenSize = [13,100];
 grid on
 hold off
@@ -135,11 +152,12 @@ for x0 = [ ... % amplitude theta(0) = x0
            3.0 3.1 ...
          ]
   w0 = 1; % angular frequency for s.h.o.
-  k = sin(x0/2);
-  T = 4*ellipke(k^2)/w0; % period
+  k = sin(x0/2); % elliptic modulus
+  m = k^2;
+  T = 4*ellipke(m)/w0; % period
   f = 1./T; % frequency
-  w = 2*pi*f;
-  [sn,cn,dn] = ellipj(w0*(T/4-T*t),k^2); % Jacobi elliptic function
+  w = 2*pi*f; % average angular frequency, omega
+  [sn,cn,dn] = ellipj(w0*(T/4-T*t),m); % Jacobi elliptic function
   x = 2*asin(k*sn); % theta (exact pendulum solution)
   v = -2*k*w0.*cn.*dn./sqrt(1-(k*sn).^2); % dtheta/dt
   plot(t,x0*cos(w*T*t),'--','Color',colors(i,:),'LineWidth',0.5); % simple s.h.o. with the same period
@@ -160,8 +178,8 @@ yticks(-pi:pi/4:3.5)
 yticklabels({'-\pi','-3\pi/4','-\pi/2','-\pi/4',...
              '0','\pi/4','\pi/2','3\pi/4','\pi'})
 leg = legend(tls,'NumColumns',1, ...  %'Location', 'northoutside', ...
-             'Position',[0.46 0.16 0.1 0.3], ... 
-             'Interpreter','latex','FontSize',12);
+             'Position',[0.49 0.16 0.1 0.3], ... 
+             'Interpreter','latex','FontSize',14);
 leg.ItemTokenSize = [13,100];
 grid on
 hold off
@@ -183,10 +201,11 @@ for x0 = [ ... % amplitude theta(0) = x0
            3.1 ...
          ]
   w0 = 1; % angular frequency for s.h.o.
-  k = sin(x0/2);
-  T = 4*ellipke(k^2)/w0; % period
+  k = sin(x0/2); % elliptic modulus
+  m = k^2;
+  T = 4*ellipke(m)/w0; % period
   w = 2*pi/T; %pi/(2*ellipke(sin(x0/2)^2)); omega
-  [sn,cn,dn] = ellipj(w0*(T/4-t),k^2); % Jacobi elliptic functions
+  [sn,cn,dn] = ellipj(w0*(T/4-t),m); % Jacobi elliptic functions
   v = -2*k*w0*cn.*dn./sqrt(1-(k*sn).^2); % dtheta/dt
   vmax = x0*w; % s.h.o.
   %vmax = 2*k*w0; % exact pendulum
@@ -196,8 +215,8 @@ for x0 = [ ... % amplitude theta(0) = x0
   tls(3*i) = sprintf('$\\theta_0=%.4g$',x0);
   i = i+1;
 end
-leg = legend(tls,'NumColumns',3,'Position',[0.5 0.84 0.3 0.1], ... 
-             'Interpreter','latex','FontSize',11);
+leg = legend(tls,'NumColumns',3,'Position',[0.51 0.90 0.2 0.08], ... 
+             'Interpreter','latex','FontSize',12);
 leg.ItemTokenSize = [13,100];
 ylim([-2.2 2.7])
 xlabel("$t$ [s]",'Interpreter','latex','FontSize',14)
@@ -221,9 +240,10 @@ for x0 = [ ... % amplitude theta(0) = x0
          ]
   w0 = 1; % angular frequency for s.h.o.
   k = sin(x0/2);
-  T = 4*ellipke(k^2)/w0; % period
+  m = k^2;
+  T = 4*ellipke(m)/w0; % period
   w = 2*pi/T; %pi/(2*ellipke(sin(x0/2)^2)); omega
-  [sn,cn,dn] = ellipj(w0*T*(1/4-t),k^2); % Jacobi elliptic functions
+  [sn,cn,dn] = ellipj(w0*T*(1/4-t),m); % Jacobi elliptic functions
   v = -2*k*w0*cn.*dn./sqrt(1-(k*sn).^2); % dtheta/dt
   vmax = x0*w; % s.h.o.
   plot(t,-vmax*sin(2*pi*t),'--','Color',colors(i,:),'LineWidth',0.7); % simple s.h.o. with the same period
@@ -231,8 +251,8 @@ for x0 = [ ... % amplitude theta(0) = x0
   tls(2*i) = sprintf('$\\theta_0=%.4g$',x0);
   i = i+1;
 end
-leg = legend(tls,'NumColumns',1,'Position',[0.76 0.17 0.1 0.3], ...
-             'Interpreter','latex','FontSize',12);
+leg = legend(tls,'NumColumns',1,'Position',[0.82 0.16 0.08 0.3], ...
+             'Interpreter','latex','FontSize',14);
 leg.ItemTokenSize = [13,100];
 ylim([-2.2 2.2])
 xlabel("$t$ [$T$]",'Interpreter','latex','FontSize',14)
@@ -242,7 +262,7 @@ hold off
 mysaveas("fig/pendulum_omega_vs_Tt")
 
 disp("6) T/T0 vs. theta0")
-t0 = linspace(0,0.995*pi,200);
+t0 = linspace(0,0.995*pi,200); % theta0
 T = 2*ellipke(sin(t0/2).^2)/pi; % T/T0
 w = 1./T; % omega/omega0 = f/f0
 fname = sprintf("data/pendulum_period.txt");
@@ -284,6 +304,15 @@ mysaveas("fig/pendulum_omega_vs_theta",6)
 %x = (x0*cos(om*t) - x)./abs(x);
 %plot(t,x);
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   OPEN TRAJECTORIES   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Initial conditions
+% * theta(0) = 0
+% * dtheta/dt(0) = W0 > 2w0
+% where w0=1 is the angular frequency for a simple harmonic oscillator
+
 disp("9) theta vs. t (W0>2w0)")
 figure(9)
 hold on
@@ -302,11 +331,11 @@ for W0 = [ ... % angular velocity dtheta/dt(0) = W0
           4.0
          ]
   w0 = 1; % angular frequency for s.h.o.
-  k = W0/(2*w0);
+  k = W0/(2*w0); % elliptic modulus > 1
   m = k^2;
   T = 4*ellipke(1/m)/W0; % period
   f = 1./T; % frequency
-  w = 2*pi*f; % angular velocity omega
+  w = 2*pi*f; % average angular frequency, omega
   fprintf("  %4.2f %6.2f %9.4f %7.4f %7.4f\n",W0/w0,k,w,f,T)
   [sn,~,dn] = ellipj(W0*t/2,1/m); % Jacobi elliptic functions
   x = 2*asin_ext(sn,t,2*T); % theta (exact pendulum solution)
@@ -334,10 +363,8 @@ ylabel("$\theta$ [rad]",'Interpreter','latex','FontSize',14)
 ylim([0 22])
 yticks(0:pi:7*pi)
 yticklabels({'0','\pi','2\pi','3\pi','4\pi','5\pi','6\pi','7\pi'})
-leg = legend(tls, ...
-             'Location', 'northwest', ...
-             'Interpreter', 'latex', ...
-             'FontSize', 11 );
+leg = legend(tls,'Location','northwest', ...
+             'Interpreter','latex','FontSize',13);
 leg.ItemTokenSize = [13,100];
 grid on
 hold off
@@ -358,7 +385,7 @@ for W0 = [ ... % angular velocity dtheta/dt(0) = W0
           2.5 3.0 4.0
          ]
   w0 = 1; % angular frequency for s.h.o.
-  k = W0/(2*w0);
+  k = W0/(2*w0); % elliptic modulus > 1
   m = k^2;
   T = 4*ellipke(1/m)/W0; % period
   w = 2*pi/T; % angular velocity omega
@@ -385,10 +412,8 @@ ylabel("$\theta$ [rad]",'Interpreter','latex','FontSize',14)
 ylim([0 16])
 yticks(0:pi:5*pi)
 yticklabels({'0','\pi','2\pi','3\pi','4\pi','5\pi'})
-leg = legend(tls, ...
-             'Location', 'southeast', ...
-             'Interpreter', 'latex', ...
-             'FontSize', 12 );
+leg = legend(tls,'Location','southeast', ...
+             'Interpreter','latex','FontSize',13);
 leg.ItemTokenSize = [13,100];
 grid on
 hold off
@@ -407,7 +432,7 @@ for W0 = [ ... % angular velocity dtheta/dt(0) = W0
            3.6 4.0
          ]
   w0 = 1; % angular frequency for s.h.o.
-  k = W0/(2*w0);
+  k = W0/(2*w0); % elliptic modulus > 1
   m = k^2;
   T = 4*ellipke(1/m)/W0; % period
   [~,~,dn] = ellipj(W0*t/2,1/m); % Jacobi elliptic functions
@@ -417,8 +442,8 @@ for W0 = [ ... % angular velocity dtheta/dt(0) = W0
   tls(2*i) = sprintf('$\\Omega_0/2\\omega_0=%.6g$',k);
   i = i+1;
 end
-leg = legend(tls,'NumColumns',4,'Position',[0.3 0.83 0.5 0.1], ... 
-             'Interpreter','latex','FontSize',11);
+leg = legend(tls,'NumColumns',4,'Position',[0.3 0.88 0.5 0.08], ... 
+             'Interpreter','latex','FontSize',12);
 leg.ItemTokenSize = [10,100];
 ylim([0 4.8])
 xlabel("$t$ [s]",'Interpreter','latex','FontSize',14)
@@ -440,7 +465,7 @@ for W0 = [ ... % angular velocity dtheta/dt(0) = W0
            3.6 4.0
          ]
   w0 = 1; % angular frequency for s.h.o.
-  k = W0/(2*w0);
+  k = W0/(2*w0); % elliptic modulus > 1
   m = k^2;
   T = 4*ellipke(1/m)/W0; % period
   [~,~,dn] = ellipj(W0*T*t/2,1/m); % Jacobi elliptic functions
@@ -449,8 +474,8 @@ for W0 = [ ... % angular velocity dtheta/dt(0) = W0
   tls(i) = sprintf('$\\Omega_0/2\\omega_0=%.6g$',k);
   i = i+1;
 end
-leg = legend(tls,'NumColumns',4,'Position',[0.3 0.83 0.5 0.1], ... 
-             'Interpreter','latex','FontSize',11);
+leg = legend(tls,'NumColumns',4,'Position',[0.3 0.88 0.5 0.08], ... 
+             'Interpreter','latex','FontSize',12);
 leg.ItemTokenSize = [10,100];
 ylim([0 4.8])
 xlabel("$t$ [$T$]",'Interpreter','latex','FontSize',14)
@@ -462,7 +487,7 @@ mysaveas("fig/pendulum_open_omega_vs_Tt")
 disp("13) T/T0 vs. W0/2w0 (W0>2w0)")
 w0 = 1; % angular frequency for s.h.o.
 W0 = linspace(2.02,10,200);
-k = W0/(2*w0);
+k = W0/(2*w0); % elliptic modulus > 1
 m = k.^2;
 T = 2*w0*ellipke(1./m)/pi./W0; % period
 w = 1./T; % omega/omega0 = f/f0
@@ -488,14 +513,26 @@ mysaveas("fig/pendulum_open_omega_vs_W0",6)
 
 disp("Done.")
 
-function mysaveas(fname,w)
+
+%%%%%%%%%%%%%%%%%%%%%%
+%   HELP FUNCTIONS   %
+%%%%%%%%%%%%%%%%%%%%%%
+
+function mysaveas(fname,width,rmarg)
   if nargin==1
-    w = 8;
+    width = 8; % height
   end
-  %return % skip figures
-  set(gcf,'PaperPosition',[0 0 w 5]); % position plot at left hand corner with width w and height 5. 
-  set(gcf,'PaperSize',[w 5]); % set the paper to have width w and height 5.
+  if nargin<=2
+    rmarg = 0.02; % extra right margin
+  end
+  set(gca,'Units','normalized'); % ensure normalized units
+  set(gcf,'PaperPosition',[0 0 width 5]); % position plot at left hand corner with width w and height 5
+  set(gcf,'PaperSize',[width 5]); % set the paper to have width w and height 5
+  Tight = get(gca,'TightInset');  % gives you the bording spacing between plot box and any axis labels
+  Tight = [0.02/width 0.005 rmarg 0.02]+Tight; % [Left Bottom Right Top] spacing
+  set(gca,'Position',[Tight(1) Tight(2) 1-Tight(1)-Tight(3) 1-Tight(2)-Tight(4)]);
+  %return % skip saving figures
   saveas(gcf,fname,'pdf') % save figure as PDF
-  %%%saveas(gcf,fname,'png') % save figure as PNG
-  print(gcf,fname,'-dpng','-r300') % save figure as PNG
+  %%%saveas(gcf,fname,'png') % save figure as PNG (low res)
+  print(gcf,fname,'-dpng','-r300') % save figure as PNG (high res)
 end

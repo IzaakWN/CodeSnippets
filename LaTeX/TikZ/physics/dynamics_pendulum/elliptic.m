@@ -1,5 +1,8 @@
 % Author: Izaak Neutelings (Februari 2022)
-% http://dx.doi.org/10.1103/PhysRevA.90.013409
+% Description: Study behavior of Jacobi elliptic functions.
+% Sources:
+%   https://en.wikipedia.org/wiki/Jacobi_elliptic_functions
+%   http://dx.doi.org/10.1103/PhysRevA.90.013409
 clear all; close all; clc
 
 % ELLIPTIC FUNCTIONS vs. t
@@ -113,7 +116,7 @@ k = sqrt(m);
 K = ellipke(1./m)./k; % quarter period
 plot(m,K,'LineWidth',1.2);
 xlabel('$m$','Interpreter','latex','FontSize',14)
-ylabel('$K(1/m)/\sqrt(m)$','Interpreter','latex','FontSize',14)
+ylabel('$K(1/m)/\sqrt{m}$','Interpreter','latex','FontSize',14)
 grid on
 
 disp("Done.")

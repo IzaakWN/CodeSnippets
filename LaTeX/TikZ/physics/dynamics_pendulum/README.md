@@ -2,8 +2,8 @@
 
 The `MATLAB` script [`pendulum.m`](pendulum.m)
 produces plots and data files for the exact solutions of a simple pendulum.
-It makes use of the Jacobi elliptic functions, following the derivation in
-[this paper](https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?lang=en).
+It makes use of the [Jacobi elliptic functions](https://en.wikipedia.org/wiki/Jacobi_elliptic_functions),
+following the derivation in [this paper](https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?lang=en).
 
 The solutions are divided into two main cases:
 * Closed trajectories.
@@ -16,6 +16,12 @@ The solutions are divided into two main cases:
 ## Open trajectories
 The pendulum swings back and forth along an arc.
 We assume initial conditions &theta;(0) = &theta;<sub>0</sub> < &pi; and &theta;'(0) = 0.
+```
+T = 4*ellipke(k^2)/w0; % period
+[sn,cn,dn] = ellipj(w0*(T/4-t),k^2); % Jacobi elliptic functions
+x = 2*asin(k*sn); % theta (exact pendulum solution)
+v = -2*k*w0.*cn.*dn./sqrt(1-(k*sn).^2); % dtheta/dt
+```
 
 <p align="center" vertical-align: middle>
   <img src="fig/pendulum_theta_vs_t.png" alt="Pendulum exact solution" width="600"/>
@@ -34,6 +40,15 @@ For a simple pendulum with a mass suspended from a wire with length L, &omega;<s
 With these initial conditions, the solution &theta;(t) increases monotonically.
 To get this result, one needs to naturally extend the `arcsin` function by shifting it every half-period.
 This is done by the help function [`asin_ext.m`](asin_ext.m).
+```
+w0 = 1; % angular frequency for s.h.o.
+k = W0/(2*w0);
+m = k^2;
+T = 4*ellipke(1/m)/W0; % period
+[sn,~,dn] = ellipj(W0*t/2,1/m); % Jacobi elliptic functions
+x = 2*asin_ext(sn,t,2*T); % theta (exact pendulum solution)
+v = W0*dn; % dtheta/dt
+```
 
 <p align="center" vertical-align: middle>
   <img src="fig/pendulum_open_theta_vs_t.png" alt="Pendulum exact solution (open)" width="600"/>
