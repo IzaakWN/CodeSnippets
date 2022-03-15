@@ -1,4 +1,6 @@
-# TikZ examples
+# TikZ physics examples
+
+More TikZ examples in the [parent directory](..).
 
 Please see
 * Gallery of the above diagrams and more: https://www.tikz.net/
