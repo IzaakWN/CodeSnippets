@@ -44,7 +44,7 @@ which does the same.
   <img src="fig/pendulum_omega_vs_theta.png" alt="Pendulum exact solution; period" width="500"/>
 </p>
 
-## Closed trajectories
+## Open trajectories
 The pendulum goes around in circles without changing angular direction.
 We assume initial conditions &theta;(0) = 0; and &theta;'(0) = &Omega;<sub>0</sub> > 2&omega;<sub>0</sub>,
 where &omega;<sub>0</sub> is the angular frequency for a simple harmonic oscillator via the small-angle approximation.
