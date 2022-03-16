@@ -62,5 +62,25 @@ v = W0*dn; % dtheta/dt
   <img src="fig/pendulum_open_omega_vs_W0.png" alt="Pendulum exact solution (open); period" width="500"/>
 </p>
 
-## TikZ figures
-The data in the text files are used for the TikZ plot presented [here](https://tikz.net/dynamics_pendulum/).
+## `TikZ` figures
+The data in the text files are used for the `TikZ` plot presented here:
+* [phase portraits](https://tikz.net/dynamics_phaseportrait/),
+* [pendulum solutions](https://tikz.net/dynamics_pendulum/).
+The data is loaded into `TikZ` as a table in the `axis` environment:
+```
+\begin{tikzpicture}
+  \begin{axis}[
+      axis lines=none,anchor=origin,
+      x=1cm,y=1cm,ymin=0,
+    ]
+    \addplot[blue]
+      table[x index=0,y index=1] {dynamics_pendulum/data/pendulum_period.txt};
+  \end{axis}
+\end{tikzpicture}
+```
+
+<p align="center" vertical-align: middle>
+  <img src="https://tikz.net/files/dynamics_pendulum-004.png" alt="Pendulum exact solution" width="600"/>
+  <img src="https://tikz.net/files/dynamics_pendulum-005.png" alt="Pendulum exact solution; period" width="600"/>
+  <img src="https://tikz.net/files/dynamics_phaseportrait-004.png" alt="Pendulum exact solution; phase portrait" width="800"/>
+</p>
