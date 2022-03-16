@@ -69,7 +69,7 @@ Here, we used the fact that for m > 1, the
 * sn(u,m) = sn(k*u,1/m)/k
 
 Note that if one uses the [`jacobiAM`](https://ch.mathworks.com/help/symbolic/jacobiam.html),
-one does not need the extension of `arcsin`, not these transformations.
+one does not need the extension of `arcsin`, nor the transformations above.
 
 <p align="center" style="vertical-align:middle">
   <img src="fig/pendulum_open_theta_vs_t.png" alt="Pendulum exact solution (open)" width="600"/>
