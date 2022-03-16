@@ -1,9 +1,7 @@
 % Author: Izaak Neutelings (Februari 2021)
 % Description: Produce plots and data for the exact solution of a pendulum,
-%              using Jacobi elliptic functions.
-% Source:
-%   https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?lang=en
-%   https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?format=pdf&lang=en
+%              using Jacobi elliptic functions. Please see
+%              https://github.com/IzaakWN/CodeSnippets/tree/master/LaTeX/TikZ/physics/dynamics_pendulum
 clear all; close all; clc
 
 
@@ -63,7 +61,7 @@ for v0 = [ ...
   end
   i = i+1;
 end
-leg = legend(tls,'Position', [0.88 0.35 0.06 0.40], ...
+leg = legend(tls,'Position', [0.88 0.35 0.03 0.40], ...
              'Interpreter','latex','FontSize',11);
 leg.ItemTokenSize = [11,100];
 xlabel("$\theta$ [rad]",'Interpreter','latex','FontSize',14)
@@ -83,8 +81,11 @@ mysaveas("fig/pendulum_phase_portrait",8,0.07)
 %%  CLOSE TRAJECTORIES   %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initial conditions
-% * theta(0) = x0, with 0 < x0 < pi
-% * dtheta/dt(0) = 0
+% * theta(0) = x0, with 0 < x0 < pi,
+% * dtheta/dt(0) = 0.
+% Sources:
+%   https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?lang=en
+%   https://www.scielo.br/j/rbef/a/ns9Lc7tfqhZh678dBPXxRsQ/?format=pdf&lang=en
 
 disp("2) theta vs. time")
 figure(2)
@@ -178,7 +179,7 @@ yticks(-pi:pi/4:3.5)
 yticklabels({'-\pi','-3\pi/4','-\pi/2','-\pi/4',...
              '0','\pi/4','\pi/2','3\pi/4','\pi'})
 leg = legend(tls,'NumColumns',1, ...  %'Location', 'northoutside', ...
-             'Position',[0.49 0.17 0.1 0.3], ... 
+             'Position',[0.49 0.18 0.1 0.3], ... 
              'Interpreter','latex','FontSize',14);
 leg.ItemTokenSize = [13,100];
 grid on
@@ -215,7 +216,7 @@ for x0 = [ ... % amplitude theta(0) = x0
   tls(3*i) = sprintf('$\\theta_0=%.4g$',x0);
   i = i+1;
 end
-leg = legend(tls,'NumColumns',3,'Position',[0.51 0.90 0.2 0.08], ... 
+leg = legend(tls,'NumColumns',3,'Position',[0.53 0.90 0.2 0.08], ... 
              'Interpreter','latex','FontSize',12);
 leg.ItemTokenSize = [13,100];
 ylim([-2.2 2.7])
@@ -309,9 +310,19 @@ mysaveas("fig/pendulum_omega_vs_theta",6)
 %%   OPEN TRAJECTORIES   %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initial conditions
-% * theta(0) = 0
-% * dtheta/dt(0) = W0 > 2w0
-% where w0=1 is the angular frequency for a simple harmonic oscillator
+% * theta(0) = 0,
+% * dtheta/dt(0) = W0 > 2w0,
+% where w0=1 is the angular frequency for a simple harmonic oscillator.
+% We use the Jacobi real transformation for m > 1:
+% * K(m) = K(1/m)/k,
+% * sn(u,m) = sn(k*u,1/m)/k.
+% following [1] and [2].
+% Note that if one uses the jacobiAM function [3], 
+% one does not need to do these transformations.
+% 
+% [1] https://en.wikipedia.org/wiki/Jacobi_elliptic_functions#The_Jacobi_real_transformations
+% [2] https://dlmf.nist.gov/19.7
+% [3] https://ch.mathworks.com/help/symbolic/jacobiam.html
 
 disp("9) theta vs. t (W0>2w0)")
 figure(9)
