@@ -51,7 +51,7 @@ which give the same solutions.
 ## Open trajectories
 The pendulum goes around in circles without changing angular direction.
 We assume initial conditions
-* &theta;(0) = 0;,
+* &theta;(0) = 0,
 * &theta;'(0) = &Omega;<sub>0</sub> > 2&omega;<sub>0</sub>,
 
 where &omega;<sub>0</sub> is the angular frequency for a simple harmonic oscillator via the small-angle approximation.
