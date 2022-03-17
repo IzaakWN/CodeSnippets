@@ -16,7 +16,9 @@ The solutions are divided into two main cases:
 
 ## Closed trajectories
 The pendulum swings back and forth along an arc.
-We assume initial conditions &theta;(0) = &theta;<sub>0</sub> < &pi; and &theta;'(0) = 0.
+We assume initial conditions
+* &theta;(0) = &theta;<sub>0</sub>, with 0 < theta;<sub>0</sub> < &pi;,
+* &theta;'(0) = 0.
 The bounded solution is given by
 ```
 w0 = 1; % angular frequency for s.h.o.
@@ -41,12 +43,15 @@ which does the same.
   <img src="fig/pendulum_theta_vs_Tt.png" alt="Pendulum exact solution" width="600"/>
   <img src="fig/pendulum_omega_vs_t.png" alt="Pendulum exact solution; angular velocity" width="600"/>
   <img src="fig/pendulum_omega_vs_Tt.png" alt="Pendulum exact solution; angular velocity" width="600"/>
-  <img src="fig/pendulum_omega_vs_theta.png" alt="Pendulum exact solution; period" width="500"/>
+  <img src="fig/pendulum_period_vs_theta.png" alt="Pendulum exact solution; period" width="500"/>
+  <img src="fig/pendulum_omega_vs_theta.png" alt="Pendulum exact solution; angular velocity" width="500"/>
 </p>
 
 ## Open trajectories
 The pendulum goes around in circles without changing angular direction.
-We assume initial conditions &theta;(0) = 0; and &theta;'(0) = &Omega;<sub>0</sub> > 2&omega;<sub>0</sub>,
+We assume initial conditions
+* &theta;(0) = 0;,
+* &theta;'(0) = &Omega;<sub>0</sub> > 2&omega;<sub>0</sub>,
 where &omega;<sub>0</sub> is the angular frequency for a simple harmonic oscillator via the small-angle approximation.
 For a simple pendulum with a mass suspended from a wire with length L, &omega;<sub>0</sub> = sqrt(g/L).
 
@@ -58,7 +63,7 @@ This is done by the help function [`asin_ext.m`](asin_ext.m).
 w0 = 1; % angular frequency for s.h.o.
 k = W0/(2*w0); % elliptic modulus
 m = k^2;
-T = 4*ellipke(1/m)/W0; % period (using the complete elliptic integral of the first kind, K)
+T = 4*ellipke(1/m)/W0; % period
 [sn,~,dn] = ellipj(W0*t/2,1/m); % Jacobi elliptic functions
 x = 2*asin_ext(sn,t,2*T); % theta (exact pendulum solution)
 v = W0*dn; % dtheta/dt
@@ -76,7 +81,8 @@ one does not need the extension of `arcsin`, nor the transformations above.
   <img src="fig/pendulum_open_theta_vs_Tt.png" alt="Pendulum exact solution (open)" width="600"/>
   <img src="fig/pendulum_open_omega_vs_t.png" alt="Pendulum exact solution (open); angular velocity" width="600"/>
   <img src="fig/pendulum_open_omega_vs_Tt.png" alt="Pendulum exact solution (open); angular velocity" width="600"/>
-  <img src="fig/pendulum_open_omega_vs_W0.png" alt="Pendulum exact solution (open); period" width="500"/>
+  <img src="fig/pendulum_open_period_vs_W0.png" alt="Pendulum exact solution (open); period" width="500"/>
+  <img src="fig/pendulum_open_omega_vs_W0.png" alt="Pendulum exact solution (open); angular velocity" width="500"/>
 </p>
 
 ## `TikZ` figures
