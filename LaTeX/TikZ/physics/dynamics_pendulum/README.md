@@ -17,8 +17,9 @@ The solutions are divided into two main cases:
 ## Closed trajectories
 The pendulum swings back and forth along an arc.
 We assume initial conditions
-* &theta;(0) = &theta;<sub>0</sub>, with 0 < theta;<sub>0</sub> < &pi;,
+* &theta;(0) = &theta;<sub>0</sub>, with 0 < &theta;<sub>0</sub> < &pi;,
 * &theta;'(0) = 0.
+
 The bounded solution is given by
 ```
 w0 = 1; % angular frequency for s.h.o.
@@ -33,10 +34,10 @@ Here, [`ellipke(m)`](https://ch.mathworks.com/help/matlab/ref/ellipke.html)
 is the complete elliptic integral of the first kind in `m`, often denoted by K(m),
 and [`ellipj(u,m)`](https://ch.mathworks.com/help/matlab/ref/ellipj.html)
 are the  Jacobi elliptic functions `sn`, `cn`, and `dn`.
-`MATLAB` also provides the
+Note that `MATLAB` also provides the
 [Jacobi amplitude function](https://dlmf.nist.gov/22.19)
 ([`jacobiAM`](https://ch.mathworks.com/help/symbolic/jacobiam.html)),
-which does the same.
+which give the same solutions.
 
 <p align="center" style="vertical-align:middle">
   <img src="fig/pendulum_theta_vs_t.png" alt="Pendulum exact solution" width="600"/>
@@ -52,6 +53,7 @@ The pendulum goes around in circles without changing angular direction.
 We assume initial conditions
 * &theta;(0) = 0;,
 * &theta;'(0) = &Omega;<sub>0</sub> > 2&omega;<sub>0</sub>,
+
 where &omega;<sub>0</sub> is the angular frequency for a simple harmonic oscillator via the small-angle approximation.
 For a simple pendulum with a mass suspended from a wire with length L, &omega;<sub>0</sub> = sqrt(g/L).
 
