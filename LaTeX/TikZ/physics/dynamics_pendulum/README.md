@@ -73,7 +73,7 @@ v = W0*dn; % dtheta/dt
 Here, we used the fact that for m > 1, the
 [following transformations](https://en.wikipedia.org/wiki/Jacobi_elliptic_functions#The_Jacobi_real_transformations) hold:
 * K(m) = K(1/m)/k,
-* sn(u,m) = sn(k*u,1/m)/k
+* sn(u,m) = sn(k*u,1/m)/k.
 
 Note that if one uses the [`jacobiAM`](https://ch.mathworks.com/help/symbolic/jacobiam.html),
 one does not need the extension of `arcsin`, nor the transformations above.
