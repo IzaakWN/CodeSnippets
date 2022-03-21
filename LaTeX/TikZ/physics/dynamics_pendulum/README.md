@@ -86,7 +86,7 @@ one does not need the extension of `arcsin`, nor the transformations above.
   <img src="fig/pendulum_open_omega_vs_Tt.png" alt="Pendulum exact solution (open); angular velocity" width="600"/>
   <img src="fig/pendulum_open_period_vs_W0.png" alt="Pendulum exact solution (open); period" width="500"/>
   <img src="fig/pendulum_open_omega_vs_W0.png" alt="Pendulum exact solution (open); angular velocity" width="500"/>
-  <img src="fig/pendulum_open_Wmin_vs_W0" alt="Pendulum exact solution (open); minimum angular velocity" width="500"/>
+  <img src="fig/pendulum_open_Wmin_vs_W0.png" alt="Pendulum exact solution (open); minimum angular velocity" width="500"/>
 </p>
 
 ## `TikZ` figures
