@@ -46,6 +46,7 @@ which give the same solutions.
   <img src="fig/pendulum_omega_vs_Tt.png" alt="Pendulum exact solution; angular velocity" width="600"/>
   <img src="fig/pendulum_period_vs_theta.png" alt="Pendulum exact solution; period" width="500"/>
   <img src="fig/pendulum_omega_vs_theta.png" alt="Pendulum exact solution; angular velocity" width="500"/>
+  <img src="fig/pendulum_Wmax_vs_theta.png" alt="Pendulum exact solution; maximum angular velocity" width="500"/>
 </p>
 
 ## Open trajectories
@@ -85,6 +86,7 @@ one does not need the extension of `arcsin`, nor the transformations above.
   <img src="fig/pendulum_open_omega_vs_Tt.png" alt="Pendulum exact solution (open); angular velocity" width="600"/>
   <img src="fig/pendulum_open_period_vs_W0.png" alt="Pendulum exact solution (open); period" width="500"/>
   <img src="fig/pendulum_open_omega_vs_W0.png" alt="Pendulum exact solution (open); angular velocity" width="500"/>
+  <img src="fig/pendulum_open_Wmin_vs_W0" alt="Pendulum exact solution (open); minimum angular velocity" width="500"/>
 </p>
 
 ## `TikZ` figures
@@ -105,7 +107,7 @@ The data is loaded into `TikZ` as a table in the `axis` environment:
 ```
 
 <p align="center" style="vertical-align:middle">
+  <img src="https://tikz.net/files/dynamics_phaseportrait-004.png" alt="Pendulum exact solution; phase portrait" width="800"/>
   <img src="https://tikz.net/files/dynamics_pendulum-004.png" alt="Pendulum exact solution" width="600"/>
   <img src="https://tikz.net/files/dynamics_pendulum-005.png" alt="Pendulum exact solution; period" width="600"/>
-  <img src="https://tikz.net/files/dynamics_phaseportrait-004.png" alt="Pendulum exact solution; phase portrait" width="800"/>
 </p>
