@@ -266,7 +266,7 @@ w = 1./T; % omega/omega0 = f/f0
 Wmax = 2*k; % maximum angular velocity
 fname = sprintf("data/pendulum_period.txt");
 file  = fopen(fname,'w');
-fprintf(file,'%-12s %-12s %-12s\n','theta0','T/T0','omega/omega0','Wmax/omega0');
+fprintf(file,'%-12s %-12s %-12s %-12s\n','theta0','T/T0','omega/omega0','Wmax/omega0');
 fprintf(file,'%-12.8f %-12.8f %-12.8f %-12.8f\n',[t0;T;w;Wmax]);
 fclose(file);
 figure(6)
@@ -431,7 +431,7 @@ for W0 = [ ... % angular velocity dtheta/dt(0) = W0
   k = W0/(2*w0); % elliptic modulus > 1
   m = k^2;
   T = 4*ellipke(1/m)/W0; % period
-  w = 2*pi/T; % angular velocity omega
+  %w = 2*pi/T; % angular velocity omega
   [sn,~,dn] = ellipj(W0*T*t/2,1/m); % Jacobi elliptic functions
   x = 2*asin_ext(sn,T*t,2*T); % theta (exact pendulum solution)
   v = W0*dn; % dtheta/dt
@@ -537,7 +537,7 @@ w = 1./T; % omega/omega0 = f/f0
 Wmin = 2*sqrt(m-1);
 fname = sprintf("data/pendulum_period_open.txt");
 file  = fopen(fname,'w');
-fprintf(file,'%-12s %-12s %-12s %-12s\n','W0/w0','W0/2w0','T/T0','omega/omega0','Wmin/omega0');
+fprintf(file,'%-12s %-12s %-12s %-12s %-12s\n','W0/w0','W0/2w0','T/T0','omega/omega0','Wmin/omega0');
 fprintf(file,'%-12.8f %-12.8f %-12.8f %-12.8f %-12.8f\n',[W0/w0;k;T;w;Wmin]);
 fclose(file);
 figure(13)
@@ -547,6 +547,7 @@ plot(k,T,'LineWidth',1.4,'Color',myblue);
 leg = legend(["Uniform circular motion ($T/T_0 = \omega_0/\Omega_0$)" "Exact solution"], ...
              'NumColumns',1,'Location','northwest', ...
              'Interpreter','latex','FontSize',14);
+leg.ItemTokenSize = [15,100];
 xlim([1 5])
 ylim([0 1.1])
 xlabel("$\Omega_0/2\omega_0$",'Interpreter','latex','FontSize',14)
@@ -556,7 +557,6 @@ grid on
 mysaveas("fig/pendulum_open_period_vs_W0",6)
 
 disp("14) omega/omega0 vs. W0/2w0 (W0>2w0)")
-tts = ["Uniform circular motion ($\omega = \Omega_0$)" "Exact solution"];
 figure(14)
 hold on
 plot(k,2*k,'--','LineWidth',0.7,'Color',myred);
