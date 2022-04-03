@@ -18,12 +18,12 @@
 \newcommand\jetcone[6][sigcol]{{
   \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}{\pgfpointanchor{#3}{center}}
   \pgfmathsetmacro\oang{#4/2} % half-opening angle
-  \edef\e{#5} % ratio a/b
+  \edef\e{#5} % ratio a/b ("eccentricity") of cone top
   \def\tmpL{tmpL-#2-#3} % unique coordinate name
   \edef\vang{\pgfmathresult} % angle of vector OV
   \tikzmath{
     coordinate \C;
-    \C = (#2)-(#3);
+    \C = (#2)-(#3); % vector OV
     \x = veclen(\Cx,\Cy)*\e*sin(\oang)^2; % x coordinate P
     \y = tan(\oang)*(veclen(\Cx,\Cy)-\x); % y coordinate P
     \a = veclen(\Cx,\Cy)*sqrt(\e)*sin(\oang); % vertical radius

@@ -76,22 +76,27 @@
   \def\tu{\tan^2u} % shorthand
   \def\tv{\tan^2v} % shorthand
   \node[align=left] at (0,0) {
-    Kruskal-Szekeres coordinates for Schwarzschild spacetime\\[2mm]$
-    \begin{cases}
-      \left.\begin{aligned}
-        U &= \sqrt{\dfrac{r}{2GM}-1}\,e^{\frac{r}{4GM}}\cosh\left(\frac{t}{4GM}\right) \\
-        V &= \sqrt{\dfrac{r}{2GM}-1}\,e^{\frac{r}{4GM}}\sinh\left(\frac{t}{4GM}\right) \\
-      \end{aligned}\right\} &\text{for $r>2GM$} \\[8mm]
-      \left.\begin{aligned}
-        U &= \sqrt{1-\dfrac{r}{2GM}}\,e^{\frac{r}{4GM}}\sinh\left(\frac{t}{4GM}\right) \\
-        V &= \sqrt{1-\dfrac{r}{2GM}}\,e^{\frac{r}{4GM}}\cosh\left(\frac{t}{4GM}\right) \\
-      \end{aligned}\right\} &\text{for $r<2GM$}
-    \end{cases}$\\[2mm]$
-    \Rightarrow\begin{cases}
-      U^2 - V^2 = \left(\dfrac{r}{2GM}-1\right)e^{\frac{r}{2GM}} & \\[3mm]
-      V = \tanh\left(\dfrac{t}{4GM}\right)U & \text{for $r>2GM$} \\[3mm]
-      V = \coth\left(\dfrac{t}{4GM}\right)U & \text{for $r<2GM$}
-    \end{cases}$};
+    \begin{minipage}{9.5cm}
+      Kruskal-Szekeres coordinates for Schwarzschild spacetime
+      \begin{align*}
+        &\begin{cases}
+          \left.\begin{aligned}
+            U &= \sqrt{\dfrac{r}{2GM}-1}\,e^{\frac{r}{4GM}}\cosh\left(\frac{t}{4GM}\right) \\
+            V &= \sqrt{\dfrac{r}{2GM}-1}\,e^{\frac{r}{4GM}}\sinh\left(\frac{t}{4GM}\right) \\
+          \end{aligned}\right\} &\text{for $r>2GM$} \\[8mm]
+          \left.\begin{aligned}
+            U &= \sqrt{1-\dfrac{r}{2GM}}\,e^{\frac{r}{4GM}}\sinh\left(\frac{t}{4GM}\right) \\
+            V &= \sqrt{1-\dfrac{r}{2GM}}\,e^{\frac{r}{4GM}}\cosh\left(\frac{t}{4GM}\right) \\
+          \end{aligned}\right\} &\text{for $r<2GM$}
+        \end{cases}\\[1mm]
+        &\Rightarrow\begin{cases}
+          U^2 - V^2 = \left(\dfrac{r}{2GM}-1\right)e^{\frac{r}{2GM}} & \\[3mm]
+          V = \tanh\left(\dfrac{t}{4GM}\right)U & \text{for $r>2GM$} \\[3mm]
+          V = \coth\left(\dfrac{t}{4GM}\right)U & \text{for $r<2GM$}
+        \end{cases}
+     \end{align*}
+   \end{minipage}
+  };
 \end{tikzpicture}
 
 

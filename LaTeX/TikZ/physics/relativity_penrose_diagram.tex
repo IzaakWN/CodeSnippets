@@ -142,16 +142,21 @@
 \begin{tikzpicture}[scale=1]
   \def\tu{\tan^2u} % shorthand
   \def\tv{\tan^2v} % shorthand
-  \node[align=left] at (0,0)
-    {Penrose coordinates for Minkowski spacetime\\[2mm]$
-    \left\{\begin{aligned}
-      r + t = \tan(u+v) \\
-      r - t = \tan(u-v) \\
-    \end{aligned}\right.$\\[2mm]$
-    \Rightarrow\begin{cases}
-      \tan v = \dfrac{\sqrt{(1+\tu)^2+4r^2\tu}-(1+\tu)}{2r\tu} & \text{for constant $r$} \\[5mm]
-      \tan u = \dfrac{\sqrt{(1+\tv)^2+4t^2\tv}-(1+\tv)}{2t\tv} & \text{for constant $t$}
-    \end{cases}$};
+  \node[align=left] at (0,0){
+    \begin{minipage}{10cm}
+      Penrose coordinates for Minkowski spacetime
+      \begin{align*}
+        &\left\{\begin{aligned}
+          r + t = \tan(u+v) \\
+          r - t = \tan(u-v) \\
+        \end{aligned}\right.\\[1mm]
+        &\Rightarrow\begin{cases}
+          \tan v = \dfrac{\sqrt{(1+\tu)^2+4r^2\tu}-(1+\tu)}{2r\tu} & \text{for constant $r$} \\[5mm]
+          \tan u = \dfrac{\sqrt{(1+\tv)^2+4t^2\tv}-(1+\tv)}{2t\tv} & \text{for constant $t$}
+        \end{cases}
+      \end{align*}
+    \end{minipage}
+  };
 \end{tikzpicture}
 
 
@@ -397,37 +402,41 @@
   \def\tu{\tan^2u} % shorthand
   \def\tv{\tan^2v} % shorthand
   \node[align=left] at (0,0) {
-    Kruskal-Szekeres coordinates for Schwarzschild spacetime\\[2mm]
-    $\displaystyle
-    \begin{cases}
-      \left.\begin{aligned}
-        U &= \sqrt{\frac{r}{2GM}-1}\,e^{\frac{r}{4GM}}\cosh\left(\frac{t}{4GM}\right) \\
-        V &= \sqrt{\frac{r}{2GM}-1}\,e^{\frac{r}{4GM}}\sinh\left(\frac{t}{4GM}\right) \\
-      \end{aligned}\right\} &\text{for $r>2GM$} \\[8mm]
-      \left.\begin{aligned}
-        U &= \sqrt{1-\frac{r}{2GM}}\,e^{\frac{r}{4GM}}\sinh\left(\frac{t}{4GM}\right) \\
-        V &= \sqrt{1-\frac{r}{2GM}}\,e^{\frac{r}{4GM}}\cosh\left(\frac{t}{4GM}\right) \\
-      \end{aligned}\right\} &\text{for $r<2GM$}
-    \end{cases}$\\[2mm]
-    $\displaystyle
-    \Rightarrow\begin{cases}
-      U^2 - V^2 = \left(\dfrac{r}{2GM}-1\right)e^{\frac{r}{2GM}} \\[3mm]
-      V = \tanh\left(\dfrac{t}{4GM}\right)U & \text{for $r>2GM$} \\[3mm]
-      V = \coth\left(\dfrac{t}{4GM}\right)U & \text{for $r<2GM$}
-    \end{cases}$\\[6mm]
-    Penrose coordinates for Schwarzschild spacetime\\[2mm]$
-    \left\{\begin{aligned}
-      U + V = \tan(u+v) \\
-      U - V = \tan(u-v) \\
-    \end{aligned}\right.$\\[2mm]
-    $\displaystyle
-    \Rightarrow\begin{cases}
-      \cos(2v) = \dfrac{2GM+\left(r-2GM\right)e^{\frac{r}{2GM}}}
-                       {2GM-\left(r-2GM\right)e^{\frac{r}{2GM}}}
-                 \cos(2u) \\[5mm]
-      \sin(2v) = \tanh\left(\dfrac{t}{4GM}\right)\sin(2u) & \text{for $r>2GM$} \\[5mm]
-      \sin(2v) = \cosh\left(\dfrac{t}{4GM}\right)\sin(2u) & \text{for $r<2GM$}
-    \end{cases}$};
+    \begin{minipage}{9.5cm}
+      Kruskal-Szekeres coordinates for Schwarzschild spacetime
+      \begin{align*}
+        &\begin{cases}
+          \left.\begin{aligned}
+            U &= \sqrt{\frac{r}{2GM}-1}\,e^{\frac{r}{4GM}}\cosh\left(\frac{t}{4GM}\right) \\
+            V &= \sqrt{\frac{r}{2GM}-1}\,e^{\frac{r}{4GM}}\sinh\left(\frac{t}{4GM}\right) \\
+          \end{aligned}\right\} &\text{for $r>2GM$} \\[8mm]
+          \left.\begin{aligned}
+            U &= \sqrt{1-\frac{r}{2GM}}\,e^{\frac{r}{4GM}}\sinh\left(\frac{t}{4GM}\right) \\
+            V &= \sqrt{1-\frac{r}{2GM}}\,e^{\frac{r}{4GM}}\cosh\left(\frac{t}{4GM}\right) \\
+          \end{aligned}\right\} &\text{for $r<2GM$}
+        \end{cases}\\[1mm]
+        &\Rightarrow\begin{cases}
+          U^2 - V^2 = \left(\dfrac{r}{2GM}-1\right)e^{\frac{r}{2GM}} \hspace{-10mm} \\[3mm]
+          V = \tanh\left(\dfrac{t}{4GM}\right)U & \text{for $r>2GM$} \\[3mm]
+          V = \coth\left(\dfrac{t}{4GM}\right)U & \text{for $r<2GM$}
+        \end{cases}
+      \end{align*}
+      Penrose coordinates for Schwarzschild spacetime
+      \begin{align*}
+        &\left\{\begin{aligned}
+          U + V = \tan(u+v) \\
+          U - V = \tan(u-v) \\
+        \end{aligned}\right.\\[1mm]
+        &\Rightarrow\begin{cases}
+          \cos(2v) = \dfrac{2GM+\left(r-2GM\right)e^{\frac{r}{2GM}}}
+                           {2GM-\left(r-2GM\right)e^{\frac{r}{2GM}}}
+                     \cos(2u) \hspace{-15mm} \\[5mm]
+          \sin(2v) = \tanh\left(\dfrac{t}{4GM}\right)\sin(2u) & \text{for $r>2GM$} \\[5mm]
+          \sin(2v) = \cosh\left(\dfrac{t}{4GM}\right)\sin(2u) & \text{for $r<2GM$}
+        \end{cases}
+      \end{align*}
+    \end{minipage}
+  };
 \end{tikzpicture}
 
 
@@ -509,10 +518,6 @@
   \conefront{X1};
   \conefront{X2};
   
-  % ESCAPING PHOTONS
-  \draw[photon] (X0) ++ (45:0.1) --++ (45:0.3);
-  \draw[photon] (X1) ++ (45:0.1) --++ (45:0.3);
-  
   % REGIONS
   \node[fill=mylightblue,inner sep=2] at (O) {I};
   \node[fill=mylightpurple,inner sep=2] at (0,0.64) {II};
@@ -539,6 +544,12 @@
   \node[right=1,above=1,mydarkpurple] at (N) {$i^+$};
   \node[mydarkblue,above right=-1] at (1.5,0.5) {$\calI^+$};
   \node[mydarkblue,below right=-2] at (1.5,-0.5) {$\calI^-$};
+  
+  % PHOTONS
+  \draw[photon] (X0) ++ (45:0.1) --++ (45:0.3);
+  \draw[photon] (X0) ++ (135:0.1) --++ (135:0.4);
+  \draw[photon] (X1) ++ (45:0.1) --++ (45:0.3);
+  \draw[photon] (X1) ++ (135:0.1) --++ (135:0.14);
   
 \end{tikzpicture}
 
@@ -657,9 +668,11 @@
   \conefront{X1};
   \conefront{X2};
   
-  % ESCAPING PHOTONS
+  % PHOTONS
   \draw[photon] (X0) ++ (45:0.1) --++ (45:0.3);
+  \draw[photon] (X0) ++ (135:0.1) --++ (135:0.3);
   \draw[photon] (X1) ++ (45:0.1) --++ (45:0.3);
+  \draw[photon] (X1) ++ (135:0.1) --++ (135:0.14);
   
 \end{tikzpicture}
 

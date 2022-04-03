@@ -1,0 +1,2 @@
+Tt           theta        dtheta/dt    Uw0^2/mg^2   Kw0^2/mg^2  
+0.00000000   3.14100000   

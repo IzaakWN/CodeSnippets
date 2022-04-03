@@ -23,12 +23,12 @@
 
 \newcommand\jetcone[5][blue]{{
   \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}{\pgfpointanchor{#3}{center}}
-  \edef\ang{#4/2}
-  \edef\e{#5}
+  \edef\ang{#4/2} % half-opening angle
+  \edef\e{#5} % ratio a/b ("eccentricity") of cone top
   \edef\vang{\pgfmathresult} % angle of vector OV
   \tikzmath{
     coordinate \C;
-    \C = (#2)-(#3);
+    \C = (#2)-(#3); % vector OV
     \x = veclen(\Cx,\Cy)*\e*sin(\ang)^2; % x coordinate P
     \y = tan(\ang)*(veclen(\Cx,\Cy)-\x); % y coordinate P
     \a = veclen(\Cx,\Cy)*sqrt(\e)*sin(\ang); % vertical radius

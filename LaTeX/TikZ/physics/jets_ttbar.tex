@@ -29,13 +29,13 @@
 \newcommand{\bbar}{{\ensuremath{\overline{\mathrm{b}}}}} %\xspace
 \newcommand\jetcone[5][blue]{{
   \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}{\pgfpointanchor{#3}{center}}
-  \edef\ang{#4/2}
-  \edef\e{#5}
+  \edef\ang{#4/2} % half-opening angle
+  \edef\e{#5} % ratio a/b ("eccentricity") of cone top
   \edef\vang{\pgfmathresult} % angle of vector OV
-  \coordinate (tmpO) at ($(#2)+(\vang:0.017)$);
+  \coordinate (tmpO) at ($(#2)+(\vang:0.017)$); % shift origin due to sharp point
   \tikzmath{
     coordinate \C;
-    \C = (tmpO)-(#3);
+    \C = (tmpO)-(#3); % vector OV
     \x = veclen(\Cx,\Cy)*\e*sin(\ang)^2; % x coordinate P
     \y = tan(\ang)*(veclen(\Cx,\Cy)-\x); % y coordinate P
     \a = veclen(\Cx,\Cy)*sqrt(\e)*sin(\ang); % vertical radius

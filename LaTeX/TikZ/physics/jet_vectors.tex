@@ -23,19 +23,10 @@
 \newcommand{\ptmiss}{\vv{p}_\mathrm{T}^\mathrm{miss}}
 \newcommand*{\ptmissX}[1]{\vv{p}_\mathrm{T}^\mathrm{miss,#1}}
 \newcommand*{\MTX}[1]{M_\mathrm{T}^{(#1)}}
-\newcommand\cone[4]{
-  \pgfmathanglebetweenpoints{\pgfpointanchor{#1}{center}}{\pgfpointanchor{#2}{center}}
-  \coordinate (tmpR) at ($(#2)+(\pgfmathresult+90:#3)$);
-  \coordinate (tmpL) at ($(#2)+(\pgfmathresult-90:#3)$);
-  \draw[blue!80!black] (tmpL) -- (#1) -- (tmpR);
-  %\draw[red] (#2)++(\pgfmathresult:#4) circle({sqrt(#3^2+#4^2)});
-  \draw[blue!80!black,rotate=\pgfmathresult] (#2) ellipse({#4} and {#3});
-}
 
 \newcommand\jetcone[4]{
   \pgfmathanglebetweenpoints{\pgfpointanchor{#1}{center}}{\pgfpointanchor{#2}{center}}
   \edef\tmpang{\pgfmathresult}
-  \coordinate (tmpO) at ($(#1)+(\tmpang:0.02)$); % center
   \coordinate (tmpC) at ($(#2)+(\tmpang-180:{abs(#4)+0.4})$); % center
   \coordinate (tmpL) at ($(tmpC)+(\tmpang+90:#3)$); % left corner
   \coordinate (tmpR) at ($(tmpC)+(\tmpang-90:#3)$); % right corner
@@ -44,12 +35,12 @@
     %(tmpR) arc(90:-90:{#4} and {#3});
     (tmpC) ellipse({#4} and {#3});
   \begin{scope}
-    \clip[rotate=\tmpang] (tmpR) -- (tmpO) -- (tmpL) arc(90:-90:{#4+0.6} and {#3});
-    \draw[vector] (tmpO) -- (#2);
+    \clip[rotate=\tmpang] (tmpR) -- (#1) -- (tmpL) arc(90:-90:{#4+0.6} and {#3});
+    \draw[vector] (#1) -- (#2);
   \end{scope}
-  \draw[thin,blue!50!black,fill opacity=0.8, %,fill=blue!50!black!30
+  \draw[thin,blue!50!black,fill opacity=0.8,rounded corners=0.0001pt, %,fill=blue!50!black!30
         top color=blue!50!black!30,bottom color=blue!40!black!50,shading angle=\tmpang,rotate=\tmpang]
-    (tmpL) arc(90:270:{#4} and {#3}) -- (tmpO) -- cycle;
+    (tmpL) arc(90:270:{#4} and {#3}) -- (#1) -- cycle;
 }
 
 
@@ -67,17 +58,14 @@
   \coordinate (M) at ($(M1)+(M2)$); % total missing momentum
   
   % PTMISS
+  \jetcone{O}{J2}{0.4}{0.10}
   \draw[ptmiss,-,very thin] (M1) -- (M) -- (M2);
   \draw[ptmiss] (O) -- (M1) node[left=2,above=-3] {$\ptmissX{1}$};
   \draw[ptmiss] (O) -- (M2) node[right=0] {$\ptmissX{2}$};
   \draw[ptmiss] (O) -- (M) node[above right=-1] {$\ptmiss$};
   
   % JET CONES
-  %\draw[vector] (O) -- (J1);
-  %\draw[vector] (O) -- (J2);
-  %\cone{O}{J1}{0.3}{0.15}
   \jetcone{O}{J1}{0.4}{0.08}
-  \jetcone{O}{J2}{0.4}{0.10}
   \node[vector,left] at (J1) {$\vv{p}_{j_1}$};
   \node[vector,right] at (J2) {$\vv{p}_{j_2}$};
   

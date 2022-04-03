@@ -10,7 +10,7 @@
 \colorlet{xcol}{blue!70!black}
 \colorlet{darkblue}{blue!40!black}
 \colorlet{myred}{red!65!black}
-\tikzstyle{mydashed}=[xcol,dashed,line width=0.25,dash pattern=on 2.2pt off 2.2pt]
+\tikzstyle{mydashed}=[xcol,line width=0.25,dash pattern=on 2.2pt off 2.2pt]
 \tikzstyle{axis}=[->,thick] %line width=0.6
 \tikzstyle{ell}=[{Latex[length=3.3,width=2.2]}-{Latex[length=3.3,width=2.2]},line width=0.3]
 \tikzstyle{dx}=[-{Latex[length=3.3,width=2.2]},darkblue,line width=0.3]
@@ -199,7 +199,7 @@
   \tick{-\xy,-\dl}{0} node[left] {$y_0$};
   \tick{ \xy,-\dl}{180} node[right] {$0$};
   \draw[mass] (-\w/2,-\y) rectangle++ (\w,-\h) node[midway] {$m$};
-  \draw[force] (0.4*\w,-\y-0.3*\h) --++ (0,\F) node[below right=0] {$\vb{F}$};
+  \draw[force] (0.4*\w,-\y-0.3*\h) --++ (0,1.6*\F) node[pos=0.9,right=0] {$\vb{F}$};
   \draw[force] (0.3*\w,-\y-0.7*\h) --++ (0,-\F) node[above right=0] {$m\vb{g}$};
   \draw[ell] (0.45*\W,0) --++ (0,-\l) node[midway,right=-2] {$\ell_0$};
   %\draw[ell] (-0.4*\W,-0.75*\y) --++ (0,-0.25*\y) node[midway,left=1] {$y_0$};
