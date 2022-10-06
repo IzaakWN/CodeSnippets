@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 # Author: Izaak Neutelings (July 2022)
 # Description:
-#  Clean BibTeX file: key ordering, capitalization, indentation, spacing, ...
-#  and detect potential issues.
+#   Clean BibTeX file: key ordering, capitalization, indentation, spacing, ...
+#   and detect potential issues.
 # Note:
 #   * Do not use the same input/output names !
 #   * Following CMS guidelines:
