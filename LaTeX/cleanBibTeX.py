@@ -4,12 +4,13 @@
 #   Clean BibTeX file: key ordering, capitalization, indentation, spacing, ...
 #   and detect potential issues.
 # Note:
-#   * If you use the same input/output name, a backup file will be created !
+#   * If you use the same input/output name, use --backup to create a backup file of the original !
 #   * Following CMS guidelines:
 #     https://twiki.cern.ch/twiki/bin/viewauth/CMS/Internal/PubGuidelines#References
 #     https://gitlab.cern.ch/tdr/utils/-/blob/master/general/cleanRefs.py
 # Instructions:
 #   ./cleanBibTeX.py thesis.bib
+#   ./cleanBibTeX.py thesis.bib -o thesis.bib --backup
 #   ./cleanBibTeX.py thesis.bib --check -o thesis_clean.bib  # do checks
 #   ./cleanBibTeX.py thesis.bib > thesis_clean.bib           # careful of picking up warnings
 from __future__ import print_function
@@ -321,7 +322,7 @@ def main(args):
   # USER INPUT
   infname   = args.infname
   outfname  = args.outfname
-  backup    = args.backup or infname==outfname # make backup of original file
+  backup    = args.backup  # make backup of original file
   check     = args.check   # check fields, and warn of potential issues
   compile   = args.compile # compile comparison files
   cmstdr    = args.cmstdr  # prepare TeX files for CMS's TDR script
@@ -343,12 +344,13 @@ def main(args):
     newinfname = infname+'.bkp'
     print(f">>> Making backup {infname} -> {newinfname}")
     shutil.copy2(infname,newinfname)
+    infname = newinfname # use backup as input to avoid conflict
     ###if outfname==None:
     ###  outfname = infname
   
   # SANITY CHECKS
   assert not outfname or outfname[-4:]=='.bib', f"Output file must end in .bib! Got {outfname}..."
-  #assert infname!=outfname, "Input and output filenames cannot be the same! Otherwise use --backup"
+  assert backup or infname!=outfname, "Input and output filenames cannot be the same! Otherwise use --backup to create backup of original."
   
   # LOOP OVER INPUT FILE
   labels = [ ] # labels of all references
