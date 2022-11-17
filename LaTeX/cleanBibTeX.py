@@ -4,14 +4,14 @@
 #   Clean BibTeX file: key ordering, capitalization, indentation, spacing, ...
 #   and detect potential issues.
 # Note:
-#   * Do not use the same input/output names !
+#   * If you use the same input/output name, a backup file will be created !
 #   * Following CMS guidelines:
 #     https://twiki.cern.ch/twiki/bin/viewauth/CMS/Internal/PubGuidelines#References
 #     https://gitlab.cern.ch/tdr/utils/-/blob/master/general/cleanRefs.py
 # Instructions:
 #   ./cleanBibTeX.py thesis.bib
-#   ./cleanBibTeX.py thesis.bib --check -o thesis_clean.bib
-#   ./cleanBibTeX.py thesis.bib > thesis_clean.bib
+#   ./cleanBibTeX.py thesis.bib --check -o thesis_clean.bib  # do checks
+#   ./cleanBibTeX.py thesis.bib > thesis_clean.bib           # careful of picking up warnings
 from __future__ import print_function
 import os, re, stat
 from math import ceil
