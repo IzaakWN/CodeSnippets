@@ -321,6 +321,7 @@ def main(args):
   # USER INPUT
   infname   = args.infname
   outfname  = args.outfname
+  backup    = args.backup or infname==outfname # make backup of original file
   check     = args.check   # check fields, and warn of potential issues
   compile   = args.compile # compile comparison files
   cmstdr    = args.cmstdr  # prepare TeX files for CMS's TDR script
@@ -335,10 +336,19 @@ def main(args):
   ###compare   = True
   ###compile   = True
   
-  # SANITY CHECKS
+  # BACKUP
   assert infname[-4:]=='.bib', f"Input file must end in .bib! Got {infname}..."
-  assert outfname[-4:]=='.bib', f"Output file must end in .bib! Got {outfname}..."
-  assert infname!=outfname, "Input and output filenames cannot be the same!"
+  if backup:
+    import shutil
+    newinfname = infname+'.bkp'
+    print(f">>> Making backup {infname} -> {newinfname}")
+    shutil.copy2(infname,newinfname)
+    ###if outfname==None:
+    ###  outfname = infname
+  
+  # SANITY CHECKS
+  assert not outfname or outfname[-4:]=='.bib', f"Output file must end in .bib! Got {outfname}..."
+  #assert infname!=outfname, "Input and output filenames cannot be the same! Otherwise use --backup"
   
   # LOOP OVER INPUT FILE
   labels = [ ] # labels of all references
@@ -408,6 +418,7 @@ if __name__ == '__main__':
   parser = ArgumentParser(prog="plot",description=description,epilog="Good luck!")
   parser.add_argument('infname',        help="filename of BibTeX file to reformat" )
   parser.add_argument('-o','--outfname',help="output filename of reformatted BibTeX file")
+  parser.add_argument('-b','--backup',  action='store_true', help="back up original file")
   parser.add_argument('-c','--check',   action='store_true',
                                         help="check fields and warn of potential issues")
   parser.add_argument('-C','--compare', action='store_true',
