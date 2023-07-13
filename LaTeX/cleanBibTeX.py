@@ -9,6 +9,7 @@
 #     https://twiki.cern.ch/twiki/bin/viewauth/CMS/Internal/PubGuidelines#References
 #     https://gitlab.cern.ch/tdr/utils/-/blob/master/general/cleanRefs.py
 # Instructions:
+#   curl https://raw.githubusercontent.com/IzaakWN/CodeSnippets/master/LaTeX/cleanBibTeX.py > cleanBibTeX.py
 #   ./cleanBibTeX.py thesis.bib
 #   ./cleanBibTeX.py thesis.bib -o thesis.bib --backup
 #   ./cleanBibTeX.py thesis.bib --check -o thesis_clean.bib  # do checks
