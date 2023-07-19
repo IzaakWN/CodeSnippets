@@ -39,8 +39,9 @@
 \begin{document}
 
 
-% PHASE DIAGRAM
+% PHASE DIAGRAM: Simple harmonic oscillator
 \begin{tikzpicture}
+  \message{^^JPHASE DIAGRAM: Simple harmonic oscillator}
   \def\xmax{2.0}
   \def\A{1.7}
   \def\a{0.85}
@@ -70,8 +71,9 @@
 \end{tikzpicture}
 
 
-% PHASE DIAGRAM - parameter
+% PHASE DIAGRAM - different parameters
 \begin{tikzpicture}
+  \message{^^JPHASE DIAGRAM: different parameters}
   \def\xmax{2.0}
   \def\A{1.5}
   \def\ang{50}
@@ -100,6 +102,7 @@
 
 % PHASE DIAGRAM - damped
 \begin{tikzpicture}
+  \message{^^JPHASE DIAGRAM: damped}
   \def\xmax{2.0}
   \def\A{1.7}
   \def\a{0.8}
@@ -128,19 +131,29 @@
 
 
 % PHASE DIAGRAM - pendulum
-% https://tex.stackexchange.com/questions/545590/phase-portrait-of-van-der-pol-oscillator-with-pgfplots
-% http://matlab.cheme.cmu.edu/2011/08/09/phase-portraits-of-a-system-of-odes/
+% Sources:
+%   https://tex.stackexchange.com/questions/545590/phase-portrait-of-van-der-pol-oscillator-with-pgfplots
+%   http://matlab.cheme.cmu.edu/2011/08/09/phase-portraits-of-a-system-of-odes/
+% Instructions to compile this part of the code:
+%   These curves were generated numerically with these MATLAB scripts:
+%     https://github.com/IzaakWN/CodeSnippets/tree/master/LaTeX/TikZ/physics/dynamics_pendulum
+%   To compile this part of the code, the curves need to be loaded via
+%   external txt files. To download the txt files from GitHub, do e.g.
+%     svn checkout https://github.com/IzaakWN/CodeSnippets/trunk/LaTeX/TikZ/physics/dynamics_pendulum/data ./dynamics_pendulum/data
 \begin{tikzpicture}[scale=0.9]
+  \message{^^JPHASE DIAGRAM: pendulum}
   \def\xmax{6.75}
   \def\ymax{3.15}
-  \def\traj#1#2#3#4#5{
+  \def\traj#1#2#3#4#5{ % pendulum trajectory curve
+    \def\fname{dynamics_pendulum/data/pendulum_phase-#5.txt}
+    \message{^^J Loading pendulum trajectory with initial omega = #5 from \fname...}
     \addplot[thin,xcol,postaction={decorate},decoration={markings,
              mark=at position #2 with {\arrow[thick,rotate=#4]{>}},
              mark=at position #3 with {\arrow[thick,rotate=#4]{>}}},#1]
-      table {dynamics_pendulum/data/pendulum_phase-#5.txt};
-    \addplot[xline,#1] table {dynamics_pendulum/data/pendulum_phase-#5.txt};
+      table {\fname};
+    \addplot[xline,#1] table {\fname};
   }
-  \def\pend#1#2{
+  \def\pend#1#2{ % small pendulum diagram
     \def\R{0.55}
     \draw[mydarkblue,line width=0.9] ({(#1/180)*pi},-3.1) coordinate (O) --++ (#1-90:\R) coordinate(M);
     \draw[mydashed] (O) --++ (0,-0.9*\R) coordinate(B);
@@ -203,16 +216,16 @@
   \node[mydarkred,scale=0.8,rotate=-45] at (2.60,0.83) {separatrix};
   \node[mypurple,scale=0.8] at (3.1,2.20) {open};
   
-  \pend{ 335}{};
-  \pend{ 270}{};
-  \pend{180}{\pi};
-  \pend{  90}{}; %\;\; \dfrac{\pi}{2}
-  \pend{  25}{};
-  \pend{ -25}{};
-  \pend{ -90}{};
-  \pend{-180}{-\pi};
-  \pend{-270}{};%-\dfrac{\pi}{2}\;\;\;
-  \pend{-335}{};
+  \pend{ 335}{}
+  \pend{ 270}{}
+  \pend{ 180}{\pi}
+  \pend{  90}{} %\;\; \dfrac{\pi}{2}
+  \pend{  25}{}
+  \pend{ -25}{}
+  \pend{ -90}{}
+  \pend{-180}{-\pi}
+  \pend{-270}{} %-\dfrac{\pi}{2}\;\;\;
+  \pend{-335}{}
   
 \end{tikzpicture}
 
