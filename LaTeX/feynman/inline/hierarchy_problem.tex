@@ -1,0 +1,133 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (July 2017)
+\documentclass[a4paper,12pt]{article}
+\usepackage[margin=2.4cm]{geometry} % margins
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{feynmp-auto}
+ 
+\begin{document}
+ 
+\section{Typesetting equations with Feynman diagrams}
+ 
+This is an equation of the dominant correction to the Higgs mass squared, containing a Feynman diagram:
+\begin{equation}\label{eq:hierarchy_problem}
+\begin{fmffile}{higgs_mass_correction}
+    \Delta m_H^2
+    \,\, = \,\,\parbox{80pt}{
+    \begin{fmfgraph*}(80,60)
+       \fmfleft{i}
+       \fmfright{o}
+       \fmfv{label=H,l.a=60}{i}
+       \fmfv{label=H,l.a=120}{o}
+       \fmf{dashes,tension=1}{i,v1} % ,label=H,label.side=left
+       \fmf{dashes,tension=1}{v2,o}
+       \fmf{fermion,left,tension=0.4,label=$\text{t}$}{v1,v2,v1}
+    \end{fmfgraph*}}
+    \,\, + \,\,\ldots
+    \,\, = \,\, -\frac{|\lambda_\text{t}|^2}{8\pi}\Lambda^2 + \ldots
+\end{fmffile}
+\end{equation}
+ 
+% SUSY
+To avoid finetuning in Eq.~\eqref{eq:hierarchy_problem}, one can introduce supersymmetry (SUSY), which assumes each fermion has a scalar superpartner. SUSY will introduce an extra loop diagram: \vspace{5mm}
+\begin{equation}\label{eq:hierarchy_problem_SUSY}
+  \begin{fmffile}{higgs_mass_correction_SUSY}
+    \Delta m_H^2
+    \,\, = \,\,\parbox{80pt}{
+    \begin{fmfgraph*}(80,60)
+       \fmfleft{i}
+       \fmfright{o}
+       \fmfv{label=H,l.a=60}{i}
+       \fmfv{label=H,l.a=120}{o}
+       \fmf{dashes,tension=1}{i,v1} % ,label=H,label.side=left
+       \fmf{dashes,tension=1}{v2,o}
+       \fmf{fermion,left,tension=0.4,label=$\text{t}$}{v1,v2,v1}
+    \end{fmfgraph*}}
+    \,\, + \,\,\parbox{80pt}{
+    \begin{fmfgraph*}(80,60)
+       \fmfleft{i}
+       \fmfright{o}
+       \fmftop{m}
+       \fmfv{label=H,l.a=60}{i}
+       \fmfv{label=H,l.a=120}{o}
+       \fmflabel{$\widetilde{\text{t}}$}{m}
+       \fmf{dashes,tension=1}{i,v1}
+       \fmf{dashes,tension=1}{v1,o}
+       \fmf{dashes,right,tension=0}{v1,m,v1}
+    \end{fmfgraph*}}
+    \,\, + \,\,\ldots
+  \end{fmffile}
+\end{equation}
+ 
+% VLQ
+Yet another solution to finetuning are models with vector-like quarks (VLQs): \vspace{5mm}
+\begin{equation}\label{eq:hierarchy_problem_VLQ}
+\begin{fmffile}{higgs_mass_correction_VLQ}
+    \Delta m_H^2
+    \,\, = \,\,\parbox{80pt}{
+    \begin{fmfgraph*}(80,60)
+       \fmfleft{i}
+       \fmfright{o}
+       \fmfv{label=H,l.a=60}{i}
+       \fmfv{label=H,l.a=120}{o}
+       \fmf{dashes,tension=1}{i,v1} % ,label=H,label.side=left
+       \fmf{dashes,tension=1}{v2,o}
+       \fmf{fermion,left,tension=0.4,label=$\text{t}$}{v1,v2,v1}
+    \end{fmfgraph*}}
+    \,\, + \,\,\parbox{80pt}{
+    \begin{fmfgraph*}(80,60)
+       \fmfleft{i}
+       \fmfright{o}
+       \fmfv{label=H,l.a=60}{i}
+       \fmfv{label=H,l.a=120}{o}
+       \fmf{dashes,tension=1}{i,v1} % ,label=H,label.side=left
+       \fmf{dashes,tension=1}{v2,o}
+       \fmf{fermion,left,tension=0.4,label=$\text{t}$}{v2,v1}
+       \fmf{fermion,left,tension=0.4,label=$\text{T}$}{v1,v2}
+    \end{fmfgraph*}}
+    \,\, + \,\,\parbox{80pt}{
+    \begin{fmfgraph*}(80,60)
+       \fmfleft{i}
+       \fmfright{o}
+       \fmftop{m}
+       \fmfv{label=H,l.a=60}{i}
+       \fmfv{label=H,l.a=120}{o}
+       \fmflabel{$\text{T}$}{m}
+       \fmf{dashes,tension=1}{i,v1}
+       \fmf{dashes,tension=1}{v1,o}
+       \fmf{fermion,right,tension=0}{v1,m,v1}
+    \end{fmfgraph*}}
+    \,\, + \,\,\ldots
+\end{fmffile}
+\end{equation}
+ 
+Notice that in the code, \verb|\,| was used to add extra space between the diagrams and math symbols. Alternatively, you can use the wider \verb|\quad|.
+ 
+Because the stop label $\widetilde{\text{t}}$ and VLQ top partner T labels were sticking out, an extra \verb|\vspace{5mm}| was needed above the equation to prevent these label from overlapping with the line above.\\
+ 
+Equations with \verb|feymp| diagrams might not compile in the \verb|align| environment. Instead, use \verb|aligned| within the \verb|equation| environment. For example:
+\begin{equation}
+\begin{aligned}
+  \Delta m_H^2 \,\, &=
+  \begin{fmffile}{higgs_mass_correction}
+    \,\,\parbox{80pt}{
+    \begin{fmfgraph*}(80,60)
+       \fmfleft{i}
+       \fmfright{o}
+       \fmfv{label=H,l.a=60}{i}
+       \fmfv{label=H,l.a=120}{o}
+       \fmf{dashes,tension=1}{i,v1} % ,label=H,label.side=left
+       \fmf{dashes,tension=1}{v2,o}
+       \fmf{fermion,left,tension=0.4,label=$\text{t}$}{v1,v2,v1}
+    \end{fmfgraph*}}
+    \,\, + \,\,\ldots
+  \end{fmffile}\\ %[10pt] % to add extra vertical white space between the line
+   &= \,\, -\frac{|\lambda_\text{t}|^2}{8\pi}\Lambda^2 \,\, + \,\,\ldots
+\end{aligned}
+\end{equation}
+ 
+Another tip: use \verb|\\[10pt]| instead of just \verb|\\| at the end of a line in the \verb|aligned| environment to add extra vertical white space between two lines of equations.
+ 
+\end{document}

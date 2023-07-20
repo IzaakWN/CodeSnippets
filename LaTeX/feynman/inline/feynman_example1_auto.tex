@@ -1,0 +1,35 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=2.4cm]{geometry} % margins
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+% macro to compile Feynman graphs without extra scripts
+\usepackage{feynmp-auto}
+
+\begin{document}
+
+This is a test file for Feynman diagrams. You need to compile twice: once to make compile and save the Feynman diagrams, twice to include them in the typeset PDF file.
+
+\begin{figure}[h]
+\vspace{10mm}
+\centering
+\begin{fmffile}{feynman-compton}
+  \begin{fmfgraph*}(150,100)
+    \fmfleft{i1,i2}
+    \fmfright{o1,o2}
+    \fmflabel{$\gamma$}{i2}
+    \fmflabel{$e^-$}{i1}
+    \fmflabel{$\gamma$}{o1}
+    \fmflabel{$e^-$}{o2}
+    \fmf{photon}{i2,v2}
+    \fmf{fermion}{i1,v1,v2,o2}
+    \fmf{photon}{v1,o1}
+  \end{fmfgraph*}
+\end{fmffile}
+\vspace{5mm}
+\caption{Feynman diagram for Compton scattering} %\label{compton}
+\end{figure}
+
+\end{document}

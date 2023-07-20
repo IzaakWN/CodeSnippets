@@ -1,0 +1,537 @@
+% Author: Izaak Neutelings (July 2017)
+
+\documentclass[10pt,standalone]{article}
+\usepackage[margin=2.2cm]{geometry} % margins
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{feynmp}
+
+% macro to compile Feynman graphs without extra scripts
+\DeclareGraphicsRule{*}{mps}{*}{}
+\makeatletter
+\def\endfmffile{
+  \fmfcmd{\p@rcent\space the end.^^J end.^^J endinput;}
+  \if@fmfio
+    \immediate\closeout\@outfmf
+  \fi
+  %\ifnum\pdfshellescape=\@ne
+  \ifnum\pdfshellescape>\z@
+    \immediate\write18{mpost \thefmffile}
+  \fi}
+\makeatother
+
+\begin{document}
+
+
+
+\begin{fmffile}{A1}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b1,b2}
+    \fmf{fermion,t=1}{v1,v,v2}
+    \fmf{fermion,t=1.4}{b1,v1}
+    \fmf{fermion,t=1.4}{v2,b2}
+    \fmf{boson,t=6}{t,v}
+    \fmf{boson,r=0.2,t=0}{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{A2}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b1,b2}
+    \fmf{dashes,t=1}{v1,v,v2}
+    \fmf{dashes,t=1.4}{b1,v1}
+    \fmf{dashes,t=1.4}{v2,b2}
+    \fmf{dashes,t=6}{t,v}
+    \fmf{dashes,t=0}{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{A3}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b1,b2}
+    \fmf{boson,t=1}{v1,v,v2}
+    \fmf{boson,t=1.4}{b1,v1}
+    \fmf{boson,t=1.4}{v2,b2}
+    \fmf{boson,t=6}{t,v}
+    \fmf{boson,r=0.2,t=0}{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{A4}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b1,b2}
+    \fmf{gluon,t=1}{v1,v,v2}
+    \fmf{gluon,t=1.4}{b1,v1}
+    \fmf{gluon,t=1.4}{v2,b2}
+    \fmf{gluon,t=6}{t,v}
+    \fmf{gluon,r=0.2,t=0}{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{A5}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b1,b2}
+    \fmf{gluon,t=1}{v2,v,v1}
+    \fmf{gluon,t=1.4}{v1,b1}
+    \fmf{gluon,t=1.4}{b2,v2}
+    \fmf{gluon,t=6}{t,v}
+    \fmf{gluon,r=0.2,t=0}{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{1cm}
+
+\begin{fmffile}{B1}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i1,b,d,c,d,t,i2}
+    \fmfright{r}
+    \fmfforce{(0.4w,0.5h)}{v}
+    \fmf{boson}{c,v}
+    \fmf{boson,l=1.8}{t,v}
+    \fmf{boson,r=1.8}{b,v}
+    \fmf{plain}{b,t1}
+    \fmf{fermion}{c,t,i2}
+    \fmf{fermion}{i1,b,c}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{B2}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i,b1,d,b2,t1,d,t2,o}
+    \fmf{boson,r=2.1}{t1,t2}
+    \fmf{boson,r=2.1}{b1,b2}
+    \fmf{plain}{b2,t1}
+    \fmf{fermion}{t1,t2,o}
+    \fmf{fermion}{i,b1,b2}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{1cm}
+
+\begin{fmffile}{C1}
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i}
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmfright{o4,o3,d,d,d,o2,o1}
+    \fmf{gluon,t=9}{v,i}
+    \fmf{gluon,r=0.58,t=2}{v1,v,v2}
+    \fmf{fermion,t=9}{o2,v1,o1}
+    \fmf{fermion,t=9}{o3,v2,o4}
+    \fmf{phantom,t=6}{v1,t,b,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{C2}
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i}
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmfright{o4,o3,d,d,d,o2,o1}
+    \fmf{gluon,r=2,t=2}{v1,v2}
+    \fmf{fermion,t=9}{o2,v1,o1}
+    \fmf{fermion,t=9}{o3,v2,o4}
+    \fmf{phantom,t=6}{v1,t,b,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{1cm}
+
+\begin{fmffile}{G1}
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i}
+    \fmftop{t2,t,d}
+    \fmfbottom{d,b,g1}
+    \fmfshift{24 left}{g1}
+    \fmfright{d,o4,o3,d,g4,d,d,o2,o1}
+    \fmf{gluon,r=2.6,t=2}{v2,v1}
+    \fmf{phantom,t=3}{o2,v2,o1}
+    \fmf{phantom,t=3}{o3,v1,o4}
+    \fmf{phantom,t=4}{v2,t,b,v1}
+    \fmffreeze
+    \fmf{fermion}{g1,v1}
+    \fmf{fermion,t=3}{v1,g2}
+    \fmf{phantom}{v2,g2}
+    \fmffreeze
+    \fmf{gluon,t=5}{g4,g2,g3}
+    \fmf{phantom,t=1}{t2,g3,i}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{G2}
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i}
+    \fmftop{t2,t,d}
+    \fmfbottom{d,b,g1}
+    \fmfshift{24 left}{g1}
+    \fmfright{d,o4,o3,d,g4,d,d,o2,o1}
+    \fmf{gluon,r=2.6,t=2}{v2,v1}
+    \fmf{phantom,t=3}{o2,v2,o1}
+    \fmf{phantom,t=3}{o3,v1,o4}
+    \fmf{phantom,t=4}{v2,t,b,v1}
+    \fmffreeze
+    \fmf{gluon}{g1,v1}
+    \fmf{gluon,t=3}{v1,g2}
+    \fmf{phantom}{v2,g2}
+    \fmffreeze
+    \fmf{gluon,t=5}{g3,g2,g4}
+    \fmf{phantom,t=1}{t2,g3,i}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{G3}
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i}
+    \fmftop{t2,t,d}
+    \fmfbottom{d,b,g1}
+    \fmfshift{24 left}{g1}
+    \fmfright{d,o4,o3,d,g4,d,d,o2,o1}
+    \fmf{gluon,r=2.6,t=2}{v2,v1}
+    \fmf{phantom,t=3}{o2,v2,o1}
+    \fmf{phantom,t=3}{o3,v1,o4}
+    \fmf{phantom,t=4}{v2,t,b,v1}
+    \fmffreeze
+    \fmf{gluon}{g1,v1}
+    \fmf{gluon,t=3}{v1,g2}
+    \fmf{phantom}{v2,g2}
+    \fmffreeze
+    \fmf{fermion,t=5}{g3,g2,g4}
+    \fmf{phantom,t=1}{t2,g3,i}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{1cm}
+
+\begin{fmffile}{I1}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,v1,t2}
+    \fmfbottom{b1,v2,b2}
+    \fmf{boson}{t1,v1}
+    \fmf{boson}{b1,v2}
+    \fmf{fermion}{b2,v2,v1,t2}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{I2}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,v1,t2}
+    \fmfbottom{b1,v2,b2}
+    \fmf{boson}{v1,v2}
+    \fmf{fermion}{t1,v1,t2}
+    \fmf{fermion}{b1,v2,b2}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{I3}
+  \begin{fmfgraph*}(80,120)
+    \LARGE
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,v1,t2}
+    \fmfbottom{b1,v2,b2}
+    \fmf{dashes}{v1,v2}
+    \fmf{fermion}{t1,v1,t2}
+    \fmf{fermion}{b2,v2,b1}
+    \fmfv{l=b,l.a=110,l.d=8}{t1}
+    \fmfv{l=$\tau^-$,l.a=70,l.d=8}{t2}
+    \fmfv{l=$\overline{\text{b}}$,l.a=110,l.d=8}{b1}
+    \fmfv{l=$\tau^+$,l.a=70,l.d=8}{b2}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{1cm}
+
+\begin{fmffile}{L1}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{d,t,d,d,d,d,d,d}
+    \fmfbottom{d,b1,d,d,d,d,d,b2}
+    \fmfleft{i,d}
+    \fmfshift{10 down}{i}
+    \fmf{boson}{t,b1}
+    \fmf{fermion}{i,b1,b2}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{1cm}
+
+\begin{fmffile}{N1}
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmf{boson,t=0}{v2,v1}
+    \fmf{fermion}{i2,v2,i1}
+    \fmf{fermion}{o1,v1,o2}
+    \fmf{phantom,t=3}{i1,v2}
+    \fmf{phantom,t=3}{o2,v1}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\hspace{1cm}
+%
+\begin{fmffile}{N2}
+  \begin{fmfgraph*}(80,120)
+    \LARGE
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmf{dashes,t=0}{v2,v1}
+    \fmf{fermion}{i2,v2,i1}
+    \fmf{fermion}{o1,v1,o2}
+    \fmf{phantom,t=3}{i1,v2}
+    \fmf{phantom,t=3}{o2,v1}
+    \fmfv{l=$\tau^-$,l.a=160,l.d=8}{i1}
+    \fmfv{l=b,l.a=-160,l.d=8}{i2}
+    \fmfv{l=$\tau^+$,l.a=20,l.d=8}{o1}
+    \fmfv{l=$\overline{\text{b}}$,l.a=-20,l.d=8}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{2cm}
+
+\begin{fmffile}{O1}
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmf{boson,t=4}{t,v1}
+    \fmf{boson,t=4}{v2,b}
+    \fmf{fermion,l,t=0.4}{v1,v2,v1}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{O2}
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmf{dashes,t=4}{t,v1}
+    \fmf{dashes,t=4}{v2,b}
+    \fmf{fermion,l,t=0.4}{v1,v2,v1}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{2cm}
+
+\begin{fmffile}{R1}
+  \begin{fmfgraph*}(60,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i2,d,d,v,l2,d,l1,i1}
+    \fmfright{o2,o1}
+    \fmf{boson,r=3}{l2,l1}
+    \fmf{boson,t=0}{v,o2}
+    \fmf{fermion}{i2,v}
+    \fmf{plain}{v,l2}
+    \fmf{fermion}{l2,l1,i1}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{2cm}
+
+\begin{fmffile}{S1}
+  \begin{fmfgraph*}(60,100)
+    \fmfpen{1.2thick}
+    \fmfipair{o,i,m,l,r}
+    \fmfiequ{i}{(1.05w,0.9h)}
+    \fmfiequ{l}{(0,0.9h)}
+    \fmfiequ{r}{(w,0.1h)}
+    \fmfiequ{o}{(-.1w,0.1h)}
+    \fmfi{gluon}{i{up} .. l .. r .. {up}o}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{S2}
+  \begin{fmfgraph*}(100,80)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2,t3,t4,t5}
+    \fmfbottom{b1,b2,b3,b4,b5}
+    \fmfshift{10 down}{t1,t2,t3,t4,t5}
+    \fmfshift{10 up}{b1,b2,b3,b4,b5}
+    \fmfshift{10 left}{t2,b2}
+    \fmfshift{10 right}{t4,b4}
+    \fmfshift{36 left}{t3}
+    \fmfshift{36 right}{b3}
+    \fmf{fermion,t=1}{t1,t2}
+    \fmf{plain,t=1}{t2,t3}
+    \fmf{fermion,t=1}{t3,t4,t5}
+    \fmf{fermion,t=1}{b3,b2,b1}
+    \fmf{plain,t=1}{b3}
+    \fmf{fermion,t=1}{b5,b4,b3}
+    \fmf{boson,l=1.4,t=0}{t2,t4}
+    \fmf{boson,r=1.4,t=0}{b2,b4}
+    \fmf{boson}{t3,b3}
+    \fmffreeze
+    % penguin body using MetaPost
+    \fmfipair{t,c,b}
+    \fmfiequ{t}{vloc(__t3)}
+    \fmfiequ{b}{vloc(__b3)}
+    \fmfiequ{c}{0.5[t,b]}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\begin{fmffile}{S3}
+  \begin{fmfgraph*}(100,80)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2,t3,t4,t5}
+    \fmfbottom{b1,b2,b3,b4,b5}
+    \fmfshift{10 down}{t1,t2,t3,t4,t5}
+    \fmfshift{10 up}{b1,b2,b3,b4,b5}
+    \fmfshift{ 6 left}{t2,b2}
+    \fmfshift{ 6 right}{t4,b4}
+    \fmfshift{28 left}{t3}
+    \fmfshift{28 right}{b3}
+    \fmf{fermion,t=1}{t1,t2}
+    \fmf{plain,t=1}{t2,t3}
+    \fmf{fermion,t=1}{t3,t4,t5}
+    \fmf{fermion,t=1}{b3,b2,b1}
+    \fmf{plain,t=1}{b3}
+    \fmf{fermion,t=1}{b5,b4,b3}
+    \fmf{gluon,r=1.2,t=0}{t4,t2}
+    \fmf{gluon,r=1.2,t=0}{b2,b4}
+    %\fmf{boson}{t3,b3}
+    \fmffreeze
+    % bending S using MetaPost
+    \fmfipair{t,c,b}
+    \fmfiequ{t}{vloc(__t3)}
+    \fmfiequ{b}{vloc(__b3)}
+    \fmfiequ{c}{0.5[t,b]}
+    \fmfi{gluon}{t{down} .. c .. {down}b}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{2cm}
+
+\begin{fmffile}{T1}
+  \begin{fmfgraph*}(100,120)
+    \LARGE
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2}
+    \fmfbottom{b}
+    \fmf{fermion,t=3}{t1,v,t2}
+    \fmf{dashes}{v,b}
+    \fmfv{l=b,l.a=110,l.d=8}{t1}
+    \fmfv{l=$\tau$,l.a=70,l.d=8}{t2}
+  \end{fmfgraph*}
+\end{fmffile}
+%
+\hspace{1cm}
+%
+\begin{fmffile}{T2}
+  \begin{fmfgraph*}(100,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2}
+    \fmfbottom{b}
+    \fmf{boson,t=3}{t1,v,t2}
+    \fmf{boson}{v,b}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{2cm}
+
+\begin{fmffile}{U1}
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2}
+    \fmfbottom{d,b1,b2,d}
+    \fmf{fermion,t=12}{b1,b,b2}
+    \fmf{boson,t=12}{b,v}
+    %\fmf{fermion,l=0.55}{v2,v,v1}
+    \fmf{phantom,t=1}{v2,v,v1}
+    \fmf{boson,t=2}{v1,v2}
+    \fmf{fermion,t=8}{t1,v1}
+    \fmf{fermion,t=8}{v2,t2}
+    \fmffreeze
+    % penguin body using MetaPost
+    \fmfipair{tl',tr',v',vl',vr'}
+    \fmfiequ{tl'}{vloc(__t1)}
+    \fmfiequ{tr'}{vloc(__t2)}
+    \fmfiequ{v'}{vloc(__v)}
+    \fmfiequ{vl'}{vloc(__v1)}
+    \fmfiequ{vr'}{vloc(__v2)}
+    \fmfi{fermion}{vl'{down} .. tension 1.0 .. {right}v'}
+    \fmfi{fermion}{v'{right} .. tension 1.0 .. {up}vr'}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{2cm}
+
+\begin{fmffile}{W1}
+  \begin{fmfgraph*}(120,140)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,h,t2}
+    \fmfbottom{d,b1,d,b2,d}
+    \fmfshift{20 down}{h}
+    \fmf{gluon,t=8}{b1,g1}
+    \fmf{gluon,t=8}{b2,g2}
+    \fmf{fermion,t=1}{t1,g1,v,g2,t2}
+    \fmf{dashes,t=1}{h,v}
+  \end{fmfgraph*}
+\end{fmffile}
+
+\vspace{2cm}
+
+\begin{fmffile}{exclamation1}
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmfipair{t',b',c'}
+    \fmfblob{10}{b}
+    \fmfiequ{t'}{vloc(__t)}
+    \fmfiequ{b'}{vloc(__b)}
+    \fmfiequ{c'}{.2[b',t']}
+    \fmfi{boson}{b'--c'}
+    \fmfi{fermion}{c'{up} .. tension 1.8 .. {right}t'}
+    \fmfi{fermion}{t'{right} .. tension 1.8 .. {down}c'}
+  \end{fmfgraph*}
+\end{fmffile}
+
+
+
+\end{document}
