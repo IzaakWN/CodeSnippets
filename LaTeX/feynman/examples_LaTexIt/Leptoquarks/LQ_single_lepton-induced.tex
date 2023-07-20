@@ -1,0 +1,308 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (July 2023)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape LQ_single_lepton-induced.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+\usepackage{pgffor} % for \foreach
+\usepackage{xcolor}
+\definecolor{myblue}{rgb}{.0,.13,.98} % 0,32,250
+\definecolor{mygreen}{rgb}{.22,.45,.23} % 57,115,58
+
+\begin{document}
+\large
+
+% LQ PRODUCTION - lepton induced
+\foreach \name/\symb in {ell/\ell,tau/\tau}{
+\begin{page}
+\fmfframe(10,8)(15,-20){ % padding (LTRB)
+\begin{fmffile}{feynmp-lq_single_lepton-induced_\name}
+  \begin{fmfgraph*}(150,190)
+    \fmfleft{i1,iq,i2,ip,i3}
+    \fmfright{y1,y2,y3,d,o1,o2,f1,o3,f2,d,x3,x2,x1}
+    \fmfset{arrow_len}{10}
+    % skeleton
+    \fmf{phantom,t=0.48}{vq,vp}
+    \fmf{phantom,t=1.3}{ip,vp}
+    \fmf{phantom,t=1.3}{iq,vq}
+    \fmf{phantom}{vp,x1}
+    \fmf{phantom}{vq,y1}
+    \fmffreeze
+    \fmf{phantom,t=1.6}{vq,v2,v1,vp}
+    \fmf{phantom,t=0.7}{v1,o3}
+    \fmf{phantom,t=0.7}{v2,o2}
+    \fmffreeze
+    % parton
+    \fmf{fermion,t=1.6,lab=$q$}{vp,v1}
+    \fmf{photon,t=1.6,lab=$\gamma$,l.d=3,l.s=left}{vq,v2}
+    \fmf{fermion,t=1,lab=$\symb$,l.s=right}{v1,v2}
+    \fmf{fermion,t=1}{v2,o1}
+    % hard process
+    \fmfshift{5 right}{f1,f2}
+    \fmf{dashes,t=2,lab=LQ,l.d=3,l.s=left}{v1,vf}
+    \fmf{fermion,t=1.4}{f1,vf,f2}
+    %\fmf{fermion,t=1}{v2,o1}
+    % incoming proton 1
+    \fmf{phantom}{ip,vp}
+    \fmfi{fermion}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4, 6)}
+    \fmfi{fermion}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4, 0)}
+    \fmfi{fermion}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4,-6)}
+    % incoming proton 2
+    \fmf{phantom}{iq,vq}
+    \fmfi{fermion}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4, 6)}
+    \fmfi{fermion}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4, 0)}
+    \fmfi{fermion}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4,-6)}
+    % dissacociated proton X
+    \fmfshift{28 left}{x1}
+    \fmfshift{20 left}{x2}
+    \fmfshift{18 left}{x3}
+    \fmfshift{4 down}{x3}
+    \fmf{phantom}{vp,x1} % to help \fmfi
+    \fmf{phantom}{vp,x2} % to help \fmfi
+    \fmf{phantom}{vp,x3} % to help \fmfi
+    \fmfi{fermion}{vpath (__vp,__x1) scaled 1.0 shifted (0.0, 2.9)}
+    \fmfi{fermion}{vpath (__vp,__x2) scaled 1.0 shifted (0.0, 0.0)}
+    \fmfi{fermion}{vpath (__vp,__x3) scaled 1.0 shifted (0.0,-2.7)}
+    \fmfblob{22}{vp}
+    % outgoing proton
+    \fmfshift{25 left}{y1}
+    \fmfshift{20 left}{y2,y3}
+    \fmf{phantom}{vq,y1} % to help \fmfi
+    \fmf{phantom}{vq,y2} % to help \fmfi
+    \fmf{phantom}{vq,y3} % to help \fmfi
+    \fmfi{fermion}{vpath (__vq,__y3) scaled 1.0 shifted (-1.5,-6.0)}
+    \fmfi{fermion}{vpath (__vq,__y3) scaled 1.0 shifted ( 0.0, 0.0)}
+    \fmfi{fermion}{vpath (__vq,__y3) scaled 1.0 shifted ( 1.5, 6.0)}
+    \fmfblob{22}{vq}
+    % labels
+    \fmfv{l=$\text{p}^+$,l.a=180,l.d=10}{ip}
+    \fmfv{l=$\text{p}^+$,l.a=180,l.d=10}{iq}
+    \fmfv{l=$\text{p}^+$,l.a=-20,l.d=8}{y3}
+    \fmfv{l=$\symb^+$}{f1}
+    %\fmfv{l=$\overline{\symb}$}{f1}
+    \fmfv{l=$q$}{f2}
+    \fmfv{l=$\symb^-$,l.a=-20}{o1}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=(.0,,.13,,.98),
+          l=$\color{myblue}\lambda$,l.d=6,l.a=-45}{v1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}}
+
+
+
+% LQ PRODUCTION - lepton induced, one arrow
+\foreach \name/\symb in {ell/\ell,tau/\tau}{
+\begin{page}
+\fmfframe(10,8)(15,-20){ % padding (LTRB)
+\begin{fmffile}{feynmp-lq_single_lepton-induced_onearrow_\name}
+  \begin{fmfgraph*}(150,190)
+    \fmfleft{i1,iq,i2,ip,i3}
+    \fmfright{y1,y2,y3,d,o1,o2,f1,o3,f2,d,x3,x2,x1}
+    \fmfset{arrow_len}{10}
+    % skeleton
+    \fmf{phantom,t=0.48}{vq,vp}
+    \fmf{phantom,t=1.3}{ip,vp}
+    \fmf{phantom,t=1.3}{iq,vq}
+    \fmf{phantom}{vp,x1}
+    \fmf{phantom}{vq,y1}
+    \fmffreeze
+    \fmf{phantom,t=1.6}{vq,v2,v1,vp}
+    \fmf{phantom,t=0.7}{v1,o3}
+    \fmf{phantom,t=0.7}{v2,o2}
+    \fmffreeze
+    % parton
+    \fmf{fermion,t=1.6,lab=$q$}{vp,v1}
+    \fmf{photon,t=1.6,lab=$\gamma$,l.d=3,l.s=left}{vq,v2}
+    \fmf{fermion,t=1,lab=$\symb$,l.s=right}{v1,v2}
+    \fmf{fermion,t=1}{v2,o1}
+    % hard process
+    \fmfshift{5 right}{f1,f2}
+    \fmf{dashes,t=2,lab=LQ,l.d=3,l.s=left}{v1,vf}
+    \fmf{fermion,t=1.4}{f1,vf,f2}
+    %\fmf{fermion,t=1}{v2,o1}
+    % incoming proton 1
+    \fmf{phantom}{ip,vp}
+    \fmfi{plain}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4, 6)}
+    \fmfi{fermion}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4, 0)}
+    \fmfi{plain}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4,-6)}
+    % incoming proton 2
+    \fmf{phantom}{iq,vq}
+    \fmfi{plain}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4, 6)}
+    \fmfi{fermion}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4, 0)}
+    \fmfi{plain}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4,-6)}
+    % dissacociated proton X
+    \fmfshift{28 left}{x1}
+    \fmfshift{20 left}{x2}
+    \fmfshift{18 left}{x3}
+    \fmfshift{4 down}{x3}
+    \fmf{phantom}{vp,x1} % to help \fmfi
+    \fmf{phantom}{vp,x2} % to help \fmfi
+    \fmf{phantom}{vp,x3} % to help \fmfi
+    \fmfi{fermion}{vpath (__vp,__x1) scaled 1.0 shifted (0.0, 2.9)}
+    \fmfi{fermion}{vpath (__vp,__x2) scaled 1.0 shifted (0.0, 0.0)}
+    \fmfi{fermion}{vpath (__vp,__x3) scaled 1.0 shifted (0.0,-2.7)}
+    \fmfblob{22}{vp}
+    % outgoing proton
+    \fmfshift{25 left}{y1}
+    \fmfshift{20 left}{y2,y3}
+    \fmf{phantom}{vq,y3} % to help \fmfi
+    \fmfi{plain}{vpath (__vq,__y3) scaled 1.0 shifted (-1.5,-6.0)}
+    \fmfi{fermion}{vpath (__vq,__y3) scaled 1.0 shifted ( 0.0, 0.0)}
+    \fmfi{plain}{vpath (__vq,__y3) scaled 1.0 shifted ( 1.5, 6.0)}
+    \fmfblob{22}{vq}
+    % labels
+    \fmfv{l=$\text{p}^+$,l.a=180,l.d=10}{ip}
+    \fmfv{l=$\text{p}^+$,l.a=180,l.d=10}{iq}
+    \fmfv{l=$\text{p}^+$,l.a=-20,l.d=8}{y3}
+    \fmfv{l=$\symb^+$}{f1}
+    %\fmfv{l=$\overline{\symb}$}{f1}
+    \fmfv{l=$q$}{f2}
+    \fmfv{l=$\symb^-$,l.a=-20}{o1}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=(.0,,.13,,.98),
+          l=$\color{myblue}\lambda$,l.d=6,l.a=-45}{v1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}}
+
+
+% LQ PRODUCTION - lepton induced, one-line proton
+\foreach \name/\symb in {ell/\ell,tau/\tau}{
+\begin{page}
+\fmfframe(10,8)(15,-20){ % padding (LTRB)
+\begin{fmffile}{feynmp-lq_single_lepton-induced_line_\name}
+  \begin{fmfgraph*}(150,190)
+    \fmfleft{i1,iq,i2,ip,i3}
+    \fmfright{y1,y2,y3,d,o1,o2,f1,o3,f2,d,x3,x2,x1}
+    \fmfset{arrow_len}{10}
+    % skeleton
+    \fmf{phantom,t=0.48}{vq,vp}
+    \fmf{phantom,t=1.3}{ip,vp}
+    \fmf{phantom,t=1.3}{iq,vq}
+    \fmf{phantom}{vp,x1}
+    \fmf{phantom}{vq,y1}
+    \fmffreeze
+    \fmf{phantom,t=1.6}{vq,v2,v1,vp}
+    \fmf{phantom,t=0.7}{v1,o3}
+    \fmf{phantom,t=0.7}{v2,o2}
+    \fmffreeze
+    % parton
+    \fmf{fermion,t=1.6,l.s=right,lab=$q$}{vp,v1}
+    \fmf{photon,t=1.6,lab=$\gamma$,l.d=3,l.s=left}{vq,v2}
+    \fmf{fermion,t=1,lab=$\symb$,l.s=right}{v1,v2}
+    \fmf{fermion,t=1}{v2,o1}
+    % hard process
+    \fmfshift{5 right}{f1,f2}
+    \fmf{dashes,t=2,lab=LQ,l.d=3,l.s=left}{v1,vf}
+    \fmf{fermion,t=1.4}{f1,vf,f2}
+    %\fmf{fermion,t=1}{v2,o1}
+    % incoming proton 1
+    \fmf{fermion,width=1.9}{ip,vp}
+    % incoming proton 2
+    \fmf{fermion,width=1.9}{iq,vq}
+    % dissacociated proton X
+    \fmfshift{28 left}{x1}
+    \fmfshift{20 left}{x2}
+    \fmfshift{18 left}{x3}
+    \fmfshift{4 down}{x3}
+    \fmf{phantom}{vp,x1} % to help \fmfi
+    \fmf{phantom}{vp,x2} % to help \fmfi
+    \fmf{phantom}{vp,x3} % to help \fmfi
+    \fmfi{fermion}{vpath (__vp,__x1) scaled 1.0 shifted (0.0, 2.9)}
+    \fmfi{fermion}{vpath (__vp,__x2) scaled 1.0 shifted (0.0, 0.0)}
+    \fmfi{fermion}{vpath (__vp,__x3) scaled 1.0 shifted (0.0,-2.7)}
+    % outgoing proton
+    \fmfshift{25 left}{y3}
+    \fmf{fermion,width=2.0}{vq,y3}
+    \fmfblob{18}{vq,vp}
+    % labels
+    \fmfv{l=$\text{p}^+$,l.a=180,l.d=5}{ip}
+    \fmfv{l=$\text{p}^+$,l.a=180,l.d=5}{iq}
+    \fmfv{l=$\text{p}^+$,l.a=-20,l.d=8}{y3}
+    \fmfv{l=$\symb^+$}{f1}
+    %\fmfv{l=$\overline{\symb}$}{f1}
+    \fmfv{l=$q$}{f2}
+    \fmfv{l=$\symb^-$,l.a=-20}{o1}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=(.0,,.13,,.98),
+          l=$\color{myblue}\lambda$,l.d=6,l.a=-45}{v1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}}
+
+
+% LQ PRODUCTION - lepton induced, one-line proton (double)
+\foreach \name/\symb in {ell/\ell,tau/\tau}{
+\begin{page}
+\fmfframe(10,8)(15,-20){ % padding (LTRB)
+\begin{fmffile}{feynmp-lq_single_lepton-induced_twoline_\name}
+  \begin{fmfgraph*}(150,190)
+    \fmfleft{i1,iq,i2,ip,i3}
+    \fmfright{y1,y2,y3,d,o1,o2,f1,o3,f2,d,x3,x2,x1}
+    \fmfset{arrow_len}{10}
+    % skeleton
+    \fmf{phantom,t=0.48}{vq,vp}
+    \fmf{phantom,t=1.3}{ip,vp}
+    \fmf{phantom,t=1.3}{iq,vq}
+    \fmf{phantom}{vp,x1}
+    \fmf{phantom}{vq,y1}
+    \fmffreeze
+    \fmf{phantom,t=1.6}{vq,v2,v1,vp}
+    \fmf{phantom,t=0.7}{v1,o3}
+    \fmf{phantom,t=0.7}{v2,o2}
+    \fmffreeze
+    % parton
+    \fmf{fermion,t=1.6,l.s=right,lab=$q$}{vp,v1}
+    \fmf{photon,t=1.6,lab=$\gamma$,l.d=3,l.s=left}{vq,v2}
+    \fmf{fermion,t=1,lab=$\symb$,l.s=right}{v1,v2}
+    \fmf{fermion,t=1}{v2,o1}
+    % hard process
+    \fmfshift{5 right}{f1,f2}
+    \fmf{dashes,t=2,lab=LQ,l.d=3,l.s=left}{v1,vf}
+    \fmf{fermion,t=1.4}{f1,vf,f2}
+    % incoming proton 1
+    %\fmf{double,width=1.9}{ip,vp}
+    \fmfi{plain,width=1.3}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4, 2)}
+    \fmfi{plain,width=1.3}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4,-2)}
+    % incoming proton 2
+    %\fmf{double,width=1.9}{iq,vq}
+    \fmfi{plain,width=1.3}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4, 2)}
+    \fmfi{plain,width=1.3}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4,-2)}
+    % dissacociated proton X
+    \fmfshift{28 left}{x1}
+    \fmfshift{20 left}{x2}
+    \fmfshift{18 left}{x3}
+    \fmfshift{4 down}{x3}
+    \fmf{phantom}{vp,x1} % to help \fmfi
+    \fmf{phantom}{vp,x2} % to help \fmfi
+    \fmf{phantom}{vp,x3} % to help \fmfi
+    \fmfi{fermion}{vpath (__vp,__x1) scaled 1.0 shifted (0.0, 2.9)}
+    \fmfi{fermion}{vpath (__vp,__x2) scaled 1.0 shifted (0.0, 0.0)}
+    \fmfi{fermion}{vpath (__vp,__x3) scaled 1.0 shifted (0.0,-2.7)}
+    % outgoing proton
+    \fmfshift{25 left}{y3}
+    %\fmf{double,width=1.9}{vq,y3}
+    \fmf{phantom}{vq,y3} % to help \fmfi
+    \fmfi{plain,width=1.3}{vpath (__vq,__y3) scaled 1.0 shifted (-0.8,-2.1)}
+    \fmfi{plain,width=1.3}{vpath (__vq,__y3) scaled 1.0 shifted ( 0.8, 2.0)}
+    \fmfblob{18}{vq,vp}
+    % labels
+    \fmfv{l=$\text{p}^+$,l.a=180,l.d=8}{ip}
+    \fmfv{l=$\text{p}^+$,l.a=180,l.d=8}{iq}
+    \fmfv{l=$\text{p}^+$,l.a=-20,l.d=8}{y3}
+    \fmfv{l=$\symb^+$}{f1}
+    %\fmfv{l=$\overline{\symb}$}{f1}
+    \fmfv{l=$q$}{f2}
+    \fmfv{l=$\symb^-$,l.a=-20}{o1}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=(.0,,.13,,.98),
+          l=$\color{myblue}\lambda$,l.d=6,l.a=-45}{v1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}}
+
+
+\end{document}

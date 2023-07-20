@@ -1,0 +1,491 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (February 2023)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape ttbar.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+\usepackage{xcolor}
+\usepackage{pgffor} % for \foreach
+\definecolor{myred}{rgb}{.7,.1,.1}
+%\definecolor{myblue}{rgb}{.0,.13,.98} % 0,32,250
+%\definecolor{mygreen}{rgb}{.22,.45,.23} % 57,115,58
+
+\newcommand{\Pom}{\rm I\!P} % Pomeron
+
+\begin{document}
+\large
+
+% TTBAR PRODUCTION - Quark-antiquark annihilation
+\begin{page}
+\fmfframe(-6,15)(-6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-qq}
+  \begin{fmfgraph*}(110,60)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{fermion}{o2,v2,o1}
+    \fmf{gluon,label=$g$,label.side=right,label.dist=10}{v2,v1}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{$\overline{\text{t}}$}{o2}
+    \fmflabel{t}{o1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion (s-channel)
+\begin{page}
+\fmfframe(-6,15)(-6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-gg-s}
+  \begin{fmfgraph*}(110,60)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmfshift{2 left}{i1}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{v1,i2}
+    \fmf{gluon,label.side=left,label=$g$}{v1,v2}
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    %\fmflabel{$g$}{i1}
+    %\fmflabel{$g$}{i2}
+    \fmfv{l.d=4,l=$g$}{i1}
+    \fmfv{l.d=6,l=$g$}{i2}
+    \fmflabel{$\overline{\text{t}}$}{o2}
+    \fmflabel{t}{o1}
+    %\fmflabel{$i\sqrt{\alpha}$}{v1}
+    %\fmflabel{$i\sqrt{\alpha}$}{v2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion (s-channel) 2
+\begin{page}
+\fmfframe(-6,15)(-6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-gg-s2}
+  \begin{fmfgraph*}(110,60)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{i2,v1}
+    \fmf{gluon,label.side=left,label=$g$}{v1,v2}
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    \fmflabel{$g$}{i1}
+    \fmflabel{$g$}{i2}
+    \fmflabel{$\overline{\text{t}}$}{o2}
+    \fmflabel{t}{o1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion (t-channel)
+\begin{page}
+\fmfframe(-6,15)(-6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-gg-t}
+  \begin{fmfgraph*}(110,60)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion,label=t}{v2,v1} % t-channel
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o2,v2}
+    % labels
+    \fmflabel{$g$}{i2}
+    \fmflabel{$g$}{i1}
+    \fmfv{l.d=7,l.a=22,l=t}{o1}
+    \fmfv{l.d=7,l.a=-20,l=$\overline{\text{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION - Quark-antiquark annihilation + radiation
+\begin{page}
+\fmfframe(-6,18)(-6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-qq-q}
+  \begin{fmfgraph*}(120,70)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmftop{t}
+    \fmfshift{5 up}{t}
+    % skeleton
+    \fmf{phantom}{i1,v1,i2}
+    \fmf{phantom}{v1,v2}
+    \fmf{phantom}{o1,v2,o2}
+    \fmffreeze
+    % main
+    \fmf{fermion}{i1,g}
+    \fmf{plain,tension=2.8}{g,v1}
+    \fmf{fermion}{v1,i2}
+    \fmf{gluon,tension=0}{t,g}
+    \fmf{gluon}{v1,v2}
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$g$}{t}
+    \fmflabel{$\bar{\text{t}}$}{o2}
+    \fmflabel{$\text{t}$}{o1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion + radiation
+\begin{page}
+\fmfframe(-6,18)(-6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-gg-q}
+  \begin{fmfgraph*}(120,75)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmftop{t}
+    \fmfshift{4 left}{i1}
+    \fmfshift{2 left}{i2}
+    \fmfshift{5 up}{t}
+    % skeleton
+    \fmf{phantom}{i1,v1,i2}
+    \fmf{phantom}{o1,v2,o2}
+    \fmf{phantom,tension=1.2}{v1,v2}
+    \fmffreeze
+    % main
+    \fmf{gluon,tension=0.8}{g,i1}
+    \fmf{fermion}{v1,g}
+    \fmf{gluon}{v1,i2}
+    \fmf{fermion,tension=0}{g,t}
+    \fmf{gluon}{v1,v2}
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    %\fmflabel{$g$}{i1}
+    %\fmflabel{$g$}{i2}
+    \fmfv{l.d=4,l=$g$}{i1}
+    \fmfv{l.d=6,l=$g$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$q$}{t}
+    \fmflabel{$\bar{\text{t}}$}{o2}
+    \fmflabel{$\text{t}$}{o1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION - Quark-gluon fusion + radiation
+\begin{page}
+\fmfframe(-6,18)(-6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-gq-q}
+  \begin{fmfgraph*}(120,75)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmftop{t}
+    \fmfshift{4 left}{i1}
+    \fmfshift{2 left}{i2}
+    \fmfshift{5 up}{t}
+    % skeleton
+    \fmf{phantom}{i1,v1,i2}
+    \fmf{phantom}{o1,v2,o2}
+    \fmf{phantom,tension=1.2}{v1,v2}
+    \fmffreeze
+    % main
+    \fmf{gluon,tension=0.8}{g,i1}
+    \fmf{fermion}{v1,g}
+    \fmf{fermion}{i2,v1}
+    \fmf{fermion,tension=0}{g,t}
+    \fmf{gluon}{v1,v2}
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    %\fmflabel{$g$}{i1}
+    %\fmflabel{$g$}{i2}
+    \fmfv{l.d=4,l=$g$}{i1}
+    \fmfv{l.d=6,l=$q$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$q$}{t}
+    \fmflabel{$\bar{\text{t}}$}{o2}
+    \fmflabel{$\text{t}$}{o1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION - Quark-antiquark annihilation + Z FSR
+\foreach \col in {0,1}{ % highlight ttV vertex
+\begin{page}
+\fmfframe(-6,15)(6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbarZ-qq\col}
+  \begin{fmfgraph*}(130,80)
+    \fmfleft{i2,i1}
+    \fmfright{o2,oV,o1}
+    \fmfshift{2 up}{oV}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{gluon,label=$g$,label.side=right,label.dist=10}{v2,v1}
+    \fmf{phantom}{o2,v2,o1}
+    \fmffreeze
+    \fmf{fermion}{o2,v2,vV,o1}
+    \fmf{boson,t=0}{vV,oV}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{$\overline{\text{t}}$}{o2}
+    \fmflabel{t}{o1}
+    \fmflabel{Z}{oV}
+    \ifnum \col=1
+      \fmfv{decor.shape=circle,decor.filled=full,decor.size=3.5,f=(.7,,.1,,.1)}{vV}
+      %\fmfv{decor.shape=circle,decor.filled=full,decor.size=3.5,f=(.7,,.1,,.1),
+      %  l=$\color{myred}\lambda$,l.d=6,l.a=-45}{vV}
+    \fi
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion + Z FSR
+\foreach \col in {0,1}{ % highlight ttV vertex
+\begin{page}
+\fmfframe(-6,15)(6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbarZ-gg-s\col}
+  \begin{fmfgraph*}(130,80)
+    \fmfleft{i2,i1}
+    \fmfright{o2,oV,o1}
+    \fmfshift{2 left}{i1}
+    \fmfshift{2 up}{oV}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{v1,i2}
+    \fmf{gluon,t=1.2,l.s=left,label=$g$}{v1,v2}
+    \fmf{phantom}{o2,v2,o1}
+    \fmffreeze
+    \fmf{fermion}{o2,v2,vV,o1}
+    \fmf{boson,t=0}{vV,oV}
+    % labels
+    \fmfv{l.d=4,l=$g$}{i1}
+    \fmfv{l.d=6,l=$g$}{i2}
+    \fmflabel{$\overline{\text{t}}$}{o2}
+    \fmflabel{t}{o1}
+    \fmflabel{Z}{oV}
+    \ifnum \col=1
+      \fmfv{decor.shape=circle,decor.filled=full,decor.size=3.5,f=(.7,,.1,,.1)}{vV}
+    \fi
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion (t-channel) + Z FSR
+\foreach \col in {0,1}{ % highlight ttV vertex
+\begin{page}
+\fmfframe(6,15)(6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbarZ-gg-t\col}
+  \begin{fmfgraph*}(110,80)
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o2,oV,o1}
+    \fmfshift{2 up}{oV}
+    \fmfshift{2 right}{oV}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion,label=t}{v2,v1} % t-channel
+    \fmf{gluon}{i2,v2}
+    \fmf{phantom}{v1,o1}
+    \fmf{fermion}{o2,v2}
+    \fmffreeze
+    \fmf{fermion}{v1,vV,o1}
+    \fmf{boson,t=0}{vV,oV}
+    % labels
+    \fmflabel{$g$}{i2}
+    \fmflabel{$g$}{i1}
+    \fmfv{l.d=7,l.a=22,l=t}{o1}
+    \fmfv{l.d=7,l.a=-20,l=$\overline{\text{t}}$}{o2}
+    \fmflabel{Z}{oV}
+    \ifnum \col=1
+      \fmfv{decor.shape=circle,decor.filled=full,decor.size=3.5,f=(.7,,.1,,.1)}{vV}
+    \fi
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion (t-channel) + Z ISR
+\begin{page}
+\fmfframe(6,15)(6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-ggZ-t}
+  \begin{fmfgraph*}(110,80)
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{6 down}{o2}
+    % main
+    \fmf{fermion,t=1.0}{i1,v1}
+    \fmf{fermion,t=0.5}{v1,v2} % t-channel
+    \fmf{fermion,t=1.0}{v2,i2}
+    \fmf{gluon,t=1.1}{g1,v1}
+    \fmf{phantom,t=1.1}{g2,v2}
+    \fmf{phantom,t=1.2}{o1,g1}
+    \fmf{phantom,t=0.5}{g1,g2}
+    \fmf{phantom,t=1.2}{g2,o4}
+    \fmffreeze
+    \fmf{phantom,t=0.4}{v2,oV}
+    \fmf{phantom,t=1}{oV,o4}
+    \fmffreeze
+    % outgoing particles
+    \fmf{fermion}{o1,g1,o2}
+    \fmf{boson}{v2,oV}
+    % labels
+    \fmfv{l.d=5,l.a=155,l=$q$}{i1}
+    \fmfv{l.d=4,l.a=-150,l=$\overline{q}$}{i2}
+    \fmfv{l.d=5,l.a=-20,l=Z}{oV}
+    \fmfv{l.d=7,l.a=22,l=t}{o1}
+    \fmfv{l.d=7,l.a=-20,l=$\overline{\text{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion (t-channel) + W ISR
+\begin{page}
+\fmfframe(6,15)(6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-ggW-t}
+  \begin{fmfgraph*}(110,80)
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{6 down}{o2}
+    % main
+    \fmf{fermion,t=1.0}{i1,v1}
+    \fmf{fermion,t=0.5}{v1,v2} % t-channel
+    \fmf{fermion,t=1.0}{v2,i2}
+    \fmf{gluon,t=1.1}{g1,v1}
+    \fmf{phantom,t=1.1}{g2,v2}
+    \fmf{phantom,t=1.2}{o1,g1}
+    \fmf{phantom,t=0.5}{g1,g2}
+    \fmf{phantom,t=1.2}{g2,o4}
+    \fmffreeze
+    \fmf{phantom,t=0.4}{v2,oV}
+    \fmf{phantom,t=1}{oV,o4}
+    \fmffreeze
+    % outgoing particles
+    \fmf{fermion}{o1,g1,o2}
+    \fmf{boson}{v2,oV}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmfv{l.d=5,l.a=155,l=$q$}{i1}
+    \fmfv{l.d=4,l.a=-150,l=$\overline{q}'$}{i2}
+    \fmfv{l.d=5,l.a=-22,l=W}{oV}
+    \fmfv{l.d=7,l.a=22,l=t}{o1}
+    \fmfv{l.d=7,l.a=-20,l=$\overline{\text{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION + DECAY
+\begin{page}
+\fmfframe(-1,15)(30,16){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-qq-decay}
+  \begin{fmfgraph*}(160,140)
+    \fmfset{arrow_len}{3.5mm}
+    \fmfstraight
+    \fmfleft{i1,i2,i3,i4,i5}
+    \fmfright{o1,o2,o3,o4,o5,o6}
+    % qq -> g
+    \fmfshift{5 down}{i4}
+    \fmfshift{5 up}{i2}
+    \fmf{fermion,t=1.5}{i4,vg,i2}
+    \fmf{gluon,t=1.5}{vtt,vg}
+    \fmf{phantom,t=1.2}{v1,vtt,v2} % balance
+    \fmf{phantom,t=0.7}{v1,o1} % balance
+    \fmf{phantom,t=0.7}{v2,o6} % balance
+    %\fmf{phantom,t=0.2}{v1,i2}
+    %\fmf{phantom,t=0.2}{v2,i4}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{$q$}{i4}
+    \fmffreeze
+    % tt
+    \fmf{fermion,t=1.4}{v1,vtt,v2}  % top quark pair
+    \fmf{phantom,label={$\overline{\text{t}}$},t=0,l.s=right}{vtt,v1} % top label
+    \fmf{phantom,label={$\text{t}$},t=0,l.s=left}{vtt,v2} % top label
+    \fmf{phantom,t=1}{o1,v1,o2} % balance
+    \fmf{phantom,t=1}{o5,v2,o6} % balance
+    \fmf{phantom,t=0.5}{i1,v1,v2,i5} % balance
+    \fmffreeze
+    % bW -> bqq
+    \fmf{boson,t=1.2,label={$\text{W}^+$},l.d=5,l.s=right}{v2,w2}  % W boson
+    \fmf{fermion}{v2,o6} % b quark
+    \fmf{fermion}{o5,w2,o4}
+    % bW -> blnu
+    \fmf{boson,t=1.2,label={$\text{W}^-$},l.d=5,l.s=left}{v1,w1}  % W boson
+    \fmf{fermion}{v1,o1} % b quark
+    \fmf{fermion}{o2,w1,o3}
+    % labels
+    \fmflabel{\makebox[3.2mm][l]{$\overline{\nu}_\ell$} /\, q}{o2}
+    \fmflabel{\makebox[3.2mm][l]{$\ell^-$} /\, $\overline{\text{q}}'$}{o3}
+    \fmflabel{$\overline{\text{b}}$}{o1}
+    \fmflabel{\makebox[3.2mm][l]{$\overline{\text{q}}'$} /\, $\nu_\ell$}{o4}
+    \fmflabel{\makebox[3.2mm][l]{q} /\, $\ell^+$}{o5}
+    \fmflabel{$\text{b}$}{o6}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% TTBAR PRODUCTION + DECAY (round)
+\begin{page}
+\fmfframe(-1,15)(30,16){ % padding (LTRB)
+\begin{fmffile}{feynmp-ttbar-qq-decay-round}
+  \begin{fmfgraph*}(160,140)
+    \fmfset{arrow_len}{3.5mm}
+    %\fmfset{wiggly_len}{4mm}
+    %\fmfstraight
+    \fmfleft{i1,i2,i3,i4,i5}
+    \fmfright{o1,o2,o3,o4,o5,o6}
+    % qq -> g
+    \fmfshift{5 down}{i4}
+    \fmfshift{5 up}{i2}
+    \fmf{fermion,t=1.5}{i4,vg,i2}
+    \fmf{gluon,t=1.5}{vtt,vg}
+    \fmf{phantom,t=1.4}{v1,vtt,v2} % balance
+    \fmf{phantom,t=0.8}{v1,o1} % balance
+    \fmf{phantom,t=0.8}{v2,o6} % balance
+    %\fmf{phantom,t=0.2}{v1,i2}
+    %\fmf{phantom,t=0.2}{v2,i4}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{$q$}{i4}
+    \fmffreeze
+    % tt
+    \fmf{fermion,t=1.4}{v1,vtt,v2}  % top quark pair
+    \fmf{phantom,label={$\overline{\text{t}}$},t=0,l.s=right}{vtt,v1} % top label
+    \fmf{phantom,label={$\text{t}$},t=0,l.s=left}{vtt,v2} % top label
+    \fmf{phantom,t=1}{o1,v1,o2} % balance
+    \fmf{phantom,t=1}{o5,v2,o6} % balance
+    \fmf{phantom,t=0.5}{i1,v1,v2,i5} % balance
+    \fmffreeze
+    % bW -> bqq
+    \fmf{boson,t=1.6,label={$\text{W}^+$},l.d=5,l.s=right}{v2,w2}  % W boson
+    \fmf{fermion}{v2,o6} % b quark
+    \fmf{fermion}{o5,w2,o4}
+    % bW -> blnu
+    \fmf{boson,t=1.6,label={$\text{W}^-$},l.d=5,l.s=left}{v1,w1}  % W boson
+    \fmf{fermion}{v1,o1} % b quark
+    \fmf{fermion}{o2,w1,o3}
+    \fmf{phantom,t=1}{w1,o3}
+    \fmf{phantom,t=1}{w2,o4}
+    % labels
+    \fmflabel{$\overline{\nu}_\ell$ / q}{o2}
+    \fmflabel{$\ell^-$ / $\overline{\text{q}}'$}{o3}
+    \fmflabel{$\overline{\text{b}}$}{o1}
+    \fmflabel{$\overline{\text{q}}'$ / $\nu_\ell$}{o4}
+    \fmflabel{q / $\ell^+$}{o5}
+    \fmflabel{$\text{b}$}{o6}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+\end{document}
