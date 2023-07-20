@@ -1,0 +1,200 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (February 2023)
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{feynmp-auto}
+
+\newcommand{\Pom}{\rm I\!P} % Pomeron
+
+\begin{document}
+\large
+
+% PP COLLISION - ELASTIC (POMERON)
+\begin{page}
+\fmfframe(-6,15)(-6,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-pp-elastic}
+  \begin{fmfgraph*}(160,80)
+    \fmfleft{iq,ip}
+    \fmfright{oq,op}
+    % proton 1
+    \fmflabel{$\text{p}^+$}{ip}
+    \fmflabel{$\text{p}^+$}{op}
+    \fmf{fermion,width=1.5}{ip,vp,op}
+    % proton 2
+    \fmflabel{$\text{p}^+$}{iq}
+    \fmflabel{$\text{p}^+$}{oq}
+    \fmf{fermion,width=1.5}{iq,vq,oq}
+    % pomeron
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=6}{vp}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=6}{vq}
+    \fmf{double,tension=0.9,label=${\Pom}$,label.side=right}{vp,vq}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% PP COLLISION - SINGLE DIFFRACTIVE (down)
+\begin{page}
+\fmfframe(-6,15)(-3,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-pp-single-diffractive1}
+  \begin{fmfgraph*}(160,80)
+    \fmfleft{iq,ip}
+    \fmfright{oq,op}
+    % proton 1
+    \fmflabel{$\text{p}^+$}{ip}
+    \fmflabel{$\text{p}^+$}{op}
+    \fmf{fermion,width=1.5}{ip,vp,op}
+    % proton 2
+    \fmflabel{$\text{p}^+$}{iq}
+    \fmf{fermion,width=1.5}{iq,vq}
+    \fmf{phantom}{vq,oq}
+    % pomeron
+    \fmf{double,tension=0.9,label=${\Pom}$,label.side=right}{vp,vq}
+    \fmffreeze
+    % single diffraction
+    \fmfshift{5 up}{oq}
+    \fmfv{l=Y,l.a=-10,l.d=12}{oq}
+    \fmfi{fermion}{vpath (__vq,__oq) scaled 1.01 shifted(4, 2) rotatedaround(vloc(__vq), 10)}
+    \fmfi{fermion}{vpath (__vq,__oq) scaled 1.01 shifted(4, 0) rotatedaround(vloc(__vq),  0)}
+    \fmfi{fermion}{vpath (__vq,__oq) scaled 1.01 shifted(4,-2) rotatedaround(vloc(__vq),-10)}
+    % vertices
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=6}{vp}
+    \fmfblob{20}{vq}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% PP COLLISION - SINGLE DIFFRACTIVE (up)
+\begin{page}
+\fmfframe(-6,15)(-3,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-pp-single-diffractive2}
+  \begin{fmfgraph*}(160,80)
+    \fmfleft{iq,ip}
+    \fmfright{oq,op}
+    % proton 1
+    \fmflabel{$\text{p}^+$}{ip}
+    \fmf{fermion,width=1.5}{ip,vp}
+    \fmf{phantom}{vp,op}
+    % proton 2
+    \fmflabel{$\text{p}^+$}{iq}
+    \fmflabel{$\text{p}^+$}{oq}
+    \fmf{fermion,width=1.5}{iq,vq,oq}
+    % pomeron
+    \fmf{double,tension=0.9,label=${\Pom}$,label.side=right}{vp,vq}
+    \fmffreeze
+    % single diffraction
+    \fmfshift{5 down}{op}
+    \fmfv{l=X,l.a=10,l.d=12}{op}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4, 2) rotatedaround(vloc(__vp), 10)}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4, 0) rotatedaround(vloc(__vp),  0)}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4,-2) rotatedaround(vloc(__vp),-10)}
+    % vertices
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=6}{vp}
+    \fmfblob{20}{vp}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% PP COLLISION - DOUBLE DIFFRACTION
+\begin{page}
+\fmfframe(-6,15)(-3,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-pp-diffraction-double}
+  \begin{fmfgraph*}(160,80)
+    \fmfleft{iq,ip}
+    \fmfright{oq,op}
+    % proton 1
+    \fmflabel{$\text{p}^+$}{ip}
+    \fmf{fermion,width=1.5}{ip,vp}
+    \fmf{phantom}{vp,op}
+    % proton 2
+    \fmflabel{$\text{p}^+$}{iq}
+    \fmf{fermion,width=1.5}{iq,vq}
+    \fmf{phantom}{vq,oq}
+    % pomeron
+    \fmf{double,tension=0.9,label=${\Pom}$,label.side=right}{vp,vq}
+    \fmffreeze
+    % double diffraction
+    \fmfshift{5 down}{op}
+    \fmfshift{5 up}{oq}
+    \fmfv{l=X,l.a=10,l.d=12}{op}
+    \fmfv{l=Y,l.a=-10,l.d=12}{oq}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4, 2) rotatedaround(vloc(__vp), 10)}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4, 0) rotatedaround(vloc(__vp),  0)}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4,-2) rotatedaround(vloc(__vp),-10)}
+    \fmfi{fermion}{vpath (__vq,__oq) scaled 1.01 shifted(4, 2) rotatedaround(vloc(__vq), 10)}
+    \fmfi{fermion}{vpath (__vq,__oq) scaled 1.01 shifted(4, 0) rotatedaround(vloc(__vq),  0)}
+    \fmfi{fermion}{vpath (__vq,__oq) scaled 1.01 shifted(4,-2) rotatedaround(vloc(__vq),-10)}
+    % vertices
+    \fmfblob{20}{vp}
+    \fmfblob{20}{vq}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% PP COLLISION - CENTRAL DIFFRACTION
+\begin{page}
+\fmfframe(-6,15)(-3,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-pp-diffraction-central}
+  \begin{fmfgraph*}(160,80)
+    \fmfleft{iq,ip}
+    \fmfright{oq,oc,op}
+    % proton 1
+    \fmflabel{$\text{p}^+$}{ip}
+    \fmflabel{$\text{p}^+$}{op}
+    \fmf{fermion,width=1.5}{ip,vp,op}
+    % proton 2
+    \fmflabel{$\text{p}^+$}{iq}
+    \fmflabel{$\text{p}^+$}{oq}
+    \fmf{fermion,width=1.5}{iq,vq,oq}
+    % pomeron
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=6}{vp}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=6}{vq}
+    \fmf{double,tension=0.9,label=${\Pom}$,label.side=right}{vp,v,vq}
+    \fmffreeze
+    % single diffraction
+    \fmfv{l=Z,l.a=0,l.d=12}{oc}
+    \fmf{phantom}{v,oc}
+    \fmfshift{12 left}{oc}
+    \fmfi{fermion}{vpath (__v,__oc) scaled 1.01 shifted(4, 2) rotatedaround(vloc(__v), 10)}
+    \fmfi{fermion}{vpath (__v,__oc) scaled 1.01 shifted(4, 0) rotatedaround(vloc(__v),  0)}
+    \fmfi{fermion}{vpath (__v,__oc) scaled 1.01 shifted(4,-2) rotatedaround(vloc(__v),-10)}
+    \fmfblob{20}{v}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% PP COLLISION - NONDIFFRACTIVE
+\begin{page}
+\fmfframe(-6,15)(15,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-pp-nondiffractive}
+  \begin{fmfgraph*}(160,80)
+    \fmfleft{iq,ip}
+    \fmfright{o}
+    % proton 1
+    \fmflabel{$\text{p}^+$}{ip}
+    \fmf{fermion,width=1.5}{ip,v}
+    % proton 2
+    \fmflabel{$\text{p}^+$}{iq}
+    \fmf{fermion,width=1.5}{iq,v}
+    \fmf{phantom,tension=2}{v,o}
+    \fmffreeze
+    % X
+    \fmfv{l=X,l.a=0,l.d=16}{o}
+    \fmfi{fermion}{vpath (__v,__o) scaled 1.01 shifted(6, 4) rotatedaround(vloc(__v), 24)}
+    \fmfi{fermion}{vpath (__v,__o) scaled 1.01 shifted(6, 2) rotatedaround(vloc(__v), 12)}
+    \fmfi{fermion}{vpath (__v,__o) scaled 1.01 shifted(6, 0) rotatedaround(vloc(__v),  0)}
+    \fmfi{fermion}{vpath (__v,__o) scaled 1.01 shifted(6,-2) rotatedaround(vloc(__v),-12)}
+    \fmfi{fermion}{vpath (__v,__o) scaled 1.01 shifted(6,-4) rotatedaround(vloc(__v),-24)}
+    \fmfblob{30}{v}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+\end{document}

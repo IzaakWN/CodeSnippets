@@ -1,0 +1,150 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (February 2023)
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{feynmp-auto}
+
+\def\protons{
+  % proton 1
+  \fmfv{l=$\text{p}^+$,l.a=180,l.d=10}{ip}
+  \fmf{phantom}{ip,vp}
+  \fmfi{fermion,l=$p_1$,l.s=left,l.d=8}
+                {vpath (__ip,__vp) scaled 1.01 shifted (-2.4, 6)}
+  \fmfi{fermion}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4, 0)}
+  \fmfi{fermion}{vpath (__ip,__vp) scaled 1.01 shifted (-2.4,-6)}
+  % proton 2
+  \fmfv{l=$\text{p}^+$,l.a=180,l.d=10}{iq}
+  \fmf{phantom}{iq,vq}
+  \fmfi{fermion}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4, 6)}
+  \fmfi{fermion}{vpath (__iq,__vq) scaled 1.01 shifted (-2.4, 0)}
+  \fmfi{fermion,l=$p_2$,l.s=right,l.d=8}
+                {vpath (__iq,__vq) scaled 1.01 shifted (-2.4,-6)}
+}
+\def\debris{
+  % X 2
+  \fmfshift{25 left}{x1}
+  \fmfshift{20 left}{x2,x3}
+  \fmf{phantom}{vp,x1} % to help \fmfi
+  \fmf{phantom}{vp,x2} % to help \fmfi
+  \fmf{phantom}{vp,x3} % to help \fmfi
+  \fmfi{fermion}{vpath (__vp,__x1) scaled 1.0 shifted ( 0.0, 2.0)}
+  \fmfi{fermion}{vpath (__vp,__x2) scaled 1.0 shifted ( 0.0, 0.0)}
+  \fmfi{fermion}{vpath (__vp,__x3) scaled 1.0 shifted ( 0.0,-2.0)}
+  \fmfblob{25}{vp}
+  % X 2
+  \fmfshift{25 left}{y1}
+  \fmfshift{20 left}{y2,y3}
+  \fmf{phantom}{vq,y1} % to help \fmfi
+  \fmf{phantom}{vq,y2} % to help \fmfi
+  \fmf{phantom}{vq,y3} % to help \fmfi
+  \fmfi{fermion}{vpath (__vq,__y1) scaled 1.0 shifted ( 0.0,-2.0)}
+  \fmfi{fermion}{vpath (__vq,__y2) scaled 1.0 shifted ( 0.0, 0.0)}
+  \fmfi{fermion}{vpath (__vq,__y3) scaled 1.0 shifted ( 0.0, 2.0)}
+  \fmfblob{25}{vq}
+}
+
+\begin{document}
+\large
+
+% PP COLLISION - Generic hard process
+\begin{page}
+\fmfframe(10,6)(-6,6){ % padding (LTRB)
+\begin{fmffile}{feynmp-pp-hard-generic}
+  \begin{fmfgraph*}(160,160)
+    \fmfleft{i1,iq,i2,ip,i3}
+    \fmfright{y1,y2,y3,o1,o2,o3,o4,o5,x3,x2,x1}
+    \fmfset{arrow_len}{10}
+    % skeleton
+    \fmf{phantom,tension=0.50}{vq,vp}
+    \fmf{phantom}{ip,vp,x1}
+    \fmf{phantom}{iq,vq,y1}
+    \fmffreeze
+    % parton
+    \fmf{fermion,tension=2,label=$x_1p_1$,label.side=right}{vp,v}
+    \fmf{fermion,tension=2,label=$x_2p_2$,label.side=left}{vq,v}
+    % hard interaction
+    \fmf{phantom,tension=1}{v,o2} % to help \fmfi
+    \fmf{phantom,tension=1}{v,o3} % to help \fmfi
+    \fmf{phantom,tension=1}{v,o4} % to help \fmfi
+    \fmffreeze
+    \fmfi{fermion}{vpath (__v,__o2) scaled 1.01 shifted ( 0,-2)}
+    \fmfi{fermion}{vpath (__v,__o3) scaled 1.01 shifted ( 0, 0)}
+    \fmfi{fermion}{vpath (__v,__o4) scaled 1.01 shifted ( 0, 2)}
+    \fmfblob{20}{v}
+    % protons
+    \protons
+    % debris
+    \debris
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% PP COLLISION - Drell-Yan
+\begin{page}
+\fmfframe(10,6)(27,6){ % padding (LTRB)
+\begin{fmffile}{feynmp-pp-hard-drell-yan}
+  \begin{fmfgraph*}(160,160)
+    \fmfleft{i1,iq,i2,ip,i3}
+    \fmfright{y1,y2,y3,o1,f1,o2,o3,o4,f2,o5,x3,x2,x1}
+    \fmfset{arrow_len}{10}
+    % skeleton
+    \fmf{phantom,tension=0.48}{vq,vp}
+    \fmf{phantom}{ip,vp,x1}
+    \fmf{phantom}{iq,vq,y1}
+    \fmffreeze
+    % parton
+    \fmfv{l=$x_1p_1$,l.a=-90,l.d=22}{vp} % cheat: actually a line label
+    \fmfv{l=$x_2p_2$,l.a=90,l.d=22}{vq} % cheat: actually a line label
+    \fmf{fermion,tension=1.6}{vp,v}
+    \fmf{fermion,tension=1.6}{v,vq}
+    % hard process
+    \fmfshift{20 right}{f1,f2}
+    \fmfv{l.a=-25,l.d=3,l=$\ell^+$}{f1}
+    \fmfv{l.a=25,l.d=5,l=$\ell^-$}{f2}
+    \fmf{boson,tension=2,label=$\text{Z}^0/\gamma^*$,label.side=left}{v,vf}
+    \fmf{fermion,tension=2}{f1,vf,f2}
+    % protons
+    \protons
+    % debris
+    \debris
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% PP COLLISION - Higgs production through gluon-fusion
+\begin{page}
+\fmfframe(10,6)(27,6){ % padding (LTRB)
+\begin{fmffile}{feynmp-pp-hard-higgs}
+  \begin{fmfgraph*}(160,160)
+    \fmfleft{i1,iq,i2,ip,i3}
+    \fmfright{y1,y2,y3,o1,o2,o3,o4,o5,x3,x2,x1}
+    \fmfset{arrow_len}{10}
+    \fmfset{curly_len}{8}
+    % skeleton
+    \fmf{phantom,tension=0.48}{vq,vp}
+    \fmf{phantom}{ip,vp,x1}
+    \fmf{phantom}{iq,vq,y1}
+    \fmffreeze
+    % parton
+    \fmf{gluon,tension=1.4,label=$x_1p_1$,label.side=left}{v1,vp}
+    \fmf{gluon,tension=1.4,label=$x_2p_2$,label.side=left}{vq,v2}
+    % hard process
+    \fmfshift{20 right}{o3}
+    \fmfv{l=H}{o3}
+    \fmf{fermion,tension=0.3,arrow.size=2mm}{v1,v2}
+    \fmf{fermion,tension=2.0}{v1,vh,v2}
+    \fmf{dashes,tension=2.5}{vh,o3}
+    % protons
+    \protons
+    % debris
+    \debris
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+\end{document}

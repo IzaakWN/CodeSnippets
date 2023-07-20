@@ -1,0 +1,176 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (February 2023)
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{feynmp-auto}
+
+% COLORS
+\usepackage{xcolor}
+\definecolor{myred}{rgb}{0.78,0.02,0.07}
+\definecolor{myblue}{rgb}{0.29,0.44,0.82}
+\definecolor{mygreen}{rgb}{0,0.68,0.28}
+\definecolor{mydarkblue}{rgb}{.0,.13,.98} % 0,32,250
+
+\begin{document}
+\LARGE
+
+% LFU - Z boson
+\begin{page}
+\fmfframe(-6,18)(-6,20){ % padding (LTRB)
+\begin{fmffile}{feynmp-LFU_Z}
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{Z}
+    \fmfright{n,l}
+    \fmf{boson,label=Z,l.s=left,t=1.2}{Z,v}
+    \fmf{fermion}{n,v,l}
+    \fmfv{l.d=6,l.a=28,l=e$^-$}{l}
+    \fmfv{l.d=4,l.a=-26,l=e$^+$}{n}
+    \fmfdot{v}
+  \end{fmfgraph*}}
+  =\quad
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{Z}
+    \fmfright{n,l}
+    \fmf{boson,label=Z,l.s=left,t=1.2}{Z,v}
+    \fmf{fermion}{n,v,l}
+    \fmfv{l.d=6,l.a=28,l=$\mu^-$}{l}
+    \fmfv{l.d=4,l.a=-26,l=$\mu^+$}{n}
+    \fmfdot{v}
+  \end{fmfgraph*}}
+  =\quad
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{Z}
+    \fmfright{n,l}
+    \fmf{boson,label=Z,l.s=left,t=1.2}{Z,v}
+    \fmf{fermion}{n,v,l}
+    \fmfv{l.d=6,l.a=28,l=$\tau^-$}{l}
+    \fmfv{l.d=4,l.a=-26,l=$\tau^+$}{n}
+    \fmfdot{v}
+  \end{fmfgraph*}}
+\end{fmffile}
+}
+\end{page}
+
+% LFU - W boson
+\begin{page}
+\fmfframe(-6,18)(-6,20){ % padding (LTRB)
+\begin{fmffile}{feynmp-LFU_W}
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{W}
+    \fmfright{n,l}
+    \fmf{boson,label=W$^-$,l.s=left,t=1.2}{W,v}
+    \fmf{fermion}{n,v,l}
+    \fmfv{l.d=6,l.a=28,l=e$^-$}{l}
+    \fmfv{l.d=6,l.a=-28,l=$\overline{\nu}_\text{e}$}{n}
+    \fmfdot{v}
+  \end{fmfgraph*}}
+  =\quad
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{W}
+    \fmfright{n,l}
+    \fmf{boson,label=W$^-$,l.s=left,t=1.2}{W,v}
+    \fmf{fermion}{n,v,l}
+    \fmfv{l.d=6,l.a=23,l=$\mu^-$}{l}
+    \fmfv{l.d=6,l.a=-28,l=$\overline{\nu}_\mu$}{n}
+    \fmfdot{v}
+  \end{fmfgraph*}}
+  =\quad
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{W}
+    \fmfright{n,l}
+    \fmf{boson,label=W$^-$,l.s=left,t=1.2}{W,v}
+    \fmf{fermion}{n,v,l}
+    \fmfv{l.d=6,l.a=28,l=$\tau^-$}{l}
+    \fmfv{l.d=6,l.a=-28,l=$\overline{\nu}_\tau$}{n}
+    \fmfdot{v}
+  \end{fmfgraph*}}
+\end{fmffile}
+}
+\end{page}
+
+% LFU - Z boson (colored)
+\begin{page}
+\fmfframe(-6,18)(-6,20){ % padding (LTRB)
+\begin{fmffile}{feynmp-LFU_Z_color}
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{Z}
+    \fmfright{n,l}
+    \fmf{boson,f=(0.78,,0.02,,0.07),label=\color{myred}Z,l.s=left,t=1.2}{Z,v}
+    \fmf{fermion,f=(0,,0.68,,0.28)}{n,v,l}
+    \fmfv{l.d=6,l.a=28,l=\color{mygreen}e$^-$}{l}
+    \fmfv{l.d=4,l.a=-26,l=\color{mygreen}e$^+$}{n}
+    \fmfv{decor.shape=circle,decor.filled=full,
+          decor.size=4,f=(0.94,,0.12,,0.18)}{v}
+  \end{fmfgraph*}}
+  =\quad
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{Z}
+    \fmfright{n,l}
+    \fmf{boson,f=(0.78,,0.02,,0.07),label=\color{myred}Z,l.s=left,t=1.2}{Z,v}
+    \fmf{fermion,f=(0,,0.68,,0.28)}{n,v,l}
+    \fmfv{l.d=6,l.a=28,l=\color{mygreen}$\mu^-$}{l}
+    \fmfv{l.d=4,l.a=-26,l=\color{mygreen}$\mu^+$}{n}
+    \fmfv{decor.shape=circle,decor.filled=full,
+          decor.size=4,f=(0.94,,0.12,,0.18)}{v}
+  \end{fmfgraph*}}
+  =\quad
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{Z}
+    \fmfright{n,l}
+    \fmf{boson,f=(0.78,,0.02,,0.07),label=\color{myred}Z,l.s=left,t=1.2}{Z,v}
+    \fmf{fermion,f=(0,,0.68,,0.28)}{n,v,l}
+    \fmfv{l.d=6,l.a=28,l=\color{mygreen}$\tau^-$}{l}
+    \fmfv{l.d=4,l.a=-26,l=\color{mygreen}$\tau^+$}{n}
+    \fmfv{decor.shape=circle,decor.filled=full,
+          decor.size=4,f=(0.94,,0.12,,0.18)}{v}
+  \end{fmfgraph*}}
+\end{fmffile}
+}
+\end{page}
+
+% LFU - LQ (colored)
+\begin{page}
+\fmfframe(-6,18)(-6,20){ % padding (LTRB)
+\begin{fmffile}{feynmp-LFU_LQ_color}
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{LQ}
+    \fmfright{n,l}
+    \fmf{boson,f=(0.78,,0.02,,0.07),label=\color{myred}LQ,l.s=left,t=1.2}{LQ,v}
+    \fmf{fermion,f=(0,,0.68,,0.28)}{v,l}
+    \fmf{fermion,f=(0.29,,0.44,,0.82)}{n,v}
+    \fmfv{l.d=6,l.a=28,l=\color{mygreen}e$^-$}{l}
+    \fmfv{l.d=4,l.a=-26,l=\color{myblue}d}{n}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=(.0,,.13,,.98),
+          l=\color{mydarkblue}$\lambda_{\text{de}}$,l.d=7,l.a=-110}{v}
+  \end{fmfgraph*}}
+  $<$\quad
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{LQ}
+    \fmfright{n,l}
+    \fmf{boson,f=(0.78,,0.02,,0.07),label=\color{myred}LQ,l.s=left,t=1.2}{LQ,v}
+    \fmf{fermion,f=(0,,0.68,,0.28)}{v,l}
+    \fmf{fermion,f=(0.29,,0.44,,0.82)}{n,v}
+    \fmfv{l.d=6,l.a=28,l=\color{mygreen}$\mu^-$}{l}
+    \fmfv{l.d=4,l.a=-26,l=\color{myblue}s}{n}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=(.0,,.13,,.98),
+          l=\color{mydarkblue}$\lambda_{\text{s}\mu}$,l.d=7,l.a=-110}{v}
+  \end{fmfgraph*}}
+  $<$\quad
+  \parbox{100pt}{\begin{fmfgraph*}(90,70)
+    \fmfleft{LQ}
+    \fmfright{n,l}
+    \fmf{boson,f=(0.78,,0.02,,0.07),label=\color{myred}LQ,l.s=left,t=1.2}{LQ,v}
+    \fmf{fermion,f=(0,,0.68,,0.28)}{v,l}
+    \fmf{fermion,f=(0.29,,0.44,,0.82)}{n,v}
+    \fmfv{l.d=6,l.a=28,l=\color{mygreen}$\tau^-$}{l}
+    \fmfv{l.d=4,l.a=-26,l=\color{myblue}b}{n}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=(.0,,.13,,.98),
+          l=\color{mydarkblue}$\lambda_{\text{b}\tau}$,l.d=7,l.a=-110}{v}
+  \end{fmfgraph*}}
+\end{fmffile}
+}
+\end{page}
+
+\end{document}

@@ -1,0 +1,105 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (June 2023)
+% Source:
+%  https://wiki.physik.uzh.ch/cms/latex:feynman#shaping_diagrams_with_tension_freezing_and_phantom_lines
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+\usepackage{xcolor}
+
+\begin{filecontents*}{vovalblob.mp}
+vardef vovalblob (expr bd, a) (text vl)=
+  forsuffixes $=vl:
+    if not vexists $: venter $; fi
+    vlist[vlookup $]decor.shape := fullcircle xscaled a;
+    vlist[vlookup $]decor.size := bd;
+    vlist[vlookup $]decor.sty := "shaded";
+  endfor
+enddef;
+\end{filecontents*}
+\def\fmfovalblob#1#2#3{
+  \fmfcmd{input vovalblob; vovalblob ((#1), (#2), \fmfpfx{#3});}
+}
+
+\begin{document}
+
+% H -> qqV with help lines
+\begin{page} % standalone
+\fmfframe(-2,6)(0,18){ % padding (LTRB)
+\begin{fmffile}{feynmp-blob-help}
+  \begin{fmfgraph*}(120,90)
+    \fmfstraight
+    \fmfleft{i4,i3,i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{10 down}{o2}
+    \fmfshift{10 down}{o4}
+    \fmfset{wiggly_len}{16} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    % HIGGS
+    \fmf{scalar,t=1.5,l.s=right,label=H}{i3,hqq}
+    \fmf{dots,f=(1,,0,,0)}{hqq,o3} % help line
+    \fmffreeze
+    % BOSONS
+    \fmf{fermion,t=1.5,l.s=left,label=$\overline{q}$}{vqq,hqq} % internal quark line
+    \fmf{boson}{vqq,o4}
+    \fmffreeze
+    % QUARKS
+    \fmf{fermion,l.s=left,label=$q$}{hqq,o1}
+    \fmf{fermion,l.s=left,label=$\overline{q}'$}{o2,vqq}
+    % BLOB
+    \fmffreeze
+    \fmf{dots,f=(1,,0,,0)}{o1,m,o2} % help line to define m half way between o1, o2
+    % VISUALIZE DOTS
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}i1}{i1}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}i2}{i2}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}i3}{i3}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}i4}{i4}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}o1}{o1}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}o2}{o2}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}o3}{o3}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}o4}{o4}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}hqq}{hqq}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}vqq}{vqq}
+    \fmfv{d.sh=circle,d.fi=full,d.si=1,f=(1,,0,,0),l.d=1pt,l=\tiny\color{red}m}{m}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+% H -> qqV
+\begin{page} % standalone
+\fmfframe(-6,2)(30,18){ % padding (LTRB)
+\begin{fmffile}{feynmp-blob}
+  \begin{fmfgraph*}(120,90)
+    \fmfstraight
+    \fmfleft{i4,i3,i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{10 down}{o2}
+    \fmfshift{10 down}{o4}
+    \fmfset{wiggly_len}{16} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    % HIGGS
+    \fmf{scalar,t=1.5,l.s=right,label=H}{i3,hqq}
+    \fmf{phantom}{hqq,o3} % help line
+    \fmffreeze
+    % BOSONS
+    \fmf{fermion,t=1.5,l.s=left,label=$\overline{q}$}{vqq,hqq} % internal quark line
+    \fmf{boson}{vqq,o4}
+    \fmffreeze
+    % QUARKS
+    \fmf{fermion,l.s=left,label=$q$}{hqq,o1}
+    \fmf{fermion,l.s=left,label=$\overline{q}'$}{o2,vqq}
+    \fmffreeze
+    % BLOB
+    \fmf{phantom}{o1,m,o2}
+    \fmfovalblob{.334w}{.4}{m}
+    % LABELS
+    \fmfv{l.a=-20,l.d=4pt,l=Z,, W,, $\gamma$}{o4}
+    \fmfv{l.a=57,l.d=23pt,l=$m$}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+\end{document}
