@@ -1,0 +1,883 @@
+% Author: Izaak Neutelings (May 2022)
+% https://github.com/IzaakWN/CodeSnippets/blob/master/LaTeX/TikZ/physics/tau_decay_matrix.py
+% Inspiration:
+%   https://texample.net/tikz/examples/pie-chart-color/
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath} % for \text
+\usepackage{siunitx}
+\usepackage{bm} % for bold Greek letters via \bm
+\usepackage[outline]{contour} % glow around text
+\contourlength{0.6pt}
+\usetikzlibrary{calc}
+
+% COLORS
+\colorlet{myred}{red!85!black!65}
+\colorlet{mycyan}{blue!40!cyan!85!black!55}
+\colorlet{mydarkcyan}{blue!50!cyan!60!black!60}
+\colorlet{mylightcyan}{blue!50!cyan!90!black!50}
+\colorlet{myblue}{blue!70!cyan!85!black!55}
+\colorlet{mydarkblue}{myblue!90!black!90}
+\colorlet{mydarkerblue}{myblue!80!black!90}
+\colorlet{mydarkestblue}{myblue!70!black!90}
+\colorlet{mylightblue}{blue!50!cyan!80!black!45}
+\colorlet{mypink}{magenta!95!red!100!black!72}
+\colorlet{mypurple}{blue!50!red!90!black!70}
+\colorlet{mybluepurple}{blue!80!red!80!black!60}
+\colorlet{myredpurple}{blue!30!red!85!black!65}
+\colorlet{mydarkpurple}{blue!60!red!70!black!60}
+\colorlet{mylightpurple}{blue!50!red!90!black!55}
+\colorlet{mygreen}{green!60!black!75}
+\colorlet{mydarkgreen}{green!45!black!80}
+\colorlet{mylightgreen}{green!80!red!90!black!50}
+\colorlet{mylightgreen2}{green!90!red!70!black!60}
+\colorlet{myorange}{orange!95!black!70}
+\colorlet{myblueorange}{orange!60!blue!80!black!70}
+\colorlet{mydarkorange}{orange!80!black!80}
+\colorlet{mylightorange}{orange!90!purple!80!black!55}
+\colorlet{mybrown}{brown!80!orange!77!black!77}
+\colorlet{myredbrown}{brown!70!red!80!black!65} %mybrown!80!red
+\colorlet{myyellow}{yellow!80!orange!95!black!80}
+\colorlet{mylightyellow}{yellow!80!orange!95!black!45}
+
+% STYLE
+\def\R{1} % default pie radius
+\tikzstyle{pin}=[very thin,line cap=round]
+\tikzset{
+  slice/.style={fill=#1,draw=#1!80!black,line join=round,line width=0.4,
+                blur shadow={shadow blur steps=20,shadow xshift=0.5,
+                             shadow yshift=-1,shadow opacity=40}},
+  slice/.default=myblue
+}
+%\newlength{\inlinewidth}
+%\setlength{\inlinewidth}{0.5pt}
+\tikzset{
+  inline/.style={
+    fill=#1,draw=#1!80!black,solid,line width=0.001, % cover clip line
+    postaction={clip,postaction={draw=#1!80!black,solid,thick}, %line width=\inlinewidth
+                postaction={draw}}
+}}
+
+% LAYERS
+\pgfdeclarelayer{back} % to draw on background
+\pgfsetlayers{back,main} % set order
+
+% MACROS
+%\renewcommand\bar{\overline}
+\newcommand\WW{\mathrm{WW}} %W^+W^-
+\newcommand\ZZ{\mathrm{ZZ}}
+\newcommand\Za{\mathrm{Z}\gamma}
+\renewcommand\aa{\gamma\gamma}
+\newcommand\qbar{\bar{q}}
+\newcommand\ttbar{\mathrm{t}\bar{\mathrm{t}}}
+\newcommand\bbbar{\mathrm{b}\bar{\mathrm{b}}}
+\newcommand\ccbar{\mathrm{c}\bar{\mathrm{c}}}
+\newcommand\udbar{\mathrm{u}\bar{\mathrm{d}}}
+\newcommand\csbar{\mathrm{c}\bar{\mathrm{s}}}
+\newcommand\TT{\tau\tau}
+\newcommand\e{\mathrm{e}}
+\newcommand\hp{\mathrm{h}^\pm}
+\newcommand\hM{\mathrm{h}^\mp}
+\newcommand\pz{\pi^0}
+\newcommand\tauh{\tau_\mathrm{h}}
+\newcommand\jets{\mathrm{jets}}
+\newcommand\bfrac[1]{\strut\footnotesize\bm{$#1\mathbf{\%}$}}
+\newcommand\boldlabel[2]{\bf\bm{#1}\\[-1]c\bf{$#2\mathbf{\%}$}}
+\newcommand\boldlabeltiny[2]{\bf\bm{$#1$}\\[-3]\bfrac{#2}}
+\newcommand\boldlabelcolor[3]{\contour{#3!80!black}{\bf\bm{$#1$}}\\[-3]\contour{#3!80!black}{\bfrac{#2}}}
+
+\begin{document}
+
+
+% DITAU BRANCHING FRACTION - MATRIX
+\def\frace{0.178} % electron branching fraction
+\def\fracm{0.174} % muon branching fraction
+%\def\frach{0.648} % hadronic branching fraction
+\pgfmathsetmacro\frach{1-\frace-\fracm}
+\begin{tikzpicture}[scale=4.4]
+  \def\dx{0.0015}   % contract sectors to show line
+  
+  %% TITLE
+  \node[above=1,scale=1] at (0.5,1) {\bf\bm{$\TT$} decay modes};
+  
+  % MACRO for symmetric sectors
+  \def\x{0} % initial x position
+  \def\y{0} % initial y position
+  \def\sector(#1,#2)[#3][#4]{
+    \fill[inline=#3]
+      (\x,\y) rectangle (\x+#1,\y+#2)
+      node[white,midway] {\bm{$#4$}};
+    \ifdim \x pt > \y pt % off-diagonal (symmetric)
+      \fill[inline=#3]
+        (\y,\x) rectangle (\y+#2,\x+#1)
+        node[white,midway] {\bm{$#4$}};
+    \fi
+    \pgfmathparse{\x+#1} \xdef\x{\pgfmathresult} % store for next sector
+    \ifdim \x pt > 0.99pt % reset \x & \y, store for next row
+      \pgfmathparse{\y+#2} \xdef\y{\pgfmathresult}
+      \xdef\x{\y}
+    \fi
+  }
+  
+  % ROW 1
+  \sector(\frace,\frace)[mylightgreen][\e\e]
+  \sector(\fracm,\frace)[myorange][\e\mu]
+  \sector(\frach,\frace)[mygreen][\e\tauh]
+  
+  % ROW 2
+  \sector(\fracm,\fracm)[mypink][\mu\mu]
+  \sector(\frach,\fracm)[myred][\mu\tauh]
+  
+  % ROW 3
+  \sector(\frach,\frach)[myblue][\tauh\tauh]
+  
+  % OUTLINE
+  %\draw[thick,myblue!50!black] (-2*\dx,-2*\dx) rectangle (1+2*\dx,1+2*\dx);
+  
+\end{tikzpicture}
+
+
+% DITAU CHANNELS - MATRIX
+\begin{tikzpicture}[scale=4.4]
+  \def\dx{0.003} % shift border lines
+  
+  %% TITLE
+  \node[above=1,scale=1] at (0.5,1) {\bf\bm{$\TT$} decay modes};
+  
+  % MACRO for symmetric sectors
+  \def\x{0} % initial x position
+  \def\y{0} % initial y position
+  \def\sector(#1,#2)[#3][#4][#5]{
+    \fill[inline=#3]
+      (\x,\y) rectangle (\x+#1,\y+#2)
+      node[white,midway,yshift=-1,align=center] {\boldlabeltiny{#4}{#5}};
+    \ifdim \x pt > \y pt % off-diagonal (symmetric)
+      \fill[inline=#3]
+        (\y,\x) rectangle (\y+#2,\x+#1)
+        node[white,midway,yshift=-1,align=center] {\boldlabeltiny{#4}{#5}};
+    \fi
+    \pgfmathparse{\x+#1} \xdef\x{\pgfmathresult} % store for next sector
+    \ifdim \x pt > 0.99pt % reset \x & \y, store for next row
+      \pgfmathparse{\y+#2} \xdef\y{\pgfmathresult}
+      \xdef\x{\y}
+    \fi
+  }
+  
+  % ROW 1
+  \sector(\frace,\frace)[mylightgreen][\e\e][3]
+  \sector(\fracm,\frace)[myorange][\e\mu][3]
+  \sector(\frach,\frace)[mygreen][\e\tauh][12]
+  
+  % ROW 2
+  \sector(\fracm,\fracm)[mypink][\mu\mu][3]
+  \sector(\frach,\fracm)[myred][\mu\tauh][11]
+  
+  % ROW 3
+  \sector(\frach,\frach)[myblue][\tauh\tauh][42]
+  
+  % OUTLINE
+  \draw[thick,myblue!50!black] (-\dx,-\dx) rectangle (1+\dx,1+\dx);
+  
+  % LABELS
+  \foreach \frac/\name [
+    remember=\flast as \fstart (initially 0),
+    evaluate={\flast=\fstart+\frac/100;\fmid=(\fstart+\flast)/2}] in {
+      17.8/\e,
+      17.4/\mu,
+      64.8/\tauh%
+  }{
+    \node[below=0,align=center,scale=0.8] at
+      (\fmid,0) {\boldlabeltiny{\name^+}{\frac}};
+    \node[left=-1,align=center,scale=0.8] at
+      (0,\fmid) {\boldlabeltiny{\name^-}{\frac}};
+  }
+  
+\end{tikzpicture}
+
+
+% DITAU CHANNELS - MATRIX STACK
+\begin{tikzpicture}[scale=4.8]
+  
+  %% TITLE
+  \node[right=8,scale=1,align=left] at (0,0.58)
+    {\bf\bm{$\TT$} decay\\\bf modes};
+  
+  % MACRO for symmetric sectors
+  \def\x{0} % initial x position
+  \def\y{0} % initial y position
+  \def\sector(#1,#2)[#3][#4][#5]{
+    \ifdim \x pt > \y pt % off-diagonal (symmetric)
+      \fill[inline=#3]
+        (\x,\y) rectangle (\x+#1,\y+#2)
+        node[white,midway,yshift=-1,align=center] {\boldlabeltiny{#4}{#5}};
+    \else
+      \fill[inline=#3] % diagonal: shift right & halve area
+        (\x+#1,\y) rectangle++ ({-#1/sqrt(2)},{#2/sqrt(2)})
+        node[white,midway,yshift=-1.5,align=center] {\boldlabeltiny{#4}{#5}};
+    \fi
+    \pgfmathparse{\x+#1} \xdef\x{\pgfmathresult} % store for next sector
+    \ifdim \x pt > 0.99pt % reset \x & \y, store for next row
+      \pgfmathparse{\y+#2} \xdef\y{\pgfmathresult}
+      \xdef\x{\y}
+    \fi
+  }
+  
+  % ROW 1
+  \sector(\frace,\frace)[mylightgreen][\e\e][3]
+  \sector(\fracm,\frace)[myorange][\e\mu][6]
+  \sector(\frach,\frace)[mygreen][\e\tauh][23]
+  
+  % ROW 2
+  \sector(\fracm,\fracm)[mypink][\mu\mu][3]
+  \sector(\frach,\fracm)[myred][\mu\tauh][23]
+  
+  % ROW 3
+  \sector(\frach,\frach)[myblue][\tauh\tauh][42]
+  
+  % LABELS
+  \foreach \frac/\name [
+    remember=\flast as \fstart (initially 0),
+    evaluate={
+      \flast=\fstart+\frac/100;
+      \x=(\fstart+\flast)/2;
+      \y=\fstart+\frac/200/(\flast<0.5?1:sqrt(2));% % scale down last square
+    }
+  ] in {
+      17.8/\e,
+      17.4/\mu,
+      64.8/\tauh%
+  }{
+    \node[below=0,align=center,scale=0.9] at
+      (\x,0) {\boldlabeltiny{\name}{\frac}};
+    \node[right=-1,align=center,scale=0.9] at
+      (1,\y) {\boldlabeltiny{\name}{\frac}};
+  }
+  
+\end{tikzpicture}
+
+
+% DITAU CHANNELS - MATRIX STACK 2
+\begin{tikzpicture}[scale=4.3]
+  
+  %% TITLE
+  %\node[right,scale=1,align=left] at (\frace,0.7)
+  %  {\bf\bm{$\TT$} decay\\\bf modes};
+  
+  % MACRO for stacking sectors
+  \def\x{0} % initial x position
+  \def\y{0} % initial y position
+  \def\xfirst{0}
+  \def\sector(#1,#2)[#3][#4][#5]{
+    \pgfmathsetmacro\offdiagonal{\x/2<\y+#2}
+    \ifnum \offdiagonal = 0 % off-diagonal (symmetric)
+      \fill[inline=#3] % double area by doubling width
+        (\x,\y) rectangle (\x+2*#1,\y+#2)
+        node[white,midway,yshift=-1,align=center] {\boldlabeltiny{#4}{#5}};
+      \pgfmathparse{\x+2*#1}
+    \else % on-diagonal
+      \fill[inline=#3] % shift right
+        (\x+#1,\y) rectangle (\x+2*#1,\y+#2)
+        node[white,midway,yshift=-1,align=center] {\boldlabeltiny{#4}{#5}};
+      \pgfmathparse{\x+2*#1} \xdef\xfirst{\pgfmathresult} % store for next row
+    \fi
+    \xdef\x{\pgfmathresult} % store for next sector
+    \message{  x=\x, xfirst=\xfirst}
+    \ifdim \x pt > 0.99pt % reset \x & \y, store for next row
+      \pgfmathparse{\y+#2} \xdef\y{\pgfmathresult}
+      \xdef\x{\xfirst}
+    \fi
+  }
+  
+  % ROW 1
+  \sector(\frace,\frace)[mylightgreen][\e\e][3]
+  \sector(\fracm,\frace)[myorange][\e\mu][6]
+  \sector(\frach,\frace)[mygreen][\e\tauh][23]
+  
+  % ROW 2
+  \sector(\fracm,\fracm)[mypink][\mu\mu][3]
+  \sector(\frach,\fracm)[myred][\mu\tauh][23]
+  
+  % ROW 3
+  \sector(\frach,\frach)[myblue][\tauh\tauh][42]
+  
+  % LABELS
+  \foreach \frac/\name [
+    remember=\flast as \fstart (initially 0),
+    evaluate={
+      \flast=\fstart+\frac/100;
+      \fmid=(\fstart+\flast)/2;
+      \x=(\fstart>0?2:3)*\fmid%
+    }
+  ] in {
+      17.8/\e,
+      17.4/\mu,
+      64.8/\tauh%
+  }{
+    \node[below=0,align=center,scale=0.9] at
+      (\x,0) {\boldlabeltiny{\name}{\frac}};
+    \node[right=-1,align=center,scale=0.9] at
+      (2,\fmid) {\boldlabeltiny{\name}{\frac}};
+  }
+  
+\end{tikzpicture}
+
+
+% TTBAR / WW CHANNELS - MATRIX
+% Inspiration: https://doi.org/10.1140/epjc/s10052-012-2120-0
+% https://pdg.lbl.gov/2021/tables/rpp2021-sum-quarks.pdf
+% https://pdg.lbl.gov/2021/tables/rpp2021-sum-gauge-higgs-bosons.pdf
+\def\fraclep{0.11} % ~ 0.1086, leptonic branching fraction
+\def\frachad{0.67} % ~ 0.6742, hadronic branching fraction
+\begin{tikzpicture}[scale=4.8]
+  \def\dx{0.003} % shift border lines
+  
+  % TITLE
+  \node[above=1,scale=1] at (0.5,1) {\bf\bm{$\ttbar\to\bbbar\WW$} decay modes};
+  
+  % MACRO for symmetric sectors
+  \def\x{0} % initial x position
+  \def\y{0} % initial y position
+  \def\sector(#1,#2)[#3][#4]{
+    \fill[inline=#3]
+      (\x,\y) rectangle (\x+#1,\y+#2)
+      node[white,midway] {\strut\bf\bm{$#4$}};
+    \ifdim \x pt > \y pt % off-diagonal (symmetric)
+      \fill[inline=#3]
+        (\y,\x) rectangle (\y+#2,\x+#1)
+        node[white,midway,rotate={#1>0.2?90:0}] {\strut\bm{$#4$}};
+    \fi
+    \pgfmathparse{\x+#1} \xdef\x{\pgfmathresult} % store for next sector
+    \ifdim \x pt > 0.99pt % reset \x & \y, store for next row
+      \pgfmathparse{\y+#2} \xdef\y{\pgfmathresult}
+      \xdef\x{\y}
+    \fi
+  }
+  
+  % ROW 1
+  \sector(\fraclep,\fraclep)[mylightgreen][\e\e]
+  \sector(\fraclep,\fraclep)[myorange][\e\mu]
+  \sector(\fraclep,\fraclep)[mydarkestblue][\e\tau]
+  \sector(\frachad,\fraclep)[mygreen][\e+\jets]
+  
+  % ROW 2
+  \sector(\fraclep,\fraclep)[mypink][\mu\mu]
+  \sector(\fraclep,\fraclep)[mydarkerblue][\mu\tau]
+  \sector(\frachad,\fraclep)[myred][\mu+\jets]
+  
+  % ROW 3
+  \sector(\fraclep,\fraclep)[mydarkblue][\TT]
+  \sector(\frachad,\fraclep)[myblue][\tau+\jets]
+  
+  % ROW 4
+  \sector(\frachad,\frachad)[mycyan][\text{all jets}]
+  
+  % LABELS
+  \foreach \frac/\xname/\yname [
+    remember=\flast as \fstart (initially 0),
+    evaluate={\flast=\fstart+\frac/100;\fmid=(\fstart+\flast)/2}] in {
+      11/\e^+/\e^-,
+      11/\mu^+/\mu^-,
+      11/\tau^+/\tau^-,
+      34/\udbar/\mathrm{\bar{u}d},
+      33/\csbar/\mathrm{\bar{c}s}%
+  }{
+    \draw[pin,myblue!50!black!50]
+      (\flast,-\dx) --++ (0,-0.15)
+      (-\dx,\flast) --++ (-0.15,0);
+    \node[below=0,align=center,scale=0.8] at
+      (\fmid,0) {\boldlabeltiny{\strut\xname}{\frac}};
+    \node[above=0,left=0,align=center,scale=0.8] at
+      (0,\fmid) {\boldlabeltiny{\yname}{\frac}};
+  }
+  \draw[pin,myblue!50!black!50] (0,-0.15) |- (-0.15,0);
+  
+  % OUTLINE
+  \draw[thick,myblue!50!black] (-\dx,-\dx) rectangle (1+\dx,1+\dx);
+  
+\end{tikzpicture}
+
+
+% TTBAR / WW CHANNELS - MATRIX STACK
+\begin{tikzpicture}[scale=5.4]
+  
+  % TITLE
+  \node[right=2,scale=1,align=left] at (0,0.55)
+    {\bm{$\ttbar\to\bbbar\WW$}\\\bf decay modes};
+  
+  % MACRO for stacking sectors
+  \def\x{0} % initial x position
+  \def\y{0} % initial y position
+  \def\sector(#1,#2)[#3][#4]{
+    \ifdim \x pt > \y pt % off-diagonal (symmetric)
+      \fill[inline=#3]
+        (\x,\y) rectangle (\x+#1,\y+#2)
+        node[white,midway,align=center] {\strut\bf\bm{$#4$}};
+    \else
+      \fill[inline=#3] % shift right & halve area
+        (\x+#1,\y) rectangle++ ({-#1/sqrt(2)},{#2/sqrt(2)})
+        node[white,midway,scale=1-0.16*(#1*#2<0.05)] {\strut\bf\bm{$#4$}};
+    \fi
+    \pgfmathparse{\x+#1} \xdef\x{\pgfmathresult} % store for next sector
+    \ifdim \x pt > 0.99pt % reset \x & \y, store for next row
+      \pgfmathparse{\y+#2} \xdef\y{\pgfmathresult}
+      \xdef\x{\y}
+    \fi
+  }
+  
+  % ROW 1
+  \sector(\fraclep,\fraclep)[mylightgreen][\e\e]
+  \sector(\fraclep,\fraclep)[myorange][\e\mu]
+  \sector(\fraclep,\fraclep)[mydarkestblue][\e\tau]
+  \sector(\frachad,\fraclep)[mygreen][\e+\jets]
+  
+  % ROW 2
+  \sector(\fraclep,\fraclep)[mypink][\mu\mu]
+  \sector(\fraclep,\fraclep)[mydarkerblue][\mu\tau]
+  \sector(\frachad,\fraclep)[myred][\mu+\jets]
+  
+  % ROW 3
+  \sector(\fraclep,\fraclep)[mydarkblue][\TT]
+  \sector(\frachad,\fraclep)[myblue][\tau+\jets]
+  
+  % ROW 4
+  \sector(\frachad,\frachad)[mycyan][\text{all jets}]
+  
+  % LABELS
+  \foreach \frac/\xname/\yname [
+    count=\i,
+    remember={\ylast as \ystart (initially 0)},
+    remember={\xlast as \xstart (initially 0)},
+    evaluate={
+      \xlast=\xstart+\frac/100;
+      \ylast=\ystart+\frac/100/(\ystart<0.3?1:sqrt(2));% % scale down last square
+      \x=(\xstart+\xlast)/2;
+      \y=(\ystart+\ylast)/2;%
+    }
+  ] in {
+      11/\e^+/\e^-,
+      11/\mu^+/\mu^-,
+      11/\tau^+/\tau^-,
+      34/\udbar/\mathrm{\bar{u}d},
+      33/\csbar/\mathrm{\bar{c}s}%
+  }{
+    \draw[pin,myblue!50!black!50]
+      (\xlast,0) --++ (0,-0.15)
+      (1,\ylast) --++ (0.15,0);
+    \node[below=0,align=center,scale=0.82] at
+      (\x,0) {\boldlabeltiny{\strut\xname}{\frac}};
+    \node[right=0,align=center,scale=0.82] at
+      (1,\y) {\bm{$\yname$}};
+  }
+  \draw[pin,myblue!50!black!50] (1,-0.15) |- (1.15,0);
+  
+\end{tikzpicture}
+
+
+% HH DECAY CHANNELS - MATRIX STACK
+\def\fracbb{0.5807}   % bbbar
+\def\fracWW{0.2154}   % WW
+\def\fracZZ{0.02643}  % ZZ
+\def\fracTT{0.06256}  % tautau
+\def\fraccc{0.02883}  % cc
+\def\fracgg{0.08179}  % gg
+\def\fracAA{0.00227}  % gammagamma
+\def\fracZA{0.001541} % Zgamma
+\def\fracMM{0.000217} % mumu
+%\def\fracXX{0.00429}  % 1-0.5807-0.2154-0.02643-0.06256-0.02883-0.08179
+\pgfmathsetmacro\fracXX{1-\fracbb-\fracWW-\fracZZ-\fracTT-\fraccc-\fracgg}
+\begin{tikzpicture}[scale=12,every node/.style={align=center,inner sep=1}]
+  
+  % TITLE
+  \node[scale=1,align=left,font=\bf] at (0.2,0.55)
+    {Higgs pair\\decay modes};
+  
+  % MACRO for stacking sectors
+  \def\x{\fracXX} % initial x position
+  \def\y{\fracXX} % initial y position
+  \def\sector(#1,#2)[#3][#4]{
+    \pgfmathsetmacro\den{\x>\y?1:sqrt(2)}
+    \pgfmathsetmacro\xlast{\x+#1}
+    \coordinate (#4) at ({\x+#1*(1-0.5/\den)},{\y+#2/2/\den)});
+    \fill[inline=#3] % shift right & halve area
+      (\xlast,\y) rectangle++ ({-#1/\den},#2/\den);
+    \xdef\x{\xlast} % store for next sector
+    \ifdim \x pt > 0.99pt % reset \x & \y, store for next row
+      \pgfmathparse{\y+#2} \xdef\y{\pgfmathresult}
+      \xdef\x{\y}
+    \fi
+  }
+  
+  % ROW 1 (other)
+  \fill[inline=myyellow]
+    ({(1-1/sqrt(2))*\fracXX},0) rectangle (1,\fracXX);
+    %node[midway,white]
+    %{\bf other (\bm{$gg$}, \bm{$\aa$}, \bm{$\mathrm{Z}\gamma$}, ...)};
+  
+  %% GAMMA GAMMA + XX
+  %\pgfmathsetmacro\widthAAAA{sqrt((1-(1-0.00227)^2)/2)} % halve area
+  %\draw[thin,draw=mylightyellow!80!black,fill=mylightyellow]
+  %  ({(1-1/sqrt(2))*\fracXX},\fracXX) rectangle++ (\widthAAAA,-\widthAAAA);
+  %  %node[midway,white,scale=0.9] {\bm{$\aa XX$}};
+  %\draw[pin] (0.84*\widthAAAA,0.82*\fracXX) --++ (166:0.045)
+  %  node[anchor=-15,outer sep=-4] {\boldlabeltiny{\aa XX}{0.45}};
+  
+  % ROW 2 (gg)
+  \sector(\fracgg,\fracgg)[mycyan][gggg]
+  \sector(\fraccc,\fracgg)[mydarkorange][ccgg]
+  \sector(\fracTT,\fracgg)[mydarkcyan][ttgg]
+  \sector(\fracZZ,\fracgg)[mylightpurple][ZZgg]
+  \sector(\fracWW,\fracgg)[mybrown][WWgg]
+  \sector(\fracbb,\fracgg)[mylightgreen2][bbgg]
+  
+  % ROW 3 (cc)
+  \sector(\fraccc,\fraccc)[myorange][cccc]
+  \sector(\fracTT,\fraccc)[mydarkerblue][ttcc] %myblueorange
+  \sector(\fracZZ,\fraccc)[mydarkpurple][ZZcc]
+  \sector(\fracWW,\fraccc)[myredbrown][WWcc] %mylightorange
+  \sector(\fracbb,\fraccc)[mydarkorange][bbcc]
+  
+  % ROW 4 (tautau)
+  \sector(\fracTT,\fracTT)[myblue][tttt]
+  \sector(\fracZZ,\fracTT)[mybluepurple][ZZtt]
+  \sector(\fracWW,\fracTT)[mydarkblue][WWtt]
+  \sector(\fracbb,\fracTT)[mydarkestblue][bbtt]
+  
+  % ROW 5 (ZZ)
+  \sector(\fracZZ,\fracZZ)[mypurple][ZZZZ]
+  \sector(\fracWW,\fracZZ)[mypink][WWZZ]
+  \sector(\fracbb,\fracZZ)[myredpurple][bbZZ]
+  
+  % ROW 6
+  \sector(\fracWW,\fracWW)[myred][WWWW]
+  \sector(\fracbb,\fracWW)[mygreen][bbWW]
+  
+  % ROW 7
+  \sector(\fracbb,\fracbb)[mydarkgreen][bbbb]
+  
+  % LABELS
+  \draw[pin,myblue!50!black!50] (0.9995,0) -- (1.15,0);
+  \foreach \frac/\name [
+    count=\i,
+    remember={\ylast as \ystart (initially 0)},
+    remember={\xlast as \xstart (initially 0)},
+    evaluate={
+      \perc=100*\frac;
+      \xlast=\xstart+\frac;
+      \ylast=\ystart+\frac/(\ystart<0.3?1:sqrt(2));% % scale down last square
+      \x=(\xstart+\xlast)/2;
+      \y=(\ystart+\ylast)/2;%
+    }
+  ] in {
+       \fracXX/\text{\bf other},
+       \fracgg/gg,
+       \fraccc/\ccbar,
+       \fracTT/\TT,
+       \fracZZ/\ZZ,
+       \fracWW/\WW,
+       \fracbb/\bbbar%
+  }{
+    \pgfkeys{/pgf/number format/precision=1}
+    \pgfmathroundtozerofill{\perc}
+    \pgfmathsetmacro\roundperc{\pgfmathresult}
+    \draw[pin,myblue!50!black!50]
+      (\xlast,0.005) -- (\xlast,-0.03)
+      (0.9995,\ylast) --++ (0.15,0);
+    \ifdim \frac pt > 0.02 pt
+      \node[below=0,scale=0.9] at
+        (\x,0) {\strut\contour{white}{\bm{$\name$}}};
+      \node[below=1,right=2,scale=0.9] at
+        (1,\y) {\strut\bm{$\name$}}; %\; \bfrac{\frac}};
+      \node[below=1,left=2,scale=0.85] at
+        (1.15,\y) {\bfrac{\roundperc}};
+    \fi
+  }
+  \node[right=1,scale=0.85] at
+    (1,\fracXX/2) {\strut\contour{white}{\bf other}};
+  \node[left=2,scale=0.85] at
+    (1.15,\fracXX/2) {\bfrac{0.43}};
+  \draw[pin] (40:0.003) --++ (-140:0.016) %myyellow!60!black
+    node[black,scale=0.9,anchor=15,inner sep=-1] {\bf other};
+  
+  % LABELS
+  %\node[white,scale=0.8]
+  %  at (gggg) {\boldlabeltiny{gggg}{0.67}};
+  \node[white,yshift=-2,scale=0.9]
+    at (ttgg) {\boldlabeltiny{\TT gg}{1.0}};
+  
+  % PINNED LABELS above
+  \draw[pin,mycyan!60!black] (gggg)++(170:0.018) --++ (175:0.03)
+    node[scale=0.9,anchor=10] {\boldlabeltiny{gggg}{0.67}};
+  \draw[pin,mydarkorange!60!black] (ccgg)++(105:0.028) --++ (165:0.025)
+    node[scale=0.9,anchor=-10] {\boldlabeltiny{\ccbar gg}{0.47}};
+  %\draw[pin] (ttgg)++(-130:0.03) --++ (-130:0.07)
+  %  node[anchor=50] {\boldlabeltiny{\TT gg}{1.0}};
+  \draw[pin,myorange!60!black] (cccc)++(150:0.005) --++ (155:0.07)
+    node[scale=0.9,anchor=-30,inner sep=0] {\boldlabeltiny{\ccbar\ccbar}{0.08}};
+  \draw[pin,mydarkerblue!60!black] (ttcc)++(160:0.02) --++ (125:0.02)
+    node[scale=0.9,anchor=-45,inner sep=-1] {\boldlabeltiny{\TT\ccbar}{0.36}};
+  \draw[pin,myblue!60!black] (tttt)++(120:0.017) --++ (120:0.07)
+    node[scale=0.9,anchor=-24,inner sep=0] {\boldlabeltiny{\TT\TT}{0.40}};
+  \draw[pin,mybluepurple!60!black] (ZZtt)++(105:0.025) --++ (110:0.035)
+    node[scale=0.9,anchor=-65,inner sep=-1] {\boldlabeltiny{\ZZ\TT}{0.33}};
+  \draw[pin,mypurple!60!black] (ZZZZ)++(70:0.005) --++ (75:0.07)
+    node[scale=0.9,anchor=-80,inner sep=-1] {\boldlabeltiny{\ZZ\ZZ}{0.07}};
+  
+  % PINNED LABELS under
+  \draw[pin,mylightpurple!60!black] (ZZgg)++(-105:0.032) --++ (-115:0.065) %++(110:0.025)
+    node[scale=0.9,anchor=78] {\boldlabeltiny{\ZZ gg}{0.43}};
+  \draw[pin,mydarkpurple!60!black] (ZZcc)++(-50:0.01) --++ (-70:0.13)
+    node[scale=0.9,anchor=120,inner sep=2] {\boldlabeltiny{\ZZ\ccbar}{0.15}};
+  
+  % ALIGN WWXX nodes
+  \node[white,right]
+    at ($(WWgg)-(0.09,0)$) {\strut\bm{$\WW gg$}};
+  \node[white,left]
+    at ($(WWgg)+(0.09,0)$) {\bfrac{3.5}};
+  \node[white,below=1,right]
+    at ($(WWcc)-(0.09,0)$) {\strut\bm{$\WW\ccbar$}};
+  \node[white,below=0.5,left,scale=0.95]
+    at ($(WWcc)+(0.09,0)$) {\bfrac{1.2}};
+  \node[white,right]
+    at ($(WWtt)-(0.09,0)$) {\strut\bm{$\WW\TT$}};
+  \node[white,left]
+    at ($(WWtt)+(0.09,0)$) {\bfrac{2.7}};
+  \node[white,below=1,right,scale=0.95]
+    at ($(WWZZ)-(0.09,0)$) {\strut\bm{$\WW\ZZ$}};
+  \node[white,below=0.5,left]
+    at ($(WWZZ)+(0.09,0)$) {\bfrac{1.1}};
+  \node[white]
+    at (WWWW) {\boldlabeltiny{\WW\WW}{4.6}};
+  
+  % ALIGN bbXX nodes
+  \node[white,right]
+    at ($(bbgg)-(0.06,0)$) {\strut\bm{$\bbbar gg$}};
+  \node[white,left]
+    at ($(bbgg)+(0.09,0)$) {\bfrac{9.5}};
+  \node[white,below=1.5,right]
+    at ($(bbcc)-(0.06,0)$) {\strut\bm{$\bbbar\ccbar$}};
+  \node[white,below=1,left,scale=0.95]
+    at ($(bbcc)+(0.09,0)$) {\bfrac{3.3}};
+  \node[white,right]
+    at ($(bbtt)-(0.06,0)$) {\strut\bm{$\bbbar\TT$}};
+  \node[white,left]
+    at ($(bbtt)+(0.09,0)$) {\bfrac{7.3}};
+  \node[white,below=1.5,right,scale=0.95]
+    at ($(bbZZ)-(0.06,0)$) {\strut\bm{$\bbbar\ZZ$}};
+  \node[white,below=1,left]
+    at ($(bbZZ)+(0.09,0)$) {\bfrac{3.1}};
+  %\node[white,right]
+  %  at ($(bbWW)-(0.06,0)$) {\strut\bm{$\bbbar\WW$}};
+  %\node[white,left]
+  %  at ($(bbWW)+(0.12,0)$) {\bfrac{25}};
+  \node[white]
+    at (bbWW) {\boldlabeltiny{\bbbar\WW}{33.7}};
+  \node[white]
+    at (bbbb) {\boldlabeltiny{\bbbar\bbbar}{33.7}};
+  
+\end{tikzpicture}
+
+
+% HH DECAY CHANNELS - MATRIX STACK 2
+\begin{tikzpicture}[scale=12,every node/.style={align=center,inner sep=1}]
+  
+  % MACRO for stacking sectors
+  \def\x{\fracXX} % initial x position
+  \def\y{0} % initial y position
+  \def\sector(#1,#2)[#3][#4]{
+    \pgfmathsetmacro\xlast{\x+#1}
+    \coordinate (#4) at (\x+#1/2,\y+100*#2/2);
+    \fill[inline=#3] % shift right & halve area
+      (\x,\y) rectangle++ (#1,100*#2);
+    \xdef\x{\xlast} % store for next sector
+    \ifdim \x pt > 0.8pt % reset \x & \y, store for next row
+      \pgfmathparse{\y+100*#2} \xdef\y{\pgfmathresult}
+      \xdef\x{\fracXX}
+    \fi
+  }
+  
+  % COLUMN 1 (other)
+  \fill[inline=myyellow]
+    (0,0) rectangle (\fracXX,{100*(\fracAA+\fracZA+\fracMM)});
+  
+  % ROW 1 (gammagamma)
+  \sector(\fracgg,\fracAA)[mycyan][ggaa]
+  \sector(\fraccc,\fracAA)[myorange][ccaa]
+  \sector(\fracTT,\fracAA)[myblue][ttaa]
+  \sector(\fracZZ,\fracAA)[mylightpurple][ZZaa]
+  \sector(\fracWW,\fracAA)[mylightorange][WWaa]
+  \sector(\fracbb,\fracAA)[mylightgreen2][bbaa]
+  
+  % ROW 2 (Zgamma)
+  \sector(\fracgg,\fracZA)[mylightcyan][ggZa]
+  \sector(\fraccc,\fracZA)[mylightorange][ccZa]
+  \sector(\fracTT,\fracZA)[mydarkblue][ttZa]
+  \sector(\fracZZ,\fracZA)[mydarkpurple][ZZZa]
+  \sector(\fracWW,\fracZA)[myredbrown][WWZa]
+  \sector(\fracbb,\fracZA)[mygreen][bbZa]
+  
+  % ROW 3 (mumu)
+  \sector(\fracgg,\fracMM)[mydarkcyan][ggmm]
+  \sector(\fraccc,\fracMM)[mydarkorange][ccmm]
+  \sector(\fracTT,\fracMM)[mydarkestblue][ttmm]
+  \sector(\fracZZ,\fracMM)[myredpurple][ZZmm]
+  \sector(\fracWW,\fracMM)[mybrown][WWmm]
+  \sector(\fracbb,\fracMM)[mydarkgreen][bbmm]
+  
+  \node[white,scale=0.75,above=0] at (ggaa) {\boldlabelcolor{gg\aa}{0.0371}{mycyan}};
+  \node[white,scale=0.75,below=0] at (ccaa) {\boldlabelcolor{\ccbar\aa}{0.0131}{myorange}};
+  \node[white,scale=0.75,above=0] at (ttaa) {\boldlabelcolor{\TT\aa}{0.0284}{mydarkcyan}};
+  \node[white,scale=0.75,below=0] at (ZZaa) {\boldlabelcolor{\ZZ\aa}{0.0120}{mylightpurple}};
+  \node[white,scale=1] at (WWaa) {\boldlabeltiny{\WW\aa}{0.0978}};
+  \node[white,scale=1] at (bbaa) {\boldlabeltiny{\bbbar\aa}{0.264}};
+  
+  \node[white,scale=0.75,above=0] at (ggZa) {\boldlabelcolor{gg\Za}{0.0252}{mylightcyan}};
+  \node[white,scale=0.75,below=0] at (ccZa) {\boldlabelcolor{\ccbar\Za}{0.0089}{mylightorange}};
+  \node[white,scale=0.75,above=0] at (ttZa) {\boldlabelcolor{\TT\Za}{0.0193}{mydarkblue}};
+  \node[white,scale=0.75,below=0] at (ZZZa) {\boldlabelcolor{\ZZ\Za}{0.0081}{mydarkpurple}};
+  \node[white,scale=1] at (WWZa) {\boldlabeltiny{\WW\Za}{0.0664}};
+  \node[white,scale=1] at (bbZa) {\boldlabeltiny{\bbbar\Za}{0.179}};
+  
+  \draw[pin,mydarkcyan!60!black] (ggmm)++(170:0.02) --++ (130:0.03)
+    node[scale=0.75,anchor=-60,inner sep=-1] {\boldlabeltiny{gg\mu\mu}{0.0035}};
+  \draw[pin,mydarkorange!60!black] (ccmm)++(150:0.005) --++ (110:0.02)
+    node[scale=0.75,anchor=-80,inner sep=-1] {\boldlabeltiny{\ccbar\mu\mu}{0.0013}};
+  \draw[pin,mydarkerblue!60!black] (ttmm) --++ (84:0.06)
+    node[scale=0.75,anchor=-90,inner sep=-1] {\boldlabeltiny{\TT\mu\mu}{0.0027}};
+  \draw[pin,myredpurple!60!black] (ZZmm)++(120:0.006) --++ (65:0.02)
+    node[scale=0.75,anchor=-150,inner sep=-1] {\boldlabeltiny{\ZZ\mu\mu}{0.0011}};
+  \node[white,scale=0.75,yshift=-1] at (WWmm)
+    {\strut\contour{myredbrown!80!black}{\bm{$\WW\mu\mu$} \,\bfrac{0.0093}}};
+  \node[white,scale=0.75,yshift=-1] at (bbmm)
+    {\strut\contour{mydarkgreen!80!black}{\bm{$\mathrm{b\bar{b}}\mu\mu$} \,\bfrac{0.0252}}};
+  
+  % X LABELS
+  \node[above right=1,scale=0.75] at (1,\y+\fracMM) {$\times100$};
+  \draw[pin,myblue!50!black!50] (0.999,0) -- (1.14,0);
+  \foreach \frac/\name [
+    count=\i,
+    remember={\xlast as \xstart (initially \fracXX)},
+    evaluate={\xlast=\xstart+\frac/100;\x=(\xstart+\xlast)/2;}
+  ] in {
+       %0.43/\text{\bf other},
+       8.2/gg,
+       2.9/\ccbar,
+       6.3/\TT,
+       2.6/\ZZ,
+      21.5/\WW,
+      58.1/\bbbar%
+  }{
+    \draw[pin,myblue!50!black!50]
+      (\xlast,0.001) -- (\xlast,-0.055);
+    \node[below=0,scale=0.9] at
+      (\x,0) {\strut\contour{white}{\bm{$\name$}}};
+      %(\x,0) {\boldlabelcolor{\name}{\frac}{white}};
+    \node[below,scale=0.58] at
+      (\x,-0.029) {\strut\contour{white}{\bm{$\frac\mathbf{\%}$}}};
+  }
+  \draw[pin] (40:0.003) --++ (-140:0.016) %myyellow!60!black
+    node[black,scale=0.9,anchor=15,inner sep=-1] {\bf other};
+  
+  % Y LABELS
+  \foreach \frac/\name [
+    count=\i,
+    remember={\ylast as \ystart (initially 0)},
+    evaluate={\ylast=\ystart+\frac;\y=(\ystart+\ylast)/2;}
+  ] in {
+       0.227/\aa,
+       0.154/\Za,
+       0.0217/\mu\mu%
+  }{
+    \draw[pin,myblue!50!black!50]
+      (1,\ylast) --++ (0.135,0);
+    \node[right=1,scale=0.9] at
+      (1,\y) {\strut\contour{white}{\bm{$\name$}}};
+    \node[right=2,scale=0.7] at
+      (1.045,\y) {\bfrac{\frac}};
+  }
+  
+\end{tikzpicture}
+
+
+% HH DECAY CHANNELS - MATRIX STACK 3
+\begin{tikzpicture}[scale=12,every node/.style={align=center,inner sep=1}]
+  \pgfmathsetmacro\fractot{\fracAA+\fracZA+\fracMM}
+  \pgfmathsetmacro\xend{99*\fractot}
+  
+  % MACRO for stacking sectors
+  \def\x{0} % initial x position
+  \def\y{0} % initial y position
+  \def\sector(#1,#2)[#3][#4]{
+    \pgfmathsetmacro\xlast{\x+100*#1}
+    \pgfmathsetmacro\den{\x>\y?1:sqrt(2)}
+    \coordinate (#4) at ({\x+100*#1*(1-0.5/\den)},{\y+100*#2/2/\den)});
+    \fill[inline=#3] % shift right & halve area
+      (\x+100*#1,\y) rectangle++ (-100*#1/\den,100*#2/\den);
+    \xdef\x{\xlast} % store for next sector
+    \ifdim \x pt > \xend pt % reset \x & \y, store for next row
+      \pgfmathparse{\y+100*#2} \xdef\y{\pgfmathresult}
+      \xdef\x{\y}
+    \fi
+  }
+  
+  % ROW 1
+  \sector(\fracAA,\fracAA)[myyellow][aaaa]
+  \sector(\fracZA,\fracAA)[mydarkpurple][Zaaa]
+  \sector(\fracMM,\fracAA)[myredpurple][mmaa]
+  
+  % ROW 6
+  \sector(\fracZA,\fracZA)[mypurple][ZaZa]
+  \sector(\fracMM,\fracZA)[mypink][mmZa]
+  
+  % ROW 7
+  \sector(\fracMM,\fracMM)[myred][mmmm]
+  
+  % LABELS
+  \draw[pin,myblue!50!black!50] (100*\fractot-0.0005,0) --++ (0.15,0);
+  \foreach \frac/\name [
+    count=\i,
+    remember={\ylast as \ystart (initially 0)},
+    remember={\xlast as \xstart (initially {\frac*(1-1/sqrt(2))})},
+    evaluate={
+      \xlast=\xstart+\frac/(\xstart>0.2?1:sqrt(2)); % scale down first square
+      \ylast=\ystart+\frac/(\ystart<0.3?1:sqrt(2)); % scale down last square
+      \x=(\xstart+\xlast)/2;
+      \y=(\ystart+\ylast)/2;%
+    }
+  ] in {
+       0.227/\aa,
+       0.1541/\Za,
+       0.0217/\mu\mu%
+  }{
+    \draw[pin,myblue!50!black!50]
+      (\xlast,0.0005) -- (\xlast,-0.03)
+      (100*\fractot-0.0005,\ylast) --++ (0.15,0);
+    \node[below=-1,scale=0.9] at
+      (\x,0) {\strut\contour{white}{\bm{$\name$}}};
+    \node[below=-0.2,right=2,scale=0.9] at
+      (100*\fractot,\y) {\strut\contour{white}{\bm{$\name$}}};
+    \node[below=0.1,left=2,scale=0.85] at
+      (100*\fractot+0.15,\y) {\contour{white}{\bfrac{\frac}}};
+  }
+  
+  % LABELS
+  \node[white,scale=1] at (aaaa)
+    {\strut\contour{myyellow!80!black}{\bm{$\aa\aa$}}\\[-3]
+     \strut\footnotesize\contour{myyellow!80!black}{\num{5.15e-6}}};
+  \node[white,scale=1] at (Zaaa)
+    {\strut\contour{mydarkpurple!80!black}{\bm{$\Za\aa$}}\\[-3]
+     \strut\footnotesize\contour{mydarkpurple!80!black}{\num{7.0e-6}}};
+  \node[white,scale=0.8] at (ZaZa)
+    {\strut\contour{mypurple!80!black}{\bm{$\Za\Za$}}\\[-3]
+     \strut\footnotesize\contour{mypurple!80!black}{\num{2.37e-6}}};
+  
+  % PINS
+  \draw[pin,myredpurple!60!black] (mmaa)++(85:0.055) --++ (15:0.08)
+    node[scale=0.75,anchor=-170,inner sep=3] {\bf\bm{$\mu\mu\aa$}\\[-3]\footnotesize\num{9.85e-7}};
+  \draw[pin,mypink!60!black] (mmZa)++(-84:0.035) --++ (-8:0.09)
+    node[scale=0.75,anchor=175,inner sep=-2] {\bf\bm{$\mu\mu\Za$}\\[-3]\footnotesize\num{6.69e-7}};
+  \draw[pin,myred!60!black] (mmmm)++(150:0.003) --++ (-170:0.05)
+    node[scale=0.75,anchor=18,inner sep=-2] {\bf\bm{$\mu\mu\mu\mu$}\\[-3]\footnotesize\num{4.71e-8}};
+  
+\end{tikzpicture}
+
+
+\end{document}

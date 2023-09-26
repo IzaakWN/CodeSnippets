@@ -1,0 +1,438 @@
+% Author: Izaak Neutelings (June 2023)
+% Description:
+%   Beamspot profile in the CMS detector with pileup vertices & tracks
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath}
+\usepackage[outline]{contour} % glow around text
+\contourlength{1.1pt}
+\usetikzlibrary{arrows.meta} % for arrow size
+\pgfdeclarelayer{back} % to draw on background
+\pgfdeclarelayer{front} % to draw on foreground
+\pgfsetlayers{back,main,front} % set order
+
+% COLORS
+\colorlet{myred}{red!80!black}
+\colorlet{myblue}{blue!85!black}
+\colorlet{mydarkred}{myred!75!black}
+\colorlet{mygreen}{green!75!black}
+\colorlet{mydarkgreen}{green!40!black}
+\colorlet{mygreygreen}{green!40!black!50}
+\colorlet{mylightgreygreen}{green!40!black!10}
+\colorlet{trackcol1}{blue!60!black!26}
+\colorlet{trackcol2}{red!60!black!26}
+\colorlet{trackcol3}{orange!50!yellow!70!black!36}
+\colorlet{vertexcol}{yellow!80!orange!100!black!95}
+
+% TIKZ
+\tikzset{>=latex} % for LaTeX arrow head
+\tikzstyle{window}=[#1,fill=#1!20,line width=0.1,rounded corners=0.2pt]
+\tikzstyle{dashed curve}=[curve,thick,dashed]
+\tikzstyle{track}=[#1,thin,line cap=round]
+\tikzstyle{vertex}=[draw=orange,fill=#1,ultra thin]
+\tikzstyle{muon}=[track=myred,thick]
+\tikzstyle{thinarr}=[-{Latex[length=2.0,width=2.8]},line width=0.4]
+\tikzstyle{thinleftarr}=[{Latex[length=2.0,width=2.3]}-,line width=0.30]
+\tikzstyle{ultrathindashed}=[dash pattern=on 0.5pt off 0.5pt,line width=0.1]
+\tikzstyle{verythindashed}=[dash pattern=on 1pt off 0.9pt,line width=0.2]
+\tikzstyle{thindashed}=[dash pattern=on 1.6pt off 1.4pt,line width=0.3]
+\tikzset{
+  track/.default=trackcol1,
+  vertex/.default=vertexcol
+}
+
+% FUNCTIONS
+\tikzset{
+  declare function={
+    norm(\x,\s) = {1/(\s*sqrt(2*pi))*exp(-((\x)^2)/(2*\s^2))};
+    gaus(\x,\s) = {exp(-((\x)^2)/(2*\s^2))};
+    gausBS(\x) = {\cBS+\ABS*gaus(\x-\xBS,\wBS)}; % gaussian distribution for BS
+  }
+}
+
+% MACROS
+\def\drawvertices#1{ % PU vertices
+  \message{^^JDraw pileup vertices}
+  \foreach \x [
+    count=\i from 1,
+    evaluate={\x=\xBS+\wBS/(3.3*\wT)*(\x*\wT-\xBS)}
+  ] in {%
+    -7.45,-4.62,-2.82,-1.62,-0.76,-0.26,0.48,1.08,2.18,3.84,5.17,6.6
+  }{
+    \coordinate (V\i#1) at (\x,0); % track vertex
+    \begin{pgfonlayer}{front} % TICKS LABELS (draw on front)
+      \draw[vertex] (V\i#1) circle(14.3*\Rv pt);
+    \end{pgfonlayer}
+  }
+}
+\def\drawtracks#1{ % PU tracks
+  \message{^^JDraw pileup tracks}
+  \drawvertices{}
+  \begin{scope}
+    %\draw (\xmin,-\ltrk) rectangle (\xmax,\ltrk);
+    \draw[track=trackcol1!#1]
+      (V1) to[bend left=5]++ (  50:\ltrk)
+      (V1) to[bend left=2]++ ( 110:\ltrk)
+      (V1) to[bend left=3]++ (-120:0.9*\ltrk);
+    \draw[track=trackcol2!#1]
+      (V2) to[bend left=5]++ (  40:\ltrk)
+      (V2) to[bend left=2]++ ( 115:\ltrk)
+      (V2) to[bend left=5]++ ( 145:1.3*\ltrk)
+      (V2) to[bend left=4]++ ( -50:\ltrk)
+      (V2) to[bend left=3]++ (-140:1.2*\ltrk);
+    \draw[track=trackcol3!#1]
+      (V3) to[bend left=5]++ (  55:\ltrk)
+      (V3) to[bend left=3]++ (  22:\ltrk)
+      (V3) to[bend left=5]++ ( 105:\ltrk)
+      (V3) to[bend left=5]++ ( 135:1.1*\ltrk)
+      (V3) to[bend left=2]++ ( -34:1.2*\ltrk)
+      (V3) to[bend left=5]++ (-112:0.9*\ltrk)
+      (V3) to[bend left=4]++ (-160:1.3*\ltrk);
+    \draw[track=trackcol1!#1]
+      (V4) to[bend left= 5]++ (  30:\ltrk)
+      (V4) to[bend left=-6]++ ( 150:1.4*\ltrk)
+      (V4) to[bend left= 2]++ (-135:1.1*\ltrk)
+      (V4) to[bend left= 3]++ ( -45:\ltrk);
+    \draw[track=trackcol2!#1]
+      (V5) to[bend left=5]++ (  65:\ltrk)
+      (V5) to[bend left=4]++ ( 110:\ltrk)
+      (V5) to[bend left=6]++ (-110:\ltrk);
+    \draw[track=trackcol3!#1]
+      (V6) to[bend left=5]++ ( 115:\ltrk)
+      (V6) to[bend left=4]++ (-125:\ltrk);
+    \draw[track=trackcol1!#1]
+      (V7) to[bend left=4]++ ( -40:\ltrk)
+      (V7) to[bend left=5]++ (-100:0.8*\ltrk)
+      (V7) to[bend left=3]++ (  65:\ltrk);
+    \draw[track=trackcol2!#1]
+      (V8) to[bend left=4]++ (  35:\ltrk)
+      (V8) to[bend left=7]++ ( 150:1.6*\ltrk)
+      (V8) to[bend left=7]++ (-122:\ltrk);
+    \draw[track=trackcol3!#1]
+      (V9) to[bend left= 5]++ (  30:\ltrk)
+      (V9) to[bend left=-6]++ ( 158:1.7*\ltrk)
+      (V9) to[bend left= 4]++ ( -45:\ltrk)
+      (V9) to[bend left= 3]++ (-147:1.2*\ltrk);
+    \draw[track=trackcol1!#1]
+      (V10) to[bend left=5]++ (  30:\ltrk)
+      (V10) to[bend left=3]++ (  58:\ltrk)
+      (V10) to[bend left=5]++ ( 110:\ltrk)
+      (V10) to[bend left=3]++ (-134:1.2*\ltrk)
+      (V10) to[bend left=6]++ ( -28:1.1*\ltrk);
+    \draw[track=trackcol2!#1]
+      (V11) to[bend left=4]++ ( -50:\ltrk)
+      (V11) to[bend left=5]++ (-110:0.8*\ltrk)
+      (V11) to[bend left=3]++ (  55:\ltrk);
+    \draw[track=trackcol3!#1]
+      (V12) to[bend left=4]++ (  50:\ltrk)
+      (V12) to[bend left=5]++ ( 110:\ltrk)
+      (V12) to[bend left=3]++ (-145:\ltrk)
+      (V12) to[bend left=5]++ ( -28:1.1*\ltrk);
+  \end{scope}
+}
+\def\drawgaus{ % BEAMSPOT GAUSSIAN DISTRIBUTION
+  \message{^^JDraw BS gaussians}
+  \fill[mylightgreygreen,samples=200,domain=\xmin:\xmax]
+    plot(\x,{gausBS(\x)}) |- (\xmin,0);
+  \draw[mygreygreen,samples=200,domain=\xmin:\xmax]
+    plot(\x,{gausBS(\x)});
+}
+\def\drawaxis#1{ % DRAW AXIS WITH TICKS
+  \draw[->,thick]
+    (\xmin-0.2,0) -- (\xmax+0.4,0)
+    node[below right=-3pt] {$z$ [cm]};
+  \foreach \i [evaluate={\x=\wT*\i; \t=int(\i);}] in {-\NnT,...,\NpT}{
+    \draw[thick] (\x,\hT/2) --++ (0,-\hT) coordinate(T\i);
+  }
+  \ifnum#1>0 % half ticks
+    \foreach \i [evaluate={\x=\wT*\i; \t=int(\i);},parse=true] in {-\NnT,...,\NpT-1}{
+      \draw[thick] (\x+\wT/2,\hHT/2) --++ (0,-\hHT);
+    }
+  \fi
+  \begin{pgfonlayer}{front} % TICKS LABELS (draw on front)
+    \foreach \i [evaluate={\x=\wT*\i; \t=int(\i);}] in {-\NnT,...,\NpT}{
+      \ifnum\i<0
+        \node[left=3pt,below=0pt,scale=0.8] at (T\i) {\contour{white}{$\t$}};
+      \else
+        \node[below=0pt,scale=0.8] at (T\i) {\contour{white}{$\t$}};
+      \fi
+    }
+  \end{pgfonlayer}
+}
+\def\drawwindows{ % DRAW WINDOWS
+  \pgfmathsetmacro\Npw{int(round(\xmax/\ww))}  % number of windows on positive side
+  \pgfmathsetmacro\Nnw{int(round(-\xmin/\ww))} % number of windows on negative side
+  \message{^^JNumber of windows: Nnw=\Nnw, Npw=\Npw}
+  \foreach \i [evaluate={\x=\ww*\i;},parse=true] in {-\Nnw,...,\Npw-1}{
+    \edef\c{\ifodd \i myred\else myblue\fi} % color
+    \draw[window=\c] (\x,-\hw/2) rectangle++ (\ww-0.003,\hw);
+  }
+}
+
+\begin{document}
+
+
+% BEAMSPOT - before corrections
+\def\xmin{-4.7}   % x axis minimum
+\def\xmax{ 4.7}   % x axis maximum
+\def\NpT{9}       % number of ticks on positive side
+\def\NnT{9}       % number of ticks on negative side
+\def\hT{0.23}     % height tick
+\def\ABS{1.50}    % BS gaussian amplitude/normalization
+\def\cBS{0.1*\hT} % BS gaussian vertical offset
+\begin{tikzpicture}[scale=1]
+  \pgfmathsetmacro\wT{\xmax/\NpT} % distance between tick
+  \pgfmathsetmacro\Rv{0.2*\hT}    % radius of vertex
+  \pgfmathsetmacro\xBS{0.3*\wT}   % z position BS
+  \pgfmathsetmacro\wBS{3.1*\wT}   % z sigma (width) BS
+  \pgfmathsetmacro\ltrk{1.2*\ABS} % length track
+  
+  % BEAMSPOT GAUSSIAN DISTRIBUTION
+  \drawgaus
+  
+  % AXES & TICKS
+  \drawaxis{0}
+  
+  % TRACKS
+  \drawtracks{80}
+  
+  % BEAMSPOT MEASURES
+  \draw[mydarkgreen,dashed]
+    (\xBS,\cBS+\ABS+0.08) -- (\xBS,-1.8*\hT)
+    node[right=3pt,below=-1pt]
+      {\contour{white}{$z_\text{BS}^\text{MC}$}};
+  \draw[mydarkgreen]
+    (\xBS-\wBS,{gausBS(\xBS+\wBS)-0.1}) --++ (0,0.2);
+  \draw[<->,mydarkgreen]
+    (\xBS,{gausBS(\xBS+\wBS)-0.01}) --++ (-\wBS,0)
+    node[midway,fill=mylightgreygreen,inner sep=0pt]
+      {$\sigma_{\!z,\text{BS}}^\text{MC}$};
+  
+\end{tikzpicture}
+
+
+% BEAMSPOT - after corrections
+\begin{tikzpicture}[scale=1]
+  \pgfmathsetmacro\wT{\xmax/\NpT}  % distance between tick
+  \pgfmathsetmacro\xBS{-0.27*\wT}  % z position BS
+  \pgfmathsetmacro\wBS{3.8*\wT}    % z sigma (width) BS
+  \pgfmathsetmacro\xBSmc{0.25*\wT} % z position BS (MC)
+  \pgfmathsetmacro\wBSmc{3.1*\wT}  % z sigma (width) BS (MC)
+  \pgfmathsetmacro\Rv{0.2*\hT}     % radius of vertex
+  \pgfmathsetmacro\ltrk{1.2*\ABS}  % length track
+  
+  % BEAMSPOT GAUSSIAN DISTRIBUTION
+  \drawgaus
+  \draw[mygreygreen,dashed,samples=200,domain=\xmin:\xmax]
+    plot(\x,{\cBS+\ABS*gaus(\x-0.4*\wT,2.8*\wT)});
+  
+  % AXES & TICKS
+  \begin{scope}[vertex/.style={
+    draw=orange,fill=#1!90!orange,ultrathindashed,opacity=0.5
+  }]
+    \def\xBS{\xBSmc} % z position BS
+    \def\wBS{\wBSmc} % z sigma (width) BS
+    \drawvertices{-mc}
+  \end{scope}
+  \drawaxis{0}
+  
+  % TRACKS
+  \drawtracks{80}
+  
+  \begin{pgfonlayer}{front} % TICKS LABELS (draw on front)
+    \foreach \i in {1,...,12}{
+      \draw[thinarr,orange!95!black,shorten >=0.2pt,shorten <=0.3pt]
+        (V\i-mc) -- (V\i);
+    }
+  \end{pgfonlayer}
+  
+  % BEAMSPOT MEASURES
+  \draw[mydarkgreen!60,dashed,very thin]
+    (\xBSmc,\cBS+\ABS+0.08) -- (\xBSmc,-1.2*\hT);
+  \draw[mydarkgreen,dashed]
+    (\xBS,\cBS+\ABS+0.08) -- (\xBS,-1.8*\hT)
+    node[right=3pt,below=-1pt]
+      {\contour{white}{$z_\text{BS}^\text{Data}$}};
+  \draw[mydarkgreen]
+    (\xBS-\wBS,{gausBS(\xBS+\wBS)-0.1}) --++ (0,0.2);
+  \draw[<->,mydarkgreen]
+    (\xBS,{gausBS(\xBS+\wBS)-0.01}) --++ (-\wBS,0)
+    node[midway,fill=mylightgreygreen,inner sep=0pt]
+      {$\sigma_{\!z,\text{BS}}^\text{Data}$};
+  
+\end{tikzpicture}
+
+
+% BEAMSPOT - WINDOWS
+\foreach \NT in {10,8}{
+\begin{tikzpicture}[scale=1]
+  \def\xmin{-6.7}   % x axis minimum
+  \def\xmax{ 6.7}   % x axis maximum
+  \def\NpT{\NT}     % number of ticks on positive side
+  \def\NnT{\NT}     % number of ticks on negative side
+  \def\hw{0.13}     % height window
+  \def\hT{0.23}     % height tick
+  \def\hHT{0.18}    % height half tick
+  \def\ABS{1.50}    % BS gaussian amplitude/normalization
+  \def\cBS{0.4*\hT} % BS gaussian vertical offset
+  \pgfmathsetmacro\wT{\xmax/\NpT}       % distance between tick
+  \pgfmathsetmacro\ww{\wT*0.1}          % width small windows (0.1 cm)
+  \pgfmathsetmacro\xBS{0.23*\wT}        % z position BS
+  \pgfmathsetmacro\wBS{3.3*\wT}         % z sigma (width) BS
+  \pgfmathsetmacro\xHS{2.62*\wT}        % z position signal window
+  \pgfmathsetmacro\hHS{1.2*\hT}         % height signal window
+  \pgfmathsetmacro\Rv{0.16*\hHS}        % radius of vertex
+  
+  \pgfmathsetmacro\ltrk{1.4*\ABS}       % length track
+  \coordinate (M) at (\xHS,0); % dimuon vertex
+  
+  % BEAMSPOT GAUSSIAN DISTRIBUTION
+  \drawgaus
+  
+  % WINDOWS
+  \drawwindows
+  
+  % AXES & TICKS
+  \drawaxis{1}
+  
+  % TRACKS
+  \drawtracks{68}
+  
+  % MUONS
+  \draw[muon]
+    (M) to[bend left=5]++ (50:1.6*\ABS)
+    node[anchor=-160] {$\mu$};
+  \draw[muon]
+    (M) to[bend left=5]++ (-124:1.4*\ABS)
+    node[anchor=28] {$\mu$};
+  
+  % WINDOW MEASURE
+  \pgfmathsetmacro\xL{(-\NnT+1)*\wT+2*\ww}
+  \pgfmathsetmacro\xR{\xL+\ww}
+  \draw[verythindashed] (\xL,0) --++ (0,1.34*\hT);
+  \draw[verythindashed] (\xR,0) --++ (0,1.34*\hT);
+  \draw[thinleftarr] (\xL,1.24*\hT) --++ (-4*\ww,0);
+  \draw[thinleftarr] (\xR,1.24*\hT) --++ (4*\ww,0);
+  \node[above=-1pt,scale=0.65] at (\xL+\ww/2,1.4*\hT) {0.1\,cm};
+  
+  % BEAMSPOT MEASURES
+  \draw[mydarkgreen,dashed]
+    (\xBS,\cBS+\ABS+0.12) -- (\xBS,-2*\hT)
+    node[right=3pt,below=-1pt]
+      {\contour{white}{$z_\text{BS}$}};
+  \draw[mydarkgreen]
+    (\xBS-\wBS,{gausBS(\xBS+\wBS)-0.1}) --++ (0,0.2);
+  \draw[<->,mydarkgreen]
+    (\xBS,{gausBS(\xBS+\wBS)-0.01}) --++ (-\wBS,0)
+    node[midway,fill=mylightgreygreen,inner sep=0pt]
+      {\contour{white}{$\sigma_z^\text{BS}$}};
+  
+  % SIGNAL WINDOW (hard scattering)
+  \draw[mydarkred,fill=myred!25,fill opacity=0.8,rounded corners=2pt]
+    (\xHS-\wT,-\hHS/2) rectangle++ (2*\wT,\hHS);
+  \draw[->,thin,mydarkred]
+    (\xHS,0.75*\hHS) --++ (-\wT,0)
+    node[pos=0.45,above,scale=0.65] {1\,cm};
+  \draw[->,thin,mydarkred]
+    (\xHS,0.75*\hHS) --++ (\wT,0)
+    node[pos=0.45,above,scale=0.65] {\contour{mylightgreygreen}{1\,cm}};
+  \draw[mydarkred,dashed]
+    (\xHS,0.96*\hHS) -- (\xHS,-2*\hT)
+    node[right=3pt,below=-1pt] {$z_{\mu\mu}$};
+  \fill[mydarkred] (M) circle(0.11*\hHS);
+  
+\end{tikzpicture}}
+
+
+% BEAMSPOT - SIGNAL WINDOW
+\foreach \addtracks in {0,1}{
+\begin{tikzpicture}[scale=1]
+  \message{^^JBeamspot with signal window (draw track: \addtracks)}
+  \def\xmin{-5.68}  % x axis minimum
+  \def\xmax{ 7.6}   % x axis maximum
+  \def\NpT{3}       % number of ticks on positive side
+  \def\NnT{2}       % number of ticks on negative side
+  \def\ABS{1.50}    % BS gaussian amplitude/normalization
+  \def\cBS{0.0*\hw} % BS gaussian vertical offset
+  \def\hw{0.13}     % height window
+  \def\hT{0.23}     % height tick
+  \def\hHT{0.20}    % height half tick
+  \def\tcol{70}     % setting to make tracks more lighter
+  \pgfmathsetmacro\wT{0.95*\xmax/\NpT}  % distance between tick ( = 1 cm)
+  \pgfmathsetmacro\ww{\wT*0.1}          % width small windows (0.1 cm)
+  \pgfmathsetmacro\Npw{int(\xmax/\ww)}  % number of windows on positive side
+  \pgfmathsetmacro\Nnw{int(-\xmin/\ww)} % number of windows on negative side
+  \pgfmathsetmacro\xBS{0.27*\wT}        % z position BS
+  \pgfmathsetmacro\wBS{2.5*\wT}         % z sigma (width) BS
+  \pgfmathsetmacro\xHS{1.72*\wT}        % z position signal window
+  \pgfmathsetmacro\hHS{1.2*\hT}         % height signal window
+  \pgfmathsetmacro\Rv{0.25*\hHS}        % radius of vertex
+  \pgfmathsetmacro\ltrk{1.4*\ABS}       % length track
+  \coordinate (M) at (\xHS,0); % dimuon vertex
+  
+  % BEAMSPOT GAUSSIAN DISTRIBUTION
+  \drawgaus
+  
+  % WINDOWS
+  \drawwindows
+  
+  % AXES & TICKS
+  \drawaxis{1}
+  
+  % DRAW PU TRACKS
+  \ifnum \addtracks=1
+     \begin{scope}[x=0.45cm,xshift=14]
+       \drawtracks{70}
+     \end{scope}
+  \fi
+  
+  % MUONS
+  \draw[muon]
+    (M) to[bend left=5]++ (30:1.7*\ABS)
+    node[anchor=-160] {$\mu$};
+  \draw[muon]
+    (M) to[bend left=5]++ (-134:1.4*\ABS)
+    node[anchor=20] {$\mu$};
+  
+  % WINDOW MEASURE
+  \pgfmathsetmacro\xL{-1*\wT-7*\ww}
+  \pgfmathsetmacro\xR{\xL+\ww}
+  \draw[thindashed] (\xL,0) --++ (0,-1.16*\hT);
+  \draw[thindashed] (\xR,0) --++ (0,-1.16*\hT);
+  \draw[thinleftarr] (\xL,-0.95*\hT) --++ (-0.9*\ww,0);
+  \draw[thinleftarr] (\xR,-0.95*\hT) --++ (0.9*\ww,0);
+  \node[below=-1pt,scale=0.65] at (\xL+\ww/2,-1.2*\hT) {0.1\,cm};
+  
+  % SIGNAL WINDOW MEASURE
+  \pgfmathsetmacro\xL{\xHS-\ww/2} % left x coordinate window
+  \pgfmathsetmacro\xR{\xHS+\ww/2} % right x coordinate window
+  \draw[mydarkred,thindashed] (\xL,0) --++ (0,2.29*\hT);
+  \draw[mydarkred,thindashed] (\xR,0) --++ (0,2.29*\hT);
+  \draw[mydarkred,thinleftarr] (\xL,1.95*\hT) --++ (-0.9*\ww,0);
+  \draw[mydarkred,thinleftarr] (\xR,1.95*\hT) --++ (0.9*\ww,0);
+  \node[mydarkred,above=-1pt,scale=0.72] at (\xL+\ww/2,2.18*\hT) {0.1\,cm};
+  
+  % BEAMSPOT MEASURES
+  \draw[mydarkgreen,dashed]
+    (\xBS,\cBS+\ABS+0.12) -- (\xBS,-2*\hT)
+    node[right=3pt,below=-1pt]
+      {\contour{white}{$z_\text{BS}$}};
+  \draw[mydarkgreen]
+    (\xBS-\wBS,{gausBS(\xBS+\wBS)-0.1}) --++ (0,0.2);
+  \draw[<->,mydarkgreen] (\xBS,{gausBS(\xBS+\wBS)-0.03}) --++ (-\wBS,0)
+    node[midway,fill=mylightgreygreen,inner sep=0pt] {$\sigma_z^\text{BS}$};
+  
+  % SIGNAL WINDOW (hard scattering)
+  \draw[mydarkred,fill=myred!25,fill opacity=0.5,rounded corners=1pt]
+    (\xHS-\ww/2,-\hHS/2) rectangle++ (\ww,\hHS);
+  %\draw[->,thin,mydarkred]
+  %  (\xHS-\ww,0.75*\hHS) --++ (2*\ww,0)
+  %  node[pos=0.45,above,scale=0.65] {0.1\,cm};
+  \draw[mydarkred,dashed]
+    (\xHS,0.96*\hHS) -- (\xHS,-2*\hT)
+    node[right=3pt,below=-1pt] {$z_{\mu\mu}$};
+  \fill[mydarkred] (M) circle(0.13*\hHS);
+  
+\end{tikzpicture}}
+
+
+\end{document}
