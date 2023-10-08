@@ -2,6 +2,7 @@
 % Description: Signatures of long-lived particles
 % Inspired by J. Antonelli in ICHEP 2016
 %   https://indico.cern.ch/event/432527/contributions/1072042/attachments/1321320/1981614/Antonelli_ICHEP2016_CMSLLP.pdf
+%   https://twiki.cern.ch/twiki/bin/view/CMS/ExoticaLongLived (CMS internal)
 % Sources:
 %   CMS Silicon detector: https://cms.cern/detector/identifying-tracks/silicon-strips
 %   LLPs: https://royalsocietypublishing.org/doi/10.1098/rsta.2019.0047
@@ -64,6 +65,7 @@
 }}
 
 % DETECTOR
+\def\scale{1.6} % scale diagrams
 \def\keepseg#1#2{% % return boolean if detector segment falls outside mask
   (\mask==0 || (#2>\angmin-4 && #1<\angmax+4) || (#2>\angmin+356 && #1<\angmax+364))
 }
@@ -171,11 +173,10 @@
 
 
 % LLP SIGNATURES in the CMS detector
-\def\scale{1.6}
 \begin{tikzpicture}[scale=\scale]
   %\def\R{2} % tracker outer radius
   %\def\dang{4} % angular granularity of calo deposits, CMS: 0.0175*180/pi = 1
-  %% HELP LINE GRID
+  %% HELP GRID
   %\draw[black!20,opacity=0.2,very thin]
   %  \foreach \r in {0.2,0.4,...,4.4}{(0,0) circle(\r)}
   %  \foreach \a in {0,10,...,350}{(0,0) -- (\a:4.4)};
@@ -276,7 +277,7 @@
   \foreach \lab [%
     count=\i,evaluate={\ang=(\i-0.5)*360/8;}
   ] in {%
-    displaced\\dilepton,displaced\\lepton,HSCP\\[-5pt],
+    displaced\\lepton,displaced\\dilepton,HSCP\\[-5pt],
     disappearing\\track,displaced\hspace*{7pt}\\dijet,displaced\\vertex,
     displaced\\conversion,displaced\\photon%
   }{
@@ -287,90 +288,162 @@
 \end{tikzpicture}
 
 
-% LLP SIGNATURE: DISPLACED LEPTON
-\begin{tikzpicture}[scale=\scale,rotate=180]
-  \draw pic[black!15,scale=\scale] {detector={180:225}};
-  \draw[charged exo] (0,0) -- (22:0.90) coordinate (V);
-  \draw[->,lepton] (V) to[bend left=16] (7:2.3);
-  \draw[->,particle] (V) -- (38:2.3);
-\end{tikzpicture}
-
-
-% LLP SIGNATURE: DISPLACED DILEPTON
-\begin{tikzpicture}[scale=\scale,rotate=135]
-  \draw pic[black!15,scale=\scale] {detector={180:225}};
-  \draw[neutral exo] (0,0) -- (67:0.90) coordinate (V);
-  \draw[->,lepton] (V) to[bend left=16] (53:2.2);
-  \draw[->,lepton] (V) to[bend right=16] (79:2.2);
-\end{tikzpicture}
-
-
-% LLP SIGNATURE: HSCP
-\begin{tikzpicture}[scale=\scale,rotate=90]
-  \draw pic[black!15,scale=\scale] {detector={180:225}};
-  \draw[->,charged exo] (0,0) to[bend right=18] (120:2.4);
-\end{tikzpicture}
-
-
-% LLP SIGNATURE: DISPLACED LEPTON
-\begin{tikzpicture}[scale=\scale,rotate=45]
-  \draw pic[black!15,scale=\scale] {detector={180:225}};
-  \draw[charged exo] (0,0) to[bend right=17] (158:1.1) coordinate (V);
-  \draw[->,neutral exo] (V) -- (167:2.45);
-  \draw[particle] (V) arc(80:300:0.11);
-\end{tikzpicture}
-
-
-% LLP SIGNATURE: DISPLACED JET
-\begin{tikzpicture}[scale=\scale,rotate=0]
-  \draw pic[black!15,scale=\scale] {detector={180:225}};
-  \draw[neutral exo] (0,0) -- (-160:0.90) coordinate (V);
-  %\draw[->,quark] (V) to[bend left=16] (-172:2.45);
-  %\draw[->,quark] (V) to[bend right=16] (-148:2.45);
-  \coordinate (J1) at (-168:2.34); % jet 1 vector
-  \coordinate (J2) at (-146:2.34); % jet 2 vector
-  \jetcone[quarkcol]{V}{J1}{23}{0.12}{ % jet 1
-    \draw[->,track] (V-v) to[bend left=12] (-175:2.62);
-    \draw[->,track] (V-v) to[bend right=11] (-163:2.60);
-    \draw[->,track,dashed] (V-v) -- (-169:2.63);
-  }
-  \jetcone[quarkcol]{V}{J2}{23}{0.12}{ % jet 2
-    \draw[->,track] (V-v) to[bend right=12] (-140:2.60);
-    \draw[->,track] (V-v) to[bend left=10] (-146:2.58);
-    \draw[->,track] (V-v) to[bend left=12] (-151:2.62);
-  }
-\end{tikzpicture}
-
-
-% LLP SIGNATURE: DISPLACED VERTEX
-\begin{tikzpicture}[scale=\scale,rotate=-45]
-  \draw pic[black!15,scale=\scale] {detector={180:225}};
-  \draw[neutral exo] (0,0) -- (-115:0.90) coordinate (V);
-  \draw[->,particle] (V) to[bend left=18] (-130:2.4);
-  \draw[->,particle] (V) to[bend right=18] (-120:2.3);
-  \draw[->,particle] (V) to[bend right=14] (-106:2.25);
-  \draw[->,particle] (V) to[bend left=15] (-95:2.3);
-\end{tikzpicture}
-
-
-% LLP SIGNATURE: DISPLACED CONVERSION
-\begin{tikzpicture}[scale=\scale,rotate=-90]
-  \draw pic[black!15,scale=\scale] {detector={180:225}};
-  \draw[->,neutral exo]
-    (0,0) -- (-68:0.88) coordinate (V) -- (-82:2.45);
-  \draw[photon] (V) -- (-60:1.59) coordinate (P);
-  \draw[->,lepton] (P) to[bend right=10] (-52:2.27);
-  \draw[->,lepton] (P) to[bend left=10] (-62:2.33);
-\end{tikzpicture}
-
-
-% LLP SIGNATURE: DISPLACED PHOTON
-\begin{tikzpicture}[scale=\scale,rotate=-135]
-  \draw pic[black!15,scale=\scale] {detector={180:225}};
-  \draw[->,neutral exo]
-    (0,0) -- (-27:0.90) coordinate (V) -- (-38:2.3);
-  \draw[->,photon] (V) -- (-7:2.22);
-\end{tikzpicture}
+%% LLP SIGNATURE: DISPLACED LEPTON
+%\begin{tikzpicture}[scale=\scale,rotate=180]
+%  \draw pic[black!15,scale=\scale] {detector={180:225}};
+%  \draw[charged exo] (0,0) -- (22:0.90) coordinate (V);
+%  \draw[->,lepton] (V) to[bend left=16] (7:2.3);
+%  \draw[->,particle] (V) -- (38:2.3);
+%\end{tikzpicture}
+%
+%
+%% LLP SIGNATURE: DISPLACED DILEPTON
+%\begin{tikzpicture}[scale=\scale,rotate=135]
+%  \draw pic[black!15,scale=\scale] {detector={180:225}};
+%  \draw[neutral exo] (0,0) -- (67:0.90) coordinate (V);
+%  \draw[->,lepton] (V) to[bend left=16] (53:2.2);
+%  \draw[->,lepton] (V) to[bend right=16] (79:2.2);
+%\end{tikzpicture}
+%
+%
+%% LLP SIGNATURE: HSCP
+%\begin{tikzpicture}[scale=\scale,rotate=90]
+%  \draw pic[black!15,scale=\scale] {detector={180:225}};
+%  \draw[->,charged exo] (0,0) to[bend right=18] (120:2.4);
+%\end{tikzpicture}
+%
+%
+%% LLP SIGNATURE: DISAPPEARING TRACK
+%\begin{tikzpicture}[scale=\scale,rotate=45]
+%  \draw pic[black!15,scale=\scale] {detector={180:225}};
+%  \draw[charged exo] (0,0) to[bend right=17] (158:1.1) coordinate (V);
+%  \draw[->,neutral exo] (V) -- (167:2.45);
+%  \draw[lepton] (V) arc(80:300:0.11);
+%\end{tikzpicture}
+%
+%
+%% LLP SIGNATURE: DISPLACED JETS
+%\begin{tikzpicture}[scale=\scale,rotate=0]
+%  \draw pic[black!15,scale=\scale] {detector={180:225}};
+%  \draw[neutral exo] (0,0) -- (-160:0.90) coordinate (V);
+%  %\draw[->,quark] (V) to[bend left=16] (-172:2.45);
+%  %\draw[->,quark] (V) to[bend right=16] (-148:2.45);
+%  \coordinate (J1) at (-168:2.34); % jet 1 vector
+%  \coordinate (J2) at (-146:2.34); % jet 2 vector
+%  \jetcone[quarkcol]{V}{J1}{23}{0.12}{ % jet 1
+%    \draw[->,track] (V-v) to[bend left=12] (-175:2.62);
+%    \draw[->,track] (V-v) to[bend right=11] (-163:2.60);
+%    \draw[->,track,dashed] (V-v) -- (-169:2.63);
+%  }
+%  \jetcone[quarkcol]{V}{J2}{23}{0.12}{ % jet 2
+%    \draw[->,track] (V-v) to[bend right=12] (-140:2.60);
+%    \draw[->,track] (V-v) to[bend left=10] (-146:2.58);
+%    \draw[->,track] (V-v) to[bend left=12] (-151:2.62);
+%  }
+%\end{tikzpicture}
+%
+%
+%% LLP SIGNATURE: DISPLACED VERTEX
+%\begin{tikzpicture}[scale=\scale,rotate=-45]
+%  \draw pic[black!15,scale=\scale] {detector={180:225}};
+%  \draw[neutral exo] (0,0) -- (-115:0.90) coordinate (V);
+%  \draw[->,particle] (V) to[bend left=18] (-130:2.4);
+%  \draw[->,particle] (V) to[bend right=18] (-120:2.3);
+%  \draw[->,particle] (V) to[bend right=14] (-106:2.25);
+%  \draw[->,particle] (V) to[bend left=15] (-95:2.3);
+%\end{tikzpicture}
+%
+%
+%% LLP SIGNATURE: DISPLACED CONVERSION
+%\begin{tikzpicture}[scale=\scale,rotate=-90]
+%  \draw pic[black!15,scale=\scale] {detector={180:225}};
+%  \draw[->,neutral exo]
+%    (0,0) -- (-68:0.88) coordinate (V) -- (-82:2.45);
+%  \draw[photon] (V) -- (-60:1.59) coordinate (P);
+%  \draw[->,lepton] (P) to[bend right=10] (-52:2.27);
+%  \draw[->,lepton] (P) to[bend left=10] (-62:2.33);
+%\end{tikzpicture}
+%
+%
+%% LLP SIGNATURE: DISPLACED PHOTON
+%\begin{tikzpicture}[scale=\scale,rotate=-135]
+%  \draw pic[black!15,scale=\scale] {detector={180:225}};
+%  \draw[->,neutral exo]
+%    (0,0) -- (-27:0.90) coordinate (V) -- (-38:2.3);
+%  \draw[->,photon] (V) -- (-7:2.22);
+%\end{tikzpicture}
+%
+%
+%% FOR LOOP: Make HNL diagrams with quarter and full tracker
+%\foreach \dang [evaluate={\lang=(\dang>200?-102:-23);}] in {270,180}{
+%
+%% LLP SIGNATURE: DISPLACED DILEPTON + PROMPT LEPTON
+%% E.g. a heavy neutral lepton (HNL)
+%\begin{tikzpicture}[scale=\scale,rotate=0]
+%  \def\angN{-164} % angle of HNL
+%  \draw pic[black!15,scale=\scale] {detector={180:\dang}};
+%  \coordinate (PV) at (0,0); % primary vertex
+%  \draw[neutral exo] (PV) -- (\angN:0.90) coordinate (V)
+%    node[pos=0.7,above=0pt] {N};
+%  \coordinate (L1) at (\lang:2.50); % prompt lepton
+%  \coordinate (L2) at (\angN+20:2.42); % displaced lepton 1
+%  \coordinate (L3) at (\angN-9:2.42); % displaced lepton 2
+%  \coordinate (N) at (\angN+4:2.42); % displaced neutrino
+%  \draw[->,lepton] (PV) to[bend right=11] (L1) % prompt lepton
+%    node[anchor=172+\lang,inner sep=1pt] {$\ell_1$};
+%  \draw[->,lepton] (V) to[bend right=16] (L2) % displaced lepton 1
+%    node[anchor=40,inner sep=1pt] {$\ell_2$};
+%  \draw[->,lepton] (V) to[bend left=16] (L3) % displaced lepton 2
+%    node[anchor=20,inner sep=1pt] {$\ell_3$};
+%  \draw[->,lepton,dashed] (V) -- (N) % displaced neutrino
+%    node[anchor=40,inner sep=1pt] {$\nu$};
+%\end{tikzpicture}
+%
+%% LLP SIGNATURE: DISPLACED JET + PROMPT LEPTON
+%% E.g. a heavy neutral lepton (HNL)
+%\begin{tikzpicture}[scale=\scale,rotate=0]
+%  \def\angN{-162} % angle of HNL
+%  \draw pic[black!15,scale=\scale] {detector={180:\dang}};
+%  \coordinate (PV) at (0,0); % primary vertex
+%  \draw[neutral exo] (PV) -- (\angN:0.90) coordinate (V)
+%    node[pos=0.7,above=0pt] {N};
+%  \coordinate (J) at (\angN-2:2.34); % displaced jet vector
+%  \coordinate (L1) at (\lang:2.50); % prompt lepton
+%  \coordinate (L2) at (\angN+19:2.42); % displaced lepton
+%  \draw[->,lepton] (PV) to[bend right=11] (L1) % prompt lepton
+%    node[anchor=172+\lang,inner sep=1pt] {$\ell_1$};
+%  \draw[->,lepton] (V) to[bend left=16] (L2) % displaced lepton
+%    node[anchor=40,inner sep=1pt] {$\ell_2$};
+%  \jetcone[quarkcol]{V}{J}{23}{0.12}{ % displaced jet
+%    \draw[->,track] (V-v) to[bend left=12] (\angN-9:2.62);
+%    \draw[->,track] (V-v) to[bend right=11] (\angN+4:2.60);
+%    \draw[->,track,dashed] (V-v) -- (\angN-3:2.63);
+%  }
+%\end{tikzpicture}
+%
+%% LLP SIGNATURE: DISPLACED JET + PROMPT LEPTON (boosted)
+%% E.g. a heavy neutral lepton (HNL), boosted N -> lqq'
+%\begin{tikzpicture}[scale=\scale,rotate=0]
+%  \def\angN{-162} % angle of HNL
+%  \draw pic[black!15,scale=\scale] {detector={180:\dang}};
+%  \coordinate (PV) at (0,0); % primary vertex
+%  \draw[neutral exo] (PV) -- (\angN:0.90) coordinate (V)
+%    node[pos=0.7,above=0pt] {N};
+%  \coordinate (J) at (\angN-2:2.34); % displaced jet vector
+%  \coordinate (L1) at (\lang:2.50); % prompt lepton
+%  \coordinate (L2) at (\angN+5:2.69); % displaced lepton
+%  \draw[->,lepton] (PV) to[bend right=13] (L1) % prompt lepton
+%    node[anchor=172+\lang,inner sep=1pt] {$\ell_1$};
+%  \jetcone[quarkcol]{V}{J}{23}{0.12}{ % displaced jet
+%    \draw[->,track] (V-v) to[bend left=12] (\angN-9:2.62);
+%    \draw[->,track] (V-v) to[bend right=11] (\angN+1:2.60);
+%    \draw[->,track,dashed] (V-v) -- (\angN-3:2.63);
+%    \draw[->,lepton] (V-v) to[bend right=14] (L2) % displaced lepton
+%      node[anchor=40,inner sep=0pt] {$\ell_2$};
+%  }
+%\end{tikzpicture}
+%
+%} % end \foreach
 
 
 \end{document}
