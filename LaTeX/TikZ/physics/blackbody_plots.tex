@@ -67,7 +67,7 @@
   \message{^^JBlack body}
   \def\N{60}
   \def\xmax{3100}
-  \def\ymax{1.32e10}
+  \def\ymax{1.36e10}
   \def\tick#1#2{\draw[thick] (#1+.01*\ymax) -- (#1-.01*\ymax) node[below=-.5pt,scale=0.75] {#2};}
   \begin{axis}[
       every axis plot/.style={
@@ -81,10 +81,11 @@
       tick style={black,thick},
       ticklabel style={scale=0.8},
       %xtick style={draw=none},xticklabels=none,
+      max space between ticks=26,
       xlabel={Wavelength $\lambda$ [nm]},
       ylabel={Power $P$ [kW/sr\,m$^2$\,nm]},
       xlabel style={at={(rel axis cs:0.5,0)},below=-1pt,font=\small},
-      ylabel style={at={(rel axis cs:-0.1,0.5)},rotate=90},
+      ylabel style={at={(rel axis cs:-0.11,0.5)},rotate=90},
       width=9cm, height=7cm,
       %clip=false
       tick scale binop=\times,
@@ -135,7 +136,7 @@
   \message{^^JBlack body, Wien's displacement law}
   \def\N{60}
   \def\xmax{3100}
-  \def\ymax{1.32e10}
+  \def\ymax{1.36e10}
   \def\tick#1#2{\draw[thick] (#1+.01*\ymax) -- (#1-.01*\ymax) node[below=-.5pt,scale=0.75] {#2};}
   \begin{axis}[
       every axis plot/.style={
@@ -149,10 +150,11 @@
       tick style={black,thick},
       ticklabel style={scale=0.8},
       %xtick style={draw=none},xticklabels=none,
+      max space between ticks=26,
       xlabel={Wavelength $\lambda$ [nm]},
       ylabel={Power $P$ [kW/sr\,m$^2$\,nm]},
       xlabel style={at={(rel axis cs:0.5,0)},below=-1pt,font=\small},
-      ylabel style={at={(rel axis cs:-0.1,0.5)},rotate=90},
+      ylabel style={at={(rel axis cs:-0.11,0.5)},rotate=90},
       width=9cm, height=7cm,
       %clip=false
       tick scale binop=\times,
@@ -190,6 +192,75 @@
 \end{tikzpicture}
 
 
+% BLACK BODY - 3000, 4000, 5000K
+\begin{tikzpicture}
+  \message{^^JBlack body}
+  \def\N{60}
+  \def\xmax{3100}
+  \def\ymax{1.43e10}
+  \def\tick#1#2{\draw[thick] (#1+.01*\ymax) -- (#1-.01*\ymax) node[below=-.5pt,scale=0.75] {#2};}
+  \begin{axis}[
+      every axis plot/.style={
+        mark=none,samples=\N,domain=5:\xmax,smooth},
+      xmin=(0), xmax=(\xmax),
+      ymin=(0), ymax=(\ymax),
+      restrict y to domain=0:\ymax,
+      %axis lines=middle,
+      axis line style=thick,
+      tick style={black,thick},
+      ticklabel style={scale=0.8},
+      xlabel={Wavelength $\lambda$ [nm]},
+      ylabel={Power $P$ [kW/sr\,m$^2$\,nm]},
+      xlabel style={below=-1pt,font=\small},
+      ylabel style={above=-1pt},
+      width=9cm, height=7cm,
+      tick scale binop=\times,
+      every y tick scale label/.style={at={(rel axis cs:0,1)},anchor=south}]
+    ]
+    
+    % RAINBOW
+    \draw[dashed] (380,{planck(380,5000)}) -- (380,\ymax);
+    \draw[dashed] (740,{planck(740,5000)}) -- (740,\ymax);
+    \begin{scope}
+      \clip[variable=\x,domain=200:1000,samples=40]
+        plot(\x,{planck(\x,5000)}) |- (200,0) -- cycle;
+      \shade[shading=rainbow,shading angle=90,opacity=0.7] (380,0) rectangle (740,\ymax);
+    \end{scope}
+    
+    % PLANCK
+    \addplot[very thick,red]    {planck(x,3000)};
+    \addplot[very thick,orange] {planck(x,4000)};
+    \addplot[very thick,samples=3*\N,blue] {planck(x,5000)};
+    \addplot[dashed,thick,blue,domain=1000:4000]   {rayleighjeans(x,5000)};
+    
+    % MAXIMUM (Wien's displacement law)
+    \addplot[mydarkgreen,thick,variable=T,domain=2200:4000,samples=40]
+      ({lampeak(T)},{planck(lampeak(T),T)});
+    \addplot[mydarkgreen,thick,variable=T,domain=4000:5000,samples=100]
+      ({lampeak(T)},{planck(lampeak(T),T)});
+    \fill[mydarkgreen!80!black] ({lampeak(3000)},{planck(lampeak(3000),3000)}) circle(1.5pt);
+    \fill[mydarkgreen!80!black] ({lampeak(4000)},{planck(lampeak(4000),4000)}) circle(1.5pt);
+    \fill[mydarkgreen!80!black] ({lampeak(5000)},{planck(lampeak(5000),5000)}) circle(1.5pt);
+    
+    % LABELS
+    \node[above=0pt,scale=0.75,red]
+      at (1150,{planck(1150,3000)}) {\SI{3000}{K}};
+    \node[above right=-1pt,scale=0.75,orange!80!black]
+      at (740,{planck(740,4000)}) {\SI{4000}{K}};
+    \node[above right=-1pt,scale=0.75,blue]
+      at (800,{planck(800,5000)}) {\SI{5000}{K}};
+    \node[above right=-1pt,scale=0.75,blue]
+      at (1500,{rayleighjeans(1500,5000)}) {\SI{5000}{K} Rayleigh-Jeans};
+    
+    % LABELS
+    \node[below=2pt,scale=0.8] at (200,\ymax) {\strut UV}; % 10 - 400 nm
+    \node[below=2pt,scale=0.8] at (562,\ymax) {\strut optical}; % 380 - 740 nm
+    \node[below=2pt,scale=0.8] at (920,\ymax) {\strut IR}; % 740 - 1050 nm
+    
+  \end{axis}
+\end{tikzpicture}
+
+
 % BLACK BODY LOG-LOG - colors
 % See https://tikz.net/blackbody_color/
 \begin{tikzpicture} %[scale=2]
@@ -198,7 +269,7 @@
   \def\xmin{35}
   \def\xmax{1.7e5}
   \def\ymin{1e2}
-  \def\ymax{3e12}
+  \def\ymax{2e12}
   \begin{loglogaxis}[
       every axis plot post/.append style={
         very thick,mark=none,domain=\xmin:\xmax,samples=\N,smooth},
@@ -209,6 +280,8 @@
       axis line style=thick,
       tick style={black,thick},
       ticklabel style={scale=0.8},
+      max space between ticks=23,
+      yminorticks=false,
       xlabel={Wavelength $\lambda$ [nm]},
       ylabel={Power $P$ [kW/sr\,m$^2$\,nm]},
       xlabel style={at={(rel axis cs:0.5,0)},below=8pt},
@@ -265,6 +338,8 @@
       tick style={black,thick},
       ticklabel style={scale=0.8},
       %ticks=none,
+      max space between ticks=23,
+      yminorticks=false,
       xlabel={Wavelength $\lambda$ [nm]},
       ylabel={Power $P$ [kW/sr\,m$^2$\,nm]},
       xlabel style={at={(rel axis cs:0.5,0)},below=8pt},
@@ -297,7 +372,7 @@
   \def\xmin{1.5e2}
   \def\xmax{2e5}
   \def\ymin{5e1}
-  \def\ymax{7e9}
+  \def\ymax{4e9}
   \begin{loglogaxis}[
       every axis plot/.style={
         very thick,mark=none,domain=\xmin:\xmax,samples=\N,smooth},
@@ -309,6 +384,8 @@
       tick style={black,thick},
       ticklabel style={scale=0.8},
       %ticks=none,
+      max space between ticks=23,
+      yminorticks=false,
       xlabel={Wavelength $\lambda$ [nm]},
       ylabel={Power $P$ [kW/sr\,m$^2$\,nm]},
       xlabel style={at={(rel axis cs:0.5,0)},below=8pt},
@@ -356,6 +433,8 @@
       tick style={black,thick},
       ticklabel style={scale=0.8},
       %ticks=none,
+      max space between ticks=23,
+      yminorticks=false,
       xlabel={Wavelength $\lambda$ [nm]},
       ylabel={Power $P$ [kW/sr\,m$^2$\,nm]},
       xlabel style={at={(rel axis cs:0.5,0)},below=9pt},
@@ -408,6 +487,8 @@
       tick style={black,thick},
       ticklabel style={scale=0.8},
       %ticks=none,
+      max space between ticks=23,
+      yminorticks=false,
       variable=x,
       xlabel={Wavelength $\lambda$ [nm]},
       ylabel={Power $P$ [kW/sr\,m$^2$\,nm]},

@@ -1,0 +1,123 @@
+% Author: Izaak Neutelings (December 2021)
+% Inspired by
+%   https://www.sciencedirect.com/science/article/pii/S0146641019300109
+%   https://iopscience.iop.org/article/10.1088/1361-6471/ab4574/pdf
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{siunitx}
+\usepackage[outline]{contour} % glow around text
+\usepackage{xfp} % needed for accuracy with \fpeval
+\usepackage{pgfplots} % for the axis environment
+\contourlength{1.1pt}
+\tikzset{>=latex} % for LaTeX arrow head
+
+% redraw axis on top / in front (over filled areas)
+\makeatletter \newcommand{\pgfplotsdrawaxis}{\pgfplots@draw@axis} \makeatother
+\pgfplotsset{axis line on top/.style={after end axis/.append code={\pgfplotsdrawaxis}}}
+
+% UNSLANT GREEK LETTERS for particle symbols
+% https://tex.stackexchange.com/questions/145926/upright-greek-font-fitting-to-computer-modern
+% https://tex.stackexchange.com/questions/236915/adjust-custom-made-upright-greek-letters-when-used-in-subscripts
+\usepackage{scalerel}
+\newsavebox{\foobox}
+\newcommand{\slantbox}[2][0]{\mbox{%
+  \sbox{\foobox}{#2}%
+  \hskip\wd\foobox
+  \pdfsave
+  \pdfsetmatrix{1 0 #1 1}%
+  \llap{\usebox{\foobox}}%
+  \pdfrestore
+}}
+\newcommand\unslant[2][-.25]{%
+  \mkern1.2mu%
+  \ThisStyle{\slantbox[#1]{$\SavedStyle#2$}}%
+  \mkern-1.2mu%
+}
+\newcommand{\PJpsi}{J\!/\!$\unslant\psi$}
+
+% COLORS
+\colorlet{boscol}{red!80!black} % boson color
+\colorlet{mescol}{blue!70!cyan!90!black} % meson color
+\colorlet{barcol}{blue!80!cyan!65!red!85} % baryon color
+\colorlet{lepcol}{green!80!black} % lepton color
+\colorlet{promptcol}{violet!40!black} % prompt color
+\colorlet{dispcol}{orange!40!black} % displaced color
+\colorlet{stablecol}{green!40!black} % stable color
+
+% STYLES
+\tikzstyle{mytick}=[black,line width=0.6]
+\tikzstyle{myminortick}=[black,line width=0.4]
+\tikzstyle{particle}=[text=#1!60!black,draw=none,ball color=#1,postaction={
+  fill=#1,fill opacity=0.4,draw=#1!60!black,line width=0.1}]
+\tikzset{
+  particle/.default=lepcol
+}
+\pgfplotsset{
+  compat=1.13,
+  width=8.5cm, height=6.5cm,
+  axis line style={mytick},
+  tick style={mytick},
+  minor tick style={myminortick},
+  ticklabel style={scale=0.75}
+}
+
+% MACROS
+\def\tmin{1e-26} % minimum lifetime (tau)
+\def\tmax{1e6}   % maximum lifetime (tau)
+\def\mmin{3e-4}  % minimum mass
+\def\mmax{2e3}   % maximum mass
+%\def\ctmin{3e-18} % \tmin/3e8 = 1e-26*3e8
+%\def\ctmax{3e14} % \tmax/3e8 = 1e6*3e8
+\pgfmathsetmacro\ctmin{\fpeval{\tmin*3e8}} % minimum ctau
+\pgfmathsetmacro\ctmax{\fpeval{\tmax*3e8}} % maximum ctau
+\def\Lmin{1e-20}  % minimum decay length (L)
+\def\Lmax{1e16}   % maximum decay length (L)
+\def\xprompt{1e-6} % prompt decay in detector (ctau = 1e-6 m)
+\def\xdisp{  1e-3} % displaced vertex (ctau = 1e-3 m)
+\def\xstable{10}   % stable in detector (ctau = 10 m)
+\def\r{1.3pt}
+\def\part[#1](#2){ % draw particle ball
+  \draw[particle=#1] (#2) circle(\r)
+}
+\def\partDL[#1](#2,#3){ % draw particle ball for average decay length
+  % calculate average decay length as L = (pc/mc^2)*ct
+  \draw[particle=#1] ({\pc/(#3)*(3e8*#2)},#3) circle(\r)
+}
+\def\partlineDL[#1](#2,#3){ % draw particle ball for average decay length
+  \draw[#1,thick,line cap=round]
+    ({\pcmin/(#3)*(3e8*#2)},#3) -- ({\pcmax/(#3)*(3e8*#2)},#3);
+  \draw[particle=#1] ({\pcmax/(#3)*(3e8*#2)},#3) circle(\r)
+}
+
+\begin{document}
+
+
+%\def\tmax{1e2}
+%\def\tmax{1e2}
+\begin{tikzpicture}
+  \begin{loglogaxis}[
+    xmin=\tmin, xmax=\tmax,
+    ymin=\mmin, ymax=\mmax,
+    domain=\tmin:\tmax,
+    y domain=\mmin:\mmax,
+    log basis x=10,
+    log basis y=10,
+    xlabel = Volts,
+    ylabel = Time,
+    view={0}{90},
+    only marks,
+    colorbar,
+    colorbar style={
+      width=10,
+      %yticklabel=$10^{\pgfmathprintnumber{\tick}}$
+      %log basis y=10,
+      ymin=log10(\tmin/\mmax), ymax=log10(\tmax/\mmin),
+    }
+  ]
+    \addplot3[smooth,contour filled={number=2000}]
+      {log10(x/y)};
+      %{{log10(x)-log10(y)}};
+  \end{loglogaxis}
+\end{tikzpicture}
+
+
+\end{document}

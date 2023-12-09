@@ -13,6 +13,7 @@
 \tikzset{>=latex} % for LaTeX arrow head
 
 \colorlet{myred}{red!80!black}
+\colorlet{myblue}{blue!80!black}
 \colorlet{mypurple}{blue!50!red}
 \colorlet{myorange}{orange!90!red!95!black!90}
 \colorlet{mydarkblue}{blue!60!black}
@@ -145,14 +146,14 @@
     \coordinate (T) at (\ang:0.12); % muons
     \coordinate (B) at (\ang+180:0.42); % jet cone
     %\colorlet{conecol}{\cols[0]} % color for cone
-    \draw[myorange!60!yellow!90,very thin] (-0.5,0) -- (0.5,0)
-      node[above=1,right,scale=0.9] {beam axis};
+    \draw[myorange!60!yellow!90,thin] (-0.5,0) -- (0.5,0)
+      node[above=1,right,scale=1] {beam axis};
     \jetcone[blue]{O}{B}{30}{0.16}
     \draw[boson] (O) -- (T);
     \draw[muon] (T) to[out=\ang+10,in=\ang-150]++ (\ang+20:0.30);
     \draw[muon] (T) to[out=\ang-20,in=\ang+130]++ (\ang-33:0.32) coordinate (M);
-    \node[anchor=185,inner sep=3,myred,scale=0.9] at (M) {$\mathrm{Z}\to\mu\mu$};
-    \node[anchor=175,inner sep=5,mydarkblue,scale=0.9] at (B) {recoil jet};
+    \node[anchor=185,inner sep=3,myred,scale=1] at (M) {$\mathrm{Z}\to\mu\mu$};
+    \node[anchor=175,inner sep=5,mydarkblue,scale=1] at (B) {recoil jet};
   \end{scope}
   
   % AXIS
@@ -163,6 +164,74 @@
   \draw[->,thick,mygray]
     (135:4.0) --++ (45:1.3)
     node[pos=0.7,above,rotate=45] {$|y_\text{max}|$};
+  
+\end{tikzpicture}
+
+
+% DIJET EVENTS - PSEUDORAPIDITY
+% Daniel Savoiu, https://indico.cern.ch/event/1073619/#5-update-on-dijet-production-s
+\begin{tikzpicture}[scale=0.8]
+  
+  \def\N{5} % number of eta bins with width 0.5
+  
+  %% DIAGONAL GRIDS (ymax)
+  %\foreach \i [evaluate={\ym=0.5*(\i-1);}] in {1,...,\N}{
+  %  \draw[mygray]
+  %    (\i-1,0) --++ (135:{sqrt(2)*(\i+0.2)}) coordinate (T\i) --++ (45:{sqrt(2)/2});
+  %  \draw[mygray] (T\i) --++ (135:0.06) node[above=-2,rotate=45] {\ym};
+  %}
+  %\draw[mygray] (\N,0) --++ (135:{sqrt(2)*(\N+0.75)}) node[right=3,above=0,rotate=45] {2.5};
+  
+  % GRIDS
+  \foreach \i [evaluate={\y=\i-0.5; \Nx=\N-\i+1; \e=0.5*\i}] in {1,...,\N}{
+    \draw[very thin,dashed,black!50] (0,\i) --++ (\Nx,0);
+    \draw[very thin,dashed,black!50] (\i,0) --++ (0,\Nx);
+    \tick{0,\i}{0} node[left=-1,scale=0.9] {\e};
+    \tick{\i,0}{90} node[below=-1,scale=0.9] {\e};
+  }
+  
+  % JETS
+  \foreach \i [evaluate={\y=\i-0.5; \Nx=\N-\i+1; \e=0.5*\i}] in {1,...,\N}{
+    \foreach \j [evaluate={\x=\j-0.5; \mix=100-60*(\j-1)/(\N-1);
+                           \ang=60*(\i-1)/(\N-1); % seperation
+                           \dang=90-60*(\j-1)/(\N-1); % boost
+                 }] in {1,...,\Nx}{
+      \colorlet{conecol}{\cols[\i]!\mix} % color for cone
+      \coordinate (O) at (\x,\y); % primary vertex
+      \coordinate (T) at ($(\x,\y)+(\ang+\dang:0.42)$); % top jet
+      \coordinate (B) at ($(\x,\y)+(\ang-\dang:0.42)$); % bottom jet
+      \jetcone[conecol]{O}{T}{30}{0.06} %!70!white
+      \jetcone[conecol]{O}{B}{30}{0.16}
+    }
+  }
+  
+  % AXIS
+  \draw[<->,thick]
+    (0,1.1*\N) %node[left] {\contour{white}{$y*$}} --
+    node[left=12,above right=-3] {$\frac{1}{2}\Delta\eta = \frac{1}{2}|\eta_1-\eta_2|$} --
+    (0,0) -- (1.1*\N,0) node[yshift=-10pt,below left=0pt] {Boost $\frac{1}{2}|\eta_1+\eta_2|$}; %\eta_\text{b} = 
+  %\draw[->,thick,mygray]
+  %  (135:4.0) --++ (45:1.3)
+  %  node[pos=0.7,above,rotate=45] {$|\eta_\text{max}|$};
+  
+  
+  % LEGEND
+  \begin{scope}[shift={(4,4)},scale=1.2]
+    \coordinate (O) at (0,0); % primary vertex
+    \coordinate (T) at (130:0.66); % muons
+    \coordinate (B) at (-40:0.66); % jet cone
+    %\colorlet{conecol}{\cols[0]} % color for cone
+    \draw[dashed,very thin] (0,-0.7) -- (0,0.7);
+    \draw[myorange!60!yellow!90,thick] (-0.65,0) -- (0.65,0)
+      node[above=1,right,scale=1,align=left] {beam\\[-2pt]axis};
+    %\draw[boson] (O) -- (T);
+    \jetcone[blue]{O}{T}{25}{0.16}
+    \jetcone[blue]{O}{B}{25}{0.16}
+    %\draw[->,thick,myblue] (O) -- (T);
+    %\draw[->,thick,myblue] (O) -- (B);
+    %\node[anchor=185,inner sep=3,myred,scale=0.9] at (T) {$\mathrm{Z}\to\mu\mu$};
+    %\node[anchor=175,inner sep=5,mydarkblue,scale=0.9] at (B) {recoil jet};
+  \end{scope}
   
 \end{tikzpicture}
 

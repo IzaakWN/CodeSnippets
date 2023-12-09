@@ -1,0 +1,109 @@
+% Author: Izaak Neutelings (February 2023)
+% Sources:
+%   CMS Silicon detector: https://cms.cern/detector/identifying-tracks/silicon-strips
+%   LLPs: https://royalsocietypublishing.org/doi/10.1098/rsta.2019.0047
+%   LLPs: https://hrussell.web.cern.ch/hrussell/graphics.html
+%   LLPs: https://indico.cern.ch/event/607314/contributions/2542309/attachments/1447873/2231444/20170424_LLPs.pdf
+\documentclass[border=3pt,tikz]{standalone}
+\usepackage{amsmath}
+\usetikzlibrary{calc}
+\usetikzlibrary{math} % for \tikzmath
+\usetikzlibrary{decorations.pathmorphing} % for snake, coil, zigzag
+\tikzset{>=latex} % set default arrow head as latex
+
+% COLORS
+\colorlet{leptoncol}{green!70!black}
+\colorlet{quarkcol}{blue!85!cyan!80!black}
+\colorlet{photoncol}{yellow!80!orange!90!black}
+\colorlet{exocol}{red!80!black}
+\colorlet{anycol}{blue!80!cyan!60!red!95!black!90}
+
+% STYLES
+\tikzstyle{label}=[align=center,rounded corners=3pt] %fill=blue!60!cyan!80!black!15,
+\tikzstyle{legend}=[draw=black,thick,rounded corners=3pt] %,fill=blue!60!cyan!80!black!15
+\tikzstyle{entry}=[right=1pt,inner sep=4pt]
+\tikzstyle{particle}=[anycol,very thick,line cap=round]
+\tikzstyle{lepton}=[particle,leptoncol]
+\tikzstyle{quark}=[particle,quarkcol]
+\tikzstyle{track}=[quark,thick]
+\tikzstyle{photon}=[particle,photoncol,decorate,decoration={
+  snake,amplitude=.4mm,segment length=2.5mm,post length=1mm}]
+\tikzstyle{charged exo}=[particle,exocol]
+\tikzstyle{neutral exo}=[charged exo,dashed]
+
+
+\begin{document}
+
+
+% CMS detector
+\def\scale{1.6}
+\begin{tikzpicture}[scale=\scale]
+  
+  % PIXEL TRACKER (PBIX)
+  \foreach \Rlay in {0.09,0.13,0.17,0.21}{
+    \message{^^JPixel tracker: Rlay=\Rlay}
+    \draw[line width=0.1] (0,0) circle(\Rlay);
+  }
+  
+  % SILICON INNER TRACKER (TIB)
+  \def\h{0.12}
+  \def\w{0.010}
+  \def\d{0.028}
+  \foreach \Rlay/\Nlay in {0.40/30,0.55/38,0.70/46,0.85/52}{
+    \message{^^JInner tracker: Rlay=\Rlay, Nlay=\Nlay}
+    \foreach \i [
+      evaluate={\ang=\i*(360/\Nlay);}
+    ] in {1,...,\Nlay}{
+      \fill[rotate around={\ang+10:(\ang:\Rlay-\d)},rounded corners=0.05pt]
+        (\ang:\Rlay-\d)++(-\w/2,-\h/2) rectangle++(\w,\h);
+      \fill[rotate around={\ang+10:(\ang:\Rlay+\d)},rounded corners=0.05pt]
+        (\ang:\Rlay+\d)++(-\w/2,-\h/2) rectangle++(\w,\h);
+    }
+  }
+  
+  % OUTER TRACKER (TOB)
+  \def\h{0.18}
+  \def\w{0.011}
+  \def\d{0.021}
+  \foreach \Rlay/\Nlay in {1.00/21,1.12/24,1.24/27,1.36/30,1.48/33,1.64/37}{
+    \message{^^JOuter tracker: Rlay=\Rlay, Nlay=\Nlay}
+    \foreach \i [
+      evaluate={\anga=(\i-1)*360/\Nlay;\angb=(\i-0.5)*360/\Nlay;}
+    ] in {1,...,\Nlay}{
+      \fill[rotate={\anga},rounded corners=0.05pt]
+        (0:\Rlay-\d-0.55*\w)++(-\w/2,-\h/2) rectangle++(\w,\h)
+        (0:\Rlay-\d+0.55*\w)++(-\w/2,-\h/2) rectangle++(\w,\h);
+      \fill[rotate={\angb},rounded corners=0.1pt]
+        (0:\Rlay+\d-0.55*\w)++(-\w/2,-\h/2) rectangle++(\w,\h)
+        (0:\Rlay+\d+0.55*\w)++(-\w/2,-\h/2) rectangle++(\w,\h);
+    }
+  }
+  
+  % ECAL
+  \def\Ntow{18}
+  \def\Rin{1.85} % inner radius
+  \def\Rout{2.24} % outer radius
+  \message{^^JECAL: Ntow=\Ntow}
+  \foreach \i [
+      evaluate={\anga=(\i-1.5)*360/\Ntow;\angb=(\i-0.5)*360/\Ntow;}
+    ] in {1,...,\Ntow}{
+      \draw (\anga:\Rin) -- (\anga:\Rout) --
+            (\angb:\Rout) -- (\angb:\Rin) -- cycle;
+  }
+  
+  % HCAL
+  \def\Rin{2.28} % inner radius
+  \def\Rout{3.8} % outer radius
+  \message{^^JHCAL: Ntow=\Ntow}
+  \foreach \i [
+      evaluate={\anga=(\i-1.5)*360/\Ntow;\angb=(\i-0.5)*360/\Ntow;}
+    ] in {1,...,\Ntow}{
+    \draw
+      (\anga:\Rin) -- (\anga:\Rout) --
+      (\angb:\Rout) -- (\angb:\Rin) -- cycle;
+  }
+
+\end{tikzpicture}
+
+
+\end{document}

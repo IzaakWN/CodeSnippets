@@ -4,15 +4,14 @@
 %   https://www.youtube.com/watch?v=aircAruvnKk&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi&index=1
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{amsmath} % for aligned
-%\usepackage{amssymb} % for \mathbb
-\usepackage{tikz}
-%\usepackage{etoolbox} % for \ifthen
 \usepackage{listofitems} % for \readlist to create arrays
 \usetikzlibrary{arrows.meta} % for arrow size
 \usepackage[outline]{contour} % glow around text
 \contourlength{1.4pt}
 
 \tikzset{>=latex} % for LaTeX arrow head
+
+% COLORS
 \usepackage{xcolor}
 \colorlet{myred}{red!80!black}
 \colorlet{myblue}{blue!80!black}
@@ -21,17 +20,20 @@
 \colorlet{mydarkred}{red!30!black}
 \colorlet{mydarkblue}{blue!40!black}
 \colorlet{mydarkgreen}{green!30!black}
-\tikzstyle{node}=[thick,circle,draw=myblue,minimum size=22,inner sep=0.5,outer sep=0.6]
-\tikzstyle{node in}=[node,green!20!black,draw=mygreen!30!black,fill=mygreen!25]
-\tikzstyle{node hidden}=[node,blue!20!black,draw=myblue!30!black,fill=myblue!20]
-\tikzstyle{node convol}=[node,orange!20!black,draw=myorange!30!black,fill=myorange!20]
-\tikzstyle{node out}=[node,red!20!black,draw=myred!30!black,fill=myred!20]
-\tikzstyle{connect}=[thick,mydarkblue] %,line cap=round
-\tikzstyle{connect arrow}=[-{Latex[length=4,width=3.5]},thick,mydarkblue,shorten <=0.5,shorten >=1]
-\tikzset{ % node styles, numbered for easy mapping with \nstyle
-  node 1/.style={node in},
+
+% STYLES
+\tikzset{
+  >=latex, % for default LaTeX arrow head
+  node/.style={thick,circle,draw=myblue,minimum size=22,inner sep=0.5,outer sep=0.6},
+  node in/.style={node,green!20!black,draw=mygreen!30!black,fill=mygreen!25},
+  node hidden/.style={node,blue!20!black,draw=myblue!30!black,fill=myblue!20},
+  node convol/.style={node,orange!20!black,draw=myorange!30!black,fill=myorange!20},
+  node out/.style={node,red!20!black,draw=myred!30!black,fill=myred!20},
+  connect/.style={thick,mydarkblue}, %,line cap=round
+  connect arrow/.style={-{Latex[length=4,width=3.5]},thick,mydarkblue,shorten <=0.5,shorten >=1},
+  node 1/.style={node in}, % node styles, numbered for easy mapping with \nstyle
   node 2/.style={node hidden},
-  node 3/.style={node out},
+  node 3/.style={node out}
 }
 \def\nstyle{int(\lay<\Nnodlen?min(2,\lay):3)} % map layer number onto 1, 2, or 3
 
@@ -449,11 +451,11 @@
   \path (NO-\NO) --++ (0,1+\yshift) node[midway,scale=1.2] {$\vdots$};
   
   % EQUATIONS
-  \def\agr#1{{\color{mydarkgreen}a_{#1}^{(0)}}}
-  \node[below=17,right=11,mydarkblue,scale=0.95] at (NO-1)
+  \def\agr#1{{\color{mydarkgreen}a_{#1}^{(0)}}} % green a_i^j
+  \node[below=16,right=11,mydarkblue,scale=0.95] at (NO-1)
     {$\begin{aligned} %\underset{\text{bias}}{b_1}
        &= \color{mydarkred}\sigma\left( \color{black}
-            w_{1,0}\agr{0} + w_{1,1}\agr{1} + \ldots + w_{1,n}\agr{n} + b_1^{(0)}
+            w_{1,1}\agr{1} + w_{1,2}\agr{2} + \ldots + w_{1,n}\agr{n} + b_1^{(0)}
           \color{mydarkred}\right)\\
        &= \color{mydarkred}\sigma\left( \color{black}
             \sum_{i=1}^{n} w_{1,i}\agr{i} + b_1^{(0)}
@@ -471,10 +473,10 @@
       &=
       \color{mydarkred}\sigma\left[ \color{black}
       \begin{pmatrix}
-        w_{1,0} & w_{1,1} & \ldots & w_{1,n} \\
-        w_{2,0} & w_{2,1} & \ldots & w_{2,n} \\
+        w_{1,1} & w_{1,2} & \ldots & w_{1,n} \\
+        w_{2,1} & w_{2,2} & \ldots & w_{2,n} \\
         \vdots  & \vdots  & \ddots & \vdots  \\
-        w_{m,0} & w_{m,1} & \ldots & w_{m,n}
+        w_{m,1} & w_{m,2} & \ldots & w_{m,n}
       \end{pmatrix}
       {\color{mydarkgreen}
       \begin{pmatrix}
@@ -491,11 +493,10 @@
         b_{m}^{(0)}
       \end{pmatrix}
       \color{mydarkred}\right]\\[0.5em]
-      {\color{mydarkblue}a^{(1)}}
+      {\color{mydarkblue}\mathbf{a}^{(1)}} % vector (bold)
       &= \color{mydarkred}\sigma\left( \color{black}
-           \mathbf{W}^{(0)} {\color{mydarkgreen}a^{(0)}}+\mathbf{b}^{(0)}
+           \mathbf{W}^{(0)} {\color{mydarkgreen}\mathbf{a}^{(0)}}+\mathbf{b}^{(0)}
          \color{mydarkred}\right)
-         %\color{black},\quad \mathbf{W}^{(0)} \in \mathbb{R}^{m\times n}
     \end{aligned}$};
   
 \end{tikzpicture}

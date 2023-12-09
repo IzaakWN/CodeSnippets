@@ -28,6 +28,7 @@
 \tikzstyle{myorangeset}=[myset,draw=mydarkorange,fill=mydarkorange!3]
 \tikzstyle{mydashed}=[very thin,dashed,draw=black!50,opacity=0.4]
 \tikzstyle{purple line}=[thick,draw=mydarkpurple]
+\tikzstyle{frontline}=[white,double=black,double distance=0.4,line width=0.5]
 \tikzset{
   narcs/.initial=1,      % number of (dark) arcs
   nmarks/.initial=0,     % number of marks to indicate equal angles
@@ -715,8 +716,8 @@
   \def\yrectangle{1.2} % y position rectangle
   \def\yrighttrap{3}   % y position right-angled trapezium
   \def\ytrap{4.0}      % y position of general trapezia
-  \def\colpara{mydarkgreen!3} % contour color for parallelograms
-  \def\coltrap{mydarkred!3}   % contour color for isosceles trapezia
+  \def\colpara{white}  % contour color for parallelograms
+  \def\coltrap{white}  % contour color for isosceles trapezia
   
   % QUADRILATERALS
   \commontraps
@@ -745,7 +746,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{tikzpicture}
-  \message{^^JTrapezia only, incl. obtuse & acute}
+  \message{^^JTrapezia only, incl. obtuse & acute with grouping}
   
   \def\H{2.2}          % height of each row
   \def\W{2.4}          % width of column
@@ -898,6 +899,7 @@
       (obtuse trapezium) -- (trapezium)
       (square) -- (rectangle) -- (right trapezium) -- (trapezium)
       (square) -- (3 trapezium) -- (2 trapezium)
+      (kite) -- (rhombus)
       (parallelogram) -- (rectangle) -- (2 trapezium) %--
       (acute trapezium) -- (trapezium)
       (irregular) -- (quadrilateral) -- (trapezium);
@@ -945,7 +947,7 @@
       (trapezium) -- (convex) -- (cyclic)
       (simple) -- (quadrilateral-W)
       (complex-W) -- (quadrilateral-E);
-    \draw[white,double=black,double distance=0.4,line width=0.5]
+    \draw[frontline]
       (cyclic) -- (bicentric)
       (right kite) -- (bicentric) -- (tangential);
     \draw[blue!20!black!50,dashed]
@@ -1020,9 +1022,9 @@
       (trapezium) -- (convex)
       (simple) -- (quadrilateral-W)
       (complex-W) -- (quadrilateral-E);
-    \draw[white,double=black,double distance=0.4,line width=0.5]
+    \draw[frontline]
       (2 trapezium) -- (cyclic-W);
-    \draw[mydarkorange!3,double=black,double distance=0.4,line width=0.5]
+    \draw[frontline,mydarkorange!3]
       (cyclic) -- (bicentric)
       (tangential) -- (bicentric-N)
       (right kite) -- (bicentric-W);
@@ -1311,7 +1313,7 @@
       (crossed rectangle) -- (crossed parallelogram)
       (crossed rectangle) -- (antiparallelogram) -- (concave cyclic)
       (crossed 2 trapezium) -- (concave cyclic) -- (complex-E);
-    \draw[white,double=black,double distance=0.4,line width=0.5]
+    \draw[frontline]
       (convex cyclic-W) -- (bicentric) -- (right kite)
       (bicentric-N) -- (tangential)
       (cyclic) -- (concave cyclic);

@@ -88,12 +88,12 @@
 \newcommand\opGen[2]{min(#1,(\setGen==0 || \setGen==#2) ? 1 : \d)} % calculate fermion opacity
 \newcommand\myfrac[2]{\sfrac{#1\mkern-1.2mu}{#2}} % slanted frac
 \tikzset{
-  x={(1.4,0)},y={(0,1.6)}, % scale x, y axes differently
+  x={(1.25,0)},y={(0,1.5)}, % scale x, y axes differently
   global scale/.style={scale=#1,every node/.style={scale=#1}},
   intgroup/.style={draw=#1!90!black!80,line width=0.5, % interaction groups
                    fill=#1,fill opacity=0.5},
   intgroup/.default=groupcol,
-  pics/particle/.style n args={6}{ % particle boxes
+  pics/particle/.style n args={3}{ % particle boxes
     code={
       \tikzset{/tikz/pic opacity/.get=\OP}
       \begin{scope}[opacity=\OP]
@@ -106,8 +106,6 @@
               top color=#1!90!black!40,bottom color=#1!75!black!40]
           (-sw) rectangle (-ne);
       \else % do not fill particle boxes with color
-        %\draw[draw=#1,line width=1.1,rounded corners=3pt]
-        %  (-sw) rectangle (-ne);
         \fill[top color=#1,bottom color=#1!90!black,shading angle=30,
               rounded corners=3pt,even odd rule]
           (-0.48*\pw,-0.48*\pw) rectangle (0.48*\pw,0.48*\pw)
@@ -120,7 +118,7 @@
           \fill[ball color=\col,scale=1,shift=(\shift),scale=\scale, % particle ball
                 postaction={fill=\col!80,opacity=0.8*\OP,
                 draw=\col!80!black!90,ultra thin}]
-            (0,0.06) circle(9.5pt) coordinate(-p);
+            (0,0.11) circle(9.5pt) coordinate(-p);
           }
       \else \ifnum\pgfkeysvalueof{/tikz/gluon balls}=1 % draw GLUON as colored RGB balls
         \foreach \col/\shift/\scale in {%
@@ -131,25 +129,19 @@
           \fill[ball color=\col,scale=1,shift=(\shift),scale=\scale, % particle ball
                 postaction={fill=\col!80,opacity=0.8*\OP,
                 draw=\col!80!black!90,ultra thin}]
-            (0,0.06) circle(9pt) coordinate(-p);
+            (0,0.11) circle(9pt) coordinate(-p);
           }
       \else % draw one PARTICLE ball
         \draw[draw=none,ball color=#1,scale=1, % particle ball
               postaction={fill=#1!77,opacity=0.8*\OP,
               draw=#1!80!black!90,ultra thin}]
-          (0,0.06) circle(\pgfkeysvalueof{/tikz/ball radius}) coordinate(-p);
+          (0,0.11) circle(\pgfkeysvalueof{/tikz/ball radius}) coordinate(-p);
       \fi \fi
       \node[text=black,scale=1,shift=\pgfkeysvalueof{/tikz/symb shift}] % particle symbol
         at (-p) {\textbf{\boldmath{#2}}};
       \node[align=center,font=\bf, % particle name
-            scale=0.8*\pgfkeysvalueof{/tikz/scale name}]
-        at (0,-0.3) {\strut#3};
-      \node[below right,proplabel] % mass
-        at (-0.5*\pw,0.50*\pw) {\strut$#4$};
-      \node[below right,proplabel] % charge
-        at (-0.5*\pw,0.35*\pw) {\strut$#5$};
-      \node[below right,proplabel] % spin
-        at (-0.5*\pw,0.20*\pw) {\strut$#6$};
+            scale=0.7*\pgfkeysvalueof{/tikz/scale name}]
+        at (0,-0.29) {\strut#3};
       \end{scope}
     }
   },
@@ -202,17 +194,9 @@
   \node[above=0pt,scale=0.75] at (3,4.5) {III};
   \fill[mylightblue,rounded corners=4pt] % BOSINOS / FERMIONS
     (\nfermioncols+1-0.52*\pw,4.74) rectangle (\nfermioncols+\nbosoncols+0.52*\pw,5.1)
-    node[midway,header,scale=0.97] {%
+    node[midway,header,scale=0.96,xscale=0.92] {%
       superpartners of SM bosons\\[0pt]
       (bosinos, fermions)};
-}
-\def\legend{
-  \node[below left,proplabel]
-    at (0.5,4+0.50*\pw) {\strut mass};
-  \node[below left,proplabel]
-    at (0.5,4+0.35*\pw) {\strut charge};
-  \node[below left,proplabel]
-    at (0.5,4+0.20*\pw) {\strut spin};
 }
 
 \begin{document}
@@ -245,7 +229,6 @@
   
   % HEADERS
   \headers
-  \legend
   
   % SWITCHES
   \pgfmathsetmacro\opAllLep{max(\opLep,\opNu)}
@@ -255,28 +238,22 @@
   % QUARKS
   %\begin{scope}[opacity=\opQua,pic opacity=\opQua] % to highlight others
     \pic[pic opacity=\opGen{\opQua}{1}] (QU) at (1,4) {
-      particle={quarkcol}{u}{up}{%
-        \simeq2.2\MeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+      particle={quarkcol}{u}{up}
     };
     \pic[pic opacity=\opGen{\opQua}{2}] (QC) at (2,4) {
-      particle={quarkcol}{c}{charm}{%
-        \simeq1.3\GeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+      particle={quarkcol}{c}{charm}
     };
     \pic[pic opacity=\opGen{\opQua}{3}] (QT) at (3,4) {
-      particle={quarkcol}{t}{top}{%
-        \simeq173\GeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+      particle={quarkcol}{t}{top}
     };
     \pic[pic opacity=\opGen{\opQua}{1},symb shift=(90:0.5pt)] (QD) at (1,3) {
-      particle={quarkcol}{d}{down}{%
-        \simeq4.7\MeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+      particle={quarkcol}{d}{down}
     };
     \pic[pic opacity=\opGen{\opQua}{2}] (QS) at (2,3) {
-      particle={quarkcol}{s}{strange}{%
-        \simeq96\MeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+      particle={quarkcol}{s}{strange}
     };
     \pic[pic opacity=\opGen{\opQua}{3},symb shift=(90:0.5pt)] (QB) at (3,3) {
-      particle={quarkcol}{b}{bottom}{%
-        \simeq4.2\GeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+      particle={quarkcol}{b}{bottom}
     };
     \node[quarkcol,bflabel,above right=0pt and -2pt,opacity=\opQua]
       at (QD-sw) {QUARKS};
@@ -284,28 +261,22 @@
   
   % LEPTONS
   \pic[pic opacity=\opGen{\opLep}{1}] (EL) at (1,2) {
-    particle={leptoncol}{e}{electron}{%
-      \simeq0.511\MeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{e}{electron}
   };
   \pic[pic opacity=\opGen{\opLep}{2},symb shift=(-90:0.6pt)] (MU) at (2,2) {
-    particle={leptoncol}{$\PGm$}{muon}{%
-      \simeq106\MeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGm$}{muon}
   };
   \pic[pic opacity=\opGen{\opLep}{3}] (TAU) at (3,2) {
-    particle={leptoncol}{$\PGt$}{tau}{%
-      \simeq1.777\GeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGt$}{tau}
   };
   \pic[pic opacity=\opGen{\opNu}{1},scale name=0.83] (NE) at (1,1) {
-    particle={leptoncol}{$\PGn{\text{e}}$}{electron\\[-3pt]neutrino}{%
-      <1.0\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\text{e}}$}{electron\\[-3pt]neutrino}
   };
   \pic[pic opacity=\opGen{\opNu}{2},scale name=0.83,symb shift=(-90:0.6pt)] (NM) at (2,1) {
-    particle={leptoncol}{$\PGn{\PGm}$}{muon\\[-3pt]neutrino}{%
-      <0.17\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\PGm}$}{muon\\[-3pt]neutrino}
   };
   \pic[pic opacity=\opGen{\opNu}{3},scale name=0.83] (NT) at (3,1) {
-    particle={leptoncol}{$\PGn{\PGt}$}{tau\\[-3pt]neutrino}{%
-      <18.2\MeV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\PGt}$}{tau\\[-3pt]neutrino}
   };
   \node[leptoncol,bflabel,above right=0pt and -2pt,opacity=\opAllLep]
     at (NE-sw) {LEPTONS};
@@ -313,20 +284,16 @@
   % GAUGE BOSONS
   \begin{scope}[pic opacity=1] % to highlight others
     \pic[pic opacity=\opGlu] (GLU) at (4,4) {
-      particle={gaugecol}{g}{gluon}{%
-        0}{0}{1}
+      particle={gaugecol}{g}{gluon}
     };
     \pic[pic opacity=\opGam] (GAM) at (4,3) {
-      particle={gaugecol}{$\gamma$}{photon}{%
-        0}{0}{1}
+      particle={gaugecol}{$\gamma$}{photon}
     };
     \pic[pic opacity=\opWeak] (W) at (4,2) {
-      particle={gaugecol}{W}{W boson}{% %$\mathrm{W}^\pm$
-        \simeq80.4\GeV}{\pm1}{1}
+      particle={gaugecol}{W}{W boson}
     };
     \pic[pic opacity=\opWeak] (Z) at (4,1) {
-      particle={gaugecol}{Z}{Z boson}{% %$\mathrm{Z}^0$
-        \simeq91.2\GeV}{0}{1}
+      particle={gaugecol}{Z}{Z boson} %$\mathrm{Z}^0$
     };
     %%%\pic[pic opacity=\opWeak,scale name=0.88] (L) at (5.6,1) {
     %%%  particle={gaugecol}{LQ}{leptoquark}{% %^0$
@@ -343,8 +310,7 @@
   % SCALAR BOSONS
   \begin{scope}[opacity=\opHig,pic opacity=\opHig] % to highlight others
     \pic (HIG) at (5,4) {
-      particle={scalarcol}{H}{Higgs}{%
-        \simeq125\GeV}{0}{0}
+      particle={scalarcol}{H}{Higgs}
     };
     \node[scalarcol,bflabel,above left=-2pt and 2pt]
       at (HIG-se) {SCALAR BOSONS};
@@ -353,8 +319,7 @@
   %%%% TENSOR BOSONS
   %%%\begin{scope}[opacity=\opHig,pic opacity=\opHig] % to highlight others
   %%%  \pic (GRA) at (6,4) {
-  %%%    particle={tensorcol}{G}{graviton}{%
-  %%%      0}{0}{2}
+  %%%    particle={tensorcol}{G}{graviton}
   %%%  };
   %%%  \node[tensorcol,bflabel,above left=-2pt and 2pt]
   %%%    (TB) at (GRA-se) {TENSOR BOSONS};
@@ -412,80 +377,63 @@
   % HEADERS
   \def\nbosoncols{3} % number of boson columns
   \headers
-  \legend
   
   % QUARKS
   \pic (QU) at (1,4) {
-    particle={quarkcol}{u}{up}{%
-      \simeq2.2\MeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{u}{up}
   };
   \pic (QC) at (2,4) {
-    particle={quarkcol}{c}{charm}{%
-      \simeq1.3\GeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{c}{charm}
   };
   \pic (QT) at (3,4) {
-    particle={quarkcol}{t}{top}{%
-      \simeq173\GeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{t}{top}
   };
   \pic (QD) at (1,3) {
-    particle={quarkcol}{d}{down}{%
-      \simeq4.7\MeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{d}{down}
   };
   \pic (QS) at (2,3) {
-    particle={quarkcol}{s}{strange}{%
-      \simeq96\MeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{s}{strange}
   };
   \pic (QB) at (3,3) {
-    particle={quarkcol}{b}{bottom}{%
-      \simeq4.2\GeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{b}{bottom}
   };
   \node[quarkcol,bflabel,above right=0pt and -2pt]
     at (QD-sw) {QUARKS};
   
   % LEPTONS
   \pic (EL) at (1,2) { %[pshift={(50:0.9)}]
-    particle={leptoncol}{e}{electron}{%
-      \simeq0.511\MeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{e}{electron}
   };
   \pic[symb shift=(-90:0.6pt)] (MU) at (2,2) {
-    particle={leptoncol}{$\PGm$}{muon}{%
-      \simeq106\MeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGm$}{muon}
   };
   \pic (TAU) at (3,2) {
-    particle={leptoncol}{$\PGt$}{tau}{%
-      \simeq1.777\GeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGt$}{tau}
   };
   \pic[scale name=0.83] (NE) at (1,1) {
-    particle={leptoncol}{$\PGn{\text{e}}$}{electron\\[-3pt]neutrino}{%
-      <1.0\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\text{e}}$}{electron\\[-3pt]neutrino}
   };
   \pic[symb shift=(-90:0.6pt),scale name=0.83] (NM) at (2,1) {
-    particle={leptoncol}{$\PGn{\PGm}$}{muon\\[-3pt]neutrino}{%
-      <0.17\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\PGm}$}{muon\\[-3pt]neutrino}
   };
   \pic[scale name=0.83] (NT) at (3,1) {
-    particle={leptoncol}{$\PGn{\PGt}$}{tau\\[-3pt]neutrino}{%
-      <18.2\MeV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\PGt}$}{tau\\[-3pt]neutrino}
   };
   \node[leptoncol,bflabel,above right=0pt and -2pt]
     at (NE-sw) {LEPTONS};
   
   % GAUGE BOSONS
   \pic (GLU) at (4,4) {
-    particle={gaugecol}{g}{gluon}{%
-      0}{0}{1}
+    particle={gaugecol}{g}{gluon}
   };
   \pic (GAM) at (4,3) {
-    particle={gaugecol}{$\gamma$}{photon}{%
-      0}{0}{1}
+    particle={gaugecol}{$\gamma$}{photon}
   };
   \pic (W) at (4,2) {
-    particle={gaugecol}{W}{W boson}{% %$\mathrm{W}^\pm$
-      \simeq80.4\GeV}{\pm1}{1}
+    particle={gaugecol}{W}{W boson} %$\mathrm{W}^\pm$
   };
   \pic (Z) at (4,1) {
-    particle={gaugecol}{Z}{Z boson}{% %$\mathrm{Z}^0$
-      \simeq91.2\GeV}{0}{1}
+    particle={gaugecol}{Z}{Z boson} %$\mathrm{Z}^0$
   };
   %%%\pic[scale name=0.7] (L) at (5.6,1) {
   %%%  particle={gaugecol}{LQ}{leptoquark}{% %^0$
@@ -498,16 +446,14 @@
   
   % SCALAR BOSONS
   \pic (HIG) at (5,4) {
-    particle={scalarcol}{H}{Higgs}{%
-      \simeq125\GeV}{0}{0}
+    particle={scalarcol}{H}{Higgs}
   };
   \node[scalarcol,bflabel,above left=-2pt and 2pt]
     at (HIG-se) {SCALAR BOSONS};
   
   % TENSOR BOSONS
   \pic (GRA) at (6,4) {
-    particle={tensorcol}{G}{graviton}{%
-      0}{0}{2}
+    particle={tensorcol}{G}{graviton}
   };
   \node[tensorcol,bflabel,above left=-2pt and 2pt]
     (TB) at (GRA-se) {TENSOR BOSONS};
@@ -527,140 +473,109 @@
   \def\nfermioncols{6} % number of fermion columns
   \def\nbosoncols{2} % number of boson columns
   \headers
-  \legend
   
   % QUARKS
   \pic[quark balls=1,scale name=1] (QU) at (1,4) {
-    particle={quarkcol}{u}{up}{%
-      \simeq2.2\MeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{u}{up}
   };
   \pic[quark balls=1,scale name=1] (QC) at (2,4) {
-    particle={quarkcol}{c}{charm}{%
-      \simeq1.3\GeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{c}{charm}
   };
   \pic[quark balls=1,scale name=1] (QT) at (3,4) {
-    particle={quarkcol}{t}{top}{%
-      \simeq173\GeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{t}{top}
   };
   \pic[quark balls=1,scale name=1] (QD) at (1,3) {
-    particle={quarkcol}{d}{down}{%
-      \simeq4.7\MeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{d}{down}
   };
   \pic[quark balls=1,scale name=1] (QS) at (2,3) {
-    particle={quarkcol}{s}{strange}{%
-      \simeq96\MeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{s}{strange}
   };
   \pic[quark balls=1,scale name=1] (QB) at (3,3) {
-    particle={quarkcol}{b}{bottom}{%
-      \simeq4.2\GeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{b}{bottom}
   };
   \node[quarkcol,bflabel,above right=0pt and -2pt]
     at (QD-sw) {QUARKS};
   
   % ANTIQUARKS
   \pic[quark balls=1,scale name=1] (QU) at (4,4) {
-    particle={quarkcol}{$\overline{\text{u}}$}{antiup}{%
-      \simeq2.2\MeV}{\!\myfrac{-\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{$\overline{\text{u}}$}{antiup}
   };
   \pic[quark balls=1,scale name=0.95] (QC) at (5,4) {
-    particle={quarkcol}{$\overline{\text{c}}$}{anticharm}{%
-      \simeq1.3\GeV}{\!\myfrac{-\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{$\overline{\text{c}}$}{anticharm}
   };
   \pic[quark balls=1,scale name=1] (QT) at (6,4) {
-    particle={quarkcol}{$\overline{\text{t}}$}{antitop}{%
-      \simeq173\GeV}{\!\myfrac{-\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{$\overline{\text{t}}$}{antitop}
   };
   \pic[quark balls=1,scale name=0.95,symb shift=(90:0.5pt)] (QD) at (4,3) {
-    particle={quarkcol}{$\overline{\text{d}}$}{antidown}{%
-      \simeq4.7\MeV}{\!\myfrac{+\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{$\overline{\text{d}}$}{antidown}
   };
   \pic[quark balls=1,scale name=0.87] (QS) at (5,3) {
-    particle={quarkcol}{$\overline{\text{s}}$}{antistrange}{%
-      \simeq96\MeV}{\!\myfrac{+\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{$\overline{\text{s}}$}{antistrange}
   };
   \pic[quark balls=1,scale name=0.87,symb shift=(90:0.5pt)] (QB) at (6,3) {
-    particle={quarkcol}{$\overline{\text{b}}$}{antibottom}{%
-      \simeq4.2\GeV}{\!\myfrac{+\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{$\overline{\text{b}}$}{antibottom}
   };
   
   % LEPTONS
   \pic[symb shift=(60:1pt)] (EL) at (1,2) {
-    particle={leptoncol}{e$^-$}{electron}{%
-      \simeq0.511\MeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{e$^-$}{electron}
   };
   \pic[symb shift=(30:1pt)] (MU) at (2,2) {
-    particle={leptoncol}{$\PGm^-$}{muon}{%
-      \simeq106\MeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGm^-$}{muon}
   };
   \pic[symb shift=(60:1.3pt)] (TAU) at (3,2) {
-    particle={leptoncol}{$\PGt^-$}{tau}{%
-      \simeq1.777\GeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGt^-$}{tau}
   };
   \pic[symb shift=(-80:0.3pt),scale name=0.83] (NE) at (1,1) {
-    particle={leptoncol}{$\PGn{\text{e}}$}{electron\\[-3pt]neutrino}{%
-      <1.0\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\text{e}}$}{electron\\[-3pt]neutrino}
   };
   \pic[symb shift=(-60:0.7pt),scale name=0.83] (NM) at (2,1) {
-    particle={leptoncol}{$\PGn{\PGm}$}{muon\\[-3pt]neutrino}{%
-      <0.17\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\PGm}$}{muon\\[-3pt]neutrino}
   };
   \pic[symb shift=(-75:0.3pt),scale name=0.83] (NT) at (3,1) {
-    particle={leptoncol}{$\PGn{\PGt}$}{tau\\[-3pt]neutrino}{%
-      <18.2\MeV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\PGt}$}{tau\\[-3pt]neutrino}
   };
   \node[leptoncol,bflabel,above right=0pt and -2pt]
     at (NE-sw) {LEPTONS};
   
   % ANTI-LEPTONS
   \pic[symb shift=(60:1pt)] (EL) at (4,2) {
-    particle={leptoncol}{e$^+$}{electron}{%
-      \simeq0.511\MeV}{+1}{\myfrac{1}{2}}
+    particle={leptoncol}{e$^+$}{electron}
   };
   \pic[symb shift=(30:1pt)] (MU) at (5,2) {
-    particle={leptoncol}{$\PGm^+$}{muon}{%
-      \simeq106\MeV}{+1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGm^+$}{muon}
   };
   \pic[symb shift=(60:1.3pt)] (TAU) at (6,2) {
-    particle={leptoncol}{$\PGt^+$}{tau}{%
-      \simeq1.777\GeV}{+1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGt^+$}{tau}
   };
   \pic[symb shift=(0:0.2pt),scale name=0.80] (NE) at (4,1) {
-    particle={leptoncol}{$\PAGn{\text{e}}$}{electron\\[-3pt]antineutrino}{%
-      <1.0\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PAGn{\text{e}}$}{electron\\[-3pt]antineutrino}
   };
   \pic[symb shift=(-60:0.4pt),scale name=0.80] (NM) at (5,1) {
-    particle={leptoncol}{$\PAGn{\PGm}$}{muon\\[-3pt]antineutrino}{%
-      <0.17\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PAGn{\PGm}$}{muon\\[-3pt]antineutrino}
   };
   \pic[symb shift=(-50:0.3pt),scale name=0.80] (NT) at (6,1) {
-    particle={leptoncol}{$\PAGn{\PGt}$}{tau\\[-3pt]antineutrino}{%
-      <18.2\MeV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PAGn{\PGt}$}{tau\\[-3pt]antineutrino}
   };
   
   % GAUGE BOSONS
   \pic[gluon balls=1] (GLU) at (\nfermioncols+1,4) {
-    particle={gaugecol}{g}{gluon}{%
-      0}{0}{1}
+    particle={gaugecol}{g}{gluon}
   };
   \pic (GAM) at (\nfermioncols+1,3) {
-    particle={gaugecol}{$\gamma$}{photon}{%
-      0}{0}{1}
+    particle={gaugecol}{$\gamma$}{photon}
   };
   \pic (Z) at (\nfermioncols+1,2) {
-    particle={gaugecol}{Z$^0$}{Z boson}{% %$\mathrm{Z}^0$
-      \simeq91.2\GeV}{0}{1}
+    particle={gaugecol}{Z$^0$}{Z boson} %$\mathrm{Z}^0$
   };
   \pic[symb shift=(10:0.5pt)] (W) at (\nfermioncols+1,1) {
-    particle={gaugecol}{W$^-$}{W boson}{%
-      \simeq80.4\GeV}{-1}{1}
+    particle={gaugecol}{W$^-$}{W boson}
   };
   \pic[symb shift=(10:0.5pt)] (W) at (\nfermioncols+2,1) {
-    particle={gaugecol}{W$^+$}{W boson}{%
-      \simeq80.4\GeV}{+1}{1}
+    particle={gaugecol}{W$^+$}{W boson}
   };
   %\pic[symb shift=(10:0.5pt),ball radius=11pt] (W) at (\nfermioncols+1,2) {
-  %  particle={gaugecol}{W$^\pm$}{W boson}{% %$\mathrm{W}^\pm$
-  %    \simeq80.4\GeV}{\pm1}{1}
+  %  particle={gaugecol}{W$^\pm$}{W boson} %$\mathrm{W}^\pm$
   %};
   \node[gaugecol,bflabel,below right=0pt and 2pt]
     (GB) at (Z-se) {GAUGE BOSONS};
@@ -669,8 +584,7 @@
   
   % SCALAR BOSONS
   \pic (HIG) at (\nfermioncols+2,4) {
-    particle={scalarcol}{H}{Higgs}{%
-      \simeq125\GeV}{0}{0}
+    particle={scalarcol}{H}{Higgs}
   };
   \node[scalarcol,bflabel,below left=0pt and -2pt]
     at (HIG-ne) {SCALAR BOSONS};
@@ -686,80 +600,63 @@
   
   % HEADERS
   \headers
-  \legend
   
   % QUARKS
   \pic (QU) at (1,4) {
-    particle={quarkcol}{u}{up}{%
-      \simeq2.2\MeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{u}{up}
   };
   \pic (QC) at (2,4) {
-    particle={quarkcol}{c}{charm}{%
-      \simeq1.3\GeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{c}{charm}
   };
   \pic (QT) at (3,4) {
-    particle={quarkcol}{t}{top}{%
-      \simeq173\GeV}{\!\myfrac{+\!2}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{t}{top}
   };
   \pic (QD) at (1,3) {
-    particle={quarkcol}{d}{down}{%
-      \simeq4.7\MeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{d}{down}
   };
   \pic (QS) at (2,3) {
-    particle={quarkcol}{s}{strange}{%
-      \simeq96\MeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{s}{strange}
   };
   \pic (QB) at (3,3) {
-    particle={quarkcol}{b}{bottom}{%
-      \simeq4.2\GeV}{\!\myfrac{-\!1}{3}}{\myfrac{1}{2}}
+    particle={quarkcol}{b}{bottom}
   };
   \node[quarkcol,bflabel,above right=0pt and -2pt]
     at (QD-sw) {QUARKS};
   
   % LEPTONS
   \pic (EL) at (1,2) { %[pshift={(50:0.9)}]
-    particle={leptoncol}{e}{electron}{%
-      \simeq0.511\MeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{e}{electron}
   };
   \pic[symb shift=(-90:0.6pt)] (MU) at (2,2) {
-    particle={leptoncol}{$\PGm$}{muon}{%
-      \simeq106\MeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGm$}{muon}
   };
   \pic (TAU) at (3,2) {
-    particle={leptoncol}{$\PGt$}{tau}{%
-      \simeq1.777\GeV}{-1}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGt$}{tau}
   };
   \pic[scale name=0.83] (NE) at (1,1) {
-    particle={leptoncol}{$\PGn{\text{e}}$}{electron\\[-3pt]neutrino}{%
-      <1.0\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\text{e}}$}{electron\\[-3pt]neutrino}
   };
   \pic[symb shift=(-90:0.6pt),scale name=0.83] (NM) at (2,1) {
-    particle={leptoncol}{$\PGn{\PGm}$}{muon\\[-3pt]neutrino}{%
-      <0.17\eV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\PGm}$}{muon\\[-3pt]neutrino}
   };
   \pic[scale name=0.83] (NT) at (3,1) {
-    particle={leptoncol}{$\PGn{\PGt}$}{tau\\[-3pt]neutrino}{%
-      <18.2\MeV}{0}{\myfrac{1}{2}}
+    particle={leptoncol}{$\PGn{\PGt}$}{tau\\[-3pt]neutrino}
   };
   \node[leptoncol,bflabel,above right=0pt and -2pt]
     at (NE-sw) {LEPTONS};
   
   % GAUGE BOSONS
   \pic (GLU) at (4,4) {
-    particle={gaugecol}{g}{gluon}{%
-      0}{0}{1}
+    particle={gaugecol}{g}{gluon}
   };
   \pic (GAM) at (4,3) {
-    particle={gaugecol}{$\gamma$}{photon}{%
-      0}{0}{1}
+    particle={gaugecol}{$\gamma$}{photon}
   };
   \pic (W) at (4,2) {
-    particle={gaugecol}{W}{W boson}{% %$\mathrm{W}^\pm$
-      \simeq80.4\GeV}{\pm1}{1}
+    particle={gaugecol}{W}{W boson} %$\mathrm{W}^\pm$
   };
   \pic (Z) at (4,1) {
-    particle={gaugecol}{Z}{Z boson}{% %$\mathrm{Z}^0$
-      \simeq91.2\GeV}{0}{1}
+    particle={gaugecol}{Z}{Z boson} %$\mathrm{Z}^0$
   };
   %\node[gaugecol,bflabel,below right=0pt and 2pt]
   %  (GB) at (Z-se) {GAUGE BOSONS};
@@ -772,20 +669,16 @@
   
   % SCALAR BOSONS
   \pic[scale name=0.88] (HIG-h) at (5,4) {
-    particle={scalarcol}{h}{light\\[-3pt]Higgs}{%
-      \simeq125\GeV?}{0}{0}
+    particle={scalarcol}{h}{light\\[-3pt]Higgs}
   };
   \pic[scale name=0.88] (HIG-H) at (5,3) {
-    particle={scalarcol}{H}{heavy\\[-3pt]Higgs}{%
-      \simeq125\GeV?}{0}{0}
+    particle={scalarcol}{H}{heavy\\[-3pt]Higgs}
   };
   \pic[scale name=0.79] (HIG-A) at (5,2) {
-    particle={scalarcol}{A}{pseudoscalar\\[-3pt]Higgs}{%
-      ?}{0}{0}
+    particle={scalarcol}{A}{pseudoscalar\\[-3pt]Higgs}
   };
   \pic[scale name=0.88] (HIG-C) at (5,1) {
-    particle={scalarcol}{H$^\pm$}{charged\\[-3pt]Higgs}{%
-      ?}{0}{0}
+    particle={scalarcol}{H$^\pm$}{charged\\[-3pt]Higgs}
   };
   \node[scalarcol,bflabel,below left=2pt and -2pt]
     at (HIG-h-ne) {(PSEUDO)SCALAR BOSONS};
@@ -801,88 +694,70 @@
   
   % HEADERS
   \headerMSSM
-  \legend
   
   % SQUARKS
   \pic[symb shift=(90:0.4pt),scale name=0.84] (QU) at (1,4) {
-    particle={quarkcol}{$\mytilde{u}$}{up\\[-3pt]squark}{%
-      ?}{\!\myfrac{+\!2}{3}}{0}
+    particle={quarkcol}{$\mytilde{u}$}{up\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.4pt),scale name=0.84] (QC) at (2,4) {
-    particle={quarkcol}{$\mytilde{c}$}{charm\\[-3pt]squark}{%
-      ?}{\!\myfrac{+\!2}{3}}{0}
+    particle={quarkcol}{$\mytilde{c}$}{charm\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.6pt)] (QT) at (3,4) {
-    particle={quarkcol}{$\mytilde{t}$}{stop}{%
-      ?}{\!\myfrac{+\!2}{3}}{0}
+    particle={quarkcol}{$\mytilde{t}$}{stop}
   };
   \pic[symb shift=(90:0.6pt),scale name=0.84] (QD) at (1,3) {
-    particle={quarkcol}{$\mytilde{d}$}{down\\[-3pt]squark}{%
-      ?}{\!\myfrac{-\!1}{3}}{0}
+    particle={quarkcol}{$\mytilde{d}$}{down\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.4pt),scale name=0.84] (QS) at (2,3) {
-    particle={quarkcol}{$\mytilde{s}$}{strange\\[-3pt]squark}{%
-      ?}{\!\myfrac{-\!1}{3}}{0}
+    particle={quarkcol}{$\mytilde{s}$}{strange\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.6pt)] (QB) at (3,3) {
-    particle={quarkcol}{$\mytilde{b}$}{sbottom}{%
-      ?}{\!\myfrac{-\!1}{3}}{0}
+    particle={quarkcol}{$\mytilde{b}$}{sbottom}
   };
   \node[quarkcol,bflabel,above right=0pt and -2pt]
     at (QD-sw) {SQUARKS};
   
   % SLEPTONS
   \pic[symb shift=(90:0.4pt)] (EL) at (1,2) {
-    particle={leptoncol}{$\mytilde{e}$}{selectron}{%
-      ?}{-1}{0}
+    particle={leptoncol}{$\mytilde{e}$}{selectron}
   };
   \pic (MU) at (2,2) {
-    particle={leptoncol}{$\widetilde{\PGm}$}{smuon}{%
-      ?}{-1}{0}
+    particle={leptoncol}{$\widetilde{\PGm}$}{smuon}
   };
   \pic[symb shift=(90:0.4pt)] (TAU) at (3,2) {
-    particle={leptoncol}{$\widetilde{\PGt}$}{stau}{%
-      ?}{-1}{0}
+    particle={leptoncol}{$\widetilde{\PGt}$}{stau}
   };
   \pic[scale name=0.83] (NE) at (1,1) {
-    particle={leptoncol}{$\PSGn{e}$}{electron\\[-3pt]sneutrino}{%
-      ?}{0}{0}
+    particle={leptoncol}{$\PSGn{e}$}{electron\\[-3pt]sneutrino}
   };
   \pic[symb shift=(-90:0.5pt),scale name=0.83] (NM) at (2,1) {
-    particle={leptoncol}{$\PSGn{\PGm}$}{muon\\[-3pt]sneutrino}{%
-      ?}{0}{0}
+    particle={leptoncol}{$\PSGn{\PGm}$}{muon\\[-3pt]sneutrino}
   };
   \pic[scale name=0.83] (NT) at (3,1) {
-    particle={leptoncol}{$\PSGn{\PGt}$}{tau\\[-3pt]sneutrino}{%
-      ?}{0}{0}
+    particle={leptoncol}{$\PSGn{\PGt}$}{tau\\[-3pt]sneutrino}
   };
   \node[leptoncol,bflabel,above right=0pt and -2pt]
     at (NE-sw) {SLEPTONS};
   
   % GAUGINOS
   \pic (GLU) at (4,4) {
-    particle={gaugecol}{$\mytilde{g}$}{gluino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\mytilde{g}$}{gluino}
   };
   \pic (GAM) at (4,3) {
-    particle={gaugecol}{$\widetilde{\gamma}$}{photino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\widetilde{\gamma}$}{photino}
   };
   \pic (W) at (4,2) {
-    particle={gaugecol}{$\mytilde{W}$}{wino}{%
-      ?}{\pm1}{\myfrac{1}{2}}
+    particle={gaugecol}{$\mytilde{W}$}{wino}
   };
   \pic (Z) at (4,1) {
-    particle={gaugecol}{$\mytilde{Z}$}{zino}{% %^0$
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\mytilde{Z}$}{zino} %^0$
   };
   \node[gaugecol,bflabel,below right=0pt and 2pt]
     (GB) at (Z-se) {GAUGINOS};
   
   % HIGGSINOS
   \pic[symb shift=(90:0.3pt),scale name=0.88] (HIG) at (5,4) {
-    particle={scalarcol}{$\mytilde{H}$}{Higgsino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={scalarcol}{$\mytilde{H}$}{Higgsino}
   };
   \node[scalarcol,bflabel,above left=-2pt and 2pt]
     at (HIG-se) {SCALAR BOSONS};
@@ -898,104 +773,83 @@
   
   % HEADERS
   \headerMSSM
-  \legend
   
   % SQUARKS
   \pic[symb shift=(90:0.4pt),scale name=0.84] (QU) at (1,4) {
-    particle={quarkcol}{$\mytilde{u}$}{up\\[-3pt]squark}{%
-      ?}{\!\myfrac{+\!2}{3}}{0}
+    particle={quarkcol}{$\mytilde{u}$}{up\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.4pt),scale name=0.84] (QC) at (2,4) {
-    particle={quarkcol}{$\mytilde{c}$}{charm\\[-3pt]squark}{%
-      ?}{\!\myfrac{+\!2}{3}}{0}
+    particle={quarkcol}{$\mytilde{c}$}{charm\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.6pt)] (QT) at (3,4) {
-    particle={quarkcol}{$\mytilde{t}$}{stop}{%
-      ?}{\!\myfrac{+\!2}{3}}{0}
+    particle={quarkcol}{$\mytilde{t}$}{stop}
   };
   \pic[symb shift=(90:0.6pt),scale name=0.84] (QD) at (1,3) {
-    particle={quarkcol}{$\mytilde{d}$}{down\\[-3pt]squark}{%
-      ?}{\!\myfrac{-\!1}{3}}{0}
+    particle={quarkcol}{$\mytilde{d}$}{down\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.4pt),scale name=0.84] (QS) at (2,3) {
-    particle={quarkcol}{$\mytilde{s}$}{strange\\[-3pt]squark}{%
-      ?}{\!\myfrac{-\!1}{3}}{0}
+    particle={quarkcol}{$\mytilde{s}$}{strange\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.6pt)] (QB) at (3,3) {
-    particle={quarkcol}{$\mytilde{b}$}{sbottom}{%
-      ?}{\!\myfrac{-\!1}{3}}{0}
+    particle={quarkcol}{$\mytilde{b}$}{sbottom}
   };
   \node[quarkcol,bflabel,above right=0pt and -2pt]
     at (QD-sw) {SQUARKS};
   
   % SLEPTONS
   \pic[symb shift=(90:0.4pt)] (EL) at (1,2) {
-    particle={leptoncol}{$\mytilde{e}$}{selectron}{%
-      ?}{-1}{0}
+    particle={leptoncol}{$\mytilde{e}$}{selectron}
   };
   \pic (MU) at (2,2) {
-    particle={leptoncol}{$\widetilde{\PGm}$}{smuon}{%
-      ?}{-1}{0}
+    particle={leptoncol}{$\widetilde{\PGm}$}{smuon}
   };
   \pic[symb shift=(90:0.4pt)] (TAU) at (3,2) {
-    particle={leptoncol}{$\widetilde{\PGt}$}{stau}{%
-      ?}{-1}{0}
+    particle={leptoncol}{$\widetilde{\PGt}$}{stau}
   };
   \pic[scale name=0.83] (NE) at (1,1) {
-    particle={leptoncol}{$\PSGn{e}$}{electron\\[-3pt]sneutrino}{%
-      ?}{0}{0}
+    particle={leptoncol}{$\PSGn{e}$}{electron\\[-3pt]sneutrino}
   };
   \pic[symb shift=(-90:0.5pt),scale name=0.83] (NM) at (2,1) {
-    particle={leptoncol}{$\PSGn{\PGm}$}{muon\\[-3pt]sneutrino}{%
-      ?}{0}{0}
+    particle={leptoncol}{$\PSGn{\PGm}$}{muon\\[-3pt]sneutrino}
   };
   \pic[scale name=0.83] (NT) at (3,1) {
-    particle={leptoncol}{$\PSGn{\PGt}$}{tau\\[-3pt]sneutrino}{%
-      ?}{0}{0}
+    particle={leptoncol}{$\PSGn{\PGt}$}{tau\\[-3pt]sneutrino}
   };
   \node[leptoncol,bflabel,above right=0pt and -2pt]
     at (NE-sw) {SLEPTONS};
   
   % SGAUGINOS
   \pic (GLU) at (4,4) {
-    particle={gaugecol}{$\mytilde{g}$}{gluino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\mytilde{g}$}{gluino}
   };
   \pic (GAM) at (4,3) {
-    particle={gaugecol}{$\widetilde{\gamma}$}{photino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\widetilde{\gamma}$}{photino}
   };
   %\pic[symb shift=(-20:0.5pt)] (W) at (4,2) {
-  %  particle={gaugecol}{$\mytilde{W}^{\raisebox{-1.6pt}{$\scriptstyle\pm$}}$}{wino}{%
-  %    ?}{\pm1}{\myfrac{1}{2}}
+  %  particle={gaugecol}{$\mytilde{W}^{\raisebox{-1.6pt}{$\scriptstyle\pm$}}$}{wino}
   %};
   \pic (W) at (4,2) {
-    particle={gaugecol}{$\mytilde{W}$}{wino}{%
-      ?}{\pm1}{\myfrac{1}{2}}
+    particle={gaugecol}{$\mytilde{W}$}{wino}
   };
   \pic (Z) at (4,1) {
-    particle={gaugecol}{$\mytilde{Z}$}{zino}{% %^0$
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\mytilde{Z}$}{zino}
   };
-  \node[gaugecol,font=\bf,inner sep=0.5pt,above=1pt,scale=0.69]
+  \node[gaugecol,font=\bf,inner sep=0.5pt,above=1pt,scale=0.68,xscale=0.9]
     (GB) at (4,4.5) {GAUGINOS};
   %\node[gaugecol,bflabel,below right=0pt and 2pt]
   %  (GB) at (Z-se) {GAUGINOS};
   
   % HIGGSINOS
   \pic[scale name=0.88] (HIG) at (5,4) {
-    particle={scalarcol}{$\mytilde{h}$}{light\\[-3pt]Higgsino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={scalarcol}{$\mytilde{h}$}{light\\[-3pt]Higgsino}
   };
   \pic[scale name=0.88] (HIG) at (5,3) {
-    particle={scalarcol}{$\mytilde{H}$}{heavy\\[-3pt]Higgsino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={scalarcol}{$\mytilde{H}$}{heavy\\[-3pt]Higgsino}
   };
   \pic[scale name=0.88,symb shift=(0:0.7pt)] (HIG) at (5,2) {
-    particle={scalarcol}{$\mytilde{H}^{\raisebox{-1.3pt}{$\scriptstyle\pm$}}$}{charged\\[-3pt]Higgsino}{%
-      ?}{\pm1}{\myfrac{1}{2}}
+    particle={scalarcol}{$\mytilde{H}^{\raisebox{-1.3pt}{$\scriptstyle\pm$}}$}{charged\\[-3pt]Higgsino}
   };
-  \node[scalarcol,bflabel,rotate=-90,above=1pt,scale=0.69]
+  \node[scalarcol,bflabel,rotate=-90,above=1pt,scale=0.68,xscale=0.9]
     (GB) at (5,4.5) {HIGGSINOS};
   
 \end{tikzpicture}
@@ -1010,101 +864,81 @@
   
   % HEADERS
   \headerMSSM
-  \legend
   
   % SQUARKS
   \pic[symb shift=(90:0.4pt),scale name=0.84] (QU) at (1,4) {
-    particle={quarkcol}{$\mytilde{u}$}{up\\[-3pt]squark}{%
-      ?}{\!\myfrac{+\!2}{3}}{0}
+    particle={quarkcol}{$\mytilde{u}$}{up\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.4pt),scale name=0.84] (QC) at (2,4) {
-    particle={quarkcol}{$\mytilde{c}$}{charm\\[-3pt]squark}{%
-      ?}{\!\myfrac{+\!2}{3}}{0}
+    particle={quarkcol}{$\mytilde{c}$}{charm\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.6pt)] (QT) at (3,4) {
-    particle={quarkcol}{$\mytilde{t}$}{stop}{%
-      ?}{\!\myfrac{+\!2}{3}}{0}
+    particle={quarkcol}{$\mytilde{t}$}{stop}
   };
   \pic[symb shift=(90:0.6pt),scale name=0.84] (QD) at (1,3) {
-    particle={quarkcol}{$\mytilde{d}$}{down\\[-3pt]squark}{%
-      ?}{\!\myfrac{-\!1}{3}}{0}
+    particle={quarkcol}{$\mytilde{d}$}{down\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.4pt),scale name=0.84] (QS) at (2,3) {
-    particle={quarkcol}{$\mytilde{s}$}{strange\\[-3pt]squark}{%
-      ?}{\!\myfrac{-\!1}{3}}{0}
+    particle={quarkcol}{$\mytilde{s}$}{strange\\[-3pt]squark}
   };
   \pic[symb shift=(90:0.6pt)] (QB) at (3,3) {
-    particle={quarkcol}{$\mytilde{b}$}{sbottom}{%
-      ?}{\!\myfrac{-\!1}{3}}{0}
+    particle={quarkcol}{$\mytilde{b}$}{sbottom}
   };
   \node[quarkcol,bflabel,above right=0pt and -2pt]
     at (QD-sw) {SQUARKS};
   
   % SLEPTONS
   \pic[symb shift=(90:0.4pt)] (EL) at (1,2) {
-    particle={leptoncol}{$\mytilde{e}$}{selectron}{%
-      ?}{-1}{0}
+    particle={leptoncol}{$\mytilde{e}$}{selectron}
   };
   \pic (MU) at (2,2) {
-    particle={leptoncol}{$\widetilde{\PGm}$}{smuon}{%
-      ?}{-1}{0}
+    particle={leptoncol}{$\widetilde{\PGm}$}{smuon}
   };
   \pic[symb shift=(90:0.4pt)] (TAU) at (3,2) {
-    particle={leptoncol}{$\widetilde{\PGt}$}{stau}{%
-      ?}{-1}{0}
+    particle={leptoncol}{$\widetilde{\PGt}$}{stau}
   };
   \pic[scale name=0.83] (NE) at (1,1) {
-    particle={leptoncol}{$\PSGn{e}$}{electron\\[-3pt]sneutrino}{%
-      ?}{0}{0}
+    particle={leptoncol}{$\PSGn{e}$}{electron\\[-3pt]sneutrino}
   };
   \pic[symb shift=(-90:0.5pt),scale name=0.83] (NM) at (2,1) {
-    particle={leptoncol}{$\PSGn{\PGm}$}{muon\\[-3pt]sneutrino}{%
-      ?}{0}{0}
+    particle={leptoncol}{$\PSGn{\PGm}$}{muon\\[-3pt]sneutrino}
   };
   \pic[scale name=0.83] (NT) at (3,1) {
-    particle={leptoncol}{$\PSGn{\PGt}$}{tau\\[-3pt]sneutrino}{%
-      ?}{0}{0}
+    particle={leptoncol}{$\PSGn{\PGt}$}{tau\\[-3pt]sneutrino}
   };
   \node[leptoncol,bflabel,above right=0pt and -2pt]
     at (NE-sw) {SLEPTONS};
   
   % GLUINO
   \pic (GLU) at (4,4) {
-    particle={gaugecol}{$\mytilde{g}$}{gluino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\mytilde{g}$}{gluino}
   };
   
   % CHARGINOS
   \pic[symb shift=(60:0.7pt),scale name=0.88] (CCHI1) at (4,2) {
-    particle={gaugecol}{$\widetilde{\chi}_1^\pm$}{light\\[-3pt]chargino}{%
-      ?}{\pm1}{\myfrac{1}{2}}
+    particle={gaugecol}{$\widetilde{\chi}_1^\pm$}{light\\[-3pt]chargino}
   };
   \pic[symb shift=(60:0.7pt),scale name=0.88] (CCHI2) at (4,1) {
-    particle={gaugecol}{$\widetilde{\chi}_2^\pm$}{heavy\\[-3pt]chargino}{%
-      ?}{\pm1}{\myfrac{1}{2}}
+    particle={gaugecol}{$\widetilde{\chi}_2^\pm$}{heavy\\[-3pt]chargino}
   };
-  \def\s{\hspace{-0.03em}} % reduce spacing between letters
+  \def\s{\hspace{-0.038em}} % reduce spacing between letters
   \node[gaugecol,font=\bf,inner sep=0.5pt,above=1pt,scale=0.67]
     (GB) at (4,4.5) {GLUINO};
-  \node[gaugecol,font=\bf,inner sep=0.5pt,above=1pt,scale=0.69,xscale=0.89]
+  \node[gaugecol,font=\bf,inner sep=0.5pt,above=1pt,scale=0.68,xscale=0.88]
     (GB) at (4,2.5) {C\s H\s A\s R\s G\s I\s N\s O\s S};
   
   % NEUTRALINOS
   \pic[symb shift=(60:0.3pt),scale name=0.88] (NCHI1) at (5,4) {
-    particle={gaugecol}{$\widetilde{\chi}_1^0$}{lightest\\[-3pt]neutralino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\widetilde{\chi}_1^0$}{lightest\\[-3pt]neutralino}
   };
   \pic[symb shift=(60:0.3pt),scale name=0.84] (NCHI1) at (5,3) {
-    particle={gaugecol}{$\widetilde{\chi}_2^0$}{2\textsuperscript{nd}\! lightest\\[-3pt]neutralino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\widetilde{\chi}_2^0$}{2\textsuperscript{nd}\! lightest\\[-3pt]neutralino}
   };
   \pic[symb shift=(60:0.3pt),scale name=0.82] (NCHI2) at (5,2) {
-    particle={gaugecol}{$\widetilde{\chi}_3^0$}{2\textsuperscript{nd}\! heaviest\\[-3pt]neutralino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\widetilde{\chi}_3^0$}{2\textsuperscript{nd}\! heaviest\\[-3pt]neutralino}
   };
   \pic[symb shift=(60:0.3pt),scale name=0.88] (NCHI2) at (5,1) {
-    particle={gaugecol}{$\widetilde{\chi}_4^0$}{heaviest\\[-3pt]neutralino}{%
-      ?}{0}{\myfrac{1}{2}}
+    particle={gaugecol}{$\widetilde{\chi}_4^0$}{heaviest\\[-3pt]neutralino}
   };
   \def\s{\hspace{-0.05em}} % reduce spacing between letters
   \node[gaugecol,font=\bf,inner sep=0.5pt,above=1pt,scale=0.66,xscale=0.88]

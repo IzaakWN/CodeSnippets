@@ -353,7 +353,7 @@
     plot[domain={\xB:\xA}](\x,\adiabatic{\x}{\Cc}) -- cycle;
   \node[below=-5,blue,scale=.9] at ($(D)!.4!(B)$) {$W$};
   
-  % ADIABATIC
+  % ADIABATIC TRANSFORMATION
   \draw[myred,thick,midarr=.18,midarr=.75,domain={\xA:\xB},samples=\N]
     (D) -- (A)
     plot (\x,\adiabatic{\x}{\Ch});
@@ -419,18 +419,15 @@
     plot[domain={\xD:\xA}] (\x,\adiabatic{\x}{\Ch});
  \node[blue,scale=.9] at ($(B)!.5!(D)$) {$W$};
   
-  % ADIABATIC
-  \draw[myred,thick,midarr=.65,domain={\xA:\xB},samples=\N]
-    plot (\x,\isotherm{\x}{\Th});
-  
-  \draw[blue,thick,midarr=.50,domain={\xB:\xC},samples=\N]
-    plot (\x,\adiabatic{\x}{\Cc});
-  
+  % ADIABATIC & ISOTHERMIC TRANSFORMATIONS
+  \draw[myred,thick,midarr=.60,domain={\xA:\xB},samples=\N]
+    plot (\x,\isotherm{\x}{\Th}); % hot
+  \draw[blue,thick,midarr=.45,domain={\xB:\xC},samples=\N]
+    plot (\x,\adiabatic{\x}{\Cc}); % cold
   \draw[blue,thick,midarr=.65,domain={\xC:\xD},samples=\N]
-    plot (\x,\isotherm{\x}{\Tc});
-  
-  \draw[myred,thick,midarr=.45,domain={\xD:\xA},samples=\N]
-    plot(\x,\adiabatic{\x}{\Ch});
+    plot (\x,\isotherm{\x}{\Tc}); % cold
+  \draw[myred,thick,midarr=.40,domain={\xD:\xA},samples=\N]
+    plot(\x,\adiabatic{\x}{\Ch}); % hot
   
   % POINTS
   \fill[mydarkblue]
@@ -441,9 +438,11 @@
   
   % HEAT
   \draw[>={LaTeX[width=6,length=4]},->,line width=2,mydarkred]
-    (.14*\xmax,.30*\ymax) --++ (3:.5) node[pos=0,below=4,left=-6,scale=.9] {$Q_\text{in}$};
+    (.28*\xmax,.488*\ymax) --++ (-89:.56)
+    node[pos=0,inner sep=0,anchor=-130,scale=.9] {$Q_\text{in}$};
   \draw[>={LaTeX[width=6,length=4]},->,line width=2,mydarkblue]
-    (.47*\xmax,.18*\ymax) --++ (3:.5) node[above=1,right=-2,scale=.9] {$Q_\text{out}$};
+    (.47*\xmax,.12*\ymax) --++ (-89:.56)
+    node[inner sep=-2,anchor=60,scale=.9] {$Q_\text{out}$};
   
   % AXIS
   \draw[->,thick] (0,-0.1*\ymax) -- (0,\ymax+0.1)

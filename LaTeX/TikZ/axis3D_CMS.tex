@@ -1,5 +1,6 @@
 % Author: Izaak Neutelings (June 2017)
 % Inspiration: https://tex.stackexchange.com/questions/159445/draw-in-cylindrical-and-spherical-coordinates
+% Uploaded to https://tikz.net/axis3d_cms/
 
 \documentclass[border=3pt,tikz]{standalone}
 \usepackage{physics}
@@ -14,6 +15,8 @@
 
 \colorlet{veccol}{green!50!black}
 \colorlet{myred}{red!70!black}
+\colorlet{mycontourred}{red!55!black!3} % for contour
+\colorlet{mycontourred2}{red!55!black!6} % for contour
 \colorlet{myblue}{blue!70!black}
 \colorlet{mydarkred}{red!40!black}
 \colorlet{mydarkblue}{blue!30!black}
@@ -23,7 +26,7 @@
 \tikzstyle{axis}=[->,thick,line cap=round]
 \tikzstyle{detector}=[thick,draw=mydarkred,rotate around z=\ang]
 \tikzstyle{beam pipe}=[draw=blue!20!black!50,fill=blue!20!black!10,rotate around z=\ang]
-\tikzstyle{detector surface}=[red!60!black!60,opacity=0.06,rotate around z=\ang]
+\tikzstyle{detector surface}=[red!60!black!10,opacity=0.5,rotate around z=\ang]
 \usetikzlibrary{angles,quotes} % for pic (angle labels)
 \newcommand*{\vv}[1]{\vec{\mkern0mu#1}} % aligned vector arrow
 
@@ -51,17 +54,18 @@
   \draw[axis] (0.030,0,0) -- (1,0,0) node[below left]{$x$};
   
   % VECTORS
-  \draw[->,red,line cap=round] (O') -- (P) node[anchor=-30] {$\vv{p}$};
   %\fill[radius=0.4,red] (P) circle;
-  \draw[dashed,myred] (O'') -- (Pxy);
-  \draw[dashed,myred] (P) -- (Pxy);
-  \draw[dashed,myred] (Py) -- (Pxy);
+  %\draw[dashed,myred] (O'') -- (Pxy);
+  %\draw[dashed,myred] (Px) -- (Pxy);
+  \draw[->,red,line cap=round] (O'') -- (Pxy) node[anchor=130] {$\vv{p}_\mathrm{T}$};
+  \draw[dashed,myred,line join=round] (Py) -- (Pxy) -- (P);
+  \draw[->,red,line cap=round] (O') -- (P) node[anchor=-30] {$\vv{p}$};
   
   % ARCS
   \tdplotdrawarc[->]{(O)}{0.2}{0}{\phivec}
-    {above=2,right=-1,anchor=mid west}{$\phi$}
+    {anchor=-160,inner sep=1.5pt}{$\phi$} %{\contour{white}{$\phi$}}
   \tdplotdrawarc[->,rotate around z=\phivec-90,rotate around y=-90]{(O)}{0.4}{0}{\thetavec}
-    {anchor=mid east}{$\theta$}
+    {anchor=mid east,inner sep=2pt}{$\theta$}
   
 \end{tikzpicture}
 
@@ -92,10 +96,11 @@
   
   % VECTORS
   %\fill[radius=0.4,red] (P) circle;
-  \draw[dashed,myred] (O'') -- (Pxy);
-  \draw[dashed,myred] (P) -- (Pxy);
-  \draw[dashed,myred] (Py) -- (Pxy);
-  \draw[->,red] (O') -- (P) node[anchor=-30] {$\vv{p}$};
+  %\draw[dashed,myred] (O'') -- (Pxy);
+  %\draw[dashed,myred] (Px) -- (Pxy);
+  \draw[->,red,line cap=round] (O'') -- (Pxy) node[anchor=130] {$\vv{p}_\mathrm{T}$};
+  \draw[dashed,myred,line join=round] (Py) -- (Pxy) -- (P);
+  \draw[->,red,line cap=round] (O') -- (P) node[anchor=-30] {$\vv{p}$};
   
   % CIRCLE - LHC (front)
   \tdplotdrawarc[thick,rotate around x=90,mydarkblue,line cap=round]{(\R,0,0)}{\R}{178.6}{90}{}{}
@@ -130,10 +135,11 @@
     node[below=2,right=2,scale=0.8] {LHCb};
   
   % ARCS
+  \tdplotdrawarc[white,line width=0.9]{(O)}{0.2}{4}{\phivec-4}{}{}
   \tdplotdrawarc[->]{(O)}{0.2}{0}{\phivec}
-    {above=3,right=-2,anchor=mid west}{$\phi$}
+    {anchor=-140,inner sep=1.5pt}{$\phi$} %\contour{white}{$\phi$}}
   \tdplotdrawarc[->,rotate around z=\phivec-90,rotate around y=-90]{(O)}{0.4}{0}{\thetavec}
-    {anchor=mid east}{$\theta$}
+    {anchor=mid east,inner sep=2pt}{$\theta$}
   
 \end{tikzpicture}
 
@@ -163,10 +169,11 @@
   \draw[axis] (0.030,0,0) -- (1,0,0) node[below left]{$x$};
   
   % VECTORS
-  %\fill[radius=0.4,red] (P) circle;
-  \draw[dashed,myblue] (O'')  -- (Pxy);
-  \draw[dashed,myblue] (P)  -- (Pxy);
-  \draw[dashed,myblue] (Py) -- (Pxy);
+  %\fill[radius=0.4,blue] (P) circle;
+  %\draw[dashed,myblue] (O'')  -- (Pxy);
+  %\draw[dashed,myblue] (Px) -- (Pxy);
+  \draw[->,blue,line cap=round] (O'') -- (Pxy) node[anchor=130] {$\vv{p}_\mathrm{T}$};
+  \draw[dashed,myblue,line join=round] (Py) -- (Pxy) -- (P);
   \draw[->,blue,line cap=round] (O') -- (P) node[anchor=-30] {$\vv{p}$};
   
   % CIRCLE - LHC (front)
@@ -193,15 +200,16 @@
     node[below=5,left=0,scale=0.8] {LHCb};
   
   % ARCS
+  \tdplotdrawarc[white,line width=0.9]{(O)}{0.2}{4}{\phivec-4}{}{}
   \tdplotdrawarc[->]{(O)}{0.2}{0}{\phivec}
-    {above=3,right=-2,anchor=mid west}{$\phi$}
+    {anchor=-140,inner sep=1.5pt}{$\phi$} %\contour{white}{$\phi$}}
   \tdplotdrawarc[->,rotate around z=\phivec-90,rotate around y=-90]{(O)}{0.4}{0}{\thetavec}
-    {anchor=mid east}{$\theta$}
+    {anchor=mid east,inner sep=2pt}{$\theta$}
 
 \end{tikzpicture}
 
 
-% CMS detector - left perspective
+% CMS detector - west perspective
 \tdplotsetmaincoords{75}{50} % to reset previous setting
 \begin{tikzpicture}[scale=2.8,tdplot_main_coords,rotate around x=90]
   
@@ -226,18 +234,22 @@
   \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
   
   % CYLINDER behind
-  \def\ang{19} % rotate lines to simulate cylinder
+  \def\ang{18} % rotate lines to simulate cylinder
   \fill[top color=red!50!black!4,bottom color=red!60!black!2,rotate around z=\ang]
     (0,\R,\L/2) --++ (0,0,-\L) arc(90:270:\R) --++ (0,0,\L) arc(270:90:\R) -- cycle;
   \fill[detector surface] % transverse plane at z=L/2
     (0,0,\L/2) --++ (0,\R,0) arc(90:270:\R) -- cycle;
   \fill[detector surface] % transverse plane at z=-L/2
     (0,0,-\L/2) --++ (0,\R,0) arc(90:270:\R) -- cycle;
-  \tdplotdrawarc[detector]{(0,0,\L/2)}{\R}{0}{360}{}{}
-  \tdplotdrawarc[detector,thin]{(0,0,-\L/2)}{\R}{0}{360}{}{}
-  %\draw[detector,canvas is yx plane at z=-\L/2] (0,0,0) circle(\R);
+  \tdplotdrawarc[detector]{(0,0,\L/2)}{\R}{0}{360}{}{} % transverse plane at z=L/2
+  \tdplotdrawarc[detector,thin]{(0,0,-\L/2)}{\R}{0}{360}{}{} % transverse plane at z=-L/2
   \draw[detector,thin] % transverse plane at z=0
-    (90-\ang:\R) arc (90-\ang:270:\R);
+    (90:\R) arc (90:270:\R);
+  %\fill[detector surface] % top piece
+  %  (0,\R,\L/2) --++ (0,0,-\L) arc(90:90-\ang:\R) --++ (0,0,\L) arc(90-\ang:90:\R) -- cycle;
+  %\draw[detector,canvas is yx plane at z=-\L/2] (0,0,0) circle(\R);
+  \draw[detector,very thin] % transverse plane at z=0, top piece
+    (90:\R) arc (90:90-\ang:\R);
   \draw[detector] (0,0,-\L/2)++(90:\R) --++ (0,0,\L); % top horizontal
   \draw[detector] (0,0,-\L/2)++(-90:\R) --++ (0,0,\L); % bottom horizontal
   
@@ -267,15 +279,17 @@
   \node[mydarkred,above] at (0,\ymax,0) {$\eta=0$};
   \node[mydarkred,above=3] at (0,\R,0.3*\L) {$\eta>0$};
   \node[mydarkred,above=3] at (0,\R,-0.2*\L) {$\eta<0$};
-  \node[mydarkred,below=1,left] at (0,0,\zmax) {$\eta=\infty$};
+  \node[mydarkred,below=1,left] at (0,0,\zmax) {$\eta=+\infty$};
   \node[mydarkred,above=1,right] at (0,0,\zmin) {$\eta=-\infty$};
   
   % VECTORS
   %\fill[radius=0.4,red] (P) circle;
-  \draw[dashed,myred] (P)  -- (Pxy);
-  \draw[dashed,myred] (Py) -- (Pxy);
-  \draw[dashed,myred] (P) -- (Pz);
-  \draw[->,red,line cap=round] (O') -- (P) node[anchor=-30] {$\vv{p}$};
+  %\draw[dashed,myred] (P)  -- (Pxy);
+  %\draw[dashed,myred] (Py) -- (Pxy);
+  \draw[dashed,myred] (Px) -- (Pxy);
+  \draw[->,red,line cap=round] (O'') -- (Pxy) node[anchor=170,inner sep=2pt] {$\vv{p}_\mathrm{T}$};
+  \draw[dashed,myred,line join=round] (Py) -- (Pxy) -- (P);
+  \draw[->,red,line cap=round] (O') -- (P); %node[anchor=-30] {$\vv{p}$};
   
   % CYLINDER front
   \draw[beam pipe,fill=none] (0,\r,-\l/2) arc(90:-90:\r);
@@ -288,27 +302,31 @@
   \draw[beam pipe,fill=none] (0,\r,\l/2) arc(90:-90:\r);
   \draw[detector,very thin] % transverse plane at z=0
     (90-\ang:\R) arc (90-\ang:-90:\R);
+  \node[red,anchor=-30,inner sep=2pt] at (P) {$\vv{p}$};
+  \draw[dashed,myred] (Pz) -- (P);
   
   % ANGLES
-  \tdplotdrawarc[thick,red!57!black!3] % contour
+  \tdplotdrawarc[thick,mycontourred] % contour
     {(O)}{0.2}{4}{0.7*\phivec}{}{}
-  \tdplotdrawarc[draw=none,opacity=0.8]{(O)}{0.2}{0}{\phivec} % transparant contour
-    {above=2,right=-1,anchor=mid west}{\contour{red!55!black!3}{$\phi$}}
+  \tdplotdrawarc[draw=none,opacity=0.9]{(O)}{0.2}{0}{\phivec} % transparant contour
+    {anchor=-150,inner sep=1pt}{\contour{mycontourred}{$\phi$}}
   \tdplotdrawarc[->]{(O)}{0.2}{0}{\phivec}
-    {above=2,right=-1,anchor=mid west}{$\phi$}
+    {anchor=-150,inner sep=1pt}{$\phi$}
   \tdplotdrawarc[->,rotate around z=\phivec-90,rotate around y=-90]
-    {(O)}{0.88}{0}{\thetavec}{anchor=mid east}{$\theta$}
+    {(O)}{0.88}{0}{\thetavec}
+    {anchor=-20,inner sep=2pt}{$\theta$}
   \tdplotdrawarc[thick,red!58!black!4,rotate around z=\phivec-90,rotate around y=-90] % contour
     {(O)}{0.3}{88}{0.5*(90+\thetavec)}{}{}
   \tdplotdrawarc[-{>[flex'=1]},rotate around z=\phivec-90,rotate around y=-90,line cap=round]
-    {(O)}{0.3}{90}{\thetavec}{above=4,right=2,anchor=mid east}{$\eta$}
+    {(O)}{0.3}{90}{\thetavec}
+    {anchor=-40,inner sep=1pt}{$\eta$}
   \draw[mydarkred] (0,0,\L/2) --++ (\R,0,0);
-  \tdplotdrawarc[thick,red!60!black!6] % contour
+  \tdplotdrawarc[thick,mycontourred2] % contour
     {(Z)}{0.2}{4}{0.7*\phivec}{}{}
-  \tdplotdrawarc[draw=none,opacity=0.8]{(Z)}{0.2}{0}{\phivec} % transparant contour
-    {above=2,right=-1,anchor=mid west}{\contour{red!60!black!6}{$\phi$}}
+  \tdplotdrawarc[draw=none,opacity=0.9]{(Z)}{0.2}{0}{\phivec} % transparant contour
+    {anchor=-150,inner sep=1pt}{\contour{mycontourred2}{$\phi$}}
   \tdplotdrawarc[->]{(Z)}{0.2}{0}{\phivec}
-    {above=2,right=-1,anchor=mid west}{$\phi$}
+    {anchor=-150,inner sep=1pt}{$\phi$}
   
   % COMPASS - CMS-ATLAS axis has a ~12° declination (http://googlecompass.com)
   \begin{scope}[shift={(1.1*\R,-\R,0.2*\L)},rotate around y=12]
@@ -325,7 +343,7 @@
 \end{tikzpicture}
 
 
-% CMS detector - right perspective
+% CMS detector - east perspective
 \tdplotsetmaincoords{70}{125} % to reset previous setting
 \begin{tikzpicture}[scale=2.8,tdplot_main_coords,rotate around x=90]
   
@@ -350,7 +368,7 @@
   \tdplotsetcoord{P}{\rvec}{\thetavec}{\phivec}
   
   % CYLINDER behind
-  \def\ang{20} % rotate lines to simulate cylinder
+  \def\ang{24} % rotate lines to simulate cylinder
   \fill[top color=red!50!black!4,bottom color=red!60!black!2,rotate around z=\ang]
     (0,\R,\L/2) --++ (0,0,-\L) arc(90:270:\R) --++ (0,0,\L) arc(270:90:\R) -- cycle;
   \fill[detector surface] % transverse plane at z=L/2
@@ -360,9 +378,13 @@
   \tdplotdrawarc[detector,thin]{(0,0,\L/2)}{\R}{0}{360}{}{} % transverse plane at z=L/2
   \tdplotdrawarc[detector]{(0,0,-\L/2)}{\R}{0}{360}{}{} % transverse plane at z=-L/2
   \draw[detector,thin] % transverse plane at z=0
-    (90-\ang:\R) arc (90-\ang:270:\R);
-  \draw[detector] (0,0,-\L/2)++(90:\R) --++ (0,0,\L); % top horizontal
-  \draw[detector] (0,0,-\L/2)++(-90:\R) --++ (0,0,\L); % bottom horizontal
+    (90:\R) arc (90:270:\R);
+  %\fill[detector surface] % top piece
+  %  (0,\R,\L/2) --++ (0,0,-\L) arc(90:90-\ang:\R) --++ (0,0,\L) arc(90-\ang:90:\R) -- cycle;
+  \draw[detector,very thin] % transverse plane at z=0, top piece
+    (90:\R) arc (90:90-\ang:\R);
+  \draw[detector] (0,0,-\L/2)++(90:\R) --++ (0,0,\L); % top horizontal along z
+  \draw[detector] (0,0,-\L/2)++(-90:\R) --++ (0,0,\L); % bottom horizontal along z
   
   % BEAM PIPE
   \tdplotdrawarc[beam pipe]{(0,0,-\l/2)}{\r}{0}{360}{}{}
@@ -375,26 +397,18 @@
   
   % AXES
   \draw[axis] (0,0,0) -- (0,0,\zmax) node[right=3,below=2]{$z$}; % long
-  \draw[->,red] (O) -- (P) node[above left=-4] {$\vv{p}$};
   \fill[CMScol] (O) circle(0.5pt) node[right=1,below=1] {IP};
   \draw[axis,-] (0,0,\zmin) -- (0,0,-0.020); % long
   \draw[axis] (0,0.019,0) -- (0,\ymax,0) node[below left]{$y$};
   \draw[axis] (0.022,0,0) -- (\xmax,0,0) node[below=1,left=-2]{$x$};
+  \draw[red] (O) -- (O'); % behind circle
   
   % LABELS
   \node[mydarkred,above] at (0,\ymax,0) {$\eta=0$};
   \node[mydarkred,above=6] at (0,\R,0.23*\L) {$\eta>0$};
   \node[mydarkred,above=6] at (0,\R,-0.3*\L) {$\eta<0$};
-  \node[mydarkred,above=1,left] at (0,0,\zmax) {$\eta=\infty$};
+  \node[mydarkred,above=1,left] at (0,0,\zmax) {$\eta=+\infty$};
   \node[mydarkred,below=1,right] at (0,0,\zmin) {$\eta=-\infty$};
-  
-  % VECTORS
-  %\fill[radius=0.4,red] (P) circle;
-  \draw[dashed,myred] (O'')  -- (Pxy);
-  \draw[dashed,myred] (P)  -- (Pxy);
-  \draw[dashed,myred] (Py) -- (Pxy);
-  \draw[dashed,myred] (P) -- (Pz);
-  \draw[->,red] (O') -- (P);
   
   % CYLINDER front
   \draw[beam pipe,fill=none] (0,\r,-\l/2) arc(90:-90:\r);
@@ -402,16 +416,28 @@
     (0,\rt,\L/2) --++ (0,\R-\rt,0) arc(90:-90:\R) --++ (0,\R-\rt,0) arc(-90:90:\rt);
   \fill[detector surface] % transverse plane at z=-L/2
     (0,\rt,-\L/2) --++ (0,\R-\rt,0) arc(90:-90:\R) --++ (0,\R-\rt,0) arc(-90:90:\rt);
-  \tdplotdrawarc[detector]{(0,0,\L/2)}{\R}{-90}{90}{}{}
+  \tdplotdrawarc[detector]{(0,0,\L/2)}{\R}{-90}{90.1}{}{}
   \tdplotdrawarc[detector]{(0,0,-\L/2)}{\R}{-90}{90}{}{}
   \draw[beam pipe,fill=none] (0,\r,\l/2) arc(90:-90:\r);
   \draw[detector,very thin] % transverse plane at z=0
     (90-\ang:\R) arc (90-\ang:-90:\R);
+  \draw[detector,very thin] % top piece
+    (90-\ang:\R) arc (90-\ang:-90:\R);
+  
+  % VECTORS
+  %\fill[radius=0.4,red] (P) circle;
+  %\fill[radius=0.4,red] (P) circle;
+  %\draw[dashed,myred] (P)  -- (Pxy);
+  %\draw[dashed,myred] (Py) -- (Pxy);
+  \draw[dashed,myred] (Pz) -- (P);
+  \draw[->,red,line cap=round] (O'') -- (Pxy) node[anchor=-92] {$\vv{p}_\mathrm{T}$};
+  \draw[dashed,myred,line join=round] (Py) -- (Pxy) -- (P);
+  \draw[->,red] (O') -- (P) node[anchor=-50,inner sep=1pt] {$\vv{p}$};;
   
   % ANGLES
-  \tdplotdrawarc[thick,red!57!black!3]{(O)}{0.2}{4}{0.7*\phivec}{}{} % contour
-  \tdplotdrawarc[draw=none,opacity=0.8]{(O)}{0.2}{0}{\phivec} % transparant contour
-    {below=4,left=-1,anchor=mid east}{\contour{red!55!black!3}{$\phi$}}
+  \tdplotdrawarc[thick,mycontourred]{(O)}{0.2}{4}{0.7*\phivec}{}{} % contour
+  \tdplotdrawarc[draw=none,opacity=0.9]{(O)}{0.2}{0}{\phivec} % transparant contour
+    {below=4,left=-1,anchor=mid east}{\contour{mycontourred}{$\phi$}}
   \tdplotdrawarc[->]{(O)}{0.2}{0}{\phivec}
     {below=4,left=-1,anchor=mid east}{$\phi$}
   \tdplotdrawarc[->,rotate around z=\phivec-90,rotate around y=-90]
@@ -419,9 +445,9 @@
   \tdplotdrawarc[-{>[bend=1]},rotate around z=\phivec-90,rotate around y=-90,line cap=round]
     {(O)}{0.3}{90}{\thetavec}{above=4,right=2,anchor=mid east}{$\eta$}
   \draw[mydarkred,line cap=round] (0.004,0,\L/2) --++ (\R,0,0);
-  \tdplotdrawarc[thick,red!60!black!4]{(Z)}{0.2}{4}{0.7*\phivec}{}{} % contour
+  \tdplotdrawarc[thick,mycontourred2]{(Z)}{0.2}{4}{0.7*\phivec}{}{} % contour
   \tdplotdrawarc[draw=none]{(Z)}{0.2}{0}{\phivec} % transparant contour
-    {below=4,left=-1,anchor=mid east,opacity=0.8}{\contour{red!60!black!4}{$\phi$}}
+    {below=4,left=-1,anchor=mid east,opacity=0.9}{\contour{mycontourred2}{$\phi$}}
   \tdplotdrawarc[->]{(Z)}{0.2}{0}{\phivec}
     {below=4,left=-1,anchor=mid east}{$\phi$}
   

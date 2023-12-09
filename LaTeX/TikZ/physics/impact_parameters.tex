@@ -121,12 +121,12 @@
 % Bc -> J/psi tau nu - no J/psi pT
 \begin{tikzpicture}
   
-  \def\angJpsi{95}
+  \def\angJpsi{100}
   \coordinate (BL) at (-1,0);
   \coordinate (BR) at ( 3,0);
   \coordinate (PV) at ( 0,0);
-  \coordinate (SV) at ( 2.0,1.8);
-  \coordinate (T) at ($(SV)+(20:0.6)$);
+  \coordinate (SV) at ( 1.0,1.5);
+  \coordinate (T) at ($(SV)+(25:0.6)$);
   \coordinate (Jp1) at ($(SV)+({\angJpsi-180}:2.6)$);
   \coordinate (Jp2) at ($(SV)+(\angJpsi:2.8)$);
   
@@ -143,17 +143,17 @@
     (SV) to[out=\angJpsi-5,in=\angJpsi-220] ++(\angJpsi-20:2.4) node[above right] {$\mu^-$};
   
   % TAU
-  \draw[thick,taucol] %,mydashed]
+  \draw[thin,taucol,densely dashed]
     (SV) to[out=11,in=-148,looseness=0.6] (T);
   \path (SV) -- (T) node[taucol,pos=0.4,below right=-3] {$\tau^\pm$};
   
   % PIONS
   \draw[->,taucol,line width=1]
-    (T) to[out=28,in=-130] ++(38:2.4) node[above right] {$\pi^\pm$};
+    (T) to[out=28,in=-120] ++(45:2.2) node[above right] {$\pi^\pm$};
   \draw[->,taucol,line width=1]
-    (T) to[out=20,in=-150] ++(24:3.0) node[above right] {$\pi^\pm$};
+    (T) to[out=20,in=-140] ++(28:2.8) node[above right] {$\pi^\pm$};
   \draw[->,taucol,line width=1]
-    (T) to[out=16,in=170] ++( 2:2.4) node[right] {$\pi^\mp$};
+    (T) to[out=16,in=180] ++(8:2.2) node[right] {$\pi^\mp$};
   \fill[taucol!80!black]
     (T) circle (0.06);
   
