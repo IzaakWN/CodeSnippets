@@ -1,0 +1,895 @@
+% !TEX TS-program = xelatex
+% Author: Izaak Neutelings (May 2023)
+% Description:
+%   Unofficial logo of CMS for vector-quality,
+%   to be used for creative and fun variations only
+%   Do NOT use for official publications!
+% Instructions:
+%   You may need to install some fonts to compile this document.
+%   - Optima font for the "CMS" label (LaTeX equivalent is "Classico"
+%   - Helvetica for the "extra" text
+%   - Palatino for CMS TDR style
+%   Below are instructions to get this working with either pdfLaTeX or XeLaTeX
+% Sources:
+%   https://tikz.net/cms_logo/
+%   https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=3045
+%   https://cms-results.web.cern.ch/cms-results/public-results/publications-vs-time/
+\documentclass[border=0.5pt,tikz]{standalone}
+\usepackage{xcolor}
+\usetikzlibrary{positioning}
+
+% CMS FONTS
+\usepackage{iftex} % for \ifpdftex
+\ifpdftex % if compiled with pdfLaTeX
+  % https://tug.org/FontCatalogue/urwclassico/
+  % https://tug.org/fonts/getnonfreefonts/
+  % https://tug.org/fonts/fontinstall.html
+  % Instructions for installation on macOS (Tex Live):
+  % 1) Install Classico (equivalent of Optima):
+  %   curl --remote-name https://www.tug.org/fonts/getnonfreefonts/install-getnonfreefonts
+  %   sudo texlua install-getnonfreefonts
+  %   sudo getnonfreefonts --sys classico
+  % 2) Install Helvetica if needed (should already be included in TeX Live)
+  \message{^^JCompiling with pdfLaTeX}
+  \usepackage[T1]{fontenc}
+  \usepackage{classico} % URW Classico ~ Optima for "CMS" label
+  \usepackage{helvet} % Helvetica for CMS "extra" (sans-serif) text
+  \usepackage{palatino} % Palatino for CMS TDR style for text
+  %\usepackage{mathpazo} % Palatino for CMS TDR style for math
+  \newcommand*{\optima}{\classico}
+  \newcommand*{\helvet}{\fontfamily{phv}\selectfont}
+  \newcommand*{\palat}{\fontfamily{ppl}\selectfont}
+\else % if compiled with XeLaTeX
+  % Instructions:
+  %   1) Ensure the paths below to the Helvetica.ttc, Optima.ttc files are correct
+  %   2) Compile with XeLaTeX
+  \message{^^JCompiling with XeLaTeX}
+  \usepackage{fontspec} % needed for newfontfamily
+  \usepackage[T1]{fontenc} % needed for palatino (call after fontspec)
+  \newfontfamily{\optima}{Optima}[ % Optima for "CMS" label
+    Path = ./fonts/, % folder with Helvetica.ttc file (relative to CMS_logo.tex)
+    %Path = /System/Library/Fonts/, % macOS system standard
+    UprightFeatures = {FontIndex=0},
+    BoldFeatures = {FontIndex=1},
+    ItalicFeatures = {FontIndex=2},
+    BoldItalicFeatures = {FontIndex=3},
+    BoldFont = *,
+    ItalicFont = *
+  ]
+  \newfontfamily{\helvet}{Helvetica}[ % Optima for CMS "extra" (sans-serif) text
+    Path = ./fonts/, % folder with Helvetica.ttc file (relative to CMS_logo.tex)
+    %Path = /System/Library/Fonts/, % macOS system standard
+    UprightFeatures = {FontIndex=0},
+    BoldFeatures = {FontIndex=1},
+    ItalicFeatures = {FontIndex=2},
+    BoldItalicFeatures = {FontIndex=3},
+    BoldFont = *,
+    ItalicFont = *
+  ]
+  \usepackage{palatino} % Palatino for CMS TDR style for text
+  %\usepackage{mathpazo} % Palatino for CMS TDR style for math
+  \newcommand*{\palat}{\fontfamily{ppl}\selectfont}
+\fi
+
+% CONTOUR
+\ifpdftex % if compiled with pdfLaTeX
+  \usepackage[outline]{contour} % glow around text
+  \contourlength{0.1pt}
+\else % if compiled with XeLaTeX
+  % NOTE: use bidicontour because standard contour package does not work with XeLaTeX
+  \usepackage{bidicontour}
+  \usepackage{bidi}
+  \bidicontourlength{0.1pt}
+  \bidicontournumber{100}
+  \newcommand{\contour}[2]{\bidicontour{#1}{#2}} % alias
+\fi
+
+% CMS COLORS
+\definecolor{colTIB}{RGB}{173,235,143}  % light green
+\definecolor{colTOB}{RGB}{146,229,105}  % green
+\definecolor{colECAL}{RGB}{146,229,105} % green
+\definecolor{colgrey}{RGB}{190,174,212} % dark grey
+\definecolor{colHCAL}{RGB}{229,233,238} % light grey
+\definecolor{colMAGN}{RGB}{255,223,127} % yellow
+\definecolor{colMUON}{RGB}{133,209,251} % blue
+\definecolor{colmuon}{RGB}{240,36,11}   % red
+\definecolor{colbkg}{RGB}{253,250,244}  % CMS background color (offwhite)
+\definecolor{colfont}{RGB}{16,17,119}   % CMS font color (dark blue)
+\definecolor{colsafety}{RGB}{37,53,118} % CMS safety background color
+
+% CMS COLORS: Rainbow
+\definecolor{rbcolTIB}{RGB}{133,17,241}   % purple
+\definecolor{rbcolTOB}{RGB}{12,158,236}   % blue
+\definecolor{rbcolECAL}{RGB}{22,243,12}   % green
+\definecolor{rbcolHCAL}{RGB}{254,230,11}  % yellow
+\definecolor{rbcolMAGN}{RGB}{254,123,5}   % orange
+\definecolor{rbcolMUON}{RGB}{255,27,27}   % red
+\definecolor{rbcolmuon}{RGB}{243,104,198} % pink
+
+% CMS COLORS: Combine
+% https://root.cern.ch/doc/master/TColor_8cxx_source.html#l01363
+\colorlet{col1sd}{colTIB}  % 1 s.d. band (CMS TIB green)
+\colorlet{col2sd}{colMAGN} % 2 s.d. band (CMS magnet yellow)
+%\definecolor{col1sd}{RGB}{0,204,0}   % 1 s.d. band ROOT kGreen+1
+%\definecolor{col2sd}{RGB}{255,204,0} % 2 s.d. band ROOT kOrange
+
+% CMS STYLES
+\tikzset{
+  >=latex,
+  layer/.style={fill=#1,line width=0.05mm},
+  layer2/.style={draw=#1,line width=0.2mm},
+  band/.style={layer=#1,even odd rule}, % for CMS Combine
+  frame/.style={draw=#1,line width=0.308mm,rounded corners=0.002mm},
+  muon/.style={
+    white,double=#1,line width=\pgfkeysvalueof{/tikz/muon/outwidth},
+    double distance=\pgfkeysvalueof{/tikz/muon/inwidth},line cap=round
+  },
+  muon2/.style={
+    #1,line width=\pgfkeysvalueof{/tikz/muon/inwidth},line cap=round
+  },
+  muon/.default=colmuon,
+  muon2/.default=colmuon,
+  muon/outcol/.initial=0.15mm, % color outer line
+  muon/outwidth/.initial=0.15mm,  % width outer line
+  muon/inwidth/.initial=0.6mm, % width inner line
+}
+
+% CMS SETTINGS: Transverse radii of subdetectors
+\def\rTIB{0.0590} % outer radius inner silicon strip tracker
+\def\rTOB{0.1145} % outer radius outer silicon strip tracker
+\def\rECAL{0.220} % outer radius ECAL
+\def\rgrey{0.231} % outer radius grey band (ECAL readout?)
+\def\rHCAL{0.385} % outer radius HCAL
+\def\rMAGN{0.578} % outer radius solenoid magnet
+\def\rMUON{0.996} % outer radius muon system
+
+% PREDEFINED SHAPES
+\def\muonpathA{ % bottom muon
+  to[out=55.8,in=167.5,looseness=0.95] (14.94:0.45)
+  to[out=-12.5,in=170,looseness=1.04] (11.65:0.51)
+  to[out=-10,in=-134,looseness=0.85] (10.4:0.766)
+  to[out=46,in=-132,looseness=1.2] (13.16:0.815)
+  coordinate(M1)
+}
+\def\muonpathB{ % second muon from the bottom
+  to[out=56.8,in=178,looseness=0.933] (28.79:0.45)
+  to[out=-2,in=-179,looseness=0.953] (24.98:0.51)
+  to[out=1,in=-116,looseness=0.845] (25.33:0.954)
+  coordinate(M2)
+}
+\def\muonpathC{ % third muon from the bottom
+  to[out=61.5,in=-158.5,looseness=0.875] (41.45:0.47)
+  to[out=21.5,in=-167,looseness=0.9] (37.0:0.57)
+  to[out=13.0,in=-131,looseness=0.77] (32.85:1.075)
+  coordinate(M3)
+}
+\def\muonpathD{ % top muon
+  to[out=73.0,in=-147,looseness=0.85] (49.33:0.50)
+  to[out=33.0,in=-149,looseness=1.0] (46.74:0.58)
+  to[out=31.0,in=-131,looseness=0.80] (42.849:1.2114)
+  coordinate(M4)
+}
+\tikzset{
+  pics/muons/.style={ % all four muons
+    code={
+      \def\xD{\pgfkeysvalueof{/tikz/muon/x4}}
+      \draw[muon=#1] % draw with one command to merge inner line
+        (0.003,0) coordinate(MOa) coordinate(MO) \muonpathA
+        (0.003,0) coordinate(MOb) \muonpathB
+        (0.002,0) coordinate(MOc) \muonpathC
+        (\xD,0) coordinate(MOd) \muonpathD;
+    }
+  },
+  pics/cmstitle/.style={
+    code={
+      \node[below right,#1,font=\optima,inner sep=0,scale=3.58]
+        at (\pgfkeysvalueof{/tikz/cmstitle/x},\pgfkeysvalueof{/tikz/cmstitle/y})
+          {\contour{\pgfkeysvalueof{/tikz/cmstitle/outcol}}{CMS}};
+    }
+  },
+  pics/cmstext/.style={
+    code={
+      \node[#1,font=\helvet,scale=\pgfkeysvalueof{/tikz/cmstext/s},
+            inner sep=0,above right,rotate=90]
+        at (\pgfkeysvalueof{/tikz/cmstext/x},\pgfkeysvalueof{/tikz/cmstext/y})
+          {Compact Muon Solenoid};
+    }
+  },
+  muon/x4/.initial=0.006, % x coordinate 4th muon
+  pics/muons/.default=colmuon,
+  pics/cmstitle/.default=colfont,
+  pics/cmstext/.default=colfont,
+  cmstitle/x/.initial=0.058,
+  cmstitle/y/.initial=0.888,
+  cmstitle/outcol/.initial=white, % contour color
+  cmstext/x/.initial=0.9925,
+  cmstext/y/.initial=0.37,
+  cmstext/s/.initial=0.5255,
+}
+
+\begin{document}
+
+
+% CMS LOGO - default colors
+\foreach \cmstext in {1,0}{ % with/without text
+\begin{tikzpicture}[x=4cm,y=4.0025cm]
+  \message{^^JCMS logo, cmstext=\cmstext}
+  
+  %%%% OFFICIAL LOGO for comparison
+  %%%% https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=3045
+  %%%\node[inner sep=0,outer sep=0,above right] at (-0.154mm,-0.154mm) {
+  %%%  \includegraphics[width=40.308mm] %,clip,trim={0mm 0mm 0mm 0mm}]
+  %%%    {CMSlogo_outline_color_label_May2014.pdf}
+  %%%};
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \fill[colbkg] (0,0) rectangle (1,1); % background
+    \coordinate (O) at (20:0.002);
+    \draw[layer=colMUON] (O) circle(\rMUON); % muon system
+    \draw[layer=colMAGN] (O) circle(\rMAGN); % magnet
+    \draw[layer=colHCAL] (O) circle(\rHCAL); % HCAL
+    \draw[black!48,layer=colgrey] 
+                         (O) circle(\rgrey); % grey band
+    \draw[layer=colECAL] (O) circle(\rECAL); % ECAL
+    \draw[layer=colTOB]  (O) circle(\rTOB);  % outer strip detector
+    \draw[black!48,layer=colTIB]
+                         (O) circle(\rTIB);  % inner strip detector
+    
+    % MUONS
+    \pic {muons};
+    
+    % TEXT
+    \pic {cmstitle};
+    \ifnum\cmstext=1
+      \pic {cmstext};
+    \else
+    \fi
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  \fill (O) circle (0.1mm);
+  
+\end{tikzpicture}}
+
+
+% CMS LOGO - black / white
+\foreach \muoncol in {black,colmuon}{ % with/without red highlight
+\foreach \cmstext in {1,0}{ % with/without text
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \message{^^JCMS logo (black/white), cmstext=\cmstext}
+  
+  %%%% OFFICIAL LOGO for comparison
+  %%%% https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=3045
+  %%%\node[inner sep=0,outer sep=0,above right] at (-0.22mm,-0.10mm) {
+  %%%  \includegraphics[width=40.4mm] %,clip,trim={0mm 0mm 0mm 0mm}]
+  %%%    {CMSlogo_outline_black_label_May2014.pdf}
+  %%%};
+  
+  % CMS SETTINGS
+  \def\rTIB{0.0620} % outer radius inner silicon strip tracker
+  \def\rTOB{0.1140} % outer radius outer silicon strip tracker
+  \def\rECAL{0.244} % outer radius ECAL
+  \def\rgrey{0.257} % outer radius grey band (ECAL readout?)
+  \def\rHCAL{0.393}  % outer radius HCAL
+  \def\rMAGN{0.587}  % outer radius solenoid magnet
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \coordinate (O) at (20:0.002);
+    \draw[layer2=black!90] (O) circle(\rMUON); % muon system
+    \draw[layer2=black!90] (O) circle(\rMAGN); % magnet
+    \draw[layer2=black!90] (O) circle(\rHCAL); % HCAL
+    \draw[layer2=black!90] (O) circle(\rgrey); % grey band
+    \draw[layer2=black!56] (O) circle(\rECAL); % ECAL
+    \draw[layer2=black!90] (O) circle(\rTOB);  % outer strip detector
+    \draw[layer2=black!64] (O) circle(\rTIB);  % inner strip detector
+    
+    % MUONS
+    \pic[muon/.cd,outwidth=0.19mm,inwidth=0.5mm]
+      {muons=\muoncol};
+    
+    % TEXT
+    \pic[cmstitle/.cd,x=0.060,y=0.896]
+      {cmstitle=black};
+    \ifnum\cmstext=1
+      \pic[cmstext/.cd,x=0.9855,y=0.40,s=0.515]
+        {cmstext=black};
+    \fi
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame=black,opacity=1] (0,0) rectangle (1,1);
+  
+\end{tikzpicture}}}
+
+
+% CMS LOGO - black / white (inverted)
+\foreach \muoncol in {white,colmuon}{ % with/without red highlight
+\foreach \cmstext in {1,0}{ % with/without text
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \message{^^JCMS logo (black/white, inverted), cmstext=\cmstext}
+  
+  % CMS SETTINGS
+  \def\rTIB{0.0620} % outer radius inner silicon strip tracker
+  \def\rTOB{0.1140} % outer radius outer silicon strip tracker
+  \def\rECAL{0.244} % outer radius ECAL
+  \def\rgrey{0.257} % outer radius grey band (ECAL readout?)
+  \def\rHCAL{0.393}  % outer radius HCAL
+  \def\rMAGN{0.587}  % outer radius solenoid magnet
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    \fill[black] (0,0) rectangle (1,1);
+    
+    % DETECORS LAYERS
+    \coordinate (O) at (20:0.002);
+    \draw[layer2=black!5] (O) circle(\rMUON); % muon system
+    \draw[layer2=black!5] (O) circle(\rMAGN); % magnet
+    \draw[layer2=black!5] (O) circle(\rHCAL); % HCAL
+    \draw[layer2=black!5] (O) circle(\rgrey); % grey band
+    \draw[layer2=black!30] (O) circle(\rECAL); % ECAL
+    \draw[layer2=black!5] (O) circle(\rTOB);  % outer strip detector
+    \draw[layer2=black!30] (O) circle(\rTIB);  % inner strip detector
+    
+    % MUONS
+    \pic[muon/.cd,outwidth=0.19mm,inwidth=0.5mm]
+      {muons={\muoncol,black}};
+    
+    % TEXT
+    \pic[cmstitle/.cd,x=0.060,y=0.896,outcol=black]
+      {cmstitle=white};
+    \ifnum\cmstext=1
+      \pic[cmstext/.cd,x=0.9855,y=0.40,s=0.515]
+        {cmstext=white};
+    \fi
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame=white,opacity=1] (0,0) rectangle (1,1);
+  
+\end{tikzpicture}}}
+
+
+% CMS LOGO - rainbow color muons (white background)
+\foreach \cmstext in {1,0}{ % with/without text
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \message{^^JCMS logo (rainbow colors, white background), cmstext=\cmstext}
+  
+  % CMS SETTINGS
+  \def\rTIB{0.0620} % outer radius inner silicon strip tracker
+  \def\rTOB{0.1140} % outer radius outer silicon strip tracker
+  \def\rECAL{0.244} % outer radius ECAL
+  \def\rgrey{0.257} % outer radius grey band (ECAL readout?)
+  \def\rHCAL{0.393}  % outer radius HCAL
+  \def\rMAGN{0.587}  % outer radius solenoid magnet
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \coordinate (O) at (20:0.002);
+    \draw[layer2=black!90] (O) circle(\rMUON); % muon system
+    \draw[layer2=black!90] (O) circle(\rMAGN); % magnet
+    \draw[layer2=black!90] (O) circle(\rHCAL); % HCAL
+    \draw[layer2=black!90] (O) circle(\rgrey); % grey band
+    \draw[layer2=black!56] (O) circle(\rECAL); % ECAL
+    \draw[layer2=black!90] (O) circle(\rTOB);  % outer strip detector
+    \draw[layer2=black!64] (O) circle(\rTIB);  % inner strip detector
+    
+    % MUONS
+    \begin{scope}[muon/.cd,outwidth=0.19mm,inwidth=0.5mm]
+      \draw[muon,rotate=2] % draw in back for white line
+        (MOa) \muonpathA
+        (MOb) \muonpathB
+        (MOc) \muonpathC
+        (MOd) \muonpathD;
+      \draw[muon=magenta!90,rotate=-2] % draw in back for white line
+        (MOa) \muonpathA
+        (MOb) \muonpathB
+        (MOc) \muonpathC
+        (MOd) \muonpathD;
+      \draw[muon2=violet,rotate=2]
+        (MOa) \muonpathA;
+      \draw[muon2=blue,rotate=-2]
+        (MOb) \muonpathB;
+      \draw[muon2=cyan,rotate=2]
+        (MOb) \muonpathB;
+      \draw[muon2=green!90!cyan,rotate=-2]
+        (MOc) \muonpathC;
+      \draw[muon2=yellow!90!orange,rotate=2]
+        (MOc) \muonpathC;
+      \draw[muon2=orange,rotate=-2]
+        (MOd) \muonpathD;
+      \draw[muon2=colmuon,rotate=2]
+        (MOd) \muonpathD;
+    \end{scope}
+    
+    % TEXT
+    \pic[cmstitle/.cd,x=0.060,y=0.896]
+      {cmstitle=black};
+    \ifnum\cmstext=1
+      \node[font=\helvet,scale=0.515,inner sep=0,above right,rotate=90]
+        at (0.9855,0.40)
+          {\textcolor[wave]{400}{C}%
+           \textcolor[wave]{416}{o}%
+           \textcolor[wave]{432}{m}%
+           \textcolor[wave]{448}{p}%
+           \textcolor[wave]{464}{a}%
+           \textcolor[wave]{480}{c}%
+           \textcolor[wave]{496}{t} 
+           \textcolor[wave]{512}{M}%
+           \textcolor[wave]{528}{u}%
+           \textcolor[wave]{544}{o}%
+           \textcolor[wave]{560}{n}
+           \textcolor[wave]{583}{S}%
+           \textcolor[wave]{592}{o}%
+           \textcolor[wave]{608}{l}%
+           \textcolor[wave]{624}{e}%
+           \textcolor[wave]{640}{n}%
+           \textcolor[wave]{656}{o}%
+           \textcolor[wave]{680}{i}%
+           \textcolor[wave]{720}{d}};
+    \fi
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame=black,opacity=1] (0,0) rectangle (1,1);
+  
+\end{tikzpicture}}
+
+
+% CMS LOGO - rainbow color layers (white background)
+\foreach \cmstext in {1,0}{ % with/without text
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \message{^^JCMS logo (rainbow colors, white background), cmstext=\cmstext}
+  
+  % CMS SETTINGS
+  \def\rTIB{0.0620} % outer radius inner silicon strip tracker
+  \def\rTOB{0.1140} % outer radius outer silicon strip tracker
+  \def\rECAL{0.244} % outer radius ECAL
+  \def\rgrey{0.257} % outer radius grey band (ECAL readout?)
+  \def\rHCAL{0.393}  % outer radius HCAL
+  \def\rMAGN{0.587}  % outer radius solenoid magnet
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \coordinate (O) at (20:0.002);
+    \draw[layer2=colmuon]
+      (O) circle(\rMUON); % muon system
+    \draw[layer2=orange]
+      (O) circle(\rMAGN); % magnet
+    \draw[layer2=yellow!80!orange]
+      (O) circle(\rHCAL); % HCAL
+    \draw[layer2=green!80!black]
+      (O) circle(\rgrey); % grey band
+    \draw[layer2=cyan!70]
+      (O) circle(\rECAL); % ECAL
+    \draw[layer2=blue!80]
+      (O) circle(\rTOB);  % outer strip detector
+    \draw[layer2=violet!90]
+      (O) circle(\rTIB);  % inner strip detector
+    
+    % MUONS
+    \pic[muon/.cd,outwidth=0.19mm,inwidth=0.5mm]
+      {muons=rbcolmuon};
+    
+    % TEXT
+    \pic[cmstitle/.cd,x=0.060,y=0.896]
+      {cmstitle=black};
+    \ifnum\cmstext=1
+      \pic[cmstext/.cd,x=0.9855,y=0.40,s=0.515]
+        {cmstext=black};
+    \fi
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame=black,opacity=1] (0,0) rectangle (1,1);
+  
+\end{tikzpicture}}
+
+
+% CMS LOGO - RAINBOW LGBTQ+ COLORS
+\foreach \cmstext in {1,0}{ % with/without text
+\begin{tikzpicture}[x=4cm,y=4.0025cm]
+  \message{^^JCMS logo (rainbow colors), cmstext=\cmstext}
+  
+  %%%% OFFICIAL LOGO for comparison
+  %%%% https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=3045
+  %%%\node[inner sep=0,outer sep=0,above right] at (-0.154mm,-0.154mm) {
+  %%%  \includegraphics[width=40.308mm] %,clip,trim={0mm 0mm 0mm 0mm}]
+  %%%    {CMSlogo_rainbow_nolabel_June2018.png}
+  %%%};
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    %\fill[colbkg] (0,0) rectangle (1,1); % background
+    \coordinate (O) at (20:0.002);
+    \draw[black!48,layer=rbcolMUON]
+      (O) circle(\rMUON); % muon system
+    \draw[black!70,layer=rbcolMAGN]
+      (O) circle(\rMAGN); % magnet
+    \draw[black!70,layer=rbcolHCAL]
+      (O) circle(\rHCAL); % HCAL
+    \draw[black!48,layer=colgrey]
+      (O) circle(\rgrey); % grey band
+    \draw[black!70,layer=rbcolECAL]
+      (O) circle(\rECAL); % ECAL
+    \draw[black!70,layer=rbcolTOB]
+      (O) circle(\rTOB);  % outer strip detector
+    \draw[black!70,layer=colTIB]
+      (O) circle(\rTIB);  % inner strip detector
+    
+    % MUONS
+    \pic {muons=colmuon};
+    \pic[muon/.cd,outwidth=0.0mm,inwidth=0.53mm]
+      {muons=rbcolmuon};
+    
+    % TEXT
+    \pic {cmstitle};
+    \ifnum\cmstext=1
+      \pic {cmstext};
+    \fi
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  \fill (O) circle (0.1mm);
+  
+\end{tikzpicture}}
+
+
+% CMS LOGO - alternative colors
+\foreach \cmstext in {0}{ % with/without text
+\begin{tikzpicture}[x=4cm,y=4.0025cm]
+  \message{^^JCMS logo (alternative colors), cmstext=\cmstext}
+  
+  %%%% OFFICIAL LOGO for comparison
+  %%%% https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=3045
+  %%%\node[inner sep=0,outer sep=0,above right] at (-0.154mm,-0.154mm) {
+  %%%  \includegraphics[width=40.308mm] %,clip,trim={0mm 0mm 0mm 0mm}]
+  %%%    {CMSlogo_outline_color_label_May2014.pdf}
+  %%%};
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \fill[colbkg] (0,0) rectangle (1,1); % background
+    \coordinate (O) at (20:0.002);
+    \draw[layer=red!95!black!88]
+      (O) circle(\rMUON); % muon system
+    \draw[layer=blue!20!black!18]
+      (O) circle(\rMAGN); % magnet
+    \draw[layer=yellow!85!orange!95!black]
+      (O) circle(\rHCAL); % HCAL
+    \draw[black!48,layer=colgrey]
+      (O) circle(\rgrey); % grey band
+    \draw[layer=green!75!black!60]
+      (O) circle(\rECAL); % ECAL
+    \draw[layer=blue!90!red!70!black!75]
+      (O) circle(\rTOB);  % outer strip detector
+    \draw[black!48,layer=blue!50!black!75]
+      (O) circle(\rTIB);  % inner strip detector
+    
+    % MUONS
+    \pic {muons};
+    
+    % TEXT
+    \pic {cmstitle};
+    \ifnum\cmstext=1
+      \pic {cmstext};
+    \else
+    \fi
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  \fill (O) circle (0.1mm);
+  
+\end{tikzpicture}}
+
+
+% CMS LOGO - no magnet
+\foreach \cmstext in {0}{ % with/without text
+\begin{tikzpicture}[x=4cm,y=4.0025cm]
+  \message{^^JCMS logo (no magnet), cmstext=\cmstext}
+  
+  %%%% OFFICIAL LOGO for comparison
+  %%%% https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=3045
+  %%%\node[inner sep=0,outer sep=0,above right] at (-0.154mm,-0.154mm) {
+  %%%  \includegraphics[width=40.308mm] %,clip,trim={0mm 0mm 0mm 0mm}]
+  %%%    {CMSlogo_outline_color_label_May2014.pdf}
+  %%%};
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \fill[colbkg] (0,0) rectangle (1,1); % background
+    \coordinate (O) at (20:0.002);
+    \draw[layer=colMUON] (O) circle(\rMUON); % muon system
+    \draw[layer=colMAGN] (O) circle(\rMAGN); % muon system
+    \draw[layer=colHCAL] (O) circle(\rHCAL); % HCAL
+    \draw[black!48,layer=colgrey] 
+                         (O) circle(\rgrey); % grey band
+    \draw[layer=colECAL] (O) circle(\rECAL); % ECAL
+    \draw[layer=colTOB]  (O) circle(\rTOB);  % outer strip detector
+    \draw[black!48,layer=colTIB]
+                         (O) circle(\rTIB);  % inner strip detector
+    
+    % MUONS (no magnet)
+    \draw[muon]
+      (MO) -- (M1)
+      (MO) -- (M2)
+      (MO) -- (M3)
+      (MO) -- (M4);
+    
+    % TEXT
+    \pic {cmstitle};
+    \ifnum\cmstext=1
+      \pic {cmstext};
+    \else
+    \fi
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  \fill (O) circle (0.1mm);
+  
+\end{tikzpicture}}
+
+
+% CMS LOGO - round
+\begin{tikzpicture}[x=4cm,y=4.0025cm]
+  \message{^^JCMS round logo (butterfly)}
+  
+  % DETECORS LAYERS
+  \fill[colbkg] (0,0) rectangle (1,1); % background
+  \coordinate (O) at (20:0.002);
+  \draw[layer=colMUON] (O) circle(\rMUON); % muon system
+  \draw[layer=colMAGN] (O) circle(\rMAGN); % magnet
+  \draw[layer=colHCAL] (O) circle(\rHCAL); % HCAL
+  \draw[black!48,layer=colgrey] 
+                       (O) circle(\rgrey); % grey band
+  \draw[layer=colECAL] (O) circle(\rECAL); % ECAL
+  \draw[layer=colTOB]  (O) circle(\rTOB);  % outer strip detector
+  \draw[black!48,layer=colTIB]
+                       (O) circle(\rTIB);  % inner strip detector
+  
+  % MUONS
+  \draw[muon=colmuon]
+    (O) \muonpathA (O) \muonpathB
+    (O) \muonpathC (O) \muonpathD
+    {[xscale=-1]
+      (O) \muonpathA (O) \muonpathB
+      (O) \muonpathC (O) \muonpathD}
+    {[xscale=-1,yscale=1]
+      (O) \muonpathA (O) \muonpathB
+      (O) \muonpathC (O) \muonpathD}
+    {[xscale= 1,yscale=-1]
+      (O) \muonpathA (O) \muonpathB
+      (O) \muonpathC (O) \muonpathD}
+    {[xscale=-1,yscale=-1]
+      (O) \muonpathA (O) \muonpathB
+      (O) \muonpathC (O) \muonpathD};
+  
+  % TEXT
+  \pic[cmstitle/.cd,x=0] {cmstitle={colfont,below}};
+  
+\end{tikzpicture}
+
+
+% CMS LOGO - round
+\begin{tikzpicture}[x=4cm,y=4.0025cm]
+  \message{^^JCMS round logo}
+  
+  % DETECORS LAYERS
+  \fill[colbkg] (0,0) rectangle (1,1); % background
+  \coordinate (O) at (20:0.002);
+  \draw[layer=colMUON] (O) circle(\rMUON); % muon system
+  \draw[layer=colMAGN] (O) circle(\rMAGN); % magnet
+  \draw[layer=colHCAL] (O) circle(\rHCAL); % HCAL
+  \draw[black!48,layer=colgrey] 
+                       (O) circle(\rgrey); % grey band
+  \draw[layer=colECAL] (O) circle(\rECAL); % ECAL
+  \draw[layer=colTOB]  (O) circle(\rTOB);  % outer strip detector
+  \draw[black!48,layer=colTIB]
+                       (O) circle(\rTIB);  % inner strip detector
+  
+  % MUONS
+  \draw[muon=colmuon]
+     {[rotate=-20,yscale=-1] (O) \muonpathA}
+     {[rotate=180] (O) \muonpathB}
+     {[rotate=180,yscale=-1]  (O) \muonpathC}
+     (O) \muonpathD;
+  
+  % TEXT
+  \pic[cmstitle/.cd,x=0] {cmstitle={colfont,below}};
+  
+\end{tikzpicture}
+
+
+% CMS safety LOGO
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \message{^^JCMS safety logo}
+  
+  %%%% OFFICIAL LOGO for comparison
+  %%%% https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=3045
+  %%%\node[inner sep=0,outer sep=0,above right] at (-0.154mm,-0.154mm) {
+  %%%  \includegraphics[width=40.308mm] %,clip,trim={0mm 0mm 0mm 0mm}]
+  %%%    {Logo_CMS_Safety_0.png}
+  %%%};
+  
+  \coordinate (O) at (0,0);
+  \begin{scope}[opacity=1] % for clipping outside frame
+    
+    % BACKGROUND
+    \fill[colsafety] (0,0) rectangle (1,1);
+    
+    % HARD HAT
+    \def\yhat{0.246} % y coordinate bottom of hard hat
+    \def\rhat{0.351} % radius of hard hat
+    \fill[cyan!90!blue!85,rounded corners=3pt]
+      (0.1,\yhat) -- (0.902,\yhat) --++ (0,0.04)
+      arc(0:171:{\rhat} and {1.055*\rhat})
+      {[rounded corners=0pt] --++ (-152:0.15) arc(118:270:0.0145)};
+    
+    % MUONS
+    \begin{scope}[shift={(0.39,0.27)},xscale=0.575,yscale=0.71,rotate=2]
+      \draw[colsafety,line width=3.5mm,line cap=round]
+         {[xscale=1.09,yscale=1.24] (0,0) \muonpathA}
+         {[xscale=1.06,yscale=1.08] (0,0) \muonpathB}
+         {[xscale=1.04,yscale=1.04] (0,0) \muonpathC}
+         (0,0) \muonpathD;
+      \fill[colsafety]
+        (0,0) to[out=50,in=-130] (M1) -- (M4) -- cycle;
+      \draw[muon/outwidth=0.35mm,muon/inwidth=1.3mm,muon]
+         {[xscale=1.09,yscale=1.24] (0,0) \muonpathA}
+         {[xscale=1.06,yscale=1.08] (0,0) \muonpathB}
+         {[xscale=1.04,yscale=1.04] (0,0) \muonpathC}
+         (0,0) \muonpathD;
+    \end{scope}
+    
+    % TEXT
+    \node[white,font=\optima,inner sep=0,scale=3.5,xscale=0.98,below right]
+      at (0.048,0.94) {CMS};
+    \node[white,font=\helvet,inner sep=0,xscale=2.55,yscale=1.8,below]
+      at (0.5,0.18) {\textbf{SAFETY}};
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  \fill (O) circle (0.1mm);
+  
+\end{tikzpicture}
+
+
+% CMS LOGO - Offline Software and Computing
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \message{^^JCMS O&C logo}
+  
+  %%%% OFFICIAL LOGO for comparison
+  %%%\node[inner sep=0,outer sep=0,above right] at (-0.22mm,-0.10mm) {
+  %%%  \includegraphics[width=40.4mm] %,clip,trim={0mm 0mm 0mm 0mm}]
+  %%%     {CMSLogo_O&C.jpeg}
+  %%%};
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (0,0) rectangle (40mm,40mm);
+    
+    % MUONS
+    \pic[scale=0.88,muon/.cd,outwidth=0.19mm,inwidth=0.5mm,x4=0.002]
+      at (57:0.14) {muons=colmuon};
+    
+    % TEXT
+    \node[colfont,font=\optima,inner sep=0,scale=2.8,xscale=1.01,below right]
+      at (0.07,0.8) {\contour{white}{CMS}};
+    \node[colfont,font=\optima,inner sep=0,scale=2.8,xscale=1,below right]
+      at (0.21,0.5) {\contour{white}{O\&C}};
+    \node[colfont,font=\helvet,scale=0.624,inner sep=0,above,rotate=90]
+      at (0.958,0.449) {Offline Software and Computing};
+    
+  \end{scope}
+  
+\end{tikzpicture}
+
+
+% CMS LOGO - Combine
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \message{^^JCMS Combine logo}
+  \begin{scope} % for clip
+    \clip[rounded corners=1pt] (-0.1mm,-0.1mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \fill[colbkg] (0,0) rectangle (1,1); % background
+    \coordinate (O) at (20:0.002);
+    \draw[band=col2sd] (O) circle(\rTOB) circle(\rMUON);
+    \draw[band=col1sd] (O) circle(\rECAL) circle(\rMAGN);
+    \draw[black,line width=1pt] (O) circle(\rHCAL);
+    
+    % MUONS (likelihoods)
+    %%%\draw[muon,domain=0:0.97,samples=100] % 3th degree polynomial
+    %%%  plot (\x,{0.012+8.7*(\x-0.011)*(\x-0.75)^2});
+    %%%%\draw[muon,dashed,domain=0:0.89,samples=100] % parabola
+    %%%\draw[muon,dash pattern=on 4pt off 4pt,domain=0:0.89,samples=100] % parabola
+    %%%  plot (\x,{0.011+(\x-0.05)^2});
+    \draw[muon,domain=0:0.92,samples=100,smooth] % 3th degree polynomial
+      plot (\x,{0.012+8.9*(\x-0.011)*(\x-0.64)^2});
+    %\draw[muon,dashed,domain=0:0.89,samples=100] % parabola
+    \draw[muon,dash pattern=on 4pt off 4pt,domain=0:0.89,samples=100,smooth] % parabola
+      plot (\x,{0.011+1.5*(\x-0.15)^2});
+    
+    % TEXT
+    \pic {cmstitle};
+    \node[colfont,font=\palat,scale=1.1,below right]
+      at (0.11,0.67) {\textsc{Combine}};
+    %\node[colfont,scale=1.0,xscale=1.2,below right]
+    %  at (0.09,0.67) {\tt{\textbf{Combine}}};
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  \fill (O) circle (0.1mm);
+  
+\end{tikzpicture}
+
+
+% CMS LOGO - Combine (black/white/red)
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \message{^^JCMS Combine logo (black/white)}
+  \begin{scope} % for clip
+    \clip[rounded corners=1pt] (-0.1mm,-0.1mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \fill[colbkg] (0,0) rectangle (1,1); % background
+    \coordinate (O) at (20:0.002);
+    \draw[layer2=black!90]
+      (O) circle(\rTOB)
+          circle(\rECAL)
+          circle(\rMAGN)
+          circle(\rMUON);
+    \draw[black,line width=1pt] (O) circle(\rHCAL);
+    
+    % MUONS (likelihoods)
+    \draw[muon,domain=0:0.92,samples=100,smooth] % 3th degree polynomial
+      plot (\x,{0.012+8.9*(\x-0.011)*(\x-0.64)^2});
+    \draw[muon,dash pattern=on 4pt off 4pt,domain=0:0.89,samples=100,smooth] % parabola
+      plot (\x,{0.011+1.5*(\x-0.15)^2});
+    
+    % TEXT
+    \pic {cmstitle=black};
+    \node[black,font=\palat,scale=1.1,below right]
+      at (0.11,0.67) {\textsc{Combine}};
+    %\node[colfont,scale=1.0,xscale=1.2,below right]
+    %  at (0.09,0.67) {\texttt{Combine}};
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  \fill (O) circle (0.1mm);
+  
+\end{tikzpicture}
+
+
+\end{document}

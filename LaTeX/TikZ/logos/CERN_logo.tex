@@ -1,0 +1,127 @@
+% !TEX TS-program = xelatex
+% Author: Izaak Neutelings (June 2023)
+% Description:
+%   Unofficial logo of CERN to be used for creative and
+%   fun variations only! Do NOT use for official publications!
+% Instructions:
+%   You may need to install some fonts to compile this document.
+%   - Optima font for the "CMS" label (LaTeX equivalent is "Classico"
+%   - Helvetica for the "extra" text
+%   - Palatino for CMS TDR style
+%   Below are instructions to get this working with either pdfLaTeX or XeLaTeX
+% Sources:
+%   https://tikz.net/cms_logo/
+%   https://design-guidelines.web.cern.ch/guidelines/logo
+%   https://design-guidelines.web.cern.ch/downloads
+\documentclass[border=0.5pt,tikz]{standalone}
+\usetikzlibrary{calc}
+
+% CMS FONTS
+\usepackage{iftex} % for \ifpdftex
+\ifpdftex % if compiled with pdfLaTeX
+  % https://tug.org/FontCatalogue/urwclassico/
+  % https://tug.org/fonts/getnonfreefonts/
+  % https://tug.org/fonts/fontinstall.html
+  % Instructions for installation on macOS (Tex Live):
+  % 1) Install Classico (equivalent of Optima):
+  %   curl --remote-name https://www.tug.org/fonts/getnonfreefonts/install-getnonfreefonts
+  %   sudo texlua install-getnonfreefonts
+  %   sudo getnonfreefonts --sys classico
+  \message{^^JCompiling with pdfLaTeX}
+  \usepackage[T1]{fontenc}
+  \usepackage{classico} % URW Classico ~ Optima for "CMS" label
+  \newcommand*{\optima}{\classico}
+\else % if compiled with XeLaTeX
+  % Instructions:
+  %   1) Ensure the paths below to the Optima.ttc files are correct
+  %   2) Compile with XeLaTeX
+  \message{^^JCompiling with XeLaTeX}
+  \usepackage{fontspec} % needed for newfontfamily
+  \usepackage[T1]{fontenc} % needed for palatino (call after fontspec)
+  \newfontfamily{\optima}{Optima}[ % Optima for "CMS" label
+    Path = ./fonts/, % folder with Helvetica.ttc file (relative to CMS_logo.tex)
+    %Path = /System/Library/Fonts/, % macOS system standard
+    UprightFeatures = {FontIndex=0},
+    BoldFeatures = {FontIndex=1},
+    ItalicFeatures = {FontIndex=2},
+    BoldItalicFeatures = {FontIndex=3},
+    BoldFont = *,
+    ItalicFont = *
+  ]
+\fi
+
+% CMS COLORS
+\definecolor{colbkg}{RGB}{12,74,142} % CERN blue
+%\colorlet{myred}{red!90!black}
+
+% CMS STYLES
+\tikzset{
+  line/.style={colbkg,double=#1,line width=1.5,double distance=1.8},
+  line/.default=white,
+}
+
+\begin{document}
+
+
+% CERN LOGO
+\begin{tikzpicture}[x=2cm,y=2cm]
+  
+  % OFFICIAL LOGO
+  %%%% https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=3045
+  %%%\node[inner sep=0,outer sep=0] at (0,0) {
+  %%%  \includegraphics[width=40mm] %,clip,trim={0mm 0mm 0mm 0mm}]
+  %%%    {test/CERN_LogoBadge.pdf}
+  %%%};
+  
+  % DETECORS LAYERS
+  \def\rL{0.6205}
+  \def\rxR{0.622}
+  \def\ryR{0.633}
+  \def\angA{190}
+  \def\angB{89.8}
+  \def\angC{-39}
+  \def\angD{13}
+  \def\angE{-11}
+  \coordinate (L) at (133.5:0.224);
+  \coordinate (R) at (-16:0.127);
+  \begin{scope}[opacity=1]
+    \clip (-1,-1) rectangle (1,1);
+    \fill[colbkg] (-1,-1) rectangle (1,1);
+    
+    % RIGHT CIRCLE
+    \begin{scope}
+      \clip %draw[green]
+        (R)++(-1.1*\rxR,-1.1*\rxR) |- ($(R)+(-45:{0.05*\rxR} and {0.05*\ryR})$)
+        --++ (138.3:{1.1*\rxR} and {1.1*\ryR}) |- ($(R)+(1.2*\rxR,1.09*\rxR)$) |- cycle;
+      \draw[line]
+        (R) ellipse({\rxR} and {\ryR})
+        ($(R)+(\angE:\rxR)$)
+          to[out=89+\angE,in=-86+\angE]++ (94.1+\angE:1.3*\rxR);
+    \end{scope}
+    
+    % LEFT CIRCLE
+    \clip %draw[red]
+      (L)++(-1.1*\rL,1.1*\rL) rectangle++ (0.7*\rL,-2.292*\rL)
+      (L)++(-0.5*\rL,1.1*\rL) rectangle++ (2.4*\rL,-3.1*\rL);
+    \draw[line]
+      (L) circle(\rL)
+      ($(L)+(\angA:\rL)$)
+        to[out=91+\angA,in=-84+\angA]++ (95+\angA:0.68) % truncate with clip
+      ($(L)+(\angB:\rL)$) --++ (\angB-90:1.6)
+      ($(L)+(\angC:\rL)$)
+        to[out=\angC-90,in=\angC+88.5]++ (\angC-93.4:1.2)
+      ($(L)+(\angD:\rL)$)
+        to[out=\angD-88,in=\angD+90]++ (\angD-90.1:1.4);
+    \draw[line] % right circle overlapping left circle on top
+      ($(R)+(100:{\rxR} and {\ryR})$) arc(100:40:{\rxR} and {\ryR});
+    
+    % CERN
+    \node[white,font=\optima,xscale=2.25,yscale=2.18]
+      at ($(L)+(130:0.018)$) {CERN};
+    
+  \end{scope}
+  
+\end{tikzpicture}
+
+
+\end{document}
