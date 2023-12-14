@@ -1,0 +1,240 @@
+% !TEX TS-program = xelatex
+% Author: Izaak Neutelings (May 2023)
+% Description:
+%   Unofficial logo of CMS for vector-quality,
+%   to be used for creative and fun variations only
+%   Do NOT use for official publications!
+% Instructions:
+%   You may need to install some fonts to compile this document.
+%   - Optima font for the "CMS" label (LaTeX equivalent is "Classico"
+%   - Helvetica for the "extra" text
+%   - Palatino for CMS TDR style
+%   Below are instructions to get this working with either pdfLaTeX or XeLaTeX
+% Sources:
+%   https://tikz.net/cms_logo/
+%   https://tikz.net/jet_top/
+%   https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=3045
+%   https://cms-results.web.cern.ch/cms-results/public-results/publications-vs-time/
+\documentclass[border=0.5pt,tikz]{standalone}
+\usepackage{xcolor}
+\usetikzlibrary{calc}
+\usetikzlibrary{math} % for \tikzmath
+\usetikzlibrary{positioning}
+
+% CMS FONTS
+\usepackage{iftex} % for \ifpdftex
+\ifpdftex % if compiled with pdfLaTeX
+  % https://tug.org/FontCatalogue/urwclassico/
+  % https://tug.org/fonts/getnonfreefonts/
+  % https://tug.org/fonts/fontinstall.html
+  % Instructions for installation on macOS (Tex Live):
+  % 1) Install Classico (equivalent of Optima):
+  %   curl --remote-name https://www.tug.org/fonts/getnonfreefonts/install-getnonfreefonts
+  %   sudo texlua install-getnonfreefonts
+  %   sudo getnonfreefonts --sys classico
+  % 2) Install Helvetica if needed (should already be included in TeX Live)
+  \message{^^JCompiling with pdfLaTeX}
+  \usepackage[T1]{fontenc}
+  \usepackage{classico} % URW Classico ~ Optima for "CMS" label
+  \usepackage{helvet} % Helvetica for CMS "extra" (sans-serif) text
+  \usepackage{palatino} % Palatino for CMS TDR style for text
+  %\usepackage{mathpazo} % Palatino for CMS TDR style for math
+  \newcommand*{\optima}{\classico}
+  \newcommand*{\helvet}{\fontfamily{phv}\selectfont}
+  \newcommand*{\palat}{\fontfamily{ppl}\selectfont}
+\else % if compiled with XeLaTeX
+  % Instructions:
+  %   1) Ensure the paths below to the Helvetica.ttc, Optima.ttc files are correct
+  %   2) Compile with XeLaTeX
+  \message{^^JCompiling with XeLaTeX}
+  \usepackage{fontspec} % needed for newfontfamily
+  \usepackage[T1]{fontenc} % needed for palatino (call after fontspec)
+  \newfontfamily{\optima}{Optima}[ % Optima for "CMS" label
+    Path = ./fonts/, % folder with Helvetica.ttc file (relative to CMS_logo.tex)
+    %Path = /System/Library/Fonts/, % macOS system standard
+    UprightFeatures = {FontIndex=0},
+    BoldFeatures = {FontIndex=1},
+    ItalicFeatures = {FontIndex=2},
+    BoldItalicFeatures = {FontIndex=3},
+    BoldFont = *,
+    ItalicFont = *
+  ]
+  \newfontfamily{\helvet}{Helvetica}[ % Optima for CMS "extra" (sans-serif) text
+    Path = ./fonts/, % folder with Helvetica.ttc file (relative to CMS_logo.tex)
+    %Path = /System/Library/Fonts/, % macOS system standard
+    UprightFeatures = {FontIndex=0},
+    BoldFeatures = {FontIndex=1},
+    ItalicFeatures = {FontIndex=2},
+    BoldItalicFeatures = {FontIndex=3},
+    BoldFont = *,
+    ItalicFont = *
+  ]
+  \usepackage{palatino} % Palatino for CMS TDR style for text
+  %\usepackage{mathpazo} % Palatino for CMS TDR style for math
+  \newcommand*{\palat}{\fontfamily{ppl}\selectfont}
+\fi
+
+% CONTOUR
+\ifpdftex % if compiled with pdfLaTeX
+  \usepackage[outline]{contour} % glow around text
+  \contourlength{0.1pt}
+\else % if compiled with XeLaTeX
+  % NOTE: use bidicontour because standard contour package does not work with XeLaTeX
+  \usepackage{bidicontour}
+  \usepackage{bidi}
+  \bidicontourlength{0.1pt}
+  \bidicontournumber{100}
+  \newcommand{\contour}[2]{\bidicontour{#1}{#2}} % alias
+\fi
+
+% CMS COLORS
+\definecolor{colTIB}{RGB}{173,235,143}  % light green
+\definecolor{colTOB}{RGB}{146,229,105}  % green
+\definecolor{colECAL}{RGB}{146,229,105} % green
+\definecolor{colgrey}{RGB}{190,174,212} % dark grey
+\definecolor{colHCAL}{RGB}{229,233,238} % light grey
+\definecolor{colMAGN}{RGB}{255,223,127} % yellow
+\definecolor{colMUON}{RGB}{133,209,251} % blue
+\definecolor{colmuon}{RGB}{240,36,11}   % red
+\definecolor{colbkg}{RGB}{253,250,244}  % CMS background color (offwhite)
+\definecolor{colfont}{RGB}{16,17,119}   % CMS font color (dark blue)
+\definecolor{colsafety}{RGB}{37,53,118} % CMS safety background color
+
+% CMS STYLES
+\tikzset{
+  >=latex,
+  layer/.style={fill=#1,line width=0.05mm},
+  layer2/.style={draw=#1,line width=0.2mm},
+  band/.style={layer=#1,even odd rule}, % for CMS Combine
+  frame/.style={draw=#1,line width=0.308mm,rounded corners=0.002mm},
+  muon/.style={
+    white,double=#1,line width=\pgfkeysvalueof{/tikz/muon/outwidth},
+    double distance=\pgfkeysvalueof{/tikz/muon/inwidth},line cap=round
+  },
+  muon2/.style={
+    #1,line width=\pgfkeysvalueof{/tikz/muon/inwidth},line cap=round
+  },
+  muon/.default=colmuon,
+  muon2/.default=colmuon,
+  muon/outcol/.initial=0.15mm, % color outer line
+  muon/outwidth/.initial=0.15mm,  % width outer line
+  muon/inwidth/.initial=0.6mm, % width inner line
+}
+
+% CMS SETTINGS: Transverse radii of subdetectors
+\def\rTIB{0.0590} % outer radius inner silicon strip tracker
+\def\rTOB{0.1145} % outer radius outer silicon strip tracker
+\def\rECAL{0.220} % outer radius ECAL
+\def\rgrey{0.231} % outer radius grey band (ECAL readout?)
+\def\rHCAL{0.385} % outer radius HCAL
+\def\rMAGN{0.578} % outer radius solenoid magnet
+\def\rMUON{0.996} % outer radius muon system
+
+% JET MACROS
+\newcommand\jetcone[6][sigcol]{{
+  \pgfmathanglebetweenpoints{\pgfpointanchor{#2}{center}}{\pgfpointanchor{#3}{center}}
+  \pgfmathsetmacro\oang{#4/2} % half-opening angle
+  \edef\e{#5} % ratio a/b
+  \def\tmpL{tmpL-#2-#3} % unique coordinate name
+  \edef\vang{\pgfmathresult} % angle of vector OV
+  \tikzmath{
+    coordinate \C;
+    \C = (#2)-(#3);
+    \x = veclen(\Cx,\Cy)*\e*sin(\oang)^2; % x coordinate P
+    \y = tan(\oang)*(veclen(\Cx,\Cy)-\x); % y coordinate P
+    \a = veclen(\Cx,\Cy)*sqrt(\e)*sin(\oang); % vertical radius
+    \b = veclen(\Cx,\Cy)*tan(\oang)*sqrt(1-\e*sin(\oang)^2); % horizontal radius
+    \angb = acos(sqrt(\e)*sin(\oang)); % angle of P in ellipse
+  }
+  \coordinate (\tmpL) at ($(#3)-(\vang:\x pt)+(\vang+90:\y pt)$); % tangency
+  \draw[thin,#1!50!black,fill=#1!80!black!50,rotate=\vang] % cone back
+    (\tmpL) arc(180-\angb:180+\angb:{\a pt} and {\b pt})
+    -- (#2) -- cycle; %($(#2)+(0.01,0)$)
+  \draw[thin,#1!50!black,rotate=\vang, % cone inside
+        top color=#1!60!black!60,bottom color=#1!50!black!75,shading angle=\vang]
+    (#3) ellipse({\a pt} and {\b pt});
+  #6 % extra tracks
+  \draw[thin,#1!50!black,rotate=\vang,fill opacity=0.70,rounded corners=0.001pt, % cone front
+        top color=#1!90!black!20,bottom color=#1!50!black!50,shading angle=\vang]
+    (\tmpL) arc(180-\angb:180+\angb:{\a pt} and {\b pt})
+    -- (#2) -- cycle; %($(#2)+(0.01,0)$)
+}}
+
+\begin{document}
+
+
+% CMS B2G LOGO
+\begin{tikzpicture}[x=4cm,y=4.0025cm]
+  \message{^^JCMS B2G logo}
+  \begin{scope} % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \fill[colbkg] (0,0) rectangle (1,1); % background
+    \coordinate (O) at (20:0.002);
+    \draw[layer=colMUON] (O) circle(\rMUON); % muon system
+    \draw[layer=colMAGN] (O) circle(\rMAGN); % magnet
+    \draw[layer=colHCAL] (O) circle(\rHCAL); % HCAL
+    \draw[black!48,layer=colgrey] 
+                         (O) circle(\rgrey); % grey band
+    \draw[layer=colECAL] (O) circle(\rECAL); % ECAL
+    \draw[layer=colTOB]  (O) circle(\rTOB);  % outer strip detector
+    \draw[black!48,layer=colTIB]
+                         (O) circle(\rTIB);  % inner strip detector
+    
+    % JETS
+    \def\ljet{2.45cm}
+    \def\angjet{29}   % big jet opening angle
+    \def\angsubjet{9} % small subjet opening angle
+    \def\e{0.13}      % a/b ratio of ellipse minor and major radii
+    \coordinate (O) at (0,0);
+    \begin{scope}[rotate=63]
+      \coordinate (J1)  at ( 0:0.96*\ljet); % big jet
+      \coordinate (SJ1) at (-6:\ljet); % small subjet 1
+      \coordinate (SJ2) at ( 6:\ljet); % small subjet 2
+      \jetcone[yellow!50!orange!80!white]{O}{J1}{\angjet}{0.12}{ % big jet
+        \jetcone[red]{O}{SJ1}{\angsubjet}{0.14}{} % small subjet 1
+        \jetcone[red]{O}{SJ2}{\angsubjet}{0.14}{} % small subjet 2
+      }
+    \end{scope}
+    
+    % JETS
+    \def\ljet{3.4cm}
+    \def\angsubjet{7} % small subjet opening angle
+    \begin{scope}[rotate=21]
+      \coordinate (SV) at (8:0.60 cm); % displaced secondary vertex
+      \coordinate (J1)  at ( 0.0:0.96*\ljet); % big jet
+      \coordinate (SJ1) at ( 8.0:1.00*\ljet); % small subjet 1 (b jet)
+      \coordinate (SJ2) at (-0.5:0.94*\ljet); % small subjet 2
+      \coordinate (SJ3) at (-9.0:1.00*\ljet); % small subjet 3
+      \jetcone[red]{O}{J1}{\angjet}{0.15}{ % big jet
+        \jetcone[green]{SV}{SJ1}{8}{0.14}{} % small subjet 1 (b jet)
+        \draw[green!50!black,double=green!90!black!60,line width=0.1pt,double distance=0.2pt,
+              dash pattern=on 1.5pt off 1.5pt,line cap=round]
+          (O) -- (SV);
+        \draw[line width=0.1pt,draw=green!50!black,fill=green!90!black!60]
+          (SV) circle(0.2mm);
+        \jetcone[blue]{O}{SJ2}{\angsubjet}{0.20}{} % small subjet 2
+        \jetcone[blue]{O}{SJ3}{\angsubjet}{0.14}{} % small subjet 3
+      }
+    \end{scope}
+    % TEXT
+    \node[below right,colfont,font=\optima,inner sep=0,scale=3.58]
+      %at (0.058,0.888) {\contour{white}{CMS}};
+      at (0.07,0.95) {\contour{white}{CMS}};
+    \node[colfont,font=\palat,scale=2.0,below right]
+      %at (0.31,0.72) {\contour{white}{B2G}};
+      at (0.31,0.74) {B2G};
+    \node[colfont,font=\helvet,scale=0.65,inner sep=0,above left,rotate=90]
+      at (0.992,0.97) {Beyond SM $\to$ H\,/\,t\,/\,V}; % slash
+      %at (0.992,0.975) {Beyond SM $\to$ H, t, V}; % comma
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  
+\end{tikzpicture}
+
+
+\end{document}
