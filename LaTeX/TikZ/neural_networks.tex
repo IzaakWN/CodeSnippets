@@ -9,8 +9,6 @@
 \usepackage[outline]{contour} % glow around text
 \contourlength{1.4pt}
 
-\tikzset{>=latex} % for LaTeX arrow head
-
 % COLORS
 \usepackage{xcolor}
 \colorlet{myred}{red!80!black}
@@ -125,12 +123,16 @@
   \foreachitem \N \in \Nnod{ % loop over layers
     \def\lay{\Ncnt} % alias of index of current layer
     \pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
+    \message{^^J Layer \lay, N=\N, prev=\prev ->}
+    
+    % NODES
     \foreach \i [evaluate={\y=\N/2-\i; \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
-      
-      % NODES
+      \message{N\lay-\i, }
       \node[node \n] (N\lay-\i) at (\x,\y) {$a_\i^{(\prev)}$};
-      
-      % CONNECTIONS
+    }
+    
+    % CONNECTIONS
+    \foreach \i in {1,...,\N}{ % loop over nodes
       \ifnum\lay>1 % connect to previous layer
         \setAngles{N\prev-1}{N\lay-\i}{N\prev-\Nnod[\prev]} % angles in current node
         %\draw[red,thick] (N\lay-\i)++(\angmin:0.2) --++ (\angmin:-0.5) node[right,scale=0.5] {\dang};
@@ -143,7 +145,6 @@
           \draw[connect arrow] (N\prev-\j.{\angout}) -- (N\lay-\i.{\ang}); % connect arrows uniformly
         }
       \fi % else: nothing to connect first layer
-      
     }
   }
   
