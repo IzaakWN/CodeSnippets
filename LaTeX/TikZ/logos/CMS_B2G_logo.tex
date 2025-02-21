@@ -164,7 +164,7 @@
 
 
 % CMS B2G LOGO
-\begin{tikzpicture}[x=4cm,y=4.0025cm]
+\begin{tikzpicture}[x=4cm,y=4cm]
   \message{^^JCMS B2G logo}
   \begin{scope} % for clipping outside frame
     \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
@@ -218,6 +218,7 @@
         \jetcone[blue]{O}{SJ3}{\angsubjet}{0.14}{} % small subjet 3
       }
     \end{scope}
+    
     % TEXT
     \node[below right,colfont,font=\optima,inner sep=0,scale=3.58]
       %at (0.058,0.888) {\contour{white}{CMS}};
@@ -235,6 +236,77 @@
   \draw[frame,opacity=1] (0,0) rectangle (1,1);
   
 \end{tikzpicture}
+
+
+% CMS B2G LOGO black/white
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \message{^^JCMS B2G logo}
+  \begin{scope} % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \coordinate (O) at (20:0.002);
+    \draw[layer2=black!90]
+      (O) circle(\rMUON) % muon system
+      (O) circle(\rMAGN) % magnet
+      (O) circle(\rHCAL) % HCAL
+      (O) circle(\rgrey) % grey band
+      (O) circle(\rECAL) % ECAL
+      (O) circle(\rTOB)  % outer strip detector
+      (O) circle(\rTIB); % inner strip detector
+    
+    % JETS
+    \def\ljet{2.45cm}
+    \def\angjet{29}   % big jet opening angle
+    \def\angsubjet{9} % small subjet opening angle
+    \def\e{0.13}      % a/b ratio of ellipse minor and major radii
+    \coordinate (O) at (0,0);
+    \begin{scope}[rotate=63]
+      \coordinate (J1)  at ( 0:0.96*\ljet); % big jet
+      \coordinate (SJ1) at (-6:\ljet); % small subjet 1
+      \coordinate (SJ2) at ( 6:\ljet); % small subjet 2
+      \jetcone[white]{O}{J1}{\angjet}{0.12}{ % big jet
+        \jetcone[white]{O}{SJ1}{\angsubjet}{0.14}{} % small subjet 1
+        \jetcone[white]{O}{SJ2}{\angsubjet}{0.14}{} % small subjet 2
+      }
+    \end{scope}
+    
+    % JETS
+    \def\ljet{3.4cm}
+    \def\angsubjet{7} % small subjet opening angle
+    \begin{scope}[rotate=21]
+      \coordinate (SV) at (8:0.60 cm); % displaced secondary vertex
+      \coordinate (J1)  at ( 0.0:0.96*\ljet); % big jet
+      \coordinate (SJ1) at ( 8.0:1.00*\ljet); % small subjet 1 (b jet)
+      \coordinate (SJ2) at (-0.5:0.94*\ljet); % small subjet 2
+      \coordinate (SJ3) at (-9.0:1.00*\ljet); % small subjet 3
+      \jetcone[white]{O}{J1}{\angjet}{0.15}{ % big jet
+        \jetcone[white]{SV}{SJ1}{8}{0.14}{} % small subjet 1 (b jet)
+        \draw[black,double=white,line width=0.1pt,double distance=0.2pt,
+              dash pattern=on 1.5pt off 1.5pt,line cap=round]
+          (O) -- (SV);
+        \draw[line width=0.1pt,draw=black,fill=white]
+          (SV) circle(0.2mm);
+        \jetcone[white]{O}{SJ2}{\angsubjet}{0.20}{} % small subjet 2
+        \jetcone[white]{O}{SJ3}{\angsubjet}{0.14}{} % small subjet 3
+      }
+    \end{scope}
+    
+    % TEXT
+    \node[black,below right,font=\optima,inner sep=0,scale=3.58]
+      at (0.07,0.95) {\contour{white}{CMS}};
+    \node[black,font=\palat,scale=2.0,below right]
+      at (0.31,0.74) {B2G};
+    \node[black,font=\helvet,scale=0.65,inner sep=0,above left,rotate=90]
+      at (0.992,0.97) {Beyond SM $\to$ H\,/\,t\,/\,V};
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  
+\end{tikzpicture}
+
 
 
 \end{document}

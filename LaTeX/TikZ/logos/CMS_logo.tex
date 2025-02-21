@@ -107,11 +107,12 @@
 \definecolor{rbcolmuon}{RGB}{243,104,198} % pink
 
 % CMS COLORS: Combine
+% https://cms-analysis.docs.cern.ch/guidelines/plotting/colors/#brazilian-flag-limit-plots
 % https://root.cern.ch/doc/master/TColor_8cxx_source.html#l01363
-\colorlet{col1sd}{colTIB}  % 1 s.d. band (CMS TIB green)
-\colorlet{col2sd}{colMAGN} % 2 s.d. band (CMS magnet yellow)
-%\definecolor{col1sd}{RGB}{0,204,0}   % 1 s.d. band ROOT kGreen+1
-%\definecolor{col2sd}{RGB}{255,204,0} % 2 s.d. band ROOT kOrange
+\definecolor{rtcolG}{RGB}{0,204,0}   % ROOT kGreen+1 (1 s.d. band)
+\definecolor{rtcolY}{RGB}{255,204,0} % ROOT kOrange (2 s.d. band)
+\definecolor{cbcolY}{HTML}{85D1FB} % CMS yellow (1 s.d. band)
+\definecolor{cbcolB}{HTML}{FFDF7F} % CMS blue (2 s.d. band)
 
 % CMS STYLES
 \tikzset{
@@ -123,6 +124,9 @@
   muon/.style={
     white,double=#1,line width=\pgfkeysvalueof{/tikz/muon/outwidth},
     double distance=\pgfkeysvalueof{/tikz/muon/inwidth},line cap=round
+  },
+  muon wo white/.style={ % no white outline
+    colmuon,line width=\pgfkeysvalueof{/tikz/muon/inwidth},line cap=round,
   },
   muon2/.style={
     #1,line width=\pgfkeysvalueof{/tikz/muon/inwidth},line cap=round
@@ -283,13 +287,14 @@
     
     % DETECORS LAYERS
     \coordinate (O) at (20:0.002);
-    \draw[layer2=black!90] (O) circle(\rMUON); % muon system
-    \draw[layer2=black!90] (O) circle(\rMAGN); % magnet
-    \draw[layer2=black!90] (O) circle(\rHCAL); % HCAL
-    \draw[layer2=black!90] (O) circle(\rgrey); % grey band
-    \draw[layer2=black!56] (O) circle(\rECAL); % ECAL
-    \draw[layer2=black!90] (O) circle(\rTOB);  % outer strip detector
-    \draw[layer2=black!64] (O) circle(\rTIB);  % inner strip detector
+    \draw[layer2=black!90]
+      (O) circle(\rMUON) % muon system
+      (O) circle(\rMAGN) % magnet
+      (O) circle(\rHCAL) % HCAL
+      (O) circle(\rgrey) % grey band
+      (O) circle(\rECAL) % ECAL
+      (O) circle(\rTOB)  % outer strip detector
+      (O) circle(\rTIB); % inner strip detector
     
     % MUONS
     \pic[muon/.cd,outwidth=0.19mm,inwidth=0.5mm]
@@ -702,7 +707,7 @@
   \message{^^JCMS round logo}
   
   % DETECORS LAYERS
-  \fill[colbkg] (0,0) rectangle (1,1); % background
+  %\fill[colbkg] (-1,-1) rectangle (1,1); % background
   \coordinate (O) at (20:0.002);
   \draw[layer=colMUON] (O) circle(\rMUON); % muon system
   \draw[layer=colMAGN] (O) circle(\rMAGN); % magnet
@@ -813,47 +818,6 @@
 \end{tikzpicture}
 
 
-% CMS LOGO - Combine
-\begin{tikzpicture}[x=4cm,y=4cm]
-  \message{^^JCMS Combine logo}
-  \begin{scope} % for clip
-    \clip[rounded corners=1pt] (-0.1mm,-0.1mm) rectangle (40mm,40mm);
-    
-    % DETECORS LAYERS
-    \fill[colbkg] (0,0) rectangle (1,1); % background
-    \coordinate (O) at (20:0.002);
-    \draw[band=col2sd] (O) circle(\rTOB) circle(\rMUON);
-    \draw[band=col1sd] (O) circle(\rECAL) circle(\rMAGN);
-    \draw[black,line width=1pt] (O) circle(\rHCAL);
-    
-    % MUONS (likelihoods)
-    %%%\draw[muon,domain=0:0.97,samples=100] % 3th degree polynomial
-    %%%  plot (\x,{0.012+8.7*(\x-0.011)*(\x-0.75)^2});
-    %%%%\draw[muon,dashed,domain=0:0.89,samples=100] % parabola
-    %%%\draw[muon,dash pattern=on 4pt off 4pt,domain=0:0.89,samples=100] % parabola
-    %%%  plot (\x,{0.011+(\x-0.05)^2});
-    \draw[muon,domain=0:0.92,samples=100,smooth] % 3th degree polynomial
-      plot (\x,{0.012+8.9*(\x-0.011)*(\x-0.64)^2});
-    %\draw[muon,dashed,domain=0:0.89,samples=100] % parabola
-    \draw[muon,dash pattern=on 4pt off 4pt,domain=0:0.89,samples=100,smooth] % parabola
-      plot (\x,{0.011+1.5*(\x-0.15)^2});
-    
-    % TEXT
-    \pic {cmstitle};
-    \node[colfont,font=\palat,scale=1.1,below right]
-      at (0.11,0.67) {\textsc{Combine}};
-    %\node[colfont,scale=1.0,xscale=1.2,below right]
-    %  at (0.09,0.67) {\tt{\textbf{Combine}}};
-    
-  \end{scope}
-  
-  % FRAME
-  \draw[frame,opacity=1] (0,0) rectangle (1,1);
-  \fill (O) circle (0.1mm);
-  
-\end{tikzpicture}
-
-
 % CMS LOGO - Combine (black/white/red)
 \begin{tikzpicture}[x=4cm,y=4cm]
   \message{^^JCMS Combine logo (black/white)}
@@ -882,6 +846,89 @@
       at (0.11,0.67) {\textsc{Combine}};
     %\node[colfont,scale=1.0,xscale=1.2,below right]
     %  at (0.09,0.67) {\texttt{Combine}};
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  \fill (O) circle (0.1mm);
+  
+\end{tikzpicture}
+
+
+% CMS LOGO - Combine less saturated colors
+\foreach \colonesd/\coltwosd in {rtcolG/rtcolY,cbcolB/cbcolY}{ % loop over band colors
+\begin{tikzpicture}[x=4cm,y=4cm]
+  \begin{scope} % for clip
+    \clip[rounded corners=1pt] (-0.1mm,-0.1mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \fill[colbkg] (0,0) rectangle (1,1); % background
+    \coordinate (O) at (20:0.002);
+    \draw[band=\coltwosd] (O) circle(\rTOB) circle(\rMUON);
+    \draw[band=\colonesd] (O) circle(\rECAL) circle(\rMAGN);
+    \draw[black,line width=1pt] (O) circle(\rHCAL);
+    
+    % % MUONS (likelihoods)
+    \draw[muon,domain=0:0.92,samples=100,smooth] % 3th degree polynomial
+      plot (\x,{0.012+8.9*(\x-0.011)*(\x-0.64)^2});
+    \draw[muon,dash pattern=on 4pt off 4pt,domain=0:0.89,samples=100,smooth] % parabola
+      plot (\x,{0.011+1.5*(\x-0.15)^2});
+    \draw[muon wo white,domain=0:0.92,samples=100,smooth] % 3th degree polynomial
+      plot (\x,{0.012+8.9*(\x-0.011)*(\x-0.64)^2});
+    
+    % TEXT
+    \pic[cmstitle/x=0.058,cmstitle/y=0.928] {cmstitle};
+    \node[colfont,font=\optima,scale=1.55,below right]
+      at (0.05,0.725) {\textsc{Combine}};
+    %\node[colfont,scale=1.0,xscale=1.2,below right]
+    %  at (0.09,0.67) {\texttt{Combine}};
+    
+  \end{scope}
+  
+  % FRAME
+  \draw[frame,opacity=1] (0,0) rectangle (1,1);
+  \fill (O) circle (0.1mm);
+  
+\end{tikzpicture}}
+
+
+% CMS LOGO - CMG
+\begin{tikzpicture}[x=4cm,y=4.0025cm]
+  \message{^^JCMS logo (alternative colors)}
+  
+  \begin{scope}[opacity=1] % for clipping outside frame
+    \clip[rounded corners=1pt] (-0.15mm,-0.15mm) rectangle (40mm,40mm);
+    
+    % DETECORS LAYERS
+    \fill[colbkg] (0,0) rectangle (1,1); % background
+    \coordinate (O) at (20:0.002);
+    \draw[layer=red!90!black!75]
+      (O) circle(\rMUON); % muon system
+    \draw[layer=blue!20!black!18]
+      (O) circle(\rMAGN); % magnet
+    \draw[layer=yellow!85!orange!95!black]
+      (O) circle(\rHCAL); % HCAL
+    \draw[black!48,layer=colgrey]
+      (O) circle(\rgrey); % grey band
+    \draw[layer=green!75!black!60]
+      (O) circle(\rECAL); % ECAL
+    \draw[layer=blue!90!red!70!black!75]
+      (O) circle(\rTOB);  % outer strip detector
+    \draw[black!48,layer=blue!50!black!75]
+      (O) circle(\rTIB);  % inner strip detector
+    
+    % MUONS
+    \pic {muons};
+    
+    % TEXT
+    \node[below right,colfont,font=\optima,inner sep=0,scale=3.58]
+      at (\pgfkeysvalueof{/tikz/cmstitle/x},\pgfkeysvalueof{/tikz/cmstitle/y})
+      {\contour{white}{CMG}};
+    \node[colfont,font=\helvet,scale=\pgfkeysvalueof{/tikz/cmstext/s},
+          inner sep=0,above right,rotate=90]
+      at (\pgfkeysvalueof{/tikz/cmstext/x},0.50)
+      {EP-CMG CERN Group};
     
   \end{scope}
   
