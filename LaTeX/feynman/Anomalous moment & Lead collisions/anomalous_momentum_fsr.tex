@@ -1,0 +1,80 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (February 2024)
+% Description: Anomalous magnetic moment in pp collisions
+% Sources: https://cms.cern.ch/iCMS/analysisadmin/cadilines?line=EXO-23-005
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape anomalous_momentum_pp.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+\usepackage{xcolor}
+\usepackage{pgffor} % for \foreach
+
+% DEFINE TEXT COLORS
+\definecolor{collep}{rgb}{.1,.6,.1} % lepton (green)
+\definecolor{colvtx}{rgb}{.1,.1,.7} % vertex (dark blue)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {collep,colvtx}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}}% \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+% The following defines a custom picture environment that
+% helps to create standalone pages with common settings,
+% and correctly padding the diagram with \fmfframe
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd\MPcolors % define custom line colors in MetaPost (does not work in \fmfv)
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+% LOOP MACRO
+\def\foreachlep#1{\foreach \lep in {\mathrm{e},\mu,\tau,\ell}{#1}}
+%\def\foreachlep#1{\foreach \lep in {\ell,\tau}{#1}}
+
+\begin{document}
+\large % increase font size
+
+
+% FSR lep -> lep + gamma
+\foreachlep{ % loop over leptons labels
+\begin{fmfpicture}{2,9}{0,3}{tau-fsr} % padding (LT)(RB)
+  \begin{fmfgraph*}(105,20) % canvas (W,H)
+    % external vertices
+    \fmfleft{d,i,d}
+    \fmfright{o,m,g}
+    \fmfshift{2 up}{o,g}
+    %%%% skeleton
+    %%%\fmf{phantom}{i,v,m}
+    %%%\fmffreeze
+    \fmfforce{(.44w,.5h)}{v} % exact placement
+    % main process
+    \fmf{fermion,f=collep}{i,v,o} % lepton
+    \fmf{boson,t=0}{v,g} % photon
+    % labels
+    \fmfv{decor.shape=circle,f=(.1,,.45,,.1),decor.filled=full,decor.size=4}{v}
+    \fmfv{l.a=10,l.d=8,l=$\gamma$}{g}
+    \fmfv{l.a=170,l=\collep$\lep$}{i}
+    \fmfv{l.a=-10,l=\collep$\lep$}{o}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+
+\end{document}

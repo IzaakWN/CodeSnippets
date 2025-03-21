@@ -1,0 +1,322 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (February 2023)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape ttbar.tex
+\documentclass[11pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+
+% DEFINE fmfpicture ENVIRONMENT
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% TTBAR PRODUCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TTBAR PRODUCTION - Quark-antiquark annihilation
+\begin{fmfpicture}{-7,15}{-4,16}{qq-ttbar-schan} % padding (LTRB)
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{fermion}{o2,v2,o1}
+    \fmf{gluon,label=$g$,label.side=right,label.dist=10}{v2,v1} % s-channel
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{t}{o1}
+    \fmflabel{$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion (s-channel)
+\begin{fmfpicture}{-7,15}{-4,16}{gg-ttbar-schan} % padding (LTRB)
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmfshift{2 left}{i1}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{v1,i2}
+    \fmf{gluon,label.side=left,label=$g$}{v1,v2} % s-channel
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    %\fmflabel{$g$}{i1}
+    %\fmflabel{$g$}{i2}
+    \fmfv{l.d=4,l=$g$}{i1} % more control
+    \fmfv{l.d=6,l=$g$}{i2} % more control
+    \fmflabel{t}{o1}
+    \fmflabel{$\overline{\mathrm{t}}$}{o2}
+    %\fmflabel{$i\sqrt{\alpha}$}{v1}
+    %\fmflabel{$i\sqrt{\alpha}$}{v2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion (t-channel)
+\begin{fmfpicture}{-6,15}{-4,15}{gg-ttbar-tchan} % padding (LTRB)
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion,t=0.8,l.s=left,label=t}{v2,v1} % t-channel
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o2,v2}
+    % labels
+    \fmflabel{$g$}{i2}
+    \fmflabel{$g$}{i1}
+    \fmfv{l.d=7,l.a=22,l.s=left,l=t}{o1}
+    \fmfv{l.d=7,l.a=-20,l=$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR PRODUCTION - Gluon-gluon fusion (u-channel)
+\begin{fmfpicture}{-6,15}{-4,15}{gg-ttbar-uchan} % padding (LTRB)
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion,t=0.8,l.s=right,label=t}{v1,v2} % t-channel
+    \fmf{phantom}{v1,o1,o2,v2} % for balance
+    \fmffreeze
+    \fmf{fermion}{o2,v1}
+    \fmf{fermion,rubout}{v2,o1}
+    % labels
+    \fmflabel{$g$}{i2}
+    \fmflabel{$g$}{i1}
+    \fmfv{l.d=5,l.a=25,l.s=left,l=t}{o1}
+    \fmfv{l.d=5,l.a=-25,l=$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% TTBAR PRODUCTION + RADIAITON %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TTBAR PRODUCTION - Quark-antiquark annihilation + ISR
+\begin{fmfpicture}{-8,18}{-5,16}{qq-ttbar-isr} % padding (LTRB)
+  \begin{fmfgraph*}(120,70) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmftop{t}
+    \fmfshift{5 up}{t}
+    % skeleton
+    \fmf{phantom}{i1,v1,i2}
+    \fmf{phantom}{v1,v2}
+    \fmf{phantom}{o1,v2,o2}
+    \fmffreeze
+    % main
+    \fmf{fermion}{i1,g}
+    \fmf{plain,tension=2.8}{g,v1}
+    \fmf{fermion}{v1,i2}
+    \fmf{gluon,tension=0}{t,g}
+    \fmf{gluon}{v1,v2}
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$g$}{t}
+    \fmflabel{$\mathrm{t}$}{o1}
+    \fmflabel{$\bar{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR PRODUCTION - Quark-gluon fusion + radiation
+\begin{fmfpicture}{-6,18}{-5,16}{gq-ttbar-isr} % padding (LTRB)
+  \begin{fmfgraph*}(120,75) % dimensions (WH)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmftop{t}
+    \fmfshift{4 left}{i1}
+    \fmfshift{2 left}{i2}
+    \fmfshift{5 up}{t}
+    % skeleton
+    \fmf{phantom}{i1,v1,i2}
+    \fmf{phantom}{o1,v2,o2}
+    \fmf{phantom,tension=1.2}{v1,v2}
+    \fmffreeze
+    % main
+    \fmf{gluon,tension=0.8}{g,i1}
+    \fmf{fermion}{v1,g}
+    \fmf{fermion}{i2,v1}
+    \fmf{fermion,tension=0}{g,t}
+    \fmf{gluon}{v1,v2}
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    %\fmflabel{$g$}{i1}
+    %\fmflabel{$g$}{i2}
+    \fmfv{l.d=4,l=$g$}{i1}
+    \fmfv{l.d=6,l=$q$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$q$}{t}
+    \fmflabel{$\bar{\mathrm{t}}$}{o2}
+    \fmflabel{$\mathrm{t}$}{o1}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR PRODUCTION - Quark-antiquark annihilation + FSR
+\begin{fmfpicture}{-8,15}{15,18}{qq-ttbar-fsr} % padding (LTRB)
+  \begin{fmfgraph*}(120,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o,o1}
+    \fmfshift{2 up}{o}
+    \fmfshift{6 right}{o}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{gluon,label=$g$,label.side=right,label.dist=10}{v2,v1}
+    \fmf{phantom}{o2,v2,o1}
+    \fmffreeze
+    \fmf{fermion}{o2,v2,v,o1}
+    \fmf{gluon,t=0}{v,o}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{$\overline{\mathrm{t}}$}{o2}
+    \fmflabel{t}{o1}
+    \fmflabel{$g$}{o}
+    %\fmfv{decor.shape=circle,decor.filled=full,decor.size=3.5,f=(.7,,.1,,.1)}{v}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% TTBAR PRODUCTION + DECAY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TTBAR PRODUCTION + SEMILEPTONIC DECAY
+\begin{fmfpicture}{2,14}{34,16}{qq-ttbar-decay-semilep} % padding (LTRB)
+  \begin{fmfgraph*}(160,150) % dimensions (WH)
+    \fmfset{arrow_len}{3.6mm}
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,i1,d} % add dummies 'd' for spacing
+    \fmfright{o6,o5,o4,o3,o2,o1}
+    \fmfshift{2 up}{i1}
+    \fmfshift{2 down}{i2}
+    %\fmfshift{8 left}{o1,o6} % shift b quarks left
+    % qq -> g
+    \fmf{fermion,t=1.4}{i2,vg,i1}
+    \fmf{gluon,t=1.4}{vtt,vg} % gluon s-channel
+    % ttbar
+    \fmf{fermion,l.s=left,label={$\mathrm{t}$}}{vtt,v1}
+    \fmf{fermion,l.s=left,label={$\overline{\mathrm{t}}$}}{v2,vtt}
+    % bbbar
+    \fmf{fermion,t=0.6}{v1,o1}
+    \fmf{fermion,t=0.6}{o6,v2}
+    \fmffreeze
+    % W -> qq / lnu
+    \fmf{boson,t=1.2,label=W$^+$,l.d=5,l.s=left}{v2,w2} % W boson
+    \fmf{boson,t=1.2,label=W$^-$,l.d=5,l.s=right}{v1,w1} % W boson
+    \fmf{fermion,t=1}{o3,w1,o2} % W decay
+    \fmf{fermion,t=1}{o5,w2,o4} % W decay
+    \fmf{phantom,t=0.05}{w1,w2} % pull decay vertices together
+    % labels
+    \fmfv{l.a=155,l.d=4,l=$q$}{i1}
+    \fmfv{l.a=-155,l.d=5,l=$\overline{q}$}{i2}
+    \fmfv{l.a=25,l.d=5,l=b}{o1}
+    \fmfv{l.a=-25,l.d=5,l=$\overline{\mathrm{b}}$}{o6}
+    \fmfv{l.a=20,l.d=6,l=\makebox[3.1mm][l]{$\ell^-$} / $\overline{q}'$}{o2}
+    \fmfv{l.a=-20,l.d=6,l=\makebox[3.1mm][l]{$\overline{\nu}_\ell$} / $q$}{o3}
+    \fmfv{l.a=20,l.d=6,l=\makebox[3.1mm][l]{$q'$} / $\ell^+$}{o4}
+    \fmfv{l.a=-20,l.d=6,l=\makebox[3.1mm][l]{$\overline{q}'$} / $\nu_\ell$}{o5}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR PRODUCTION + SEMILEPTONIC DECAY (round)
+\begin{fmfpicture}{1,14}{34,16}{qq-ttbar-decay-round} % padding (LTRB)
+  \begin{fmfgraph*}(160,150) % dimensions (WH)
+    \fmfset{arrow_len}{3.6mm}
+    % external vertices
+    \fmfleft{d,i2,i1,d} % add dummies 'd' for spacing
+    \fmfright{o6,o5,o4,o3,o2,o1}
+    \fmfshift{2 up}{i1}
+    \fmfshift{2 down}{i2}
+    \fmfshift{4 left}{o1,o6} % shift b quarks left
+    % qq -> g
+    \fmf{fermion,t=1.1}{i2,vg,i1}
+    \fmf{gluon,t=1.1}{vtt,vg} % gluon s-channel
+    % ttbar
+    \fmf{fermion,l.s=left,label={$\mathrm{t}$}}{vtt,v1}
+    \fmf{fermion,l.s=left,label={$\overline{\mathrm{t}}$}}{v2,vtt}
+    % bbbar
+    \fmf{fermion,t=0.5}{v1,o1}
+    \fmf{fermion,t=0.5}{o6,v2}
+    \fmffreeze
+    % W -> qq / lnu
+    \fmf{boson,t=1.1,label=W$^+$,l.d=5,l.s=left}{v2,w2} % W boson
+    \fmf{boson,t=1.1,label=W$^-$,l.d=5,l.s=right}{v1,w1} % W boson
+    \fmf{fermion,t=1}{o3,w1,o2} % W decay
+    \fmf{fermion,t=1}{o5,w2,o4} % W decay
+    \fmf{phantom,t=0.2}{w1,w2} % pull decay vertices together
+    %\fmf{phantom,t=0.05}{w1,o2,o5,w2} % pull decay vertices to the right
+    % labels
+    \fmfv{l.a=155,l.d=4,l=$q$}{i1}
+    \fmfv{l.a=-155,l.d=5,l=$\overline{q}$}{i2}
+    \fmfv{l.a=25,l.d=5,l=b}{o1}
+    \fmfv{l.a=-25,l.d=5,l=$\overline{\mathrm{b}}$}{o6}
+    \fmfv{l.a=20,l.d=6,l=\makebox[3.1mm][l]{$\ell^-$} / $\overline{q}'$}{o2}
+    \fmfv{l.a=-20,l.d=6,l=\makebox[3.1mm][l]{$\overline{\nu}_\ell$} / $q$}{o3}
+    \fmfv{l.a=20,l.d=6,l=\makebox[3.1mm][l]{$q'$} / $\ell^+$}{o4}
+    \fmfv{l.a=-20,l.d=6,l=\makebox[3.1mm][l]{$\overline{q}'$} / $\nu_\ell$}{o5}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR + SEMILEPTONIC DECAY
+\begin{fmfpicture}{-6,14}{34,16}{ttbar-decay} % padding (LTRB)
+  \begin{fmfgraph*}(110,150) % dimensions (WH)
+    \fmfset{arrow_len}{3.6mm}
+    % external vertices
+    \fmfstraight
+    \fmfleft{i} % add dummies 'd' for spacing
+    \fmfright{o6,o5,o4,o3,o2,o1}
+    \fmfshift{2 up}{i1}
+    \fmfshift{2 down}{i2}
+    % ttbar
+    \fmf{fermion,l.s=left,label={$\mathrm{t}$}}{i,v1}
+    \fmf{fermion,l.s=left,label={$\overline{\mathrm{t}}$}}{v2,i}
+    % bbbar
+    \fmf{fermion,t=0.6}{v1,o1}
+    \fmf{fermion,t=0.6}{o6,v2}
+    \fmffreeze
+    % W -> qq / lnu
+    \fmf{boson,t=1.2,label=W$^+$,l.d=5,l.s=left}{v2,w2} % W boson
+    \fmf{boson,t=1.2,label=W$^-$,l.d=5,l.s=right}{v1,w1} % W boson
+    \fmf{fermion,t=1}{o3,w1,o2} % W decay
+    \fmf{fermion,t=1}{o5,w2,o4} % W decay
+    \fmf{phantom,t=0.05}{w1,w2} % pull decay vertices together
+    % labels
+    \fmfv{l.a=25,l.d=5,l=b}{o1}
+    \fmfv{l.a=-25,l.d=5,l=$\overline{\mathrm{b}}$}{o6}
+    \fmfv{l.a=20,l.d=6,l=\makebox[3.1mm][l]{$\ell^-$} / $\overline{q}'$}{o2}
+    \fmfv{l.a=-20,l.d=6,l=\makebox[3.1mm][l]{$\overline{\nu}_\ell$} / $q$}{o3}
+    \fmfv{l.a=20,l.d=6,l=\makebox[3.1mm][l]{$q'$} / $\ell^+$}{o4}
+    \fmfv{l.a=-20,l.d=6,l=\makebox[3.1mm][l]{$\overline{q}'$} / $\nu_\ell$}{o5}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+\end{document}

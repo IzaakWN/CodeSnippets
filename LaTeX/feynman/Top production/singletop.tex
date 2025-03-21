@@ -1,0 +1,730 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (July 2023)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape singletop.tex
+% Sources:
+%  https://cms-results.web.cern.ch/cms-results/public-results/publications/SMP-23-004
+%  https://cms-results.web.cern.ch/cms-results/public-results/publications/TOP-23-008
+\documentclass[11pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+
+% DEFINE TEXT COLORS
+\usepackage{xcolor}
+\definecolor{colW}{rgb}{1,0,0} % Wtb (red)
+\definecolor{colZ}{rgb}{.15,.75,.15} % Ztt (green)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colW,colZ}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}} % \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd\MPcolors % define custom line colors in MetaPost (does not work in \fmfv)
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% SINGLE TOP (+B) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% SINGLE TOP PRODUCTION - Quark-antiquark annihilation, s-channel
+\begin{fmfpicture}{-9,13}{-3,16}{singletop_qq-tb_schan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{fermion}{o2,v2,o1} % top quark
+    \fmf{boson,t=0.9,l.s=left,l.d=6,label=W$^+$}{v2,v1} % s-channel
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{t}{o1}
+    \fmflabel{$\overline{\mathrm{b}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION - Quark-quark, t-channel
+\begin{fmfpicture}{-7,10}{-2,10}{singletop_qq-tq_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,o1} % top quark
+    \fmf{fermion}{i2,v2,o2}
+    \fmf{boson,t=0.7,t=0.7,l.s=left,l.d=5,label=W}{v2,v1} % t-channel
+    % labels
+    \fmfv{l.d=6,l.a=158,l=b}{i1}
+    \fmfv{l.d=6,l.a=-158,l=$q$}{i2}
+    \fmfv{l.d=6,l.a=22,l=t}{o1}
+    \fmfv{l.d=6,l.a=-20,l=$q'$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION - Quark-quark, t-channel (straight)
+\begin{fmfpicture}{-7,10}{-1,10}{singletop_qq-tq_straight} % padding (LTRB)
+  \begin{fmfgraph*}(100,50) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,o1} % top quark
+    \fmf{fermion}{i2,v2,o2}
+    \fmf{boson,t=0.7,t=0,l.s=left,l.d=4,label=W}{v2,v1} % t-channel
+    % labels
+    \fmfv{l.d=6,l.a=158,l=b}{i1}
+    \fmfv{l.d=6,l.a=-158,l=$q$}{i2}
+    \fmfv{l.d=6,l.a=22,l=t}{o1}
+    \fmfv{l.d=6,l.a=-20,l=$q'$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + b - Quark-gluon (splitting), t-channel
+\begin{fmfpicture}{-8,11}{6,12}{singletop_qg-qtb} % padding (LTRB)
+  \begin{fmfgraph*}(110,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    % main
+    \fmf{fermion,t=1.6}{i1,v1}
+    \fmf{fermion}{v1,o1}
+    \fmf{gluon,t=1.6}{i2,v2}
+    \fmf{fermion}{o3,v2}
+    \fmf{fermion}{v,o2} % top quark
+    \fmf{boson,l.s=left,l.d=1,label=W$^+$\hspace{1pt}}{v,v1} % t-channel
+    \fmf{fermion,l.s=left,l.d=-2,label=$\overline{\mathrm{b}}$\hspace{8pt}}{v2,v} % t-channel
+    % labels
+    \fmfv{l.d=6,l.a=158,l=q}{i1}
+    \fmfv{l.d=6,l.a=-152,l=$g$}{i2}
+    \fmfv{l.d=6,l.a=22,l=$q'$}{o1}
+    \fmfv{l.d=6,l.a=0,l=t}{o2}
+    \fmfv{l.d=6,l.a=-20,l=$\overline{\mathrm{b}}$}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + b - Quark-gluon (splitting), t-channel (straight)
+\begin{fmfpicture}{4,11}{10,11}{singletop_qg-qtb_tchan_straight} % padding (LTRB)
+  \begin{fmfgraph*}(100,75) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    % main
+    \fmf{fermion}{i1,v1}
+    \fmf{fermion}{v1,o1}
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion}{o3,v2}
+    \fmffreeze
+    \fmf{fermion,label=$\overline{\mathrm{b}}$,l.s=left}{v2,v} % t-channel
+    \fmf{boson,l.s=left,l.d=5,label=W$^+$}{v,v1} % t-channel
+    \fmffreeze
+    \fmf{fermion,t=1}{v,o2} % top quark
+    % labels
+    \fmfv{l.d=6,l.a=160,l=$q$}{i1}
+    \fmfv{l.d=6,l.a=-160,l=$g$}{i2}
+    \fmfv{l.d=6,l.a=22,l=$q'$}{o1}
+    \fmfv{l.d=6,l.a=0,l=t}{o2}
+    \fmfv{l.d=6,l.a=-20,l=$\overline{\mathrm{b}}$}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% SINGLE TOP (+Wb) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% SINGLE TOP PRODUCTION + W - Quark-gluon, s-channel
+\begin{fmfpicture}{-8,13}{8,16}{singletop_qg-tW_schan} % padding (LTRB)
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion}{i2,v1}
+    \fmf{fermion}{v2,o1} % top quark
+    \fmf{boson}{o2,v2}
+    \fmf{fermion,label=b}{v1,v2} % s-channel
+    % labels
+    \fmflabel{$g$}{i1}
+    \fmflabel{b}{i2}
+    \fmflabel{t}{o1}
+    \fmflabel{$\mathrm{W}^-$}{o2} 
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Wb - Gluon fusion, s-channel
+\begin{fmfpicture}{-10,9}{12,10}{singletop_gg-tWb_schan_gsplit} % padding (LTRB)
+  \begin{fmfgraph*}(125,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,w,o1}
+    \fmfshift{5 left}{w}
+    \fmfshift{8 right}{o1}
+    % internal vertices (exact placement)
+    \fmfforce{(.41w,.78h)}{v1} % exact placement
+    \fmfforce{(.41w,.22h)}{v2} % exact placement
+    % main
+    \fmf{gluon,t=1.3}{v1,i1}
+    \fmf{gluon,t=1.3}{i2,v2}
+    \fmf{fermion,t=0.8,l.s=left,label=b}{v2,v1} % t-channel
+    \fmf{phantom}{v1,o1} % balance v1-o1
+    \fmf{fermion}{o2,v2}
+    \fmffreeze
+    \fmf{fermion,t=1.1,l.s=left,label=b}{v1,vw}
+    \fmf{fermion}{vw,o1} % top quark
+    \fmf{boson,t=0}{vw,w} % W boson
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=t}{o1}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{b}}$}{o2}
+    \fmfv{l.a=-26,l.d=4,l=W$^+$}{w}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Wb - Gluon fusion, s-channel (straight)
+\begin{fmfpicture}{-10,9}{11,10}{singletop_gg-tWb_schan_gsplit_straight} % padding (LTRB)
+  \begin{fmfgraph*}(125,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,w,o1}
+    \fmfshift{5 left}{w}
+    \fmfshift{9 right}{o1}
+    % internal vertices (exact placement)
+    \fmfforce{(.41w,.78h)}{v1} % exact placement
+    \fmfforce{(.41w,.22h)}{v2} % exact placement
+    \fmfforce{(.70w,.78h)}{vw} % exact placement
+    % main
+    \fmf{gluon,t=1.3}{v1,i1}
+    \fmf{gluon,t=1.3}{i2,v2}
+    \fmf{fermion,t=0.7,l.s=left,label=b}{v2,v1} % t-channel
+    \fmf{fermion}{o2,v2}
+    \fmf{fermion,l.s=left,label=b}{v1,vw}
+    \fmf{fermion}{vw,o1} % top quark
+    \fmf{boson,t=0}{vw,w} % W boson
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=t}{o1}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{b}}$}{o2}
+    \fmfv{l.a=-26,l.d=4,l=W$^+$}{w}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + W - Quark-gluon, t-channel
+\begin{fmfpicture}{-7,9}{9,10}{singletop_qg-tW_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i2,v2}
+    \fmf{boson}{v2,o2}
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion}{v1,o1} % top quark
+    % t-channel
+    \fmf{fermion,t=0.6,l.s=left,l.d=5,label=t}{v2,v1} % t-channel
+    % labels
+    \fmfv{l.d=6,l.a=158,l=$g$}{i1} 
+    \fmfv{l.d=6,l.a=-158,l=b}{i2}
+    \fmfv{l.d=6,l.a=22,l=t}{o1}
+    \fmfv{l.d=6,l.a=-20,l=$\mathrm{W}^-$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Wb - Gluon fusion, t-channel
+\begin{fmfpicture}{-8,10}{18,12}{singletop_gg-tWb_tchan_gsplit} % padding (LTRB)
+  \begin{fmfgraph*}(110,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    % main
+    \fmf{gluon,t=1.6}{v1,i1}
+    \fmf{fermion}{v1,o1} % top quark
+    \fmf{gluon,t=1.6}{i2,v2}
+    \fmf{fermion}{o3,v2}
+    \fmf{boson,t=1}{o2,v}
+    % t-channel
+    \fmf{fermion,l.s=left,l.d=-6,label=$\overline{\mathrm{t}}$\hspace{12pt}}{v,v1} % t-channel
+    \fmf{fermion,l.s=left,l.d=-4,label=b\hspace{10pt}}{v2,v} % t-channel
+    % labels
+    \fmfv{l.d=6,l.a=158,l=$g$}{i1}
+    \fmfv{l.d=6,l.a=-152,l=$g$}{i2}
+    \fmfv{l.d=6,l.a=22,l=t}{o1}
+    \fmfv{l.d=6,l.a=0,l=$\mathrm{W}^-$}{o2}
+    \fmfv{l.d=6,l.a=-20,l=$\overline{\mathrm{b}}$}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Wb - Gluon fusion, t-channel (straight)
+\begin{fmfpicture}{3,10}{18,10}{singletop_gg-tWb_tchan_gsplit_straight} % padding (LTRB)
+  \begin{fmfgraph*}(110,70) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion}{v1,o1} % top quark
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion}{o3,v2}
+    \fmffreeze
+    % t-channel
+    \fmf{fermion,l.s=left,l.d=5,label=$\overline{\mathrm{t}}$}{v,v1} % t-channel
+    \fmf{fermion,l.s=left,l.d=5,label=b}{v2,v} % t-channel
+    \fmffreeze
+    % W boson
+    \fmf{boson}{o2,v} % W boson
+    % labels
+    \fmfv{l.d=6,l.a=160,l=$g$}{i1}
+    \fmfv{l.d=6,l.a=-160,l=$g$}{i2}
+    \fmfv{l.d=6,l.a=22,l=t}{o1}
+    \fmfv{l.d=6,l.a=0,l=$\mathrm{W^-}$}{o2}
+    \fmfv{l.d=6,l.a=-20,l=$\overline{\mathrm{b}}$}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Wb - Gluon fusion, t-channel
+\begin{fmfpicture}{-10,9}{12,10}{singletop_gg-tWb_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(120,70) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,w,o1}
+    \fmfshift{5 left}{w}
+    \fmfshift{6 right}{o2}
+    % internal vertices (exact placement)
+    \fmfforce{(.44w,.78h)}{v1} % exact placement
+    \fmfforce{(.44w,.22h)}{v2} % exact placement
+    % main
+    \fmf{gluon,t=1.3}{v1,i1}
+    \fmf{gluon,t=1.3}{i2,v2}
+    \fmf{fermion,t=0.8,l.s=left,label=t}{v2,v1} % t-channel
+    \fmf{fermion}{v1,o1} % top quark
+    \fmf{phantom}{v2,o2} % balance v1-o1
+    \fmffreeze
+    \fmf{fermion,t=1.1}{vw,v2}
+    \fmf{fermion}{o2,vw}
+    \fmf{boson,t=0}{vw,w} % W boson
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=t}{o1}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{b}}$}{o2}
+    \fmfv{l.a=26,l.d=4,l=W$^+$}{w}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Wb - Gluon fusion, t-channel (straight)
+\begin{fmfpicture}{-10,10}{11,10}{singletop_gg-tWb_tchan_straight} % padding (LTRB)
+  \begin{fmfgraph*}(125,70) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,w,o1}
+    \fmfshift{5 left}{w}
+    \fmfshift{6 right}{o2}
+    % internal vertices (exact placement)
+    \fmfforce{(.43w,.78h)}{v1} % exact placement
+    \fmfforce{(.43w,.22h)}{v2} % exact placement
+    \fmfforce{(.70w,.22h)}{vw} % exact placement
+    % main
+    \fmf{gluon,t=1.3}{v1,i1}
+    \fmf{gluon,t=1.3}{i2,v2}
+    \fmf{fermion,t=0.7,l.s=left,label=t}{v2,v1} % t-channel
+    \fmf{fermion}{v1,o1} % top quark
+    \fmf{fermion}{o2,vw,v2}
+    \fmf{boson,t=0}{vw,w} % W boson
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=t}{o1}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{b}}$}{o2}
+    \fmfv{l.a=26,l.d=4,l=W$^+$}{w}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Wb - Gluon fusion, s-channel
+\begin{fmfpicture}{-10,12}{17,15}{singletop_gg-tWb_schan} % padding (LTRB)
+  \begin{fmfgraph*}(130,70) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,w,o1}
+    % internal vertices (exact placement)
+    \fmfforce{(.70w,.50h)}{v2} % exact placement
+    % main
+    \fmf{gluon}{i2,v1,i1}
+    \fmf{gluon,t=1}{v2,v1} % s-channel
+    \fmf{fermion}{v2,o1} % top quark
+    \fmf{fermion}{o2,vw,v2}
+    \fmf{boson,t=0}{vw,w} % W boson
+    % labels
+    \fmfv{l.a=150,l.d=5,l=$g$}{i1}
+    \fmfv{l.a=-150,l.d=5,l=$g$}{i2}
+    \fmfv{l.a=30,l.d=5,l=t}{o1}
+    \fmfv{l.a=15,l.d=4,l=W$^+$}{w}
+    \fmfv{l.a=-30,l.d=5,l=$\overline{\mathrm{b}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Wb - Quark-antiquark annihilation, s-channel
+\begin{fmfpicture}{-11,11}{17,15}{singletop_qq-tWb_schan} % padding (LTRB)
+  \begin{fmfgraph*}(130,70) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,w,o1}
+    % internal vertices (exact placement)
+    \fmfforce{(.70w,.50h)}{v2} % exact placement
+    % main
+    \fmf{fermion}{i2,v1,i1}
+    \fmf{gluon,t=1}{v2,v1} % s-channel
+    \fmf{fermion}{v2,o1} % top quark
+    \fmf{fermion}{o2,vw,v2}
+    \fmf{boson,t=0}{vw,w} % W boson
+    % labels
+    \fmfv{l.a=150,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-150,l.d=5,l=$\overline{q}$}{i2}
+    \fmfv{l.a=30,l.d=5,l=t}{o1}
+    \fmfv{l.a=15,l.d=4,l=W$^+$}{w}
+    \fmfv{l.a=-30,l.d=5,l=$\overline{\mathrm{b}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% SINGLE TOP (+Zq) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% SINGLE TOP PRODUCTION + Zq - Quark-antiquark annihilation, t-channel
+\begin{fmfpicture}{-9,9}{1,9}{singletop_qq-tZq_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(110,65) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,z,o1}
+    \fmfshift{5 left}{z}
+    \fmfshift{4 right}{o2}
+    % internal vertices (exact placement)
+    \fmfforce{(.44w,.78h)}{v1} % exact placement
+    \fmfforce{(.44w,.22h)}{v2} % exact placement
+    % main
+    \fmf{fermion,t=1.5}{i1,v1}
+    \fmf{fermion,t=1.5}{i2,v2}
+    \fmf{boson,t=0.8,l.s=left,l.d=4,label=W}{v2,v1} % t-channel
+    \fmf{fermion}{v1,o1}
+    \fmf{phantom}{v2,o2} % balance v1-o1
+    \fmffreeze
+    % b -> tZ
+    \fmf{fermion}{v2,vz}
+    \fmf{fermion}{vz,o2} % top quark
+    \fmf{boson,t=0}{vz,z} % Z boson
+    %%%% coupling
+    %%%\fmfv{d.sh=circle,d.f=full,d.si=4,f=colZ}{vz}
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=b}{i2}
+    \fmfv{l.a=22,l.d=5,l=$q'$}{o1}
+    \fmfv{l.a=26,l.d=4,l=Z}{z}
+    \fmfv{l.a=-22,l.d=5,l=t}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Zq - Quark-antiquark annihilation, t-channel, decay
+\begin{fmfpicture}{-9,9}{18,9}{singletop_qq-tZq-tllq_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(110,70) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,l2,l1,o1}
+    \fmfshift{8 right}{l1,l2}
+    \fmfshift{6 right}{o2}
+    % internal vertices (exact placement)
+    \fmfforce{(.44w,.78h)}{v1} % exact placement
+    \fmfforce{(.44w,.22h)}{v2} % exact placement
+    \fmfforce{(.82w,.50h)}{z} % exact placement
+    % main
+    \fmf{fermion,t=1.5}{i1,v1}
+    \fmf{fermion,t=1.5}{i2,v2}
+    \fmf{boson,t=0.8,l.s=left,l.d=4,label=W}{v2,v1} % t-channel
+    \fmf{fermion}{v1,o1}
+    \fmf{phantom}{v2,o2} % balance v1-o1
+    \fmffreeze
+    % b -> tZ -> ll
+    \fmf{fermion}{v2,vz}
+    \fmf{fermion}{vz,o2} % top quark
+    \fmf{boson,t=0,l.s=right,l.d=4,label=Z}{z,vz} % Z boson
+    \fmf{fermion,t=0}{l2,z,l1} % decay
+    %%%% coupling
+    %%%\fmfv{d.sh=circle,d.f=full,d.si=4,f=colZ}{vz}
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=b}{i2}
+    \fmfv{l.a=22,l.d=5,l=$q'$}{o1}
+    \fmfv{l.a=22,l.d=5,l=$\ell^-$}{l1}
+    \fmfv{l.a=-22,l.d=5,l=$\ell^+$}{l2}
+    \fmfv{l.a=-22,l.d=5,l=t}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Zq - Quark-antiquark annihilation, t-channel, gluon splitting
+\begin{fmfpicture}{-8,11}{10,11}{singletop_qg-tZq_tchan_gsplit} % padding (LTRB)
+  \begin{fmfgraph*}(120,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,c2,c1,o1}
+    \fmfshift{4 right}{c1,c2}
+    \fmfshift{2 up}{c1,o1}
+    \fmfshift{2 down}{c2,o2}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion}{v2,o2}
+    \fmf{phantom,t=0.25}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,t=0.60}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % Vb -> b -> Zt
+    \fmf{boson,t=1.4,l.s=left,l.d=-4,label=W$^-$\hspace{7pt}}{v,v1}
+    \fmf{fermion,t=1.4,l.s=left,l.d=8,label=$\overline{\mathrm{b}}$\vspace{-5pt}}{v2,v}
+    \fmf{fermion,t=1.7}{v,zt} % s-channel
+    \fmf{boson}{zt,c1} % Z boson
+    \fmf{fermion}{zt,c2} % top quark
+    %%%% coupling
+    %%%\fmfv{d.sh=circle,d.f=full,d.si=4,f=colZ}{zt}
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=5,l=$q$}{o1}
+    \fmfv{l.a=25,l.d=4,l=Z}{c1}
+    \fmfv{l.a=-20,l.d=4,l=t}{c2}
+    \fmfv{l.a=-22,l.d=5,l=b}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Zq - VBF
+\begin{fmfpicture}{-10,10}{2,9}{singletop_qq-tZq_VBF} % padding (LTRB)
+  \begin{fmfgraph*}(110,70) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,z,o1}
+    \fmfshift{4 left}{z}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{i2,v2,o2} % top quark
+    \fmf{phantom,t=0.25}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,t=0.60}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % VV -> Z
+    \fmf{boson,t=1.3,l.s=right,l.d=-3,label=W$^+$\hspace{6pt}}{v1,v}
+    \fmf{boson,t=1.3,l.s=left,l.d=-4,label=W$^-$\hspace{6pt}}{v2,v}
+    \fmf{boson,t=1.7}{v,z} % Z boson
+    %%%% coupling
+    %%%\fmfv{d.sh=circle,d.f=full,d.si=4,f=colW}{v2}
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=b}{i2}
+    \fmfv{l.a=22,l.d=5,l=$q'$}{o1}
+    \fmfv{l.a=0,l.d=4,l=Z}{z}
+    \fmfv{l.a=-22,l.d=5,l=t}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Zq - VBF, decay
+\begin{fmfpicture}{-9,10}{13,9}{singletop_qg-tZq-tllq_VBF} % padding (LTRB)
+  \begin{fmfgraph*}(110,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,c2,c1,o1}
+    \fmfshift{4 right}{c1,c2}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{i2,v2,o2}
+    \fmf{phantom,t=0.25}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,t=0.60}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % VV -> Z -> ll
+    \fmf{boson,t=1.3,l.s=right,l.d=-3,label=W$^+$\hspace{6pt}}{v1,v}
+    \fmf{boson,t=1.3,l.s=left,l.d=-3,label=W$^-$\hspace{6pt}}{v2,v}
+    \fmf{boson,t=1.7,label=Z,l.s=left}{v,zt} % s-channel
+    \fmf{fermion,t=1.1}{c2,zt,c1} % decay
+    %%%% coupling
+    %%%\fmfv{d.sh=circle,d.f=full,d.si=4,f=colW}{v2}
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=b}{i2}
+    \fmfv{l.a=22,l.d=5,l=$q'$}{o1}
+    \fmfv{l.a=25,l.d=4,l=$\ell^-$}{c1}
+    \fmfv{l.a=-20,l.d=4,l=$\ell^+$}{c2}
+    \fmfv{l.a=-22,l.d=5,l=t}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Zq - VBF, gluon splitting
+\begin{fmfpicture}{-9,14}{5,13}{singletop_qg-tZq_VBF_gsplit} % padding (LTRB)
+  \begin{fmfgraph*}(115,78) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,c2,c1,o1}
+    \fmfshift{3 up}{c1,o1}
+    \fmfshift{3 down}{c2,o2}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion}{o2,v2}
+    \fmf{phantom,t=0.25}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,t=0.50}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % VV -> Z
+    \fmf{boson,t=1.3}{w1,v1}
+    \fmf{fermion,t=1.3}{v2,w2}
+    \fmf{boson,t=1,l.s=right,l.d=4,label=W$^-$}{w1,w2} % t-channel
+    \fmf{boson}{w1,c1} % Z boson
+    \fmf{fermion}{w2,c2} % top quark
+    %%%% coupling
+    %%%\fmfv{d.sh=circle,d.f=full,d.si=4,f=colW}{w2}
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=5,l=$q'$}{o1}
+    \fmfv{l.a=20,l.d=4,l=Z}{c1}
+    \fmfv{l.a=-20,l.d=4,l=t}{c2}
+    \fmfv{l.a=-22,l.d=5,l=$\overline{\mathrm{b}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + Zq - VBF, gluon splitting, decay
+\begin{fmfpicture}{-10,12}{16,12}{singletop_qg-tZq-tllq_VBF_gsplit} % padding (LTRB)
+  \begin{fmfgraph*}(115,84) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,c2,c1,o1}
+    \fmfshift{2 up}{c1,o1}
+    \fmfshift{2 down}{c2,o2}
+    % external vertices (exact placement)
+    \fmfforce{vloc(__c1)+(-.14w, .00h)}{z} % exact placement
+    \fmfforce{vloc(__c1)+( .06w, .11h)}{l1} % exact placement
+    \fmfforce{vloc(__c1)+( .06w,-.14h)}{l2} % exact placement
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion}{o2,v2}
+    \fmf{phantom,t=0.25}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,t=0.50}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % VV -> Z
+    \fmf{boson,t=2.6}{w1,v1}
+    \fmf{fermion,t=2.6}{v2,w2}
+    \fmf{boson,t=2.0,l.s=right,l.d=4,label=W$^-$}{w1,w2} % t-channel
+    \fmf{phantom}{w1,c1}
+    \fmf{fermion}{w2,c2} % top quark
+    \fmffreeze
+    % Z -> ll
+    \fmf{boson,t=1.2,label=Z,l.s=left,l.d=5}{w1,z} % Z boson
+    \fmf{fermion}{l2,z,l1} % decay
+    %%%% coupling
+    %%%\fmfv{d.sh=circle,d.f=full,d.si=4,f=colW}{w2}
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=5,l=$q'$}{o1}
+    \fmfv{l.a=25,l.d=4,l=$\ell^-$}{l1}
+    \fmfv{l.a=-20,l.d=4,l=$\ell^+$}{l2}
+    \fmfv{l.a=-20,l.d=4,l=t}{c2}
+    \fmfv{l.a=-22,l.d=5,l=$\overline{\mathrm{b}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% SINGLE TOP (+llq) %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% SINGLE TOP PRODUCTION + llq - VBF
+\begin{fmfpicture}{-8,12}{9,10}{singletop_gg-tllq_VBF} % padding (LTRB)
+  \begin{fmfgraph*}(110,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,c2,c1,o1}
+    \fmfshift{2 up}{c1,o1}
+    \fmfshift{2 down}{c2,o2}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{i2,v2,o2} % top quark
+    \fmf{phantom,t=0.25}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,t=0.50}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % VV -> ll
+    \fmf{boson,t=1.6,l.s=right,l.d=2,label=W$^+$}{v1,w1}
+    \fmf{boson,t=1.6,l.s=left,l.d=1.5,label=W$^-$}{v2,w2}
+    \fmf{fermion,t=1.3}{w1,w2} % t-channel
+    \fmf{fermion,t=1.1}{c1,w1} % lepton
+    \fmf{fermion,t=1.1}{w2,c2} % lepton
+    %%%% coupling
+    %%%\fmfv{d.sh=circle,d.f=full,d.si=4,f=colW}{v2}
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=b}{i2}
+    \fmfv{l.a=22,l.d=5,l=$q'$}{o1}
+    \fmfv{l.a=20,l.d=4,l=$\ell^+$}{c1}
+    \fmfv{l.a=-20,l.d=4,l=$\ell^-$}{c2}
+    \fmfv{l.a=-22,l.d=5,l=t}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE TOP PRODUCTION + llq - VBF, gluon splitting
+\begin{fmfpicture}{-10,12}{9,12}{singletop_gg-tllq_VBF_gsplit} % padding (LTRB)
+  \begin{fmfgraph*}(120,95) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,c3,c2,c1,o1}
+    \fmfshift{2 up}{c1,o1}
+    \fmfshift{2 down}{c3,o2}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion}{o2,v2}
+    \fmf{phantom,t=0.25}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,t=0.50}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % VV -> ll
+    \fmf{boson,t=3.0,l.s=right,l.d=2,label=W$^+$}{v1,w1}
+    \fmf{fermion,t=3.0}{v2,w3}
+    \fmf{fermion,t=2.2}{w1,w2} % t-channel
+    \fmf{boson,t=2.2,l.s=right,l.d=3,label=W$^-$}{w2,w3} % Z boson
+    \fmf{fermion,t=1}{c1,w1} % lepton
+    \fmf{fermion,t=1}{w2,c2} % lepton
+    \fmf{fermion,t=1}{w3,c3} % top quark
+    %%%% coupling
+    %%%\fmfv{d.sh=circle,d.f=full,d.si=4,f=colW}{w3}
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=5,l=$q'$}{o1}
+    \fmfv{l.a=20,l.d=4,l=$\ell^+$}{c1}
+    \fmfv{l.a=0,l.d=4,l=$\ell^-$}{c2}
+    \fmfv{l.a=-20,l.d=5,l=t}{c3}
+    \fmfv{l.a=-22,l.d=5,l=$\overline{\mathrm{b}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+\end{document}

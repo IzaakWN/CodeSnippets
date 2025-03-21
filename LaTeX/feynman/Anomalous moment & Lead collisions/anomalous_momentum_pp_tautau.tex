@@ -1,0 +1,383 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (February 2024)
+% Description: Anomalous magnetic moment in pp collisions
+% Sources: https://cms.cern.ch/iCMS/analysisadmin/cadilines?line=EXO-23-005
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape anomalous_momentum_pp.tex
+\documentclass[11pt,border=4pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+\usepackage{xcolor}
+\usepackage{pgffor} % for \foreach
+
+% DEFINE TEXT COLORS
+%\definecolor{collep}{rgb}{.1,.6,.1} % lepton (green)
+\definecolor{collep}{rgb}{.75,.0,.0} % lepton (red)
+%\definecolor{collep}{rgb}{.1,.1,.7} % lepton (dark blue)
+\definecolor{colvtx}{rgb}{.1,.45,.1} % vertex (dark green)
+%\definecolor{colvtx}{rgb}{.1,.1,.9} % vertex (blue)
+\definecolor{colvtx}{rgb}{.45,.0,.0} % vertex (dark red)
+\definecolor{coldis}{rgb}{.9,.5,.0} % disassociated (orange)
+\definecolor{colbl}{rgb}{.1,.1,.7} % blue (dark blue)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {collep,colvtx,coldis,colbl}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}}% \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+% The following defines a custom picture environment that
+% helps to create standalone pages with common settings,
+% and correctly padding the diagram with \fmfframe
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd\MPcolors % define custom line colors in MetaPost (does not work in \fmfv)
+    \fmfcmd{ % custom line style: double arrows for protons
+      style_def proton expr p =
+        save oldpen; pen oldpen; oldpen := currentpen;
+        pickup oldpen scaled 1.8; % draw thick line
+        cdraw p; % draw line
+        cfill (arrow p) % draw arrow
+          shifted -center p scaled 1.1 shifted center p; % scale arrow 
+        pickup oldpen; % restore line width
+      enddef;
+    }
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+
+
+% gamma gamma -> tautau (g-2)
+\begin{fmfpicture}{-4,10}{8,10}{gammagamma-tautau} % padding (LT)(RB)
+  \begin{fmfgraph*}(110,80) % canvas (W,H)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % photons
+    \fmf{photon}{i1,v1}
+    \fmf{photon}{i2,v2}
+    % taus
+    \fmf{fermion,t=0.9,label=\collep$\tau$,l.s=right,f=collep}{v1,v2} % t channel
+    \fmf{fermion,f=collep}{o1,v1} % outgoing top lepton
+    \fmf{fermion,f=collep}{v2,o2} % outgoing bottom lepton
+    % labels
+    \fmfv{l=$\gamma$,l.a=160,l.d=5}{i1}
+    \fmfv{l=$\gamma$,l.a=-158,l.d=6}{i2}
+    \fmfv{l=\strut\collep$\tau^+$,l.a=12,l.d=5}{o1}
+    \fmfv{l=\strut\collep$\tau^-$\vspace{-7pt},l.a=-12,l.d=5}{o2}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{v1}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{v2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+% gamma gamma -> tautau (g-2)
+\begin{fmfpicture}{-4,10}{8,10}{gammagamma-tautau-blob-g} % padding (LT)(RB)
+  \begin{fmfgraph*}(110,80) % canvas (W,H)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % photons
+    \fmf{photon}{i1,v1}
+    \fmf{photon}{i2,v2}
+    % taus
+    \fmf{fermion,t=0.9,label=\collep$\tau$,l.s=right,f=collep}{v1,v2} % t channel
+    \fmf{fermion,f=collep}{o1,v1} % outgoing top lepton
+    \fmf{fermion,f=collep}{v2,o2} % outgoing bottom lepton
+    % labels
+    \fmfv{l=$\gamma$,l.a=160,l.d=5}{i1}
+    \fmfv{l=$\gamma$,l.a=-158,l.d=6}{i2}
+    \fmfv{l=\strut\collep$\tau^+$,l.a=12,l.d=5}{o1}
+    \fmfv{l=\strut\collep$\tau^-$\vspace{-7pt},l.a=-12,l.d=5}{o2}
+    \fmfv{decor.shape=circle,decor.filled=empty,decor.size=15,
+          f=colbl,b=(.92,,.92,,.98),l=\large\colbl$g$,l.a=0,l.d=0}{v1}
+    \fmfv{decor.shape=circle,decor.filled=empty,decor.size=15,
+          f=colbl,b=(.92,,.92,,.98),l=\large\colbl$g$,l.a=0,l.d=0}{v2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% gamma gamma -> ellell (g-2)
+\begin{fmfpicture}{-4,10}{8,10}{gammagamma-ellell} % padding (LT)(RB)
+  \begin{fmfgraph*}(110,80) % canvas (W,H)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % photons
+    \fmf{photon}{i1,v1}
+    \fmf{photon}{i2,v2}
+    % taus
+    \fmf{fermion,t=0.9,label=\collep$\ell$,l.s=right,f=collep}{v1,v2} % t channel
+    \fmf{fermion,f=collep}{o1,v1} % outgoing top lepton
+    \fmf{fermion,f=collep}{v2,o2} % outgoing bottom lepton
+    % labels
+    \fmfv{l=$\gamma$,l.a=160,l.d=5}{i1}
+    \fmfv{l=$\gamma$,l.a=-158,l.d=6}{i2}
+    \fmfv{l=\strut\collep$\ell^+$,l.a=12,l.d=5}{o1}
+    \fmfv{l=\strut\collep$\ell^-$\vspace{-7pt},l.a=-20,l.d=5}{o2}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{v1}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{v2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+% gamma gamma -> WW
+\begin{fmfpicture}{-4,10}{8,10}{gammagamma-WW} % padding (LT)(RB)
+  \begin{fmfgraph*}(110,80) % canvas (W,H)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % photons
+    \fmf{photon}{i1,v1}
+    \fmf{photon}{i2,v2}
+    % bosons
+    \fmf{boson,t=0.9,label=\coldis W,l.s=right,f=coldis}{v1,v2} % t channel
+    \fmf{boson,f=coldis}{o1,v1} % outgoing top boson
+    \fmf{boson,f=coldis}{v2,o2} % outgoing bottom boson
+    % labels
+    \fmfv{l=$\gamma$,l.a=160,l.d=5}{i1}
+    \fmfv{l=$\gamma$,l.a=-158,l.d=6}{i2}
+    \fmfv{l=\strut\coldis W$^+$,l.a=12,l.d=5}{o1}
+    \fmfv{l=\strut\coldis W$^-$\vspace{-7pt},l.a=-16,l.d=5}{o2}
+    %\fmfv{decor.shape=circle,f=coldis,decor.filled=full,decor.size=4}{v1}
+    %\fmfv{decor.shape=circle,f=coldis,decor.filled=full,decor.size=4}{v2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+% pp -> tautau (g-2)
+\begin{fmfpicture}{-4,10}{8,10}{pp-tautau} % padding (LT)(RB)
+  \begin{fmfgraph*}(150,95) % canvas (W,H)
+    % external vertices
+    \fmfleft{iq,im,ip}
+    \fmfright{oq,t2,om,t1,op}
+    \fmfshift{2 down}{t1}
+    \fmfshift{2 up}{t2}
+    % protons
+    \fmf{proton}{ip,vp,op}
+    \fmf{proton}{iq,vq,oq}
+    % skeleton
+    \fmf{phantom,t=0.4}{ip,vp} % pull to right
+    \fmf{phantom,t=0.4}{iq,vq} % pull to right
+    \fmf{phantom,t=0.2}{vp,vq} % t channel
+    \fmffreeze
+    % mediators
+    \fmf{phantom,t=0.55}{vt1,om,vt2} % pull gtt vertex to left
+    \fmf{fermion,t=0.35,label=\collep$\tau$,l.s=right,f=collep}{vt1,vt2} % t channel
+    \fmf{boson,t=1,label=$\gamma$,l.d=4,l.s=right}{vp,vt1}
+    \fmf{boson,t=1,label=$\gamma$,l.d=3,l.s=left}{vq,vt2}
+    % taus
+    \fmffreeze
+    \fmf{fermion,f=collep}{t1,vt1} % outgoing lepton
+    \fmf{fermion,f=collep}{vt2,t2} % outgoing lepton
+    % labels
+    \fmfblob{15}{vp}
+    \fmfblob{15}{vq}
+    \fmfv{l=p$^+$,l.a=160,l.d=5}{ip}
+    \fmfv{l=p$^+$,l.a=20,l.d=6}{op}
+    \fmfv{l=p$^+$,l.a=-160,l.d=5}{iq}
+    \fmfv{l=p$^+$,l.a=-20,l.d=6}{oq}
+    \fmfv{l=\strut\collep$\tau^+$,l.a=10,l.d=5}{t1}
+    \fmfv{l=\strut\collep$\tau^-$,l.a=-10,l.d=5}{t2}
+    %\fmfv{decor.shape=circle,decor.filled=full,decor.size=5,f=black}{vp}
+    %\fmfv{decor.shape=circle,decor.filled=full,decor.size=5,f=black}{vq}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{vt1}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{vt2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+% pp -> tautau (g-2), single diffractive
+\begin{fmfpicture}{-4,18}{8,10}{pp-tautau-SD} % padding (LT)(RB)
+  \begin{fmfgraph*}(150,100) % canvas (W,H)
+    % external vertices
+    \fmfleft{iq,im,ip}
+    \fmfright{oq,t2,om,t1,op}
+    \fmfshift{2 down}{t1}
+    \fmfshift{2 up}{t2}
+    % protons
+    \fmf{proton}{ip,vp}
+    \fmf{phantom}{vp,op}
+    \fmf{proton}{iq,vq,oq}
+    % skeleton
+    \fmf{phantom,t=0.4}{ip,vp} % pull to right
+    \fmf{phantom,t=0.4}{iq,vq} % pull to right
+    \fmf{phantom,t=0.2}{vp,vq} % t channel
+    \fmffreeze
+    % diffracted proton
+    \fmfi{fermion,f=coldis}{vpath (__vp,__op) scaled 1.01 shifted(4, 2.5) rotatedaround(vloc(__vp), 9)}
+    \fmfi{fermion,f=coldis}{vpath (__vp,__op) scaled 1.01 shifted(4, 0.0) rotatedaround(vloc(__vp), 1)}
+    \fmfi{fermion,f=coldis}{vpath (__vp,__op) scaled 1.01 shifted(4,-2.5) rotatedaround(vloc(__vp),-7)}
+    % mediators
+    \fmf{phantom,t=0.55}{vt1,om,vt2} % pull gtt vertex to left
+    \fmf{fermion,t=0.35,label=\collep$\tau$,l.s=right,f=collep}{vt1,vt2} % t channel
+    \fmf{boson,t=1,label=$\gamma$,l.d=4,l.s=right}{vp,vt1}
+    \fmf{boson,t=1,label=$\gamma$,l.d=3,l.s=left}{vq,vt2}
+    % taus
+    \fmffreeze
+    \fmf{fermion,f=collep}{t1,vt1} % outgoing lepton
+    \fmf{fermion,f=collep}{vt2,t2} % outgoing lepton
+    % labels
+    \fmfblob{15}{vp}
+    \fmfblob{15}{vq}
+    \fmfv{l=p$^+$,l.a=160,l.d=5}{ip}
+    %\fmfv{l=$X$,l.a=20,l.d=12}{op}
+    \fmfv{l=p$^+$,l.a=-160,l.d=5}{iq}
+    \fmfv{l=p$^+$,l.a=-20,l.d=6}{oq}
+    \fmfv{l=\strut\collep$\tau^+$,l.a=10,l.d=5}{t1}
+    \fmfv{l=\strut\collep$\tau^-$,l.a=-10,l.d=5}{t2}
+    %\fmfv{decor.shape=circle,decor.filled=full,decor.size=5,f=black}{vq}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{vt1}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{vt2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+% pp -> tautau (g-2), double diffractive
+\begin{fmfpicture}{-4,18}{8,18}{pp-tautau-DD} % padding (LT)(RB)
+  \begin{fmfgraph*}(150,100) % canvas (W,H)
+    % external vertices
+    \fmfleft{iq,im,ip}
+    \fmfright{oq,t2,om,t1,op}
+    \fmfshift{2 down}{t1}
+    \fmfshift{2 up}{t2}
+    % protons
+    \fmf{proton}{ip,vp}
+    \fmf{phantom}{vp,op}
+    \fmf{proton}{iq,vq}
+    \fmf{phantom}{vq,oq}
+    % skeleton
+    \fmf{phantom,t=0.4}{ip,vp} % pull to right
+    \fmf{phantom,t=0.4}{iq,vq} % pull to right
+    \fmf{phantom,t=0.2}{vp,vq} % t channel
+    \fmffreeze
+    % diffracted proton
+    \fmfi{fermion,f=coldis}{vpath (__vp,__op) scaled 1.01 shifted(4, 2.5) rotatedaround(vloc(__vp), 9)}
+    \fmfi{fermion,f=coldis}{vpath (__vp,__op) scaled 1.01 shifted(4, 0.0) rotatedaround(vloc(__vp), 1)}
+    \fmfi{fermion,f=coldis}{vpath (__vp,__op) scaled 1.01 shifted(4,-2.5) rotatedaround(vloc(__vp),-7)}
+    \fmfi{fermion,f=coldis}{vpath (__vq,__oq) scaled 1.01 shifted(4,-2.5) rotatedaround(vloc(__vq),-9)}
+    \fmfi{fermion,f=coldis}{vpath (__vq,__oq) scaled 1.01 shifted(4, 0.0) rotatedaround(vloc(__vq),-1)}
+    \fmfi{fermion,f=coldis}{vpath (__vq,__oq) scaled 1.01 shifted(4, 2.5) rotatedaround(vloc(__vq),7)}
+    % mediators
+    \fmf{phantom,t=0.55}{vt1,om,vt2} % pull gtt vertex to left
+    \fmf{fermion,t=0.35,label=\collep$\tau$,l.s=right,f=collep}{vt1,vt2} % t channel
+    \fmf{boson,t=1,label=$\gamma$,l.d=4,l.s=right}{vp,vt1}
+    \fmf{boson,t=1,label=$\gamma$,l.d=3,l.s=left}{vq,vt2}
+    % taus
+    \fmffreeze
+    \fmf{fermion,f=collep}{t1,vt1} % outgoing lepton
+    \fmf{fermion,f=collep}{vt2,t2} % outgoing lepton
+    % labels
+    \fmfblob{15}{vp}
+    \fmfblob{15}{vq}
+    \fmfv{l=p$^+$,l.a=160,l.d=5}{ip}
+    %\fmfv{l=$X$,l.a=20,l.d=12}{op}
+    \fmfv{l=p$^+$,l.a=-160,l.d=5}{iq}
+    %\fmfv{l=p$^+$,l.a=-20,l.d=6}{oq}
+    \fmfv{l=\strut\collep$\tau^+$,l.a=10,l.d=5}{t1}
+    \fmfv{l=\strut\collep$\tau^-$,l.a=-10,l.d=5}{t2}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{vt1}
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{vt2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+% pp -> tautau blob (g-2)
+\begin{fmfpicture}{-4,10}{8,10}{pp-tautau-blob} % padding (LT)(RB)
+  \begin{fmfgraph*}(150,95) % canvas (W,H)
+    % external vertices
+    \fmfleft{iq,im,ip}
+    \fmfright{oq,t2,om,t1,op}
+    \fmfshift{2 down}{t1}
+    \fmfshift{2 up}{t2}
+    % protons
+    \fmf{proton}{ip,vp,op}
+    \fmf{proton}{iq,vq,oq}
+    % skeleton
+    \fmf{phantom,t=0.4}{ip,vp} % pull to right
+    \fmf{phantom,t=0.4}{iq,vq} % pull to right
+    \fmf{phantom,t=0.2}{vp,vq} % t channel
+    \fmffreeze
+    % mediators
+    \fmf{phantom,t=1.5}{vt,om} % pull gtt vertex to left
+    \fmf{boson,t=1.12,label=$\gamma$,l.d=4,l.s=right}{vp,vt}
+    \fmf{boson,t=1.12,label=$\gamma$,l.d=3,l.s=left}{vq,vt}
+    % taus
+    \fmffreeze
+    \fmf{phantom,f=collep}{t1,vt} % outgoing lepton
+    \fmf{phantom,f=collep}{vt,t2} % outgoing lepton
+    \fmfi{fermion,f=collep}{vpath (__t1,__vt) shifted(0,2)} % outgoing lepton
+    \fmfi{fermion,f=collep}{vpath (__vt,__t2) shifted(0,-2)} % outgoing lepton
+    % labels
+    \fmfblob{15}{vq}
+    \fmfblob{15}{vp}
+    \fmfv{d.s=circle,f=colbl,d.f=full,d.s=4,l.d=12,l.a=0,
+          l=\normalsize\colbl$C_{\tau B}/\Lambda^2$}{vt}
+    \fmfblob{18}{vt} % use \fmfv first to give color
+    \fmfv{l=p$^+$,l.a=160,l.d=5}{ip}
+    \fmfv{l=p$^+$,l.a=20,l.d=6}{op}
+    \fmfv{l=p$^+$,l.a=-160,l.d=5}{iq}
+    \fmfv{l=p$^+$,l.a=-20,l.d=6}{oq}
+    \fmfv{l=\strut\collep$\tau^+$,l.a=22,l.d=5}{t1}
+    \fmfv{l=\strut\collep$\tau^-$,l.a=-22,l.d=5}{t2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% pp -> tautau (g-2)
+\begin{fmfpicture}{-4,10}{8,10}{pp-tautau-blob-g} % padding (LT)(RB)
+  \begin{fmfgraph*}(150,95) % canvas (W,H)
+    % external vertices
+    \fmfleft{iq,im,ip}
+    \fmfright{oq,t2,om,t1,op}
+    \fmfshift{2 down}{t1}
+    \fmfshift{2 up}{t2}
+    % protons
+    \fmf{proton}{ip,vp,op}
+    \fmf{proton}{iq,vq,oq}
+    % skeleton
+    \fmf{phantom,t=0.4}{ip,vp} % pull to right
+    \fmf{phantom,t=0.4}{iq,vq} % pull to right
+    \fmf{phantom,t=0.2}{vp,vq} % t channel
+    \fmffreeze
+    % mediators
+    \fmf{phantom,t=0.55}{vt1,om,vt2} % pull gtt vertex to left
+    \fmf{fermion,t=0.35,label=\collep$\tau$,l.s=right,f=collep}{vt1,vt2} % t channel
+    \fmf{boson,t=1,label=$\gamma$,l.d=4,l.s=right}{vp,vt1}
+    \fmf{boson,t=1,label=$\gamma$,l.d=3,l.s=left}{vq,vt2}
+    % taus
+    \fmffreeze
+    \fmf{fermion,f=collep}{t1,vt1} % outgoing lepton
+    \fmf{fermion,f=collep}{vt2,t2} % outgoing lepton
+    % labels
+    \fmfblob{15}{vp}
+    \fmfblob{15}{vq}
+    \fmfv{l=p$^+$,l.a=160,l.d=5}{ip}
+    \fmfv{l=p$^+$,l.a=20,l.d=6}{op}
+    \fmfv{l=p$^+$,l.a=-160,l.d=5}{iq}
+    \fmfv{l=p$^+$,l.a=-20,l.d=6}{oq}
+    \fmfv{l=\strut\collep$\tau^+$,l.a=10,l.d=5}{t1}
+    \fmfv{l=\strut\collep$\tau^-$,l.a=-10,l.d=5}{t2}
+    \fmfv{decor.shape=circle,decor.filled=empty,decor.size=15,
+          f=colbl,b=(.92,,.92,,.98),l=\large\colbl$g$,l.a=0,l.d=0}{vt1}
+    \fmfv{decor.shape=circle,decor.filled=empty,decor.size=15,
+          f=colbl,b=(.92,,.92,,.98),l=\large\colbl$g$,l.a=0,l.d=0}{vt2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+\end{document}

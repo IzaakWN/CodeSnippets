@@ -1,0 +1,600 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (September 2024)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape LQ_colored.tex
+\documentclass[11pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+\usepackage{mathtools}
+
+% DEFINE TEXT COLORS
+\usepackage{xcolor}
+\definecolor{colpair}{rgb}{.02,.18,.64} % pair production (blue)
+\definecolor{colsingle}{rgb}{.23,.45,.21} % single production (green)
+\definecolor{colnonres}{rgb}{.91,.54,.22} % nonres. production (orange)
+\definecolor{colvtx}{rgb}{0,.1,1} % LQ vertex (blue)
+\definecolor{colqcd}{rgb}{1,0,0} % strong vertex (red)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colpair,colsingle,colnonres,colvtx,colqcd}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}} % \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{dash_len}{10} % dashes length
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd\MPcolors % define custom line colors in MetaPost
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+% DEFINE 
+\newcommand\alphaS{\colqcd$\sqrt{\smash[b]{\alpha_\mathrm{s}}}$}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% SINGLE LQ PRODUCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% SINGLE LQ PRODUCTION - s-channel
+\begin{fmfpicture}{3,22}{13,15}{LQ_single_schan} % padding (LTRB)
+  \color{colsingle} % default text color
+  \fmfcmd{foreground:=colsingle;} % default line color
+  \begin{fmfgraph*}(130,80) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    \fmfshift{8 up}{o1,o2}
+    \fmfshift{18 left}{o3}
+    % internal vertices (exact placement)
+    \fmfforce{(.22w,.50h)}{v1} % exact placement
+    \fmfforce{(.62w,.50h)}{v2} % exact placement
+    \fmfforce{(.78w,.86h)}{lq} % exact placement
+    % incoming partons
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion}{i2,v1}
+    % s-channel
+    \fmf{fermion,l.s=right,label=$q$}{v1,v2}
+    % associated lepton
+    \fmf{fermion}{v2,o3}
+    % LQ -> lepton + quark
+    \fmf{dashes,t=1.2,l.s=left,l.d=4,label=LQ}{v2,lq}
+    \fmf{fermion}{o2,lq,o1}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=-8}{v2}
+    % labels
+    \fmfv{l.a=155,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-155,l.d=4,l=$q$}{i2}
+    \fmfv{l.a=25,l.d=4,l=$q$}{o1}
+    \fmfv{l.a=-20,l.d=4,l=\vspace{-2pt}$\ell^+$}{o2}
+    \fmfv{l.a=-25,l.d=3,l=$\ell^-$}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE LQ PRODUCTION - s-channel
+\begin{fmfpicture}{3,22}{13,13}{LQ_single_schan_btautau} % padding (LTRB)
+  \color{colsingle} % default text color
+  \fmfcmd{foreground:=colsingle;} % default line color
+  \begin{fmfgraph*}(130,80) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    \fmfshift{8 up}{o1,o2}
+    \fmfshift{18 left}{o3}
+    % internal vertices (exact placement)
+    \fmfforce{(.22w,.50h)}{v1} % exact placement
+    \fmfforce{(.62w,.50h)}{v2} % exact placement
+    \fmfforce{(.78w,.86h)}{lq} % exact placement
+    % incoming partons
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion}{i2,v1}
+    % s-channel
+    \fmf{fermion,l.s=right,label=b}{v1,v2}
+    % associated lepton
+    \fmf{fermion}{v2,o3}
+    % LQ -> lepton + quark
+    \fmf{dashes,t=1.2,l.s=left,l.d=4,label=LQ}{v2,lq}
+    \fmf{fermion}{o2,lq,o1}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=-8}{v2}
+    % labels
+    \fmfv{l.a=155,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-155,l.d=4,l=b}{i2}
+    \fmfv{l.a=25,l.d=4,l=b}{o1}
+    \fmfv{l.a=-20,l.d=4,l=\vspace{-2pt}$\tau^+$}{o2}
+    \fmfv{l.a=-20,l.d=5,l=\vspace{-2pt}$\tau^-$}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE LQ PRODUCTION - s-channel, gluon-splitting
+\begin{fmfpicture}{3,25}{13,13}{LQ_single_schan_gsplit} % padding (LTRB)
+  \color{colsingle} % default text color
+  \fmfcmd{foreground:=colsingle;} % default line color
+  \begin{fmfgraph*}(140,110) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{12 up}{o1,o2}
+    \fmfshift{6 up}{o3}
+    \fmfshift{8 left}{o3}
+    \fmfshift{28 left}{o4}
+    % internal vertices (exact placement)
+    \fmfforce{(.25w,.33h)}{vg} % exact placement
+    \fmfforce{(.25w,.66h)}{v1} % exact placement
+    \fmfforce{(.62w,.66h)}{v2} % exact placement
+    \fmfforce{(.78w,.94h)}{lq} % exact placement
+    % gluon splitting
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{i2,vg}
+    \fmf{fermion,l.s=left,label=b}{vg,v1}
+    \fmf{fermion}{o4,vg}
+    % s-channel
+    \fmf{fermion,l.s=left,label=b}{v1,v2}
+    % associated lepton
+    \fmf{fermion}{v2,o3}
+    % LQ -> lepton + quark
+    \fmf{dashes,t=1.2,l.d=4,l.s=left,l.d=4,label=LQ}{v2,lq}
+    \fmf{fermion}{o2,lq,o1}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=-110}{v2}
+    % labels
+    \fmfv{l.a= 155,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-155,l.d=4,l=b}{i2}
+    \fmfv{l.a=  25,l.d=4,l=b}{o1}
+    \fmfv{l.a= -20,l.d=4,l=\vspace{-2pt}$\tau^+$}{o2}
+    \fmfv{l.a= -20,l.d=5,l=\vspace{-2pt}$\tau^-$}{o3}
+    \fmfv{l.a= -20,l.d=5,l=\vspace{-2pt}b}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE LQ PRODUCTION - s-channel, gluon-splitting
+\begin{fmfpicture}{-10,14}{12,11}{LQ_single_schan_gsplit2} % padding (LTRB)
+  \color{colsingle} % default text color
+  \fmfcmd{foreground:=colsingle;} % default line color
+  \begin{fmfgraph*}(130,90) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{12 down}{i1}
+    \fmfshift{12 up}{i2}
+    % gluon splitting
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion,t=0.9,l.s=left,label=b}{v2,v1} % t-channel
+    \fmf{phantom,t=0.6}{v1,o1,o4,v2}
+    \fmffreeze
+    % outgoing bottom quarks
+    \fmf{fermion}{v1,lq1}
+    \fmf{fermion,t=0.8}{lq1,o1}
+    \fmf{fermion}{o4,v2}
+    \fmffreeze
+    % LQ -> btau
+    \fmf{dashes,t=0.9,l.s=right,l.d=4,label=LQ}{lq1,lq2}
+    \fmf{fermion,t=0.9}{o2,lq2,o3}
+    \fmf{phantom,t=0.9}{v2,lq2}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=120}{lq1}
+    % labels
+    \fmfv{l.a= 160,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-160,l.d=4,l=$g$}{i2}
+    \fmfv{l.a=  25,l.d=4,l=$\tau^-$}{o1}
+    \fmfv{l.a=  25,l.d=5,l=\vspace{-2pt}$\tau^+$}{o2}
+    \fmfv{l.a= -20,l.d=5,l=b}{o3}
+    \fmfv{l.a= -20,l.d=5,l=\vspace{-2pt}b}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE LQ PRODUCTION - t-channel
+\begin{fmfpicture}{3,15}{13,11}{LQ_single_tchan} % padding (LTRB)
+  \color{colsingle} % default text color
+  \fmfcmd{foreground:=colsingle;} % default line color
+  \begin{fmfgraph*}(110,80) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    \fmfshift{20 left}{o3}
+    % internal vertices (exact placement)
+    \fmfforce{(.34w,.75h)}{v1} % exact placement
+    \fmfforce{(.34w,.23h)}{v2} % exact placement
+    \fmfforce{(.73w,.75h)}{lq} % exact placement
+    \fmffreeze
+    % gluon + quarks
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion}{i2,v2,o3}
+    % LQs
+    \fmf{dashes,t=1.2,l.s=left,l.d=4,label=LQ}{v1,lq}
+    \fmf{dashes,l.s=left,l.d=4,label=LQ}{v2,v1}
+    % LQ -> lepton + quark
+    \fmf{fermion}{o2,lq,o1}
+    % vertex
+    %\fmfv{d.sh=circle,d.f=full,d.si=4,f=colqcd,
+    %      l=\alphaS,l.d=5,l.a=-40}{v1}
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=7,l.a=-90}{v2}
+    % labels
+    \fmfv{l.a= 150,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-160,l.d=4,l=b}{i2}
+    \fmfv{l.a= -20,l.d=5,l=$\tau^-$}{o3}
+    \fmfv{l.a=  25,l.d=4,l=b}{o1}
+    \fmfv{l.a= -20,l.d=5,l=$\tau^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% SINGLE LQ PRODUCTION - t-channel (photon-induced)
+\foreach \q in {b,$q$}{
+\begin{fmfpicture}{3,15}{13,11}{LQ_single_tchan_photon_btautau} % padding (LTRB)
+  \color{colsingle} % default text color
+  \fmfcmd{foreground:=colsingle;} % default line color
+  \begin{fmfgraph*}(110,80) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    \fmfshift{20 left}{o3}
+    % internal vertices (exact placement)
+    \fmfforce{(.34w,.75h)}{v1} % exact placement
+    \fmfforce{(.34w,.23h)}{v2} % exact placement
+    \fmfforce{(.73w,.75h)}{lq} % exact placement
+    \fmffreeze
+    % gluon + quarks
+    \fmf{fermion}{i1,v1}
+    \fmf{photon}{i2,v2} % photon
+    \fmf{fermion}{v2,o3}
+    % LQs
+    \fmf{dashes,t=1.2,l.s=left,l.d=4,label=LQ}{v1,lq}
+    \fmf{fermion,l.s=right,label=$\tau$}{v1,v2}
+    % LQ -> lepton + quark
+    \fmf{fermion}{o2,lq,o1}
+    % vertex
+    %\fmfv{d.sh=circle,d.f=full,d.si=4,f=colqcd,
+    %      l=\alphaS,l.d=5,l.a=-40}{v1}
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=7,l.a=-90}{v2}
+    % labels
+    \fmfv{l.a= 160,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-160,l.d=5,l=$\gamma$}{i2}
+    \fmfv{l.a= -20,l.d=5,l=$\tau^-$}{o3}
+    \fmfv{l.a=  25,l.d=5,l=\q}{o1}
+    \fmfv{l.a= -20,l.d=5,l=$\tau^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% SINGLE LQ PRODUCTION - t-channel (photon-induced)
+\begin{fmfpicture}{3,15}{13,11}{LQ_single_tchan_photon_qll} % padding (LTRB)
+  \color{colsingle} % default text color
+  \fmfcmd{foreground:=colsingle;} % default line color
+  \begin{fmfgraph*}(110,80) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    \fmfshift{20 left}{o3}
+    % internal vertices (exact placement)
+    \fmfforce{(.34w,.75h)}{v1} % exact placement
+    \fmfforce{(.34w,.23h)}{v2} % exact placement
+    \fmfforce{(.73w,.75h)}{lq} % exact placement
+    \fmffreeze
+    % gluon + quarks
+    \fmf{fermion}{i1,v1}
+    \fmf{photon}{i2,v2} % photon
+    \fmf{fermion}{v2,o3}
+    % LQs
+    \fmf{dashes,t=1.2,l.s=left,l.d=4,label=LQ}{v1,lq}
+    \fmf{fermion,l.s=right,label=$\ell$}{v1,v2}
+    % LQ -> lepton + quark
+    \fmf{fermion}{o2,lq,o1}
+    % vertex
+    %\fmfv{d.sh=circle,d.f=full,d.si=4,f=colqcd,
+    %      l=\alphaS,l.d=5,l.a=-40}{v1}
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=7,l.a=-90}{v2}
+    % labels
+    \fmfv{l.a= 160,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-160,l.d=5,l=$\gamma$}{i2}
+    \fmfv{l.a= -20,l.d=5,l=$\ell^-$}{o3}
+    \fmfv{l.a=  25,l.d=5,l=$q$}{o1}
+    \fmfv{l.a= -20,l.d=5,l=$\ell^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% LQ PAIR PRODUCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% LQ PAIR PRODUCTION
+\begin{fmfpicture}{3,14}{14,11}{LQ_pair_gg_bbtautau} % padding (LTRB)
+  \color{colpair} % default text color
+  \fmfcmd{foreground:=colpair;} % default line color
+  \begin{fmfgraph*}(140,100) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{10 down}{i1}
+    \fmfshift{10 up}{i2}
+    % internal vertices (exact placement)
+    \fmfforce{(.80w,.82h)}{lq1} % exact placement
+    \fmfforce{(.80w,.18h)}{lq2} % exact placement
+    % gg -> g
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{i2,v1}
+    \fmf{gluon,t=1.1}{v1,v2} % s-channel
+    % g -> LQ LQ
+    \fmf{dashes,t=1.2,l.s=left,label=LQ}{v2,lq1}
+    \fmf{dashes,t=1.2,l.s=right,label=$\overline{\mathrm{LQ}}$}{v2,lq2}
+    % LQ -> ql
+    \fmf{fermion}{o2,lq1,o1}
+    \fmf{fermion}{o3,lq2,o4}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colqcd,
+          l=\strut\alphaS,l.d=6,l.a=20}{v2}
+    % labels
+    \fmfv{l.a=150,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-150,l.d=4,l=$g$}{i2}
+    \fmfv{l.a=25,l=$\tau^-$}{o1}
+    \fmfv{l.a=-20,l=$\overline{\mathrm{b}}$}{o2}
+    \fmfv{l.a=25,l=$\tau^+$}{o3}
+    \fmfv{l.a=-20,l=\vspace{-2pt}b}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% LQ PAIR PRODUCTION
+\begin{fmfpicture}{3,14}{14,11}{LQ_pair_gg_qqll} % padding (LTRB)
+  \color{colpair} % default text color
+  \fmfcmd{foreground:=colpair;} % default line color
+  \begin{fmfgraph*}(140,100) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{10 down}{i1}
+    \fmfshift{10 up}{i2}
+    % internal vertices (exact placement)
+    \fmfforce{(.80w,.82h)}{lq1} % exact placement
+    \fmfforce{(.80w,.18h)}{lq2} % exact placement
+    % gg -> g
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{i2,v1}
+    \fmf{gluon,t=1.1}{v1,v2} % s-channel
+    % g -> LQ LQ
+    \fmf{dashes,t=1.2,l.s=left,label=LQ}{v2,lq1}
+    \fmf{dashes,t=1.2,l.s=right,label=$\overline{\mathrm{LQ}}$}{v2,lq2}
+    % LQ -> ql
+    \fmf{fermion}{o2,lq1,o1}
+    \fmf{fermion}{o3,lq2,o4}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colqcd,
+          l=\strut\alphaS,l.d=6,l.a=20}{v2}
+    % labels
+    \fmfv{l.a= 150,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-150,l.d=4,l=$g$}{i2}
+    \fmfv{l.a= 20,l.d=6,l=$\ell^-$}{o1}
+    \fmfv{l.a=-20,l.d=6,l=$\overline{q}$}{o2}
+    \fmfv{l.a= 20,l.d=6,l=$\ell^+$}{o3}
+    \fmfv{l.a=-20,l.d=6,l=$q$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% LQ PAIR PRODUCTION
+\def\col#1{\strut\makebox[6.7mm][l]{#1}}
+\begin{fmfpicture}{3,14}{35,11}{LQ_pair_gg_qqll_qqnunu} % padding (LTRB)
+  \color{colpair} % default text color
+  \fmfcmd{foreground:=colpair;} % default line color
+  \begin{fmfgraph*}(140,100) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{10 down}{i1}
+    \fmfshift{10 up}{i2}
+    % internal vertices (exact placement)
+    \fmfforce{(.80w,.82h)}{lq1} % exact placement
+    \fmfforce{(.80w,.18h)}{lq2} % exact placement
+    % gg -> g
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{i2,v1}
+    \fmf{gluon,t=1.1}{v1,v2} % s-channel
+    % g -> LQ LQ
+    \fmf{dashes,t=1.2,l.s=left,label=LQ}{v2,lq1}
+    \fmf{dashes,t=1.2,l.s=right,label=$\overline{\mathrm{LQ}}$}{v2,lq2}
+    % LQ -> ql
+    \fmf{fermion}{o2,lq1,o1}
+    \fmf{fermion}{o3,lq2,o4}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colqcd,
+          l=\strut\alphaS,l.d=6,l.a=20}{v2}
+    % labels
+    \fmfv{l.a= 150,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-150,l.d=4,l=$g$}{i2}
+    \fmfv{l.a= 20,l.d=8,l=\col{$\ell^-$,,}         \col{$\nu$}           }{o1}
+    \fmfv{l.a=-20,l.d=8,l=\col{$\overline{q}$\:,,} \col{$\overline{q}$}  }{o2}
+    \fmfv{l.a= 20,l.d=8,l=\col{$\ell^+$,,}         \col{$\overline{\nu}$}}{o3}
+    \fmfv{l.a=-20,l.d=8,l=\col{$q$\:,,}            \col{$q$}             }{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% LQ PAIR PRODUCTION
+\begin{fmfpicture}{3,14}{80,11}{LQ_pair_gg_qqll_qqlnu_qqnunu} % padding (LTRB)
+  \color{colpair} % default text color
+  \fmfcmd{foreground:=colpair;} % default line color
+  \begin{fmfgraph*}(140,100) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{10 down}{i1}
+    \fmfshift{10 up}{i2}
+    % internal vertices (exact placement)
+    \fmfforce{(.80w,.82h)}{lq1} % exact placement
+    \fmfforce{(.80w,.18h)}{lq2} % exact placement
+    % gg -> g
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{i2,v1}
+    \fmf{gluon,t=1.1}{v1,v2} % s-channel
+    % g -> LQ LQ
+    \fmf{dashes,t=1.2,l.s=left,label=LQ}{v2,lq1}
+    \fmf{dashes,t=1.2,l.s=right,label=$\overline{\mathrm{LQ}}$}{v2,lq2}
+    % LQ -> ql
+    \fmf{fermion}{o2,lq1,o1}
+    \fmf{fermion}{o3,lq2,o4}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colqcd,
+          l=\strut\alphaS,l.d=6,l.a=20}{v2}
+    % labels
+    \fmfv{l.a= 150,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-150,l.d=4,l=$g$}{i2}
+    \fmfv{l.a= 20,l.d=8,l=\col{$\ell^-$,,}         \col{$\ell^-$,,}
+                          \col{$\nu$,,}            \col{$\nu$}}{o1}
+    \fmfv{l.a=-20,l.d=8,l=\col{$\overline{q}$\:,,} \col{$\overline{q}$\:,,}
+                          \col{$\overline{q}$\:,,} \col{$\overline{q}$}}{o2}
+    \fmfv{l.a= 20,l.d=8,l=\col{$\ell^-$,,}         \col{$\overline{\nu}$,,}
+                          \col{$\ell^-$,,}         \col{$\overline{\nu}$}}{o3}
+    \fmfv{l.a=-20,l.d=8,l=\col{$q$\:,,}            \col{$q$\:,,}
+                          \col{$q$\:,,}            \col{$q$}}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% NONRESONANT DILEPTON PRODUCTION %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% NONRESONANT DILEPTON PRODUCTION - t-channel
+\begin{fmfpicture}{-6,10}{3,10}{LQ_tchan} % padding (LTRB)
+  \color{colnonres} % default text color
+  \fmfcmd{foreground:=colnonres;} % default line color
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main: qq -> ll
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{o2,v2,i2}
+    \fmf{dashes,t=0.7,l.s=right,l.d=5,label=LQ}{v1,v2} % t-channel
+    % vertices
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=90}{v1}
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=-90}{v2}
+    % labels
+    \fmfv{l.a=160,l=$q$}{i1}
+    \fmfv{l.a=20,l=$\ell^-$}{o1}
+    \fmfv{l.a=-170,l=$\overline{q}$}{i2}
+    \fmfv{l.a=-10,l=$\ell^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% NONRESONANT DITAU PRODUCTION - t-channel
+\begin{fmfpicture}{-6,10}{4,10}{LQ_tchan_bbtautau} % padding (LTRB)
+  \color{colnonres} % default text color
+  \fmfcmd{foreground:=colnonres;} % default line color
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main: qq -> ll
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{o2,v2,i2}
+    \fmf{dashes,t=0.7,l.s=right,l.d=5,label=LQ}{v1,v2} % t-channel
+    % vertices
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=90}{v1}
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=-90}{v2}
+    % labels
+    \fmfv{l.a=160,l=b}{i1}
+    \fmfv{l.a=20,l=$\tau^-$}{o1}
+    \fmfv{l.a=-170,l=$\overline{\mathrm{b}}$}{i2}
+    \fmfv{l.a=-10,l=$\tau^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% NONRESONANT DITAU PRODUCTION - t-channel
+\begin{fmfpicture}{-6,10}{4,10}{LQ_tchan_bqtaunu} % padding (LTRB)
+  \color{colnonres} % default text color
+  \fmfcmd{foreground:=colnonres;} % default line color
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main: qq -> ll
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{o2,v2,i2}
+    \fmf{dashes,t=0.7,l.s=right,l.d=5,label=LQ}{v1,v2} % t-channel
+    % vertices
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda_{33}$,l.d=6,l.a=90}{v1}
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda_{23}$,l.d=6,l.a=-90}{v2}
+    % labels
+    \fmfv{l.a= 160,l=b}{i1}
+    \fmfv{l.a=  20,l=$\tau^-$}{o1}
+    \fmfv{l.a=-170,l=$\overline{q}$}{i2}
+    \fmfv{l.a= -10,l=$\overline{\nu}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% NONRESONANT DITAU PRODUCTION - t-channel, double gluon splitting
+\begin{fmfpicture}{3,9}{13,9}{LQ_tchan_bbtautau_gsplit2} % padding (LTRB)
+  \color{colnonres} % default text color
+  \fmfcmd{foreground:=colnonres;} % default line color
+  \begin{fmfgraph*}(115,135) % dimensions (WH)
+    % external vertices
+    \fmfleft{d,i2,i1,d}
+    \fmfright{b2,o2,o1,b1}
+    \fmfshift{8 down}{b1}
+    \fmfshift{8 up}{b2}
+    % gluon splitting
+    \fmf{gluon}{g1,i1}
+    \fmf{gluon}{i2,g2}
+    \fmf{phantom,t=0.62}{g1,o1,o2,g2} % pull gluons straight right
+    \fmffreeze
+    % main: qq -> ll
+    \fmf{fermion}{g1,v1,o1}
+    \fmf{fermion}{o2,v2,g2}
+    \fmf{fermion}{b1,g1}
+    \fmf{fermion}{g2,b2}
+    \fmf{dashes,t=0.6,l.s=right,l.d=5,label=LQ}{v1,v2} % t-channel
+    % vertices
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=90}{v1}
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\colvtx$\lambda$,l.d=6,l.a=-90}{v2}
+    % labels
+    \fmfv{l.a= 160,l=$g$}{i1}
+    \fmfv{l.a=-170,l=$g$}{i2}
+    \fmfv{l.a=  20,l=$\tau^-$}{o1}
+    \fmfv{l.a= -10,l=$\tau^+$}{o2}
+    \fmfv{l.a=  25,l.d=4,l=\vspace{-2pt}$\overline{\mathrm{b}}$}{b1}
+    \fmfv{l.a= -25,l.d=4,l=b}{b2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+\end{document}

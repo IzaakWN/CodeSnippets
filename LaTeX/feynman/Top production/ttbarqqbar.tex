@@ -1,0 +1,439 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (July 2023)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape ttbarqqbar.tex
+% Sources:
+%  https://cms-results.web.cern.ch/cms-results/public-results/publications/SMP-23-004
+\documentclass[11pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+\usepackage{pgffor} % for \foreach
+
+% DEFINE fmfpicture ENVIRONMENT
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{13} % boson wavelength
+    \fmfset{wiggly_slope}{68} % boson slope of waves
+    %\fmfcmd\MPcolors % define custom line colors in MetaPost (does not work in \fmfv)
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% FOUR TOP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% FOUR TOP PRODUCTION - Gluon fusion s-channel
+\foreach \q in {t,b}{ % loop over quark flavor
+\begin{fmfpicture}{2,12}{6,9}{ttqq_gg-tt\q\q_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,100) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{17 down}{i1}
+    \fmfshift{17 up}{i2}
+    % internal vertices (exact placement)
+    \fmfforce{(.76w,.83h)}{vq1} % exact placement
+    \fmfforce{(.76w,.17h)}{vq2} % exact placement
+    % main
+    \fmf{gluon,t=1.2}{v1,i1}
+    \fmf{gluon,t=1.2}{v1,i2}
+    \fmf{gluon,t=1.1}{v1,v2} % s-channel
+    \fmf{gluon}{vq1,v2}
+    \fmf{gluon}{vq2,v2}
+    % g -> tt
+    \fmf{fermion}{o2,vq1,o1}
+    \fmf{fermion}{o4,vq2,o3}
+    % labels
+    \fmfv{l.a=150,l.d=5,l=$g$}{i1}
+    \fmfv{l.a=-150,l.d=5,l=$g$}{i2}
+    \fmfv{l.a=30,l.d=5,l=t}{o1}
+    \fmfv{l.a=-20,l.d=5,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.a=30,l.d=5,l=\q}{o3}
+    \fmfv{l.a=-20,l.d=5,l=$\overline{\mathrm{\q}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% FOUR TOP PRODUCTION - Quark-antiquark annihilation, s-channel
+\foreach \q in {t,b}{ % loop over quark flavor
+\begin{fmfpicture}{4,12}{8,9}{ttqq_qq-tt\q\q_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,100) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{17 down}{i1}
+    \fmfshift{17 up}{i2}
+    % internal vertices (exact placement)
+    \fmfforce{(.76w,.83h)}{vq1} % exact placement
+    \fmfforce{(.76w,.17h)}{vq2} % exact placement
+    % main
+    \fmf{fermion,t=1.2}{i1,v1,i2}
+    \fmf{gluon,t=1.1}{v1,v2} % s-channel
+    \fmf{gluon}{vq1,v2}
+    \fmf{gluon}{vq2,v2}
+    % g -> tt
+    \fmf{fermion}{o2,vq1,o1}
+    \fmf{fermion}{o4,vq2,o3}
+    % labels
+    \fmfv{l.a=150,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-150,l.d=5,l=$\overline{q}'$}{i2}
+    \fmfv{l.a=30,l.d=5,l=t}{o1}
+    \fmfv{l.a=-20,l.d=5,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.a=30,l.d=5,l=\q}{o3}
+    \fmfv{l.a=-20,l.d=5,l=$\overline{\mathrm{\q}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% FOUR TOP PRODUCTION - Gluon fusion, t-channel
+\foreach \q in {t,b}{ % loop over quark flavor
+\begin{fmfpicture}{2,12}{6,10}{ttqq_gg-tt\q\q_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(105,80) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{8 down}{i1}
+    \fmfshift{8 up}{i2}
+    % internal vertices (exact placement)
+    %\fmfforce{(.30w,.80h)}{v1} % exact placement
+    %\fmfforce{(.30w,.20h)}{v2} % exact placement
+    \fmfforce{(.72w,.83h)}{vq1} % exact placement
+    \fmfforce{(.72w,.17h)}{vq2} % exact placement
+    % main
+    \fmf{gluon,t=1.1}{v1,i1}
+    \fmf{gluon,t=1.1}{i2,v2}
+    \fmf{gluon,t=0.7}{v1,v2} % t-channel
+    \fmf{gluon}{vq1,v1}
+    \fmf{gluon}{v2,vq2}
+    % g -> tt
+    \fmf{fermion}{o2,vq1,o1}
+    \fmf{fermion}{o4,vq2,o3}
+    % labels
+    \fmfv{l.a=150,l.d=5,l=$g$}{i1}
+    \fmfv{l.a=-150,l.d=5,l=$g$}{i2}
+    \fmfv{l.a=30,l.d=5,l=t}{o1}
+    \fmfv{l.a=-20,l.d=5,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.a=30,l.d=5,l=\q}{o3}
+    \fmfv{l.a=-20,l.d=5,l=$\overline{\mathrm{\q}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% FOUR TOP PRODUCTION - Quark-antiquark annihilation, t-channel
+\foreach \q in {t,b}{ % loop over quark flavor
+\begin{fmfpicture}{4,12}{7,10}{ttqq_qq-tt\q\q_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(105,80) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{8 down}{i1}
+    \fmfshift{8 up}{i2}
+    % internal vertices (exact placement)
+    %\fmfforce{(.30w,.80h)}{v1} % exact placement
+    %\fmfforce{(.30w,.20h)}{v2} % exact placement
+    \fmfforce{(.72w,.83h)}{vq1} % exact placement
+    \fmfforce{(.72w,.17h)}{vq2} % exact placement
+    % main
+    \fmf{fermion,t=1.1}{i1,v1}
+    \fmf{fermion,t=1.1}{v2,i2}
+    \fmf{fermion,t=0.7}{v1,v2} % t-channel
+    \fmf{gluon}{vq1,v1}
+    \fmf{gluon}{v2,vq2}
+    % g -> tt
+    \fmf{fermion}{o2,vq1,o1}
+    \fmf{fermion}{o4,vq2,o3}
+    % labels
+    \fmfv{l.a=150,l.d=5,l=$q$}{i1}
+    \fmfv{l.a=-150,l.d=5,l=$\overline{q}'$}{i2}
+    \fmfv{l.a=30,l.d=5,l=t}{o1}
+    \fmfv{l.a=-20,l.d=5,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.a=30,l.d=5,l=\q}{o3}
+    \fmfv{l.a=-20,l.d=5,l=$\overline{\mathrm{\q}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% FOUR TOP (Associated, s-channel) %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% FOUR TOP PRODUCTION - Gluon fusion, s-channel (gluon)
+\foreach \q in {t,b}{ % loop over quark flavor
+\begin{fmfpicture}{-9,11}{2,12}{ttqq_gg-ttg-{\q}tt\q_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{2 up}{o1,o2}
+    \fmfshift{2 down}{o4,o3}
+    % skeleton
+    \fmf{gluon,t=1.9}{v1,i1}
+    \fmf{gluon,t=1.9}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o4,v2}
+    % ttbar -> g -> ttbar
+    \fmf{fermion}{v2,v,v1}
+    \fmf{gluon,t=0.85}{v',v} % s-channel
+    \fmf{fermion}{o3,v',o2}
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=\q}{o1}
+    \fmfv{l.a=25,l.d=4,l=t}{o2}
+    \fmfv{l.a=-20,l.d=4,l=$\overline{\mathrm{t}}$}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{\q}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% FOUR TOP PRODUCTION - Gluon fusion, s-channel (gluon)
+\begin{fmfpicture}{-9,11}{4,12}{ttqq_gg-ttg-tbbt_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{2 up}{o1,o2}
+    \fmfshift{2 down}{o4,o3}
+    % skeleton
+    \fmf{gluon,t=1.9}{v1,i1}
+    \fmf{gluon,t=1.9}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o4,v2}
+    % ttbar -> g -> ttbar
+    \fmf{fermion}{v2,v,v1}
+    \fmf{gluon,t=0.85}{v',v} % s-channel
+    \fmf{fermion}{o3,v',o2}
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=t}{o1}
+    \fmfv{l.a=25,l.d=4,l=b}{o2}
+    \fmfv{l.a=-20,l.d=4,l=$\overline{\mathrm{b}}$}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{t}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% FOUR TOP PRODUCTION - Gluon fusion, s-channel (y*/Z)
+\foreach \q in {t,b}{ % loop over quark flavor
+\begin{fmfpicture}{-9,11}{2,12}{ttqq_gg-ttZ-{\q}tt\q_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{2 up}{o1,o2}
+    \fmfshift{2 down}{o4,o3}
+    % skeleton
+    \fmf{gluon,t=1.9}{v1,i1}
+    \fmf{gluon,t=1.9}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o4,v2}
+    % ttbar -> y*/Z -> ttbar
+    \fmf{fermion}{v2,v,v1}
+    \fmf{boson,t=0.9,label=$\gamma^*$\!/Z,l.s=left,l.d=4}{v,v'} % s-channel
+    \fmf{fermion}{o3,v',o2}
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=\q}{o1}
+    \fmfv{l.a=25,l.d=4,l=t}{o2}
+    \fmfv{l.a=-20,l.d=4,l=$\overline{\mathrm{t}}$}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{\q}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% FOUR TOP PRODUCTION - Gluon fusion, s-channel (y*/Z)
+\begin{fmfpicture}{-9,11}{4,12}{ttqq_gg-ttZ-tbbt_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{2 up}{o1,o2}
+    \fmfshift{2 down}{o4,o3}
+    % skeleton
+    \fmf{gluon,t=1.9}{v1,i1}
+    \fmf{gluon,t=1.9}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o4,v2}
+    % ttbar -> y*/Z -> ttbar
+    \fmf{fermion}{v2,v,v1}
+    \fmf{boson,t=0.9,label=$\gamma^*$\!/Z,l.s=left,l.d=4}{v,v'} % s-channel
+    \fmf{fermion}{o3,v',o2}
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=t}{o1}
+    \fmfv{l.a=25,l.d=4,l=b}{o2}
+    \fmfv{l.a=-20,l.d=4,l=$\overline{\mathrm{b}}$}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{t}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% FOUR TOP PRODUCTION - Gluon fusion, s-channel (Higgs)
+\foreach \q in {t,b}{ % loop over quark flavor
+\begin{fmfpicture}{-9,11}{2,12}{ttqq_gg-tth-{\q}tt\q_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{2 up}{o1,o2}
+    \fmfshift{2 down}{o4,o3}
+    % skeleton
+    \fmf{gluon,t=1.9}{v1,i1}
+    \fmf{gluon,t=1.9}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o4,v2}
+    % ttbar -> h -> ttbar
+    \fmf{fermion}{v2,v,v1}
+    \fmf{dashes,t=0.9,label=h,l.s=left,l.d=4}{v,v'} % s-channel
+    \fmf{fermion}{o3,v',o2}
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=\q}{o1}
+    \fmfv{l.a=25,l.d=4,l=t}{o2}
+    \fmfv{l.a=-20,l.d=4,l=$\overline{\mathrm{t}}$}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{\q}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% FOUR TOP PRODUCTION - Gluon fusion, s-channel (Higgs)
+\begin{fmfpicture}{-9,11}{4,12}{ttqq_gg-tth-tbbt_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{2 up}{o1,o2}
+    \fmfshift{2 down}{o4,o3}
+    % skeleton
+    \fmf{gluon,t=1.9}{v1,i1}
+    \fmf{gluon,t=1.9}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o4,v2}
+    % ttbar -> h -> ttbar
+    \fmf{fermion}{v2,v,v1}
+    \fmf{dashes,t=0.9,label=h,l.s=left,l.d=4}{v,v'} % s-channel
+    \fmf{fermion}{o3,v',o2}
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=t}{o1}
+    \fmfv{l.a=25,l.d=4,l=b}{o2}
+    \fmfv{l.a=-20,l.d=4,l=$\overline{\mathrm{b}}$}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{t}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% FOUR TOP (Associated, t-channel) %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% FOUR TOP PRODUCTION - Gluon fusion, t-channel
+\foreach \q in {t,b}{ % loop over quark flavor
+\begin{fmfpicture}{-9,13}{4,14}{ttqq_gg-tth-tt\q\q_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(120,90) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{4 up}{o1,o2}
+    \fmfshift{4 down}{o4,o3}
+    % skeleton
+    \fmf{gluon,t=2.5}{v1,i1}
+    \fmf{gluon,t=2.5}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o4,v2}
+    % qq -> ttbar
+    \fmf{fermion,t=1.4}{vt1,v1}
+    \fmf{fermion,t=1.4}{v2,vt2}
+    \fmf{fermion}{o2,vt1}
+    \fmf{fermion}{vt2,o3}
+    \fmf{gluon,t=1.2}{vt1,vt2} % t-channel
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=t}{o1}
+    \fmfv{l.a=20,l.d=4,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.a=-20,l.d=4,l=\q}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{\q}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% FOUR TOP PRODUCTION - Gluon fusion, t-channel
+\foreach \q in {t,b}{ % loop over quark flavor
+\begin{fmfpicture}{-9,13}{4,15}{ttqq_gg-ttz-tt\q\q_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(120,90) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{4 up}{o1,o2}
+    \fmfshift{4 down}{o4,o3}
+    % skeleton
+    \fmf{gluon,t=2.5}{v1,i1}
+    \fmf{gluon,t=2.5}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o4,v2}
+    % qq -> ttbar
+    \fmf{fermion,t=1.4}{vt1,v1}
+    \fmf{fermion,t=1.4}{v2,vt2}
+    \fmf{fermion}{o2,vt1}
+    \fmf{fermion}{vt2,o3}
+    \fmf{boson,t=1.2,label=$\gamma^*$\!/Z,l.s=right,l.d=5}{vt1,vt2} % t-channel
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=t}{o1}
+    \fmfv{l.a=20,l.d=4,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.a=-20,l.d=4,l=\q}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{\q}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% TTBAR+BBAR PRODUCTION - Gluon fusion, t-channel
+\begin{fmfpicture}{-9,14}{2,15}{ttqq_gg-bbw-ttbb_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(120,90) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{4 up}{o1,o2}
+    \fmfshift{4 down}{o4,o3}
+    % skeleton
+    \fmf{gluon,t=2.5}{v1,i1}
+    \fmf{gluon,t=2.5}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o4,v2}
+    % qq -> ttbar
+    \fmf{fermion,t=1.4}{vt1,v1}
+    \fmf{fermion,t=1.4}{v2,vt2}
+    \fmf{fermion}{o2,vt1}
+    \fmf{fermion}{vt2,o3}
+    \fmf{boson,t=1.2,label=W,l.s=right,l.d=5}{vt1,vt2} % t-channel
+    % labels
+    \fmfv{l.a=158,l.d=6,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=6,l=b}{o1}
+    \fmfv{l.a=20,l.d=4,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.a=-20,l.d=4,l=t}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$\overline{\mathrm{b}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+\end{document}

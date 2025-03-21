@@ -1,0 +1,351 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (January 2024)
+% Description: VLQ/VLL production & HNL in pp collisions
+% Sources: https://cms-results.web.cern.ch/cms-results/public-results/publications/EXO-23-006
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape VLQ_VLL.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+\usepackage{amsmath}
+
+% DEFINE TEXT COLORS
+\usepackage{xcolor}
+\definecolor{colVLQ}{rgb}{.5,0,.7} % VLQ (purple)
+\definecolor{colVLL}{rgb}{0,0,1} % VLL (blue)
+\definecolor{colBSM}{rgb}{.96,.3,0} % BSM mediator (orange)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colVLQ,colVLL,colBSM}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}} % \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+% The following defines a custom picture environment that
+% helps to create standalone pages with common settings,
+% and correctly padding the diagram with \fmfframe
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd{ % custom line style: double arrows for Majorana neutrino
+      style_def majorana
+        expr p = cdraw p;
+        cfill (tarrow (p,0.18)); % shift arrow 
+        cfill (tarrow (reverse(p),0.18)); % shift arrow
+      enddef;
+    }
+    \fmfcmd\MPcolors % define custom line colors in MetaPost
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+% BRACES
+\usepackage{scalerel}
+\newcommand{\mylbrace}[2]{\vspace{#2pt}\hspace{4pt}\scaleleftright[\dimexpr6pt+#1\dimexpr0.11pt]{\lbrace}{\rule[\dimexpr2pt-#1\dimexpr0.5pt]{-4pt}{#1pt}}{.}}
+\newcommand{\myrbrace}[2]{\vspace{#2pt}\scaleleftright[\dimexpr6pt+#1\dimexpr0.11pt]{.}{\rule[\dimexpr2pt-#1\dimexpr0.5pt]{-4pt}{#1pt}}{\rbrace}\hspace{2pt}}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% VLQ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% VLQ pair production - gluon fusion
+\begin{fmfpicture}{3,16}{8,18}{vlq_qq-QQ} % padding (LT)(RB)
+  \begin{fmfgraph*}(110,75) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % main process
+    \fmf{quark}{i1,v1,i2} % incoming particles
+    \fmf{fermion,f=colVLQ}{o2,v2,o1} % outgoing particles
+    \fmf{gluon,t=1.1}{v2,v1} % s-channel
+    % labels
+    \fmfv{l.d=5,l.a=156,l=q}{i1}
+    \fmfv{l.d=3,l.a=-156,l=$\overline{\mathrm{q}}'$}{i2}
+    \fmfv{l.d=5,l.a=25,l=\colVLQ Q}{o1}
+    \fmfv{l.d=5,l.a=-25,l=\colVLQ$\overline{\mathrm{Q}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% VLQ pair production - quark-antiquark annihilation
+\begin{fmfpicture}{1,16}{8,18}{vlq_gg-QQ} % padding (LT)(RB)
+  \begin{fmfgraph*}(110,75) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % main process
+    \fmf{gluon}{i2,v1,i1} % incoming particles
+    \fmf{fermion,f=colVLQ}{o2,v2,o1} % outgoing particles
+    \fmf{gluon,t=1.1}{v2,v1} % s-channel
+    % labels
+    \fmfv{l.d=5,l.a=156,l=g}{i1}
+    \fmfv{l.d=5,l.a=-156,l=g}{i2}
+    \fmfv{l.d=5,l.a=25,l=\colVLQ Q}{o1}
+    \fmfv{l.d=5,l.a=-25,l=\colVLQ$\overline{\mathrm{Q}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% VLQ pair production + decay
+\begin{fmfpicture}{1,-4}{46,-5}{vlq_gg-TT_decay} % padding (LT)(RB)
+  \begin{fmfgraph*}(130,120) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,d,i1,d}
+    \fmfright{o4,o3,o2,o1}
+    \fmftop{t}
+    \fmfbottom{b}
+    % gluons
+    \fmf{gluon,t=1.6}{i2,v1,i1}
+    \fmf{gluon,t=1.8}{v1,v2}
+    \fmf{fermion,t=1.3,f=colVLQ,label=\colVLQ T,l.s=left}{v2,d1}
+    \fmf{fermion,t=1.3,f=colVLQ,label=\colVLQ$\overline{\mathrm{T}}$,l.s=left}{d2,v2}
+    % decay products
+    \fmfshift{16 down}{o1}
+    \fmfshift{ 8 down}{o2}
+    \fmfshift{ 8 up}{o3}
+    \fmfshift{16 up}{o4}
+    \fmf{fermion,t=1.8}{o1,d1} % decay on top
+    \fmf{dashes,t=1.8}{d1,o2} % decay on top
+    \fmf{boson,t=1.8}{d2,o3} % decay on bottom
+    \fmf{fermion,t=1.8}{o4,d2} % decay on bottom
+    \fmf{phantom,t=0.8}{t,d1} % pull decay vertex
+    \fmf{phantom,t=0.8}{d2,b} % pull decay vertex
+    % labels
+    \fmfv{l.d=4,l.a=156,l=g}{i1}
+    \fmfv{l.d=4,l.a=-156,l=g}{i2}
+    \fmfv{l.d=5,l.a=24,l=t}{o1}
+    \fmfv{l.d=4,l.a=-20,l=H}{o2}
+    \fmfv{l.d=4,l.a=20,l=W$^-$/H/Z}{o3}
+    \fmfv{l.d=5,l.a=-20,l=$\overline{\mathrm{b}}$/$\overline{\mathrm{t}}$/$\overline{\mathrm{t}}$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% VLQ single production
+\begin{fmfpicture}{-10,12}{23,11}{vlq_qg-qbT} % padding (LT)(RB)
+  \begin{fmfgraph*}(130,85) % canvas (W,H)
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    % main
+    \fmf{fermion}{i1,v1}
+    \fmf{fermion}{v1,o1}
+    \fmf{gluon}{i2,v2}
+    \fmf{fermion}{o3,v2}
+    \fmf{fermion,t=1}{v2,v} % t-channel
+    \fmf{boson,t=1,l.s=left,l.d=5,label=W/Z}{v,v1} % t-channel
+    \fmffreeze
+    \fmf{fermion,f=colVLQ}{v,o2} % top out
+    % labels
+    \fmfv{l.d=6,l.a=160,l=q}{i1}
+    \fmfv{l.d=6,l.a=-160,l=g}{i2}
+    \fmfv{l.d=6,l.a=22,l=q$'$/q}{o1}
+    \fmfv{l.d=6,l.a=0,l=\colVLQ T/B}{o2}
+    \fmfv{l.d=6,l.a=-20,l=$\overline{\mathrm{b}}$}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% VLQ single production - quark-antiquark annihilation, new mediator
+\begin{fmfpicture}{2,14}{8,16}{vlq_qq-w-bT} % padding (LT)(RB)
+  \begin{fmfgraph*}(110,75) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % main process
+    \fmf{gluon}{i2,v1,i1} % incoming particles
+    \fmf{fermion,f=colVLQ}{v2,o1} % outgoing particles
+    \fmf{fermion}{o2,v2} % outgoing particles
+    \fmf{boson,t=1.1,f=colBSM,label=\colBSM W$'$,l.s=left,l.d=4}{v2,v1} % s-channel
+    % labels
+    \fmfv{l.d=5,l.a=156,l=g}{i1}
+    \fmfv{l.d=5,l.a=-156,l=g}{i2}
+    \fmfv{l.d=5,l.a=25,l=\colVLQ T}{o1}
+    \fmfv{l.d=5,l.a=-25,l=$\overline{\mathrm{b}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% VLL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% VLL pair production
+\begin{fmfpicture}{2,14}{7,16}{vll_qq-z-LL} % padding (LT)(RB)
+  \begin{fmfgraph*}(110,75) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % main process
+    \fmf{fermion}{i1,v1,i2} % incoming particles
+    \fmf{fermion,f=colVLL}{o2,v2,o1} % outgoing particles
+    \fmf{boson,t=1.1,label=Z/$\gamma^*$,l.s=left,l.d=5}{v2,v1} % s-channel
+    % labels
+    \fmfv{l.d=5,l.a=156,l=q}{i1}
+    \fmfv{l.d=5,l.a=-156,l=$\overline{\mathrm{q}}$}{i2}
+    \fmfv{l.d=5,l.a=25,l=\colVLL L}{o1}
+    \fmfv{l.d=5,l.a=-25,l=\colVLL$\overline{\mathrm{L}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% VLL pair production
+\begin{fmfpicture}{2,13}{8,16}{vll_qq-w-EN} % padding (LT)(RB)
+  \begin{fmfgraph*}(110,75) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % main process
+    \fmf{fermion}{i1,v1,i2} % incoming particles
+    \fmf{fermion,f=colVLL}{o2,v2,o1} % outgoing particles
+    \fmf{boson,t=1.1,label=W$^\pm$,l.s=left,l.d=4}{v2,v1} % s-channel
+    % labels
+    \fmfv{l.d=5,l.a=156,l=q}{i1}
+    \fmfv{l.d=5,l.a=-156,l=$\overline{\mathrm{q}}$}{i2}
+    \fmfv{l.d=5,l.a=25,l=\colVLL N}{o1}
+    \fmfv{l.d=5,l.a=-25,l=\colVLL$\overline{\mathrm{E}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% VLL pair production through W + decay
+\begin{fmfpicture}{3,14}{11,13}{vll_qq-w-NE_decay} % padding (LT)(RB)
+  \begin{fmfgraph*}(160,140) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,d,i1,d}
+    \fmfright{o6,o5,o4,o3,o2,o1}
+    \fmfshift{10 left}{o1,o6}
+    \fmfshift{5 down}{i1}
+    \fmfshift{5 up}{i2}
+    % qq -> W & skeleton
+    \fmf{fermion,t=1.5}{i1,v1,i2}
+    \fmf{boson,t=1.5,label=W$^\pm$,l.s=right,l.d=4}{v2,v1}
+    \fmf{fermion,t=0.7}{w1,o1} % top outgoing fermion
+    \fmf{fermion,t=0.7}{o6,w2} % bottom outgoing fermion
+    % W decay to heavy leptons
+    \fmf{fermion,t=1.1,f=colVLL,label=\colVLL N,l.d=5,l.s=left}{v2,w1} % HNL
+    \fmf{fermion,t=1.1,f=colVLL,label=\colVLL $\overline{\mathrm{E}}$,l.d=5,l.s=left}{w2,v2} % HNL
+    \fmffreeze
+    % HNL decay
+    \fmf{boson,t=1.2,label=$\mathrm{W}^\pm$,l.d=5,l.s=right}{w1,d1} % W boson
+    \fmf{fermion}{o2,d1,o3}
+    % HCL decay
+    \fmf{dashes,t=1.2,label=H,l.d=5,l.s=left}{w2,d2} % Higgs boson
+    \fmf{fermion}{o5,d2,o4}
+    % labels
+    \fmfv{l.d=4,l.a=155,l=q}{i1}
+    \fmfv{l.d=3,l.a=-155,l=$\overline{\mathrm{q}}'$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$\ell^\mp$}{o1}
+    \fmfv{l.d=5,l.a=20,l=$\ell^\pm$}{o2}
+    \fmfv{l.d=5,l.a=-15,l=$\nu$}{o3}
+    \fmfv{l.d=5,l.a=20,l=b}{o4}
+    \fmfv{l.d=5,l.a=-15,l=$\overline{\mathrm{b}}$}{o5}
+    \fmfv{l.d=5,l.a=-25,l=$\overline{\nu}$}{o6}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% VLL pair production through Z/gamma + decay
+\begin{fmfpicture}{1,11}{13,14}{vll_qq-z-EE_decay} % padding (LT)(RB)
+  \begin{fmfgraph*}(160,140) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,d,i1,d}
+    \fmfright{o6,o5,o4,o3,o2,o1}
+    \fmfshift{10 left}{o1,o6}
+    \fmfshift{5 down}{i1}
+    \fmfshift{5 up}{i2}
+    % qq -> W & skeleton
+    \fmf{fermion,t=1.5}{i1,v1,i2}
+    \fmf{boson,t=1.5,label=Z/$\gamma^*$,l.s=right,l.d=4}{v2,v1}
+    \fmf{fermion,t=0.7}{w1,o1} % top outgoing fermion
+    \fmf{fermion,t=0.7}{o6,w2} % bottom outgoing fermion
+    % W decay to heavy leptons
+    \fmf{fermion,t=1.1,f=colVLL,label=\colVLL E,l.d=5,l.s=left}{v2,w1} % HNL
+    \fmf{fermion,t=1.1,f=colVLL,label=\colVLL $\overline{\mathrm{E}}$,l.d=5,l.s=left}{w2,v2} % HNL
+    \fmffreeze
+    % HNL decay
+    \fmf{boson,t=1.2,label=$\mathrm{W}^\pm$,l.d=5,l.s=right}{w1,d1} % W boson
+    \fmf{fermion}{o3,d1,o2}
+    % HCL decay
+    \fmf{boson,t=1.2,label=Z,l.d=5,l.s=left}{w2,d2} % Z boson
+    \fmf{fermion}{o5,d2,o4}
+    % labels
+    \fmfv{l.d=4,l.a=155,l=q}{i1}
+    \fmfv{l.d=4,l.a=-155,l=$\overline{\mathrm{q}}$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$\nu$}{o1}
+    \fmfv{l.d=5,l.a=20,l=q$''$}{o2}
+    \fmfv{l.d=5,l.a=-15,l=$\overline{\mathrm{q}}'''$}{o3}
+    \fmfv{l.d=5,l.a=20,l=$\ell^\mp$}{o4}
+    \fmfv{l.d=5,l.a=-15,l=$\ell^\pm$}{o5}
+    \fmfv{l.d=4,l.a=-25,l=$\ell^\pm$}{o6}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% VLL E -> bql decay
+\begin{fmfpicture}{3,13}{5,13}{vll_bql_decay} % padding (LT)(RB)
+  \begin{fmfgraph*}(90,65) % canvas (W,H)
+    % external vertices
+    \fmfleft{d,i,d,d}
+    \fmfright{o3,m,o2,o1}
+    \fmftop{t} % for pulling
+    \fmfshift{9 down}{o2}
+    \fmfshift{4 left}{o3}
+    % main process
+    \fmf{fermion,f=colVLL,t=1.4}{i,v}
+    \fmf{phantom}{v,m}
+    \fmffreeze
+    \fmf{boson,f=colBSM,t=1.5,label=\colBSM U,l.s=left,l.d=4}{v,w}
+    \fmf{fermion}{o2,w,o1}
+    \fmf{fermion}{v,o3}
+    \fmf{phantom,t=0.7}{w,t} % pull W decay vertex
+    % labels
+    \fmfv{l.d=5,l.a=180,l=\colVLL E}{i}
+    \fmfv{l.d=5,l.a=25,l=$\ell^\mp$}{o1}
+    \fmfv{l.d=5,l.a=0,l=$\overline{\mathrm{q}}$}{o2}
+    \fmfv{l.d=4,l.a=-25,l=b}{o3}
+    %\fmfv{l.d=8,l.a=180,l=U}{w} % for boson line
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% VLL N -> tql decay
+\begin{fmfpicture}{4,13}{5,13}{vll_tql_decay} % padding (LT)(RB)
+  \begin{fmfgraph*}(90,65) % canvas (W,H)
+    % external vertices
+    \fmfleft{d,i,d,d}
+    \fmfright{o3,m,o2,o1}
+    \fmftop{t} % for pulling
+    \fmfshift{9 down}{o2}
+    \fmfshift{4 left}{o3}
+    % main process
+    \fmf{fermion,f=colVLL,t=1.4}{i,v}
+    \fmf{phantom}{v,m}
+    \fmffreeze
+    \fmf{boson,t=1.5,f=colBSM,label=\colBSM U,l.s=left,l.d=4}{v,w}
+    \fmf{fermion}{o2,w,o1}
+    \fmf{fermion}{v,o3}
+    \fmf{phantom,t=0.7}{w,t} % pull W decay vertex
+    % labels
+    \fmfv{l.d=5,l.a=180,l=\colVLL N}{i}
+    \fmfv{l.d=5,l.a=25,l=$\ell^\mp$}{o1}
+    \fmfv{l.d=5,l.a=0,l=$\overline{\mathrm{q}}$}{o2}
+    \fmfv{l.d=4,l.a=-25,l=t}{o3}
+    %\fmfv{l.d=8,l.a=180,l=U}{w} % for boson line
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+\end{document}

@@ -1,0 +1,26 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (October 2024)
+% Sources:
+%   https://tex.stackexchange.com/questions/175659/circle-with-a-cross-inside-feynmp
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape otimes.tex
+\documentclass[11pt,border=4pt]{standalone}
+\usepackage{feynmp-auto}
+\begin{document}
+\begin{fmffile}{feynmp-test}
+  \fmfframe(-12,2)(4,2){ % padding (LT)(RB)
+  \begin{fmfgraph*}(80,70) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o}
+    % main
+    \fmf{fermion,t=1.2}{i2,v,i1}
+    \fmf{boson}{v,o}
+    % circle with cross
+    \fmfforce{vloc(__o)}{o'} % copy point
+    \fmfv{decor.shape=circle,decor.filled=empty,decor.size=12}{o}
+    \fmfv{decor.shape=cross,decor.filled=empty,decor.size=12}{o'}
+  \end{fmfgraph*}}
+\end{fmffile}
+\end{document}

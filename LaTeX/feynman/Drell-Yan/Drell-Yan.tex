@@ -1,0 +1,162 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (May 2023)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape single_top.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+\usepackage{xcolor}
+
+% DEFINE TEXT COLORS
+%\definecolor{collep}{rgb}{.1,.6,.1} % lepton (green)
+\definecolor{collep}{rgb}{.74,.05,.05} % lepton (red)
+\definecolor{colrad}{rgb}{.20,.41,.90} % radiation (cyan)
+%\definecolor{colvtx}{rgb}{.1,.1,.7} % vertex (dark blue)
+%\definecolor{mybl}{rgb}{0,0,1} % blue
+%\definecolor{mygr}{rgb}{.1,.7,.1} % green
+%\definecolor{myor}{rgb}{1,0.5,0} % orange
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colkappaf,colkappaV,colkappah}{ % create command & MetaPost code
+  %\expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}}% \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+% The following defines a custom picture environment that
+% helps to create standalone pages with common settings,
+% and correctly padding the diagram with \fmfframe
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd\MPcolors % define custom line colors in MetaPost (does not work in \fmfv)
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+% LOOP MACRO
+\def\foreachlep#1{\foreach \lep in {\mathrm{e},\mu,\tau,\ell}{#1}}
+%\def\foreachlep#1{\foreach \lep in {\ell,\tau}{#1}}
+
+\begin{document}
+\large
+
+% DRELL-YAN - Quark-antiquark annihilation
+\foreachlep{
+\begin{fmfpicture}{-8,12}{-1,8}{feynmp-dy-qq} % padding (LTRB)
+  \begin{fmfgraph*}(110,60)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{boson,l.s=right,l.d=7,label=Z/$\gamma^*$}{v2,v1} % s-channel
+    \fmf{fermion,f=collep}{o2,v2,o1}
+    % labels
+    \fmfv{l.a=160,l.d=4,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=4,l=$\overline{q}$}{i2}
+    \fmfv{l.a=24,l.d=4,l=\collep$\lep^-$}{o1}
+    \fmfv{l.a=-22,l.d=4,l=\collep$\lep^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}}
+
+
+% DRELL-YAN - gluon radiation (no decay)
+\begin{fmfpicture}{-8,10}{-4,10}{feynmp-dy-qq-g} % padding (LTRB)
+  \begin{fmfgraph*}(110,60)
+    % external vertices
+    \fmfleft{i2,i1} 
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion,t=1.0}{i1,v1}
+    \fmf{fermion,t=0.8}{v1,v2} % t-channel
+    \fmf{fermion,t=1.0}{v2,i2}
+    \fmf{photon}{v1,o1}
+    \fmf{gluon}{v2,o2}
+    % labels
+    \fmfv{l.a=160,l=$q$}{i1}
+    \fmfv{l.a=-158,l=$\overline{q}$}{i2}
+    \fmfv{l.a=22,l=Z}{o1}
+    \fmfv{l.a=-24,l=$g$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+% DRELL-YAN - quark radiation
+\foreachlep{
+\begin{fmfpicture}{-8,10}{-4,10}{feynmp-dy-qq-mumug} % padding (LTRB)
+  \begin{fmfgraph*}(125,75)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % skeleton
+    \fmf{phantom}{i1,v1,i2}
+    \fmf{phantom}{o1,v2,o2}
+    \fmf{phantom}{v1,v2}
+    \fmffreeze
+    \fmftop{t}
+    \fmfshift{5 left}{i1}
+    \fmfshift{5 up}{i1,t}
+    % main
+    \fmf{gluon,tension=0.8}{g,i1}
+    \fmf{fermion}{v1,g}
+    \fmf{fermion}{i2,v1}
+    \fmf{fermion,f=colrad,tension=0}{g,t}
+    \fmf{boson,label=Z/$\gamma^*$,label.side=right}{v1,v2}
+    \fmf{fermion,f=collep}{o2,v2,o1}
+    % labels
+    \fmfv{l.a=160,l.d=4,l=$g$}{i1}
+    \fmfv{l.a=-154,l.d=4,l=$q$}{i2}
+    \fmfv{l.a=24,l.d=4,l=\collep$\lep^-$}{o1}
+    \fmfv{l.a=-22,l.d=4,l=\collep$\lep^+$}{o2}
+    %\fmfv{l.a=10,l.d=5,l=\colrad$q$}{t}
+    \fmfv{l.a=-110,l.d=10,l=\colrad$q$}{t}
+  \end{fmfgraph*}
+\end{fmfpicture}
+}
+
+
+% DRELL-YAN - qq -> qqZ -> qqtautau
+\begin{fmfpicture}{-7,10}{10,10}{qq-qqZ-qqtautau} % padding (LTRB)
+  \begin{fmfgraph*}(135,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,t2,t1,o1}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{i2,v2,o2}
+    \fmf{phantom,t=0.25}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,t=0.60}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % VV -> H -> HH
+    \fmf{boson,t=0.9}{v2,v,v1}
+    \fmf{boson,t=1.1,l.s=left,label=Z}{v,z} % Z boson
+    \fmf{fermion}{t2,z,t1}
+    \fmffreeze
+    % labels
+    \fmf{phantom,t=6}{w1,v,w2} % create extra vertices for labels
+    \fmf{phantom,l.d=4,l.s=right,label=$W$}{v1,w1}
+    \fmf{phantom,l.d=2,l.s=left,label=$W$}{v2,w2}
+    \fmfv{l.a=158,l.d=6,l=\strut$q$}{i1}
+    \fmfv{l.a=-158,l.d=6,l=\strut$q'$}{i2}
+    \fmfv{l.a=22,l.d=6,l=\strut$q$}{o1}
+    \fmfv{l.a=-22,l.d=6,l=\strut$q'$}{o2}
+    \fmfv{l.a=25,l.d=4,l=$\tau^-$}{t1}
+    \fmfv{l.a=-20,l.d=4,l=$\tau^+$}{t2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+\end{document}

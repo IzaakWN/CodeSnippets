@@ -1,0 +1,240 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (August 2024)
+% Sources:
+%   https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CrossSections
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escapeh higgs_pair_pp.tex
+\documentclass[11pt,border=4pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+
+% DEFINE TEXT COLORS
+\usepackage{xcolor}
+\definecolor{colkappaf}{rgb}{1,0,0} % kappa_q (red)
+\definecolor{colkappaV}{rgb}{.15,.75,.15} % kappa_V (green)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colkappaf,colkappaV}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}}% \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+% The following defines a custom picture environment that
+% helps to create standalone pages with common settings,
+% and correctly padding the diagram with \fmfframe
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd\MPcolors % define custom line colors in MetaPost (does not work in \fmfv)
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% HIGGS TO FERMIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% HIGGS DECAY - h -> ff
+\foreach \f in {f,\mathrm{b}}{ % loop over quark flavor
+\begin{fmfpicture}{4,13}{2,13}{h-ff} % padding (LTRB)
+  \begin{fmfgraph*}(70,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i}
+    \fmfright{o2,o1}
+    % main
+    \fmf{dashes,t=1.4}{i,v}
+    \fmf{fermion}{o2,v,o1}
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=5,l.a=115,l=\colkappaf$\kappa_{\f}$\hspace{-1pt}}{v}
+    % labels
+    \fmflabel{h}{i}
+    \fmfv{l.a=25,l.d=5,l=$\f$}{o1}
+    \fmfv{l.a=-25,l.d=5,l=$\overline{\f}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+% HIGGS DECAY - h -> ff
+\foreach \lep in {\mu,\tau}{ % loop over quark flavor
+\begin{fmfpicture}{4,13}{2,13}{h-ll} % padding (LTRB)
+  \begin{fmfgraph*}(70,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i}
+    \fmfright{o2,o1}
+    % main
+    \fmf{dashes,t=1.4}{i,v}
+    \fmf{fermion}{o2,v,o1}
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=5,l.a=115,l=\colkappaf$\kappa_{\lep}$\hspace{-1pt}}{v}
+    % labels
+    \fmflabel{h}{i}
+    \fmfv{l.a=25,l.d=5,l=$\lep^+$}{o1}
+    \fmfv{l.a=-25,l.d=3,l=$\lep^-$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% HIGGS TO WEAK BOSONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% HIGGS DECAY - h -> VV
+\begin{fmfpicture}{4,13}{2,13}{h-vv} % padding (LTRB)
+  \begin{fmfgraph*}(70,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i}
+    \fmfright{o2,o1}
+    % main
+    \fmf{dashes,t=1.4}{i,v}
+    \fmf{boson}{o1,v,o2}
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=5,l.a=115,l=\colkappaV$\kappa_V$}{v}
+    % labels
+    \fmflabel{h}{i}
+    \fmfv{l.a=25,l.d=5,l=$V$}{o1}
+    \fmfv{l.a=-25,l.d=5,l=$V$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS DECAY - h -> WW
+\begin{fmfpicture}{3,14}{10,14}{h-ww} % padding (LTRB)
+  \begin{fmfgraph*}(70,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i}
+    \fmfright{o2,o1}
+    % main
+    \fmf{dashes,t=1.4}{i,v}
+    \fmf{boson}{o1,v,o2}
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=5,l.a=115,l=\colkappaV$\kappa_\mathrm{W}$\hspace{-1pt}}{v}
+    % labels
+    \fmflabel{h}{i}
+    \fmfv{l.a=25,l.d=5,l=W$^+$}{o1}
+    \fmfv{l.a=-25,l.d=5,l=W$^-$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS DECAY - h -> VV
+\begin{fmfpicture}{4,13}{2,13}{h-zz} % padding (LTRB)
+  \begin{fmfgraph*}(70,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i}
+    \fmfright{o2,o1}
+    % main
+    \fmf{dashes,t=1.4}{i,v}
+    \fmf{boson}{o1,v,o2}
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=5,l.a=115,l=\colkappaV$\kappa_\mathrm{Z}$\hspace{-1pt}}{v}
+    % labels
+    \fmflabel{h}{i}
+    \fmfv{l.a=25,l.d=5,l=Z}{o1}
+    \fmfv{l.a=-25,l.d=5,l=Z}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS DECAY - h -> ZZ -> llll
+\foreach \lep in {\ell,\mu}{ % loop over quark flavor
+\begin{fmfpicture}{6,12}{14,12}{h-ZZ-llll} % padding (LTRB)
+  \begin{fmfgraph*}(100,100) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i,i1}
+    \fmfright{o4,o3,o2,o1}
+    % main
+    \fmf{dashes,t=2}{i,v}
+    \fmf{boson,t=1.5,l.d=5,l.s=right,label=Z}{v1,v,v2}
+    \fmf{fermion,t=3}{o2,v1,o1}
+    \fmf{fermion,t=3}{o4,v2,o3}
+    \fmf{phantom,t=3}{v1,i1,i2,v2} % pull Zll vertices to left 
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=6,l.a=-10,l=\colkappaV$\kappa_Z$}{v}
+    % labels
+    \fmflabel{h}{i}
+    \fmfv{l.a=20,l.d=5,l=\vspace{4pt}\strut$\lep^-$}{o1}
+    \fmfv{l.a=-20,l.d=5,l=\vspace{-6pt}\strut$\lep^+$}{o2}
+    \fmfv{l.a=20,l.d=5,l=\vspace{4pt}\strut$\lep^-$}{o3}
+    \fmfv{l.a=-20,l.d=5,l=\vspace{-6pt}\strut$\lep^+$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+} % close \foreach loop
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% HIGGS TO PHOTONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% HIGGS DECAY - h -> WW -> yy
+\begin{fmfpicture}{5,8}{20,8}{h-ww-yy} % padding (LTRB)
+  \begin{fmfgraph*}(110,50) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i,i1}
+    \fmfright{o2,o1}
+    % skeleton
+    \fmf{phantom,t=0.5}{v1,i1,i2,v2} % pull Wyy vertices to left
+    \fmf{boson}{v1,o1}
+    \fmf{boson}{v2,o2}
+    \fmffreeze
+    % main
+    \fmf{dashes,t=2.1}{i,v} % Higgs boson
+    \fmf{boson,l.s=left,label=W}{v,v1,v2,v} % triangle loop
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=5,l.a=115,l=\colkappaV$\kappa_\mathrm{W}$\hspace{-1pt}}{v}
+    % labels
+    \fmflabel{h}{i}
+    \fmfv{l.a=0,l.d=5,l=$\gamma$,, Z}{o1}
+    \fmfv{l.a=0,l.d=5,l=$\gamma$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS DECAY - h -> tt -> yy
+\begin{fmfpicture}{5,8}{20,8}{h-tt-yy} % padding (LTRB)
+  \begin{fmfgraph*}(110,50) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i,i1}
+    \fmfright{o2,o1}
+    % skeleton
+    \fmf{phantom,t=0.5}{v1,i1,i2,v2} % pull Wyy vertices to left
+    \fmf{boson}{v1,o1}
+    \fmf{boson}{v2,o2}
+    \fmffreeze
+    % main
+    \fmf{dashes,t=2.1}{i,v} % Higgs boson
+    \fmf{fermion,l.s=left,label=t}{v,v1,v2,v} % triangle loop
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=5,l.a=115,l=\colkappaf$\kappa_\mathrm{t}$\hspace{-1pt}}{v}
+    % labels
+    \fmflabel{h}{i}
+    \fmfv{l.a=0,l.d=5,l=$\gamma$,, Z}{o1}
+    \fmfv{l.a=0,l.d=5,l=$\gamma$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+\end{document}

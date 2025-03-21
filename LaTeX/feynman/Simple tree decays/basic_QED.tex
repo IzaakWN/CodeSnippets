@@ -1,0 +1,275 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (August 2024)
+% Description: Basic LO QED processes
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape basic_QED.tex
+\documentclass[11pt,border=4pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+
+% DEFINE fmfpicture ENVIRONMENT
+\usepackage{environ} % for \NewEnviron
+\DeclareGraphicsRule{*}{mps}{*}{}
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+    \fmfframe(#1)(#2){ % padding (L,T)(R,B)
+    \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+      \BODY % main code
+    \end{fmffile}
+    }
+  \end{page}
+}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% ELECTRON-MUON SCATTERING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ELECTRON-MUON SCATTERING (Mott/Rutherford) - t-channel
+\begin{fmfpicture}{-2,12}{0,14}{em-em-tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{boson,tension=0.7,label.side=right,label=$\gamma$}{v1,v2} % t-channel
+    \fmf{fermion}{i2,v2,o2}
+    % labels
+    \fmflabel{e$^-$}{i1}
+    \fmflabel{$\mu^-$}{i2}
+    \fmflabel{e$^-$}{o1}
+    \fmflabel{$\mu^-$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% ELECTRON-ELECTRON SCATTERING %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ELECTRON-ELECTRON SCATTERING (Moller) - t-channel
+\begin{fmfpicture}{-2,12}{0,14}{ee-ee-tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{boson,tension=0.7,label.side=right,label=$\gamma$}{v1,v2} % t-channel
+    \fmf{fermion}{i2,v2,o2}
+    % labels
+    \fmflabel{e$^-$}{i1}
+    \fmflabel{e$^-$}{i2}
+    \fmflabel{e$^-$}{o1}
+    \fmflabel{e$^-$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% ELECTRON-ELECTRON SCATTERING (Moller) - u-channel
+\begin{fmfpicture}{-2,12}{0,14}{ee-ee-uchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{phantom}{i1,v1,o1}
+    \fmf{boson,tension=0.7,label.side=right,label=$\gamma$}{v1,v2} % t-channel
+    \fmf{phantom}{i2,v2,o2}
+    \fmffreeze
+    % main - outgoing lines
+    \fmf{fermion,rubout}{i1,v1,o2}
+    \fmf{fermion}{i2,v2,o1}
+    % labels
+    \fmflabel{e$^-$}{i1}
+    \fmflabel{e$^-$}{i2}
+    \fmflabel{e$^-$}{o1}
+    \fmflabel{e$^-$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% ELECTRON-POSITRON SCATTERING %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ELECTRON-POSITRON SCATTERING (Bhabba) - t-channel
+\begin{fmfpicture}{-2,12}{0,14}{ep-ep-tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{boson,tension=0.7,label.side=right,label=$\gamma$}{v1,v2} % t-channel
+    \fmf{fermion}{o2,v2,i2}
+    % labels
+    \fmflabel{e$^-$}{i1}
+    \fmflabel{e$^+$}{i2}
+    \fmflabel{e$^-$}{o1}
+    \fmflabel{e$^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% ELECTRON-POSITRON SCATTERING - s-channel
+\begin{fmfpicture}{-2,12}{0,14}{ep-ep-schan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{boson,label.side=left,label=$\gamma$}{v1,v2} % s-channel
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    \fmflabel{e$^-$}{i1}
+    \fmflabel{e$^+$}{i2}
+    \fmflabel{e$^-$}{o1}
+    \fmflabel{e$^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% COMPTON SCATTERING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% COMPTON SCATTERING - t-channel
+\begin{fmfpicture}{-2,13}{0,14}{eg-eg-tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{boson}{i1,v1}
+    \fmf{fermion}{o1,v1}
+    \fmf{fermion,tension=0.7}{v2,v1} % t-channel
+    \fmf{boson}{o2,v2}
+    \fmf{fermion}{v2,i2}
+    % labels
+    \fmflabel{$\gamma$}{i1}
+    \fmflabel{e$^-$}{i2}
+    \fmflabel{e$^-$}{o1}
+    \fmflabel{$\gamma$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% COMPTON SCATTERING - s-channel
+\begin{fmfpicture}{-2,13}{0,14}{eg-eg-schan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{boson}{i1,v1}
+    \fmf{fermion}{i2,v1}
+    \fmf{fermion}{v1,v2} % s-channel
+    \fmf{fermion}{v2,o2}
+    \fmf{boson}{v2,o1}
+    % labels
+    \fmflabel{$\gamma$}{i1}
+    \fmflabel{e$^-$}{i2}
+    \fmflabel{$\gamma$}{o1}
+    \fmflabel{e$^-$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% INELASTIC SCATTERING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% PAIR ANNIHILATION - t-channel
+\begin{fmfpicture}{-2,13}{0,14}{ep-gg-tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1}
+    \fmf{fermion}{v2,i2}
+    \fmf{fermion,tension=0.7}{v1,v2} % t-channel
+    \fmf{boson}{v1,o1}
+    \fmf{boson}{v2,o2}
+    % labels
+    \fmflabel{e$^-$}{i1}
+    \fmflabel{e$^+$}{i2}
+    \fmflabel{$\gamma$}{o1}
+    \fmflabel{$\gamma$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% PAIR ANNIHILATION - u-channel
+\begin{fmfpicture}{-2,12}{0,14}{ep-gg-uchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % skeleton
+    \fmf{phantom}{i1,v1,o1}
+    \fmf{fermion,tension=0.7}{v1,v2} % t-channel
+    \fmf{phantom}{i2,v2,o2}
+    \fmffreeze
+    % main incoming/outgoing lines
+    \fmf{fermion}{i1,v1}
+    \fmf{fermion}{v2,i2}
+    \fmf{boson,rubout}{v1,o2}
+    \fmf{boson}{v2,o1}
+    % labels
+    \fmflabel{e$^-$}{i1}
+    \fmflabel{e$^+$}{i2}
+    \fmflabel{$\gamma$}{o1}
+    \fmflabel{$\gamma$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% PAIR CREATION - t-channel
+\begin{fmfpicture}{-2,13}{0,14}{gg-ep-tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{boson}{i1,v1}
+    \fmf{boson}{v2,i2}
+    \fmf{fermion,tension=0.7}{v2,v1} % t-channel
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o2,v2}
+    % labels
+    \fmflabel{$\gamma$}{i1}
+    \fmflabel{$\gamma$}{i2}
+    \fmflabel{e$^-$}{o1}
+    %\fmflabel{e$^+$}{o2}
+    \fmfv{l.d=4,l.a=-25,l=e$^+$}{o2} % more control
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% PAIR CREATION - u-channel
+\begin{fmfpicture}{-2,12}{0,14}{gg-ep-uchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % skeleton
+    \fmf{phantom}{i1,v1,o1}
+    \fmf{fermion,tension=0.7}{v1,v2} % t-channel
+    \fmf{phantom}{i2,v2,o2}
+    \fmffreeze
+    % main incoming/outgoing lines
+    \fmf{boson}{i1,v1}
+    \fmf{boson}{i2,v2}
+    \fmf{fermion}{v2,o1}
+    \fmf{fermion,rubout}{o2,v1}
+    % labels
+    \fmflabel{$\gamma$}{i1}
+    \fmflabel{$\gamma$}{i2}
+    \fmflabel{e$^-$}{o1}
+    %\fmflabel{e$^+$}{o2}
+    \fmfv{l.d=4,l.a=-25,l=e$^+$}{o2} % more control
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+\end{document}

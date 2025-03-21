@@ -1,0 +1,200 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (February 2023)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape ttbar.tex
+\documentclass[11pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+
+% DEFINE fmfpicture ENVIRONMENT
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+
+% TTBAR + Z PRODUCTION - Quark-antiquark annihilation, s-channel
+\begin{fmfpicture}{-10,14}{7,16}{ttbarV_qq-ttbarZ_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,oV,o1}
+    \fmfshift{2 up}{oV}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{gluon,label=$g$,l.s=right,l.d=10}{v2,v1}
+    \fmf{phantom,t=1.1}{o2,v2,o1}
+    \fmffreeze
+    \fmf{fermion}{o2,v2,vV,o1}
+    \fmf{boson,t=0}{vV,oV}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{$\overline{\mathrm{t}}$}{o2}
+    \fmflabel{t}{o1}
+    \fmfv{l.a=-15,l.d=4,l=Z}{oV}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR + Z PRODUCTION - Gluon fusion, s-channel
+\begin{fmfpicture}{-9,14}{6,16}{ttbarV_gg-ttbarZ_schan} % padding (LTRB)
+  \begin{fmfgraph*}(120,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,oV,o1}
+    \fmfshift{2 left}{i1}
+    \fmfshift{2 up}{oV}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{gluon}{v1,i2}
+    \fmf{gluon,t=1.2,l.s=left,label=$g$}{v1,v2}
+    \fmf{phantom}{o2,v2,o1}
+    \fmffreeze
+    \fmf{fermion}{o2,v2,vV,o1}
+    \fmf{boson,t=0}{vV,oV}
+    % labels
+    \fmfv{l.d=4,l=$g$}{i1}
+    \fmfv{l.d=6,l=$g$}{i2}
+    \fmflabel{$\overline{\mathrm{t}}$}{o2}
+    \fmflabel{t}{o1}
+    \fmfv{l.a=-15,l.d=4,l=Z}{oV}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR + Z PRODUCTION - Gluon fusion, t-channel
+\begin{fmfpicture}{3,14}{9,14}{ttbarV_gg-ttbarZ_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,75) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o2,oV,o1}
+    \fmfshift{2 up}{oV}
+    \fmfshift{3 right}{oV}
+    % main
+    \fmf{gluon}{v1,i1}
+    \fmf{fermion,label=t,l.s=left}{v2,v1} % t-channel
+    \fmf{gluon}{i2,v2}
+    \fmf{phantom}{v1,o1}
+    \fmf{fermion}{o2,v2}
+    \fmffreeze
+    \fmf{fermion}{v1,vV,o1}
+    \fmf{boson,t=0}{vV,oV}
+    % labels
+    \fmflabel{$g$}{i2}
+    \fmflabel{$g$}{i1}
+    \fmfv{l.d=7,l.a=22,l=t}{o1}
+    \fmfv{l.d=7,l.a=-20,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.a=-15,l.d=4,l=Z}{oV}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR + Z PRODUCTION - Quark-antiquark annihilation, t-channel
+\begin{fmfpicture}{1,12}{6,15}{ttbarV_qq-ttbarZ_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,75) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    \fmfshift{20 left}{o3}
+    % internal vertices (exact placement)
+    \fmfforce{(.33w,.75h)}{v1} % exact placement
+    \fmfforce{(.33w,.25h)}{v2} % exact placement
+    \fmfforce{(.72w,.75h)}{g} % exact placement
+    % main
+    \fmf{fermion}{i1,v1,v2,i2}
+    \fmf{gluon}{g,v1}
+    \fmf{fermion}{o2,g,o1}
+    \fmf{boson}{v2,o3}
+    % labels
+    \fmfv{l.d=5,l.a=155,l=$q$}{i1}
+    \fmfv{l.d=4,l.a=-150,l=$\overline{q}$}{i2}
+    \fmfv{l.d=6,l.a=22,l=t}{o1}
+    \fmfv{l.d=6,l.a=-20,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.d=5,l.a=-20,l=Z}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR + W PRODUCTION - Quark-antiquark annihilation, t-channel
+\begin{fmfpicture}{3,12}{6,16}{ttbarV_qq-ttbarW_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(100,75) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o3,o2,o1}
+    \fmfshift{20 left}{o3}
+    % internal vertices (exact placement)
+    \fmfforce{(.33w,.75h)}{v1} % exact placement
+    \fmfforce{(.33w,.25h)}{v2} % exact placement
+    \fmfforce{(.72w,.75h)}{g} % exact placement
+    % main
+    \fmf{fermion}{i1,v1,v2,i2}
+    \fmf{gluon}{g,v1}
+    \fmf{fermion}{o2,g,o1}
+    \fmf{boson}{v2,o3}
+    % labels
+    \fmfv{l.d=5,l.a=155,l=$q$}{i1}
+    \fmfv{l.d=4,l.a=-150,l=$\overline{q}'$}{i2}
+    \fmfv{l.d=6,l.a=22,l=t}{o1}
+    \fmfv{l.d=6,l.a=-20,l=$\overline{\mathrm{t}}$}{o2}
+    \fmfv{l.d=5,l.a=-20,l=W}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR PRODUCTION + W - Gluon fusion, t-channel
+\begin{fmfpicture}{-9,9}{6,9}{ttbarV_gg-ttbarW_tchan} % padding (LTRB)
+  \begin{fmfgraph*}(110,70) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,m,i1}
+    \fmfright{o2,z,o1}
+    % skeleton
+    \fmf{gluon,t=1.9}{v1,i1}
+    \fmf{gluon,t=1.9}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o2,v2}
+    % Z boson
+    \fmf{fermion,t=1.0}{v2,v,v1}
+    \fmf{dashes}{z,v} % Z boson
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=5,l=\strut t}{o1}
+    \fmfv{l.a=0,l.d=4,l=Z}{z}
+    \fmfv{l.a=-22,l.d=5,l=\strut$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% TTBAR PRODUCTION + W - Gluon fusion, t-channel, straight
+\begin{fmfpicture}{-9,10}{6,10}{ttbarV_gg-ttbarW_tchan_straight} % padding (LTRB)
+  \begin{fmfgraph*}(110,65) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,m,i1}
+    \fmfright{o2,z,o1}
+    % skeleton
+    \fmf{gluon,t=1.2}{v1,i1}
+    \fmf{gluon,t=1.2}{i2,v2}
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{o2,v2}
+    \fmffreeze
+    % Z boson
+    \fmf{fermion,t=1}{v2,v,v1}
+    \fmf{dashes}{z,v} % Z boson
+    % labels
+    \fmfv{l.a=158,l.d=5,l=$g$}{i1}
+    \fmfv{l.a=-158,l.d=5,l=$g$}{i2}
+    \fmfv{l.a=22,l.d=5,l=\strut t}{o1}
+    \fmfv{l.a=0,l.d=4,l=Z}{z}
+    \fmfv{l.a=-22,l.d=5,l=\strut$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+\end{document}

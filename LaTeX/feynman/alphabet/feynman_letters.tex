@@ -1,0 +1,848 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (September 2023)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape feynman_letters.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+\usepackage{xcolor}
+%\usepackage{pgffor} % for \foreach
+
+% DEFINE COLORS
+% https://colorbrewer2.org/#type=qualitative&scheme=Paired&n=8
+% for r,g,b in [(166,206,227),(31,120,180),(178,223,138),(51,160,44),(251,154,153),(227,26,28),(253,191,111),(255,127,0)]: print(f"{{{r/255.:0.2f},{g/255.:0.2f},{b/255.:0.2f}}} % ({r},{g},{b})")
+\definecolor{myred}{rgb}{.95,0,0}
+\definecolor{myblue}{rgb}{0,0,1}
+\definecolor{mygreen}{rgb}{.1,.7,.1}
+\definecolor{myorange}{rgb}{1,0.5,0}
+\definecolor{cbLightBlue}  {rgb}{0.65,0.81,0.89} % (166,206,227)
+\definecolor{cbBlue}       {rgb}{0.12,0.47,0.71} % (31,120,180)
+\definecolor{cbLightGreen} {rgb}{0.70,0.87,0.54} % (178,223,138)
+\definecolor{cbGreen}      {rgb}{0.20,0.63,0.17} % (51,160,44)
+\definecolor{cbLightRed}   {rgb}{0.98,0.60,0.60} % (251,154,153)
+\definecolor{cbRed}        {rgb}{0.89,0.10,0.11} % (227,26,28)
+\definecolor{cbLightOrange}{rgb}{0.99,0.75,0.44} % (253,191,111)
+\definecolor{cbOrange}     {rgb}{1.00,0.50,0.00} % (255,127,0)
+\newcommand\defineMPColors{%
+  \fmfcmd{%
+    color myred;    myred    := (.95,0,0);
+    color mygreen;  mygreen  := (.1,.7,.1);
+    color myblue;   myblue   := (0,0,1);
+    color myorange; myorange := (1,.5,0);
+    color cbLightBlue;   cbLightBlue   := (0.65,0.81,0.89);
+    color cbBlue;        cbBlue        := (0.12,0.47,0.71);
+    color cbLightGreen;  cbLightGreen  := (0.70,0.87,0.54);
+    color cbGreen;       cbGreen       := (0.20,0.63,0.17);
+    color cbLightRed;    cbLightRed    := (0.98,0.60,0.60);
+    color cbRed;         cbRed         := (0.89,0.10,0.11);
+    color cbLightOrange; cbLightOrange := (0.99,0.75,0.44);
+    color cbOrange;      cbOrange      := (1.00,0.50,0.00);
+  }%
+}
+\newcommand\setGlobalColor[1]{%
+  \color{#1}%
+  \fmfcmd{foreground:=#1;}% % set global color
+}
+\newcommand{\quark}[9]{
+  \fmfcmd{ %input TEX; input latexmp; setupLaTeXMP(packages="amssymb,amsmath");
+    style_def quark#1 expr p =
+    pair a, b, m, n;
+    if (substring (0,4) of "#6" = "left") or (substring (1,5) of "#6" = "left"):
+      a = point 0 of p; b = point length(p) of p + (#7); m = point length(p) of p + (#8);
+      path q; q = a{m-a}..tension ypart(#4)..{right}b;
+      label.rt(btex #2 etex, point 0.47 of q shifted (#5) shifted (0,-6.5))
+    fi;
+    if (substring (0,5) of "#6" = "right") or (substring (1,6) of "#6" = "right"):
+      a = point 0 of p + (#7); b = point length(p) of p; m = point 0 of p + (#8);
+      path q; q = a{right}..tension ypart(#4)..{b-m}b;
+      label.lft(btex #2 etex, point 0.53 of q shifted (#5) shifted (0,-6.5))
+    fi;
+    cdraw subpath (#3) of q                          shifted (#5);
+    if substring (0,1) of "#6" = "-":
+      cfill (tarrow (reverse(q),(xpart(#3)+ypart(#3))*0.46*xpart(#4))) shifted (#5);
+    else:
+      cfill (tarrow (q,(xpart(#3)+ypart(#3))*0.46*xpart(#4))) shifted (#5);
+    fi;
+    enddef;}
+  \fmf{quark#1,tension=0}{#9}}
+
+\begin{document}
+\large % increase font size
+
+
+% FEYNMAN LETTER: A, gluons
+\begin{page}
+\fmfframe(-4,4)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-a1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightBlue} % set global color
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b1,b2}
+    \fmf{gluon,t=1}{v2,v,v1}
+    \fmf{gluon,t=1.4}{v1,b1}
+    \fmf{gluon,t=1.4}{b2,v2}
+    \fmf{gluon,t=6}{t,v}
+    \fmf{gluon,r=0.2,t=0}{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: A, bosons
+\begin{page}
+\fmfframe(-4,4)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-a2}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightGreen} % set global color
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b1,b2}
+    \fmf{boson,t=1}{v1,v,v2}
+    \fmf{boson,t=1.4}{b1,v1}
+    \fmf{boson,t=1.4}{v2,b2}
+    \fmf{boson,t=6}{t,v}
+    \fmf{boson,r=0.2,t=0}{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: A, fermions
+\begin{page}
+\fmfframe(-4,4)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-a3}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightOrange} % set global color
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b1,b2}
+    \fmf{fermion,t=1}{v1,v,v2}
+    \fmf{fermion,t=1.4}{b1,v1}
+    \fmf{fermion,t=1.4}{v2,b2}
+    \fmf{boson,t=6}{t,v}
+    \fmf{boson,r=0.2,t=0}{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: D, fermions
+\begin{page}
+\fmfframe(16,4)(-28,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-d1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbGreen} % set global color
+  \begin{fmfgraph*}(60,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmf{fermion}{t,v1,v2,b}
+    \fmf{phantom,t=2}{b,v2}
+    \fmf{dashes,r=3}{v1,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: E, fermions radiation
+\begin{page}
+\fmfframe(-28,4)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-e1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbGreen} % set global color
+  \begin{fmfgraph*}(60,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmfright{l3,l2,l1}
+    \fmfshift{16 down}{l1}
+    \fmfshift{16 up}{l3}
+    \fmf{fermion}{t,v1,v2,v3,b}
+    \fmf{phantom,t=1.6}{t,v1}
+    \fmf{phantom,t=1.6}{b,v3}
+    \fmffreeze
+    \fmf{boson}{v1,l1}
+    \fmf{boson}{v2,l2}
+    \fmf{boson}{v3,l3}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: E, fermions
+\begin{page}
+\fmfframe(-4,-30)(-6,-27){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-e2}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightOrange} % set global color
+  \begin{fmfgraph*}(90,160)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{d,l,d}
+    \fmfright{b,r,d}
+    \fmfshift{40 up}{b}
+    \fmfshift{30 left}{b}
+    \fmf{fermion}{r,v,l}
+    \fmf{phantom,t=4}{r,v}
+    \fmffreeze
+    \fmf{boson,r=1.05}{v,l}
+    \fmf{fermion,r=0.7}{l,b}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: E, fermions + Higgs
+\begin{page}
+\fmfframe(-4,-30)(-6,-27){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-e3}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbRed} % set global color
+  \begin{fmfgraph*}(90,160)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{d,l,d}
+    \fmfright{b,r,d}
+    \fmfshift{40 up}{b}
+    \fmfshift{30 left}{b}
+    \fmf{fermion}{r,v,l}
+    \fmf{phantom,t=4}{r,v}
+    \fmffreeze
+    \fmf{dashes,r=1.05}{v,l}
+    \fmf{fermion,r=0.65}{l,b}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: F, fermions + radiation
+\begin{page}
+\fmfframe(-45,4)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-f1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightBlue} % set global color
+  \begin{fmfgraph*}(90,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmfright{l3,l2,l1}
+    \fmfshift{19 down}{l1}
+    \fmf{fermion,t=3.1}{t,v1}
+    \fmf{fermion,t=1.5}{v1,v2}
+    \fmf{fermion,t=1.0}{v2,b}
+    \fmffreeze
+    \fmf{boson}{v1,l1}
+    \fmf{boson}{v2,l2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: F, fermions + radiation
+\begin{page}
+\fmfframe(-45,4)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-f2}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbBlue} % set global color
+  \begin{fmfgraph*}(90,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmfright{l3,l2,l1}
+    \fmfshift{19 down}{l1}
+    \fmf{fermion,t=3.1}{t,v1}
+    \fmf{boson,t=1.5}{v1,v2}
+    \fmf{fermion,t=1.0}{v2,b}
+    \fmffreeze
+    \fmf{fermion}{v1,l1}
+    \fmf{fermion}{l2,v2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: G
+\begin{page}
+\fmfframe(2,9)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-g1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbOrange} % set global color
+  \begin{fmfgraph*}(100,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i}
+    \fmftop{t2,t,d}
+    \fmfbottom{d,b,g1}
+    \fmfshift{8 left}{g1}
+    \fmfshift{2 up}{g1}
+    \fmfright{d,o4,o3,d,g4,d,d,o2,o1}
+    \fmf{gluon,r=2.2,t=2}{v2,v1}
+    \fmf{phantom,t=3}{o2,v2,o1}
+    \fmf{phantom,t=3}{o3,v1,o4}
+    \fmf{phantom,t=4}{v2,t,b,v1}
+    \fmffreeze
+    \fmf{gluon}{g1,v1}
+    \fmf{gluon,t=2}{v1,g2}
+    \fmf{phantom}{v2,g2}
+    \fmffreeze
+    \fmf{fermion,t=5}{g3,g2,g4}
+    \fmf{phantom,t=1}{t2,g3,i}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: I, J/psi
+\begin{page}
+\fmfframe(-1,18)(7,22){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-i1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightGreen} % set global color
+  \begin{fmfgraph*}(60,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{m1,v1,m2}
+    \fmfbottom{c1,v2,c2}
+    \fmf{boson}{v1,v2}
+    \fmf{fermion}{m2,v1,m1}
+    \fmf{fermion}{c1,v2,c2}
+    \fmfv{l=\strut$\mu^+$,l.a=110,l.d=2}{m1}
+    \fmfv{l=\strut$\mu^-$,l.a=60,l.d=3}{m2}
+    \fmfv{l=\strut c,l.a=-120,l.d=3}{c1}
+    \fmfv{l=\strut$\overline{\text{c}}$,l.a=-60,l.d=3}{c2}
+    \fmfv{l=$\text{J/}\psi$,l.a=-90,l.d=6}{v2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: I, bb -> tautau (LQ)
+\begin{page}
+\fmfframe(-1,18)(4,9){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-i2}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbGreen} % set global color
+  \begin{fmfgraph*}(60,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,v1,t2}
+    \fmfbottom{b1,v2,b2}
+    \fmf{dashes}{v1,v2}
+    \fmf{fermion}{t1,v1,t2}
+    \fmf{fermion}{b2,v2,b1}
+    \fmfv{l=b,l.a=110,l.d=8}{t1}
+    \fmfv{l=$\tau^-$,l.a=70,l.d=8}{t2}
+    \fmfv{l=$\overline{\text{b}}$,l.a=110,l.d=8}{b1}
+    \fmfv{l=$\tau^+$,l.a=70,l.d=8}{b2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: I
+\begin{page}
+\fmfframe(-4,4)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-i3}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightRed} % set global color
+  \begin{fmfgraph*}(10,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{ne,nw}
+    \fmfbottom{se,sw}
+    \fmf{fermion}{ne,t,nw}
+    \fmf{fermion}{se,b,sw}
+    \fmf{boson,t=2}{t,o,b} %,label=$\text{W}^+$
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=3}{o}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: L
+\begin{page}
+\fmfframe(-5,7)(-4,15){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-l1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightBlue} % set global color
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{d,t,d,d,d,d,d,d}
+    \fmfbottom{d,b1,d,d,d,d,d,b2}
+    \fmfleft{i,d}
+    \fmfshift{10 down}{i}
+    \fmf{boson,t=1.05}{t,b1}
+    \fmf{fermion}{i,b1,b2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: L
+\begin{page}
+\fmfframe(-8,6)(4,6){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-l2}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightOrange} % set global color
+  \begin{fmfgraph*}(30,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{d,t}
+    \fmfbottom{b,o}
+    \fmfipair{t',b',c'}
+    \fmfiequ{t'}{vloc(__t)}
+    \fmfiequ{b'}{vloc(__b)}
+    \fmfiequ{c'}{.2[b',t']}
+    \fmfi{fermion}{c'{dir 97} .. tension 1.5 .. {right}t'}
+    \fmfi{fermion}{t'{right} .. tension 1.8 .. {dir -140}c'}
+    \fmfi{dashes}{c'{dir -83} .. tension 1. .. {dir 20}vloc(__o)}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: N, boson
+\begin{page}
+\fmfframe(-4,6)(-4,6){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-n1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbOrange} % set global color
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmf{boson,t=0}{v2,v1}
+    \fmf{fermion}{i2,v2,i1}
+    \fmf{fermion}{o1,v1,o2}
+    \fmf{phantom,t=3}{i1,v2}
+    \fmf{phantom,t=3}{o2,v1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: N, dashes
+\begin{page}
+\fmfframe(10,9)(10,8){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-n2}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightBlue} % set global color
+  \begin{fmfgraph*}(80,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmf{dashes,t=0}{v2,v1}
+    \fmf{fermion}{i2,v2,i1}
+    \fmf{fermion}{o1,v1,o2}
+    \fmf{phantom,t=3}{i1,v2}
+    \fmf{phantom,t=3}{o2,v1}
+    \fmfv{l=\strut$\tau^-$,l.a=158,l.d=4}{i1}
+    \fmfv{l=\strut b,l.a=-160,l.d=6}{i2}
+    \fmfv{l=$\tau^+$,l.a=20,l.d=8}{o1}
+    \fmfv{l=\strut$\overline{\text{b}}$,l.a=-10,l.d=7}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: O
+\begin{page}
+\fmfframe(0,4)(0,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-o1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbBlue} % set global color
+  \begin{fmfgraph*}(100,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{d,i,d}
+    \fmfright{d,o,d}
+    \fmf{gluon,r=1}{i,o}
+    \fmf{gluon,r=1}{o,i}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: R
+\begin{page}
+\fmfframe(-4,5)(-4,5){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-r1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightGreen} % set global color
+  \begin{fmfgraph*}(60,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i2,d,d,v,l2,d,l1,i1}
+    \fmfright{o2,o1}
+    \fmf{boson,r=3}{l2,l1}
+    \fmf{boson,t=0}{v,o2}
+    \fmf{fermion}{i2,v}
+    \fmf{plain}{v,l2}
+    \fmf{fermion}{l2,l1,i1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: R
+\begin{page}
+\fmfframe(-4,5)(-10,5){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-r2}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbGreen} % set global color
+  \begin{fmfgraph*}(60,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmf{fermion,t=2.3}{l,i1}
+    \fmf{fermion,t=1.0}{i2,l}
+    \fmf{phantom,t=2.3}{o1,r}
+    \fmf{phantom,t=1.0}{o2,r}
+    \fmffreeze
+    \fmf{boson,l=0.7}{l,r}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: R, gluons
+\begin{page}
+\fmfframe(-4,5)(-10,5){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-r3}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightOrange} % set global color
+  \begin{fmfgraph*}(60,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    \fmf{gluon,t=2.3}{l,i1}
+    \fmf{gluon,t=1.0}{i2,l}
+    \fmf{phantom,t=2.3}{o1,r}
+    \fmf{phantom,t=1.0}{o2,r}
+    \fmffreeze
+    \fmf{gluon,l=0.7}{l,r}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: P
+\begin{page}
+\fmfframe(-4,5)(-12,5){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-p1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbRed} % set global color
+  \begin{fmfgraph*}(60,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmf{fermion,t=3.0}{i1,l1}
+    \fmf{fermion,t=1.0}{l1,l2}
+    \fmf{fermion,t=1.1}{l2,i2}
+    \fmf{boson,r=3}{l2,l1}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: S
+\begin{page}
+\fmfframe(-4,40)(-4,40){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-s1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightOrange} % set global color
+  \begin{fmfgraph*}(100,80)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2,t3,t4,t5}
+    \fmfbottom{b1,b2,b3,b4,b5}
+    \fmfshift{10 down}{t1,t2,t3,t4,t5}
+    \fmfshift{10 up}{b1,b2,b3,b4,b5}
+    \fmfshift{ 6 left}{t2,b2}
+    \fmfshift{ 6 right}{t4,b4}
+    \fmfshift{28 left}{t3}
+    \fmfshift{28 right}{b3}
+    \fmf{fermion,t=1}{t1,t2}
+    \fmf{plain,t=1}{t2,t3}
+    \fmf{fermion,t=1}{t3,t4,t5}
+    \fmf{fermion,t=1}{b3,b2,b1}
+    \fmf{plain,t=1}{b3}
+    \fmf{fermion,t=1}{b5,b4,b3}
+    \fmf{gluon,r=1.2,t=0}{t4,t2}
+    \fmf{gluon,r=1.2,t=0}{b2,b4}
+    %\fmf{boson}{t3,b3}
+    \fmffreeze
+    % bending S using MetaPost
+    \fmfipair{t,c,b}
+    \fmfiequ{t}{vloc(__t3)}
+    \fmfiequ{b}{vloc(__b3)}
+    \fmfiequ{c}{0.5[t,b]}
+    \fmfi{gluon}{t{down} .. c .. {down}b}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: T
+\begin{page}
+\fmfframe(8,22)(8,9){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-t1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbOrange} % set global color
+  \begin{fmfgraph*}(80,100)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{c1,t,c2}
+    \fmfbottom{d,q1,q2,d}
+    \fmfleft{d,m1}
+    \fmfright{d,m2}
+    \fmfshift{12 up}{c1,c2}
+    \fmf{phantom,t=8}{t,v1}
+    \fmf{boson}{v1,v2}
+    \fmf{fermion,t=5}{q1,v2,q2}
+    \fmffreeze
+    \fmf{fermion}{m1,v1}
+    \fmf{plain,t=3}{v1,a1}
+    \fmf{fermion}{a1,m2}
+    \fmffreeze
+    \fmf{phantom,t=0.9}{c1,a2}
+    \fmf{boson,t=3}{a1,a2}
+    \fmf{fermion}{c2,a2,c1}
+    % labels
+    \fmfv{l=\strut$\mu^+$,l.a=0,l.d=4}{m2}
+    \fmfv{l=\strut$\mu^-$,l.a=180,l.d=3}{m1}
+    \fmfv{l=\strut c,l.a=160,l.d=5}{c1}
+    \fmfv{l=\strut$\overline{\text{c}}$,l.a=20,l.d=5}{c2}
+    \fmfv{l=\strut q,l.a=-160,l.d=4}{q1}
+    \fmfv{l=\strut$\overline{q}$,l.a=-20,l.d=4}{q2}
+    %\fmfv{l=$\text{J/}\psi$,l.a=90,l.d=8}{a2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: T, B -> phi + ll
+\begin{page}
+\fmfframe(10,22)(10,12){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-t2}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightRed} % set global color
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmfleft{i1,i2}
+    \fmfright{o1,o2}
+    \fmfbottom{d,d,l1,l2,d,d}
+    \fmftop{d,s1,b,s2,d}
+    \fmfshift{2 up}{s1,s2}
+    \fmf{phantom,t=0.2}{i1,v1,v2,o1}
+    % LQ
+    \fmf{dashes,t=3.4,label=LQ,l.s=right,l.d=4}{v1,v2}
+    %\fmfv{l=LQ,l.d=8,l.a=-140}{v2}
+    % quarks
+    \fmf{fermion,label=b,label.side=right,t=1.6}{i2,v1}
+    \fmf{fermion,label=s,label.side=right,t=1.6}{v2,o2}
+    \fmffreeze
+    % fermions
+    \fmf{fermion,t=1}{v1,l1}
+    \fmf{fermion,t=1}{l2,v2}
+    \fmfv{l=$\ell^-$,l.d=6,l.a=-160}{l1}
+    \fmfv{l=$\ell^+$,l.d=6,l.a=-20}{l2}
+    % mesons
+    \fmf{phantom}{i1,m,o1}
+    \fmf{phantom,t=6.8}{m,b}
+    \fmfv{l=B$^0_\text{s}$,l.d=7,l.a=154}{i2}
+    \fmfv{l=\;\:$\phi$,l.d=4,l.a=65}{o2}
+    \quark{qbi}{ }{0,1}{0.86,1}{0,12}{-left }{0,17}{0,6}{i2,m}
+    \quark{qbo}{ }{0,1}{1.04,1}{0,12}{-right}{0,17}{0,6}{m,o2}
+    \fmfv{l=$\overline{\text{s}}$,l.d=8,l.a=80}{s1}
+    \fmfv{l=$\overline{\text{s}}$,l.d=8,l.a=110}{s2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: T
+\begin{page}
+\fmfframe(-4,8)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-t3}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbBlue} % set global color
+  \begin{fmfgraph*}(100,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2}
+    \fmfbottom{b}
+    \fmf{boson,t=3}{t1,v,t2}
+    \fmf{boson}{v,b}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: T
+\begin{page}
+\fmfframe(-4,18)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-t4}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightGreen} % set global color
+  \begin{fmfgraph*}(100,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2}
+    \fmfbottom{b}
+    \fmf{fermion,t=3}{t1,v,t2}
+    \fmf{dashes}{v,b}
+    \fmfv{l=b,l.a=110,l.d=8}{t1}
+    \fmfv{l=$\tau$,l.a=70,l.d=8}{t2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: U
+\begin{page}
+\fmfframe(-6,8)(-6,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-u1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbGreen} % set global color
+  \begin{fmfgraph*}(120,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2}
+    \fmfbottom{d,b1,b2,d}
+    \fmf{fermion,t=12}{b1,b,b2}
+    \fmf{boson,t=12}{b,v}
+    %\fmf{fermion,l=0.55}{v2,v,v1}
+    \fmf{phantom,t=1}{v2,v,v1}
+    \fmf{boson,t=2}{v1,v2}
+    \fmf{fermion,t=8}{t1,v1}
+    \fmf{fermion,t=8}{v2,t2}
+    \fmffreeze
+    % penguin body using MetaPost
+    \fmfipair{tl',tr',v',vl',vr'}
+    \fmfiequ{tl'}{vloc(__t1)}
+    \fmfiequ{tr'}{vloc(__t2)}
+    \fmfiequ{v'}{vloc(__v)}
+    \fmfiequ{vl'}{vloc(__v1)}
+    \fmfiequ{vr'}{vloc(__v2)}
+    \fmfi{fermion}{vl'{down} .. tension 1.0 .. {right}v'}
+    \fmfi{fermion}{v'{right} .. tension 1.0 .. {up}vr'}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: W
+\begin{page}
+\fmfframe(-4,8)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-w1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightRed} % set global color
+  \begin{fmfgraph*}(100,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,h,t2}
+    \fmfbottom{d,b1,d,b2,d}
+    \fmfshift{20 down}{h}
+    \fmf{gluon,t=6}{b1,g1}
+    \fmf{gluon,t=6}{b2,g2}
+    \fmf{fermion,t=1}{t1,g1,v,g2,t2}
+    \fmf{dashes,t=1.8}{h,v}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: Y
+\begin{page}
+\fmfframe(-4,18)(-4,4){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-y4}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbOrange} % set global color
+  \begin{fmfgraph*}(70,120)
+    \fmfpen{1.2thick}
+    \fmfstraight
+    \fmftop{t1,t2}
+    \fmfbottom{b}
+    \fmf{fermion}{t1,v,t2}
+    \fmf{dashes,t=1.5}{v,b}
+    \fmfv{l=b,l.a=110,l.d=8}{t1}
+    \fmfv{l=$\tau$,l.a=70,l.d=8}{t2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% FEYNMAN LETTER: EXLAMATION MARK !
+\begin{page}
+\fmfframe(-4,8)(-4,8){ % padding (LTRB)
+\begin{fmffile}{feynmp-letter-exclamation1}
+  \defineMPColors % load my custom colors into MetaPost
+  \setGlobalColor{cbLightOrange} % set global color
+  \begin{fmfgraph*}(30,120)
+    \fmfpen{1.2thick}
+    \fmftop{t}
+    \fmfbottom{b}
+    \fmfipair{t',b',c'}
+    \fmfblob{10}{b}
+    \fmfiequ{t'}{vloc(__t)}
+    \fmfiequ{b'}{vloc(__b)}
+    \fmfiequ{c'}{.2[b',t']}
+    \fmfi{boson}{b'--c'}
+    \fmfi{fermion}{c'{up} .. tension 1.8 .. {right}t'}
+    \fmfi{fermion}{t'{right} .. tension 1.8 .. {down}c'}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+\end{document}

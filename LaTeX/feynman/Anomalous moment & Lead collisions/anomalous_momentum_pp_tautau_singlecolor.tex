@@ -1,0 +1,194 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (February 2024)
+% Description: Anomalous magnetic moment in pp collisions
+% Sources: https://cms.cern.ch/iCMS/analysisadmin/cadilines?line=EXO-23-005
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape anomalous_momentum_pp.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+\usepackage{xcolor}
+\usepackage{pgffor} % for \foreach
+
+% DEFINE TEXT COLORS
+\definecolor{colee}{rgb}{.05,.4,.05} % elastic/exclusive (green)
+\definecolor{colsd}{rgb}{.4,.1,.7} % single disassociated (purple)
+\definecolor{coldd}{rgb}{.7,.3,.0} % double disassociated (orange)
+
+% DEFINE ENVIRONMENT
+\usepackage{environ}
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd{ % custom line style: double arrows for Majorana neutrino
+      style_def proton expr p =
+        save oldpen; pen oldpen; oldpen := currentpen;
+        pickup oldpen scaled 1.8; % draw thick line
+        cdraw p; % draw line
+        cfill (arrow p) % draw arrow
+          shifted -center p scaled 1.1 shifted center p; % scale arrow 
+        pickup oldpen; % restore line width
+      enddef;
+    }
+    \fmfcmd{ % define custom line colors in MetaPost (does not work in \fmfv)
+      color colee; colee := (.1,.6,.1); % elastic/exclusive (green)
+      color colsd; colsd := (.6,.2,.9); % single disassociated (purple)
+      color coldd; coldd := (.9,.5,.0); % double disassociated (orange)
+    }
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+\large % increase font size
+
+
+% pp -> tautau (g-2)
+\color{colee} % color all text
+\begin{fmfpicture}{-4,10}{8,10}{pp-tautau} % padding (LT)(RB)
+  \begin{fmfgraph*}(150,95) % canvas (W,H)
+    \fmfcmd{foreground := colee;} % set all line colors
+    % external vertices
+    \fmfleft{iq,im,ip}
+    \fmfright{oq,t2,om,t1,op}
+    \fmfshift{2 down}{t1}
+    \fmfshift{2 up}{t2}
+    % protons
+    \fmf{proton}{ip,vp,op}
+    \fmf{proton}{iq,vq,oq}
+    % skeleton
+    \fmf{phantom,t=0.4}{ip,vp} % pull to right
+    \fmf{phantom,t=0.4}{iq,vq} % pull to right
+    \fmf{phantom,t=0.2}{vp,vq} % t channel
+    \fmffreeze
+    % mediators
+    \fmf{phantom,t=0.55}{vt1,om,vt2,vt1} % pull gtt vertex to left
+    \fmf{boson,t=1.12,label=$\gamma$,l.d=4,l.s=right}{vp,vt1}
+    \fmf{boson,t=1.12,label=$\gamma$,l.d=3,l.s=left}{vq,vt2}
+    % taus
+    \fmffreeze
+    \fmf{fermion}{t1,vt1} % outgoing lepton
+    \fmf{fermion}{vt2,t2} % outgoing lepton
+    \fmf{fermion,label=$\mu$,l.s=right}{vt1,vt2} % t channel
+    % labels
+    \fmfblob{15}{vp}
+    \fmfblob{15}{vq}
+    \fmfv{l=p$^+$,l.a=160,l.d=5}{ip}
+    \fmfv{l=p$^+$,l.a=20,l.d=6}{op}
+    \fmfv{l=p$^+$,l.a=-160,l.d=5}{iq}
+    \fmfv{l=p$^+$,l.a=-20,l.d=6}{oq}
+    \fmfv{l=\strut$\mu^+$,l.a=10,l.d=5}{t1}
+    \fmfv{l=\strut$\mu^-$,l.a=-10,l.d=5}{t2}
+    %\fmfv{decor.shape=circle,decor.filled=full,decor.size=5}{vp}
+    %\fmfv{decor.shape=circle,decor.filled=full,decor.size=5}{vq}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4}{vt1}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4}{vt2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+% pp -> tautau (g-2), single diffractive
+\color{colsd} % color all text
+\begin{fmfpicture}{-4,18}{8,10}{pp-tautau-SD} % padding (LT)(RB)
+  \begin{fmfgraph*}(150,100) % canvas (W,H)
+    \fmfcmd{foreground := colsd;} % set all line colors
+    % external vertices
+    \fmfleft{iq,im,ip}
+    \fmfright{oq,t2,om,t1,op}
+    \fmfshift{2 down}{t1}
+    \fmfshift{2 up}{t2}
+    % protons
+    \fmf{proton}{ip,vp}
+    \fmf{phantom}{vp,op}
+    \fmf{proton}{iq,vq,oq}
+    % skeleton
+    \fmf{phantom,t=0.4}{ip,vp} % pull to right
+    \fmf{phantom,t=0.4}{iq,vq} % pull to right
+    \fmf{phantom,t=0.2}{vp,vq} % t channel
+    \fmffreeze
+    % diffracted proton
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4, 2.5) rotatedaround(vloc(__vp), 9)}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4, 0.0) rotatedaround(vloc(__vp), 1)}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4,-2.5) rotatedaround(vloc(__vp),-7)}
+    % mediators
+    \fmf{phantom,t=0.55}{vt1,om,vt2,vt1} % pull gtt vertex to left
+    \fmf{boson,t=1.1,label=$\gamma$,l.d=4,l.s=right}{vp,vt1}
+    \fmf{boson,t=1.1,label=$\gamma$,l.d=3,l.s=left}{vq,vt2}
+    % taus
+    \fmffreeze
+    \fmf{fermion}{t1,vt1} % outgoing lepton
+    \fmf{fermion}{vt2,t2} % outgoing lepton
+    \fmf{fermion,label=$\mu$,l.s=right}{vt1,vt2} % t channel
+    % labels
+    \fmfblob{15}{vp}
+    \fmfblob{15}{vq}
+    \fmfv{l=p$^+$,l.a=160,l.d=5}{ip}
+    %\fmfv{l=$X$,l.a=20,l.d=12}{op}
+    \fmfv{l=p$^+$,l.a=-160,l.d=5}{iq}
+    \fmfv{l=p$^+$,l.a=-20,l.d=6}{oq}
+    \fmfv{l=\strut$\mu^+$,l.a=10,l.d=5}{t1}
+    \fmfv{l=\strut$\mu^-$,l.a=-10,l.d=5}{t2}
+    %\fmfv{decor.shape=circle,decor.filled=full,decor.size=5,f=black}{vq}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4}{vt1}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4}{vt2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+% pp -> tautau (g-2), double diffractive
+\color{coldd} % color all text
+\begin{fmfpicture}{-4,18}{8,18}{pp-tautau-DD} % padding (LT)(RB)
+  \begin{fmfgraph*}(150,100) % canvas (W,H)
+    \fmfcmd{foreground := coldd;} % set all line colors
+    % external vertices
+    \fmfleft{iq,im,ip}
+    \fmfright{oq,t2,om,t1,op}
+    \fmfshift{2 down}{t1}
+    \fmfshift{2 up}{t2}
+    % protons
+    \fmf{proton}{ip,vp}
+    \fmf{phantom}{vp,op}
+    \fmf{proton}{iq,vq}
+    \fmf{phantom}{vq,oq}
+    % skeleton
+    \fmf{phantom,t=0.4}{ip,vp} % pull to right
+    \fmf{phantom,t=0.4}{iq,vq} % pull to right
+    \fmf{phantom,t=0.2}{vp,vq} % t channel
+    \fmffreeze
+    % diffracted proton
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4, 2.5) rotatedaround(vloc(__vp), 9)}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4, 0.0) rotatedaround(vloc(__vp), 1)}
+    \fmfi{fermion}{vpath (__vp,__op) scaled 1.01 shifted(4,-2.5) rotatedaround(vloc(__vp),-7)}
+    \fmfi{fermion}{vpath (__vq,__oq) scaled 1.01 shifted(4,-2.5) rotatedaround(vloc(__vq),-9)}
+    \fmfi{fermion}{vpath (__vq,__oq) scaled 1.01 shifted(4, 0.0) rotatedaround(vloc(__vq),-1)}
+    \fmfi{fermion}{vpath (__vq,__oq) scaled 1.01 shifted(4, 2.5) rotatedaround(vloc(__vq),7)}
+    % mediators
+    \fmf{phantom,t=0.55}{vt1,om,vt2,vt1} % pull gtt vertex to left
+    \fmf{boson,t=1.1,label=$\gamma$,l.d=4,l.s=right}{vp,vt1}
+    \fmf{boson,t=1.1,label=$\gamma$,l.d=3,l.s=left}{vq,vt2}
+    % taus
+    \fmffreeze
+    \fmf{fermion,f=collep}{t1,vt1} % outgoing lepton
+    \fmf{fermion,f=collep}{vt2,t2} % outgoing lepton
+    \fmf{fermion,label=$\mu$,l.s=right}{vt1,vt2} % t channel
+    % labels
+    \fmfblob{15}{vp}
+    \fmfblob{15}{vq}
+    \fmfv{l=p$^+$,l.a=160,l.d=5}{ip}
+    %\fmfv{l=$X$,l.a=20,l.d=12}{op}
+    \fmfv{l=p$^+$,l.a=-160,l.d=5}{iq}
+    %\fmfv{l=p$^+$,l.a=-20,l.d=6}{oq}
+    \fmfv{l=\strut$\mu^+$,l.a=10,l.d=5}{t1}
+    \fmfv{l=\strut$\mu^-$,l.a=-10,l.d=5}{t2}
+    \fmfv{decor.shape=circle,f=coldd,decor.filled=full,decor.size=4}{vt1}
+    \fmfv{decor.shape=circle,f=coldd,decor.filled=full,decor.size=4}{vt2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+\end{document}

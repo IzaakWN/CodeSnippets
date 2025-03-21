@@ -1,0 +1,174 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (September 2024)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape pp_hard.tex
+\documentclass[11pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{graphicx}
+\usepackage{feynmp-auto}
+
+% DEFINE TEXT COLORS
+\usepackage{xcolor}
+\definecolor{colvtx}{rgb}{0,.1,1} % LQ vertex (blue)
+\definecolor{colkappaf}{rgb}{1,0,0} % kappa_f (red)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colvtx,colkappaf}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}} % \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unp2ue name!)
+    \fmfset{arrow_len}{10} % arrow length
+    \fmfset{dash_len}{8} % dashes length
+    \fmfset{wiggly_len}{11} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd\MPcolors % define custom line colors in MetaPost
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+% CUSTOM DRAW MACROS
+% https://wiki.physik.uzh.ch/cms/latex:feynman
+% https://ctan.math.illinois.edu/macros/latex/contrib/feynmf/fmfman.pdf
+\usepackage{listofitems}
+\def\quarknew#1#2{
+  \readlist*\mylist{#1}
+  \readlist*\mylisttwo{#2}
+  %\fmfpair{#1,#2}
+  \fmfforce{vloc(__\mylisttwo[1])+(0,-10)}{\mylist[1]}
+  \fmfcmd{
+    %pair a1, b, m, n;
+    pair a, b;
+    a = (0,0);
+    b = a + (20,20);
+    draw vloc(__i3) -- b;
+  %  %idraw ("",
+  %    path q; q = (0,0) -- (80,50);
+  %    draw q;
+%  a = point 0 of p;
+%  b = point length(p) of p + (#7);
+%  m = point length(p) of p + (#8);
+%  cdraw subpath (#3) of q shifted (#5);
+%  % arrow heads
+%  frac := (xpart(#3)+ypart(#3))*0.46*xpart(#4); % fraction along path
+%  if substring (0,1) of "#6" = "-":
+%    cfill (tarrow (reverse(q),frac)) shifted (#5);
+%  else:
+%    cfill (tarrow (q,frac)) shifted (#5);
+%  fi;
+    }
+}
+\newcommand{\quark}[9]{
+  \fmfcmd{ %input TEX; input latexmp; setupLaTeXMP(packages="amssymb,amsmath");
+    style_def quark#1 expr p =
+    pair a, b, m, n;
+    if (substring (0,4) of "#6" = "left") or (substring (1,5) of "#6" = "left"):
+      a = point 0 of p; b = point length(p) of p + (#7); m = point length(p) of p + (#8);
+      path q; q = a{m-a}..tension ypart(#4)..{right}b;
+      label.lft(btex #2 etex, point xpart(#3) of q shifted (#5))
+    fi;
+    if (substring (0,5) of "#6" = "right") or (substring (1,6) of "#6" = "right"):
+      a = point 0 of p + (#7); b = point length(p) of p; m = point 0 of p + (#8);
+      path q; q = a{right}..tension ypart(#4)..{b-m}b;
+      label.rt(btex #2 etex, point ypart(#3) of q shifted (#5))
+    fi;
+    cdraw subpath (#3) of q shifted (#5);
+    % arrow heads
+    frac := (xpart(#3)+ypart(#3))*0.46*xpart(#4); % fraction along path
+    if substring (0,1) of "#6" = "-":
+      cfill (tarrow (reverse(q),frac)) shifted (#5);
+    else:
+      cfill (tarrow (q,frac)) shifted (#5);
+    fi;
+    enddef;}
+  \fmf{quark#1,tension=0}{#9}
+}
+
+% BRACE
+\usepackage{scalerel}
+\newcommand{\mylbrace}[2]{\vspace{#2pt}\hspace{4pt}\scaleleftright[\dimexpr6pt+#1\dimexpr0.11pt]{\lbrace}{\rule[\dimexpr2pt-#1\dimexpr0.5pt]{-4pt}{#1pt}}{.}}
+\newcommand{\myrbrace}[2]{\vspace{#2pt}\scaleleftright[\dimexpr6pt+#1\dimexpr0.11pt]{.}{\rule[\dimexpr2pt-#1\dimexpr0.5pt]{-4pt}{#1pt}}{\rbrace}\hspace{4pt}}
+
+\begin{document}
+
+
+% B MESON DECAY
+\begin{fmfpicture}{30,15}{45,25}{pp_hard_DY} % padding (LTRB)
+  \begin{fmfgraph*}(120,80) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i3,i1}
+    \fmfright{o3,o2,o1}
+    % fermions
+    \fmflabel{$\ell^\pm$}{o1}
+    \fmflabel{$\nu_\ell$}{o2}
+    \fmf{phantom}{i1,v1,o1}
+    \fmf{fermion,tension=0}{o2,v1,o1}
+    % boson
+    \fmf{boson,label=$\mathrm{W}^\pm$,label.side=left}{v3,v1}
+    % neutron
+    \fmf{phantom}{i3,v3,o3} % to help \quark
+    \fmffreeze
+    % vertices
+    \fmfv{l=\parbox{10mm}{\centering B meson}\mylbrace{26}{-3},l.d=16,l.a=-160}{i3}
+    \fmfv{l=\myrbrace{26}{-3}\parbox{10mm}{\centering D meson},l.d=16,l.a=-20}{o3}
+    %\fmfiv{l=$\overline{\mathrm{b}}$,l.d=3,l.a=180}{vloc(__i3)}
+    %\fmfiv{l=$\overline{\mathrm{c}}$,l.d=3,l.a=  0}{vloc(__o3)}
+    % spectator quarks
+    \fmf{fermion}{i3,v3,o3}
+%    \quark{qai}{$b$}{0,1}{1.00,infinity}{0,  0}{left}{0, 0}{0,0}{i3,v3}
+%    \quark{qbi}{$q$}{0,1}{1.09,1}       {0,-14}{left}{0,-6}{0,0}{i3,v3}
+%    \quark{qao}{$c$}{0,1}{1.00,infinity}{0,  0}{right}{0, 0}{0,0}{v3,o3}
+%    \quark{qbo}{$q$}{0,1}{0.84,1}       {0,-14}{right}{0,-6}{0,0}{v3,o3}
+%    \quark{qai}{$b$}{0,1}{1.00,infinity}{0,  0}{left}{0, 0}{0,0}{i3,v3}
+%    \quark{qbi}{$q$}{0,1}{1.09,1}{0,-14}{left}{0,-6}{0,0}{i3,v3}
+    
+    %\fmfforce{vloc(__i3)+(0,-10)}{sp}
+    \fmfv{d.sh=circle,d.f=1,d.si=3,l=sp,l.a=40}{sp}
+    
+    \quarknew{sp,sq}{i3,v3}
+    %\quarknew{}{sp,sq}{i3,v3,o3}
+    
+    % labels
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+
+\begin{fmfpicture}{30,15}{45,25}{pp_test} % padding (LTRB)
+  \begin{fmfgraph*}(140,60) % dimensions (WH)
+    \fmfipair{i,o,v,m}
+    \fmfiequ{i}{(0,0)}
+    \fmfiequ{o}{(w,0)}
+    \fmfiequ{v}{(.5w,.5h)}
+    \fmfiequ{m}{(.5w,h)}
+    % grey tangent line (for illustration purposes)
+    \fmfi{dashes,foreground=(0.7,,0.7,,0.7)}{m--i}
+    \fmfi{dashes,foreground=(0.7,,0.7,,0.7)}{o--m}
+    % curved paths
+    \fmfi{fermion}{i{(m+(0,-10))-i} .. {right}v}
+    \fmfi{fermion}{v{right} .. {o-m}o}
+    % point labels
+    \fmfiv{d.sh=circle,d.f=1,d.si=2pt,l=i}{i}
+    \fmfiv{d.sh=circle,d.f=1,d.si=2pt,l=o}{o}
+    \fmfiv{d.sh=circle,d.f=1,d.si=2pt,l=m}{m}
+    \fmfiv{d.sh=circle,d.f=1,d.si=2pt,l=v,l.a=90}{v}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+\end{document}

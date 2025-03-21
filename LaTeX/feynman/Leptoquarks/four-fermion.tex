@@ -1,0 +1,192 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (November 2024)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape four-fermion.tex
+\documentclass[11pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+
+% DEFINE TEXT COLORS
+\usepackage{xcolor}
+%\definecolor{colvtx}{rgb}{0,.1,1} % vertex (blue)
+\definecolor{colvtx}{rgb}{.9,.1,.1} % vertex (red)
+\definecolor{colblue}{rgb}{.05,.05,.8} % blue
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colvtx,colblue}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}} % \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{dash_len}{10} % dashes length
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd\MPcolors % define custom line colors in MetaPost
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+
+% FOUR-FERMION interaction
+\begin{fmfpicture}{-2,18}{4,18}{fourfermion} % padding (LTRB)
+  \begin{fmfgraph*}(95,68) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % blob
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{v}
+    \fmfblob{20}{v}
+    % incoming & outgoing fermions
+    \fmf{fermion}{i1,v,i2}
+    \fmf{fermion}{o2,v,o1}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}'$}{i2}
+    \fmflabel{$\ell^-$}{o1}
+    \fmflabel{$\ell^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% FOUR-FERMION interaction with single gluon splitting
+\begin{fmfpicture}{4,14}{12,15}{fourfermion_gluonsplit1} % padding (LTRB)
+  \begin{fmfgraph*}(110,90) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{g2,d,g1,d}
+    \fmfright{o2,d,o1,d} % add dummies 'd' for spacing
+    \fmfforce{(.7w,1h)}{b1} % exact placement
+    % gluons
+    \fmf{gluon}{v1,g1}
+    \fmf{phantom}{g2,v2}
+    \fmf{phantom,tension=0.5}{v1,o1,o2,v2}
+    \fmffreeze
+    % b quarks
+    \fmf{phantom}{b2,v2}
+    \fmf{fermion}{v2,v}
+    \fmf{fermion,label=$\overline{\mathrm{b}}$\hspace{6pt},l.s=left,l.d=0.5}{v,v1}
+    \fmf{fermion}{v1,b1}
+    % blob
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{v}
+    \fmfblob{20}{v}
+    % outgoing fermions
+    \fmf{fermion}{v,o1}
+    \fmf{fermion}{o2,v}
+    % labels
+    \fmfv{l=$g$,l.a=160,l.d=6}{g1}
+    \fmfv{l=$q$,l.a=-135,l.d=5}{v2}
+    \fmfv{l=b,l.a=25,l.d=5}{b1}
+    \fmfv{l=$\ell^-$,l.a=25,l.d=5}{o1}
+    \fmfv{l=$\ell^+$,l.a=-25,l.d=5}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% FOUR-FERMION interaction with double gluon splitting
+\begin{fmfpicture}{1,27}{9,27}{fourfermion_gluonsplit2} % padding (LTRB)
+  \begin{fmfgraph*}(110,100) % dimensions (WH)
+    % external vertices
+    \fmfleft{d,g2,d,g1,d}
+    \fmfright{b2,o2,d,o1,b1} % add dummies 'd' for spacing
+    \fmfshift{14 down}{b2}
+    \fmfshift{14 up}{b1}
+    %%%% internal vertices (exact placement)
+    %%%\fmfforce{vloc(__g1)+(.32w,0)}{v1} % exact placement
+    %%%\fmfforce{vloc(__g2)+(.32w,0)}{v2} % exact placement
+    % gluons
+    \fmf{gluon}{v1,g1}
+    \fmf{gluon}{g2,v2}
+    \fmf{phantom,tension=0.5}{v1,o1,o2,v2}
+    \fmffreeze
+    % b quarks
+    \fmf{fermion}{b2,v2}
+    \fmf{fermion,label=$\overline{q}$\hspace{6pt},l.s=left,l.d=0.5}{v2,v}
+    \fmf{fermion,label=$\overline{\mathrm{b}}$\hspace{6pt},l.s=left,l.d=0.5}{v,v1}
+    \fmf{fermion}{v1,b1}
+    % blob
+    \fmfv{decor.shape=circle,f=colvtx,decor.filled=full,decor.size=4}{v}
+    \fmfblob{20}{v}
+    % outgoing fermions
+    \fmf{fermion}{v,o1}
+    \fmf{fermion}{o2,v}
+    % labels
+    \fmfv{l=$g$,l.a=160,l.d=6}{g1}
+    \fmfv{l=$g$,l.a=-160,l.d=6}{g2}
+    \fmfv{l=b,l.a=25,l.d=5}{b1}
+    \fmfv{l=$q$,l.a=-25,l.d=5}{b2}
+    \fmfv{l=$\ell^-$,l.a=25,l.d=5}{o1}
+    \fmfv{l=$\ell^+$,l.a=-25,l.d=5}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% FOUR-FERMION interaction - Z (SM)
+\begin{fmfpicture}{-2,18}{4,18}{fourfermion_Z} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % t-channel
+    \fmf{boson,label=\colblue $\gamma^*$\!/Z,l.s=left,f=colblue,t=0.8}{v1,v2}
+    % incoming & outgoing fermions
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{$\ell^-$}{o1}
+    \fmflabel{$\ell^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% FOUR-FERMION interaction - Z' (BSM)
+\begin{fmfpicture}{-2,18}{4,18}{fourfermion_Zp} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % t-channel
+    \fmf{boson,label=\colvtx Z$'$,l.s=left,f=colvtx,t=0.8}{v1,v2}
+    % incoming & outgoing fermions
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    \fmflabel{$q$}{i1}
+    \fmflabel{$\overline{q}$}{i2}
+    \fmflabel{$\ell^-$}{o1}
+    \fmflabel{$\ell^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% FOUR-FERMION interaction - LQ t-channel
+\begin{fmfpicture}{-2,18}{4,18}{fourfermion_LQ} % padding (LTRB)
+  \begin{fmfgraph*}(100,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % t-channel
+    \fmf{boson,label=\colvtx LQ,l.s=left,f=colvtx,t=0.8}{v1,v2}
+    % incoming & outgoing fermions
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{o2,v2,i2}
+    % labels
+    \fmfv{l=$q$,l.a=155,l.d=6}{i1}
+    \fmfv{l=$\overline{q}'$,l.a=-155,l.d=6}{i2}
+    \fmfv{l=$\ell^-$,l.a=25,l.d=6}{o1}
+    \fmfv{l=$\ell^+$,l.a=-25,l.d=6}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+\end{document}

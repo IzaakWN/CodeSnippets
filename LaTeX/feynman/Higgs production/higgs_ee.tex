@@ -1,0 +1,383 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (January 2025)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape higgs_ee.tex
+% Sources:
+%   https://arxiv.org/pdf/2106.15438
+%   https://arxiv.org/pdf/1812.06018#page=19
+%   https://link.springer.com/article/10.1140/epjst/e2019-900045-4 (p. 304)
+\documentclass[11pt,border=4pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+
+% DEFINE TEXT COLORS
+\usepackage{xcolor}
+\definecolor{colggH}{rgb}{0,0,1} % gluon fusion (blue)
+\definecolor{colVBF}{rgb}{1,0,0} % vector-boson fusion (red)
+\definecolor{colVH}{rgb}{.1,.5,.1} % Higgs strahlung (green)
+\definecolor{colqqH}{rgb}{.8,.1,.9} % Higgs with associated quarks (magenta)
+\definecolor{colkappaf}{rgb}{1,0,0} % kappa_q (red)
+\definecolor{colkappaV}{rgb}{.15,.75,.15} % kappa_V (green)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colkappaf,colkappaV}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}} % \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+% The following defines a custom picture environment that
+% helps to create standalone pages with common settings,
+% and correctly padding the diagram with \fmfframe
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd\MPcolors % define custom line colors in MetaPost
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% S-CHANNEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% HIGGS PRODUCTION - ee -> H
+\begin{fmfpicture}{-4,14}{2,15}{ee-h} % padding (LTRB)
+  \begin{fmfgraph*}(80,65) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{h}
+    % main
+    \fmf{fermion}{i1,v,i2}
+    \fmf{dashes,t=0.9}{v,h} % s-channel Higgs
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=6,l.a=-60,l=\hspace{-2pt}\colkappaf$\kappa_\mathrm{e}$}{v}
+    % labels
+    \fmfv{l.a=120,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-120,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=0,l.d=6,l=h}{h}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS PRODUCTION - ee -> H -> tautau
+\begin{fmfpicture}{-4,14}{-2,15}{ee-h-tautau} % padding (LTRB)
+  \begin{fmfgraph*}(115,65) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{dashes,t=0.9,l.s=left,label=h}{v1,v2} % s-channel Higgs
+    \fmf{fermion}{o1,v2,o2}
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=6,l.a=-60,l=\hspace{-2pt}\colkappaf$\kappa_\mathrm{e}$}{v1} % finetune with \hspace
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=6,l.a=-110,l=\colkappaf$\kappa_\tau$\hspace{5pt}}{v2} % finetune with \hspace
+    % labels
+    \fmfv{l.a=120,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-120,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=40,l.d=5,l=$\tau^+$}{o1}
+    \fmfv{l.a=-40,l.d=5,l=$\tau^-$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% VECTOR BOSON FUSION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% HIGGS PRODUCTION - Vector boson fusion
+\begin{fmfpicture}{-6,11}{8,11}{qq-vv-qqh} % padding (LTRB)
+  \begin{fmfgraph*}(120,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,h,o1}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{i2,v2,o2}
+    \fmf{phantom,tension=0.3}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,tension=0.2}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % VV -> H
+    \fmf{boson}{v2,v,v1}
+    \fmf{dashes}{v,h} % Higgs
+    \fmffreeze
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=5,l.a=-63,l=\colkappaV$\kappa_V$}{v}
+    % labels
+    \fmf{phantom,t=6}{w1,v,w2} % create extra vertices for labels
+    \fmf{phantom,l.d=3,l.s=right,label=$V$}{v1,w1}
+    \fmf{phantom,l.d=3,l.s=left,label=$V$}{v2,w2}
+    \fmfv{l.a=130,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-130,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=4,l.d=3,l=h}{h}
+    \fmfv{l.a=22,l.d=6,l=\strut$q$}{o1}
+    \fmfv{l.a=-22,l.d=6,l=\strut$q'$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS PRODUCTION - Vector boson fusion (straight)
+\begin{fmfpicture}{3,11}{5,11}{qq-vv-qqh-straight} % padding (LTRB)
+  %\color{colVBF} % red text color
+  %\fmfcmd{foreground:=(1,0,0);} % red line color
+  \begin{fmfgraph*}(120,75) % dimensions (WH)
+    % external vertices
+    \fmfleft{d,i2,d,i1,d} % add dummies 'd' for spacing
+    \fmfright{o2,p2,h,p1,o1}
+    \fmfshift{8 up}{i1,p1}
+    \fmfshift{8 down}{i2,p2}
+    % skeleton
+    \fmf{phantom}{v2,i2,i1,v1}
+    \fmf{phantom,tension=0.7}{v1,p1,p2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % qq -> qq
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{i2,v2,o2}
+    % VV -> H
+    \fmf{boson}{v2,v,v1}
+    \fmf{dashes}{v,h} % Higgs
+    \fmffreeze
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=5,l.a=-63,l=\colkappaV$\kappa_V$}{v}
+    % labels
+    \fmf{phantom,t=6}{w1,v,w2} % create extra vertices for labels
+    \fmf{phantom,l.d=3,l.s=right,label=$V$}{v1,w1}
+    \fmf{phantom,l.d=3,l.s=left,label=$V$}{v2,w2}
+    \fmfv{l.a=130,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-130,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=4,l.d=3,l=h}{h}
+    \fmfv{l.a=22,l.d=6,l=\strut$q$}{o1}
+    \fmfv{l.a=-22,l.d=6,l=\strut$q'$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS PRODUCTION - Vector boson fusion (square)
+\begin{fmfpicture}{-7,12}{8,12}{qq-vv-qqh-square} % padding (LTRB)
+  %\color{colVBF} % red text color
+  %\fmfcmd{foreground:=(1,0,0);} % red line color
+  \begin{fmfgraph*}(120,65) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,h,o1}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{i2,v2,o2}
+    \fmffreeze
+    % VV -> H
+    \fmf{boson,l.d=4,l.s=left,label=$V$}{v2,v,v1}
+    \fmf{dashes,t=0}{v,h} % Higgs
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=6,l.a=-60,l=\colkappaV$\kappa_V$}{v}
+    % labels
+    \fmfv{l.a=130,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-130,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=4,l.d=3,l=h}{h}
+    \fmfv{l.a=10,l.d=6,l=\strut$q$}{o1}
+    \fmfv{l.a=-8,l.d=6,l=\strut$q'$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS PRODUCTION - qq -> qqH -> qqtautau
+\begin{fmfpicture}{-7,10}{10,10}{qq-qqh-qqtautau} % padding (LTRB)
+  \begin{fmfgraph*}(135,80) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,t2,t1,o1}
+    % skeleton
+    \fmf{fermion}{i1,v1,o1}
+    \fmf{fermion}{i2,v2,o2}
+    \fmf{phantom,t=0.25}{v1,v2} % pull Vqq vertices together
+    \fmf{phantom,t=0.60}{v1,i1,i2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % VV -> H -> HH
+    \fmf{boson,t=0.9}{v2,v,v1}
+    \fmf{dashes,t=1.1}{v,h} % Higgs
+    \fmf{fermion}{t2,h,t1}
+    \fmffreeze
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=5,l.a=-63,l=\colkappaV$\kappa_V$}{v}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=5,l.a=-112,l=\colkappaf$\kappa_\tau$}{h}
+    % labels
+    \fmf{phantom,t=6}{w1,v,w2} % create extra vertices for labels
+    \fmf{phantom,l.d=2,l.s=right,label=$V^*$}{v1,w1}
+    \fmf{phantom,l.d=2,l.s=left,label=$V^*$}{v2,w2}
+    \fmfv{l.a=130,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-130,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=22,l.d=6,l=\strut$q$}{o1}
+    \fmfv{l.a=-22,l.d=6,l=\strut$q'$}{o2}
+    \fmfv{l.a=25,l.d=4,l=$\tau^-$}{t1}
+    \fmfv{l.a=-20,l.d=4,l=$\tau^+$}{t2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS PRODUCTION - qq -> qqH -> qqtautau
+\begin{fmfpicture}{3,10}{12,11}{qq-qqh-qqtautau-straight} % padding (LTRB)
+  %\color{colqqH} % magenta text color
+  %\fmfcmd{foreground:=(1,0,0);} % magenta line color
+  \begin{fmfgraph*}(120,110) % dimensions (WH)
+    % external vertices
+    \fmfleft{d,i2,d,d,i1,d} % add dummies 'd' for spacing
+    \fmfright{o4,p2,o3,o2,p1,o1}
+    \fmfshift{8 up}{o2,i2,p2}
+    \fmfshift{8 down}{o3,i1,p1}
+    %\fmfshift{2 right}{o2,o3}
+    % skeleton
+    \fmf{fermion}{i1,v1}
+    \fmf{fermion}{i2,v2}
+    \fmf{phantom,tension=0.5}{v1,p1,p2,v2} % pull Vqq vertices to left
+    \fmffreeze
+    % gg -> tt
+    \fmf{fermion}{v1,o1}
+    \fmf{fermion}{v2,o4}
+    % VV -> H -> tautau
+    \fmf{boson}{v1,v,v2}
+    \fmf{dashes,t=1.5,l.s=left,label=h}{v,h} % Higgs
+    \fmf{fermion,t=1.5}{o3,h,o2} % H -> tautau
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=5,l.a=-60,l=\hspace{-2pt}\colkappaV$\kappa_V$}{v}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=5,l.a=-120,l=\colkappaf$\kappa_\tau$\hspace{-4pt}}{h}
+    % labels
+    \fmf{phantom,t=4}{w1,v,w2} % create extra vertices for labels
+    \fmf{phantom,l.d=3,l.s=right,label=$V$}{v1,w1}
+    \fmf{phantom,l.d=3,l.s=left,label=$V$}{v2,w2}
+    \fmfv{l.a=130,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-130,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=22,l.d=6,l=$q$}{o1}
+    \fmfv{l.a=25,l.d=4,l=$\tau^-$}{o2}
+    \fmfv{l.a=-20,l.d=4,l=$\tau^+$}{o3}
+    \fmfv{l.a=-22,l.d=6,l=$q'$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% HIGGS STRAHLUNG %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% HIGGS PRODUCTION - qq -> VH
+\begin{fmfpicture}{-4,14}{-2,15}{qq-VH} % padding (LTRB)
+  %\color{colVH} % green text color
+  %\fmfcmd{foreground:=(0.1,0.5,0.1);} % green line color
+  \begin{fmfgraph*}(110,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{boson,l.s=left,label=$V^*$}{v1,v2} % s-channel
+    \fmf{boson}{v2,o1}
+    \fmf{dashes}{v2,o2} % Higgs
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=6,l.a=-110,l=\colkappaV$\kappa_V$\hspace{5pt}}{v2} % finetune with \hspace
+    % labels
+    \fmfv{l.a=130,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-130,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=30,l.d=5,l=$V$}{o1}
+    \fmfv{l.a=-30,l.d=5,l= h}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HIGGS PRODUCTION - qq -> VH -> mumutautau
+\begin{fmfpicture}{3,14}{12,9}{qq-VH-decay} % padding (LTRB)
+  %\color{colVH} % green text color
+  %\fmfcmd{foreground:=(0.1,0.5,0.1);} % green line color
+  \begin{fmfgraph*}(125,100) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{20 up}{i2}
+    \fmfshift{20 down}{i1}
+    % internal vertices (exact placement)
+    \fmfforce{(.76w,.82h)}{vv} % exact placement
+    \fmfforce{(.76w,.18h)}{vh} % exact placement
+    % main
+    \fmf{fermion,t=1.2}{i1,v1,i2}
+    \fmf{boson,t=1.1,l.s=left,label=$V^*$}{v1,v2} % s-channel
+    \fmf{boson,l.s=left,l.d=3,label=$V$}{v2,vv} % V boson
+    \fmf{dashes}{v2,vh} % Higgs
+    % decay
+    \fmf{fermion}{o2,vv,o1} % V boson decay
+    \fmf{fermion}{o4,vh,o3} % Higgs decay
+    % Higss couplings
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaV,
+          l.d=6,l.a=-110,l=\colkappaV$\kappa_V$\hspace{5pt}}{v2} % finetune with \hspace
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=3,l.a=-120,l=\colkappaf$\kappa_\tau$}{vh}
+    % labels
+    \fmfv{l.a=130,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-130,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=30,l.d=5,l=$\mu^-$}{o1}
+    \fmfv{l.a=-20,l.d=5,l=$\mu^+$}{o2}
+    \fmfv{l.a=30,l.d=5,l=$\tau^-$}{o3}
+    \fmfv{l.a=-20,l.d=5,l=$\tau^+$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% GLUON FUSION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% HIGGS PRODUCTION - Gluon fusion, H -> tautau decay
+\begin{fmfpicture}{4,12}{12,12}{ee-h-tautau-triangle} % padding (LTRB)
+  %\color{colggH} % blue text color
+  %\fmfcmd{foreground:=(0,0,1);} % blue line color
+  \begin{fmfgraph*}(160,50) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{i2,i1}
+    \fmfright{o2,m,o1}
+    % gluons
+    \fmf{gluon}{i2,t2}
+    \fmf{gluon}{t1,i1}
+    \fmf{phantom,t=0.4}{t1,o1,o2,t2} % pull gluons right
+    \fmffreeze
+    % top triangle loop
+    \fmf{fermion}{t1,t3,t2}
+    \fmf{fermion,l.s=left,label=t}{t2,t1}
+    \fmf{phantom,t=1.2}{t3,m} % pull triangle right
+    \fmffreeze % fix triangle
+    % Higgs boson
+    \fmf{dashes,l.s=left,label=h}{t3,h}
+    \fmf{fermion,t=0.8}{o2,h,o1}
+    % Higss coupling
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=5,l.a=-60,l=\colkappaf$\kappa_\mathrm{t}$}{t3}
+    \fmfv{decor.shape=circle,decor.filled=full,decor.size=4,f=colkappaf,
+          l.d=5,l.a=-112,l=\colkappaf$\kappa_{\tau}$}{h}
+    % labels
+    \fmfv{l.a=130,l.d=4,l=e$^-$}{i1}
+    \fmfv{l.a=-130,l.d=4,l=e$^+$}{i2}
+    \fmfv{l.a=24,l.d=5,l=$\tau^-$}{o1}
+    \fmfv{l.a=-22,l.d=5,l=$\tau^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+\end{document}

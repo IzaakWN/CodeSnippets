@@ -1,0 +1,223 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (September 2023)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape singletop_colorflow.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+\usepackage{xcolor}
+\usepackage{pgffor} % for \foreach
+
+% DEFINE COLORS
+\definecolor{myrd}{rgb}{.95,0,0}
+\definecolor{mybl}{rgb}{0,0,1}
+\definecolor{mygr}{rgb}{.1,.7,.1}
+\definecolor{myor}{rgb}{1,0.5,0}
+\newcommand\defineMPColors{
+  \fmfcmd{ % load my custom colors into MetaPost
+    color myrd; myrd := (.95,0,0);
+    color mygr; mygr := (.1,.7,.1);
+    color mybl; mybl := (0,0,1);
+    color myor; myor := (1,.5,0);
+    color glrd; glrd := (.9,.72,.72); % faint red gluon
+    color glgr; glgr := (.72,.9,.72); % faint green gluon
+    color glbl; glbl := (.72,.72,.9); % faint blue gluon
+  }
+}
+
+% MACROS
+\newcommand\defineMPStyles{
+  \fmfcmd{ % load my custom line styles into MetaPost
+    style_def shiftedarrow
+      expr p = cdraw p;
+      cfill (tarrow (p,0.38)); % shift arrow "back"
+    enddef;
+  }
+}
+
+\begin{document}
+\large % increase font size
+
+
+% SINGLE TOP t-channel
+\begin{page}
+\fmfframe(-5,10)(-5,10){ % padding (LTRB)
+\begin{fmffile}{feynmp-singletop-tchan-cf}
+  \begin{fmfgraph*}(120,70)
+    \defineMPColors % load my custom colors into MetaPost
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % main
+    \fmf{fermion,f=myrd}{i1,v1,o1} % top line
+    \fmf{fermion,f=mybl}{o2,v2,i2} % bottom line
+    \fmf{boson,t=0.7,label=W,l.s=left,l.d=4}{v2,v1} % t-channel
+    % labels
+    \fmfv{l.d=6,l.a=160,l=\color{myrd}d}{i1}
+    \fmfv{l.d=6,l.a=-165,l=\color{mybl}$\overline{\mathrm{b}}$}{i2}
+    \fmfv{l.d=6,l.a=20,l=\color{myrd}u}{o1}
+    \fmfv{l.d=6,l.a=-18,l=\color{mybl}$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% SINGLE TOP t-channel (same color)
+\begin{page}
+\fmfframe(-5,10)(-5,10){ % padding (LTRB)
+\begin{fmffile}{feynmp-singletop-tchan-cf2}
+  \begin{fmfgraph*}(120,70)
+    \defineMPColors % load my custom colors into MetaPost
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % main
+    \fmf{fermion,f=myrd}{i1,v1,o1} % top line
+    \fmf{fermion,f=myrd}{o2,v2,i2} % bottom line
+    \fmf{boson,t=0.7,label=W,l.s=left,l.d=4}{v2,v1} % t-channel
+    % labels
+    \fmfv{l.d=6,l.a=160,l=\color{myrd}d}{i1}
+    \fmfv{l.d=6,l.a=-165,l=\color{myrd}$\overline{\mathrm{b}}$}{i2}
+    \fmfv{l.d=6,l.a=20,l=\color{myrd}u}{o1}
+    \fmfv{l.d=6,l.a=-18,l=\color{myrd}$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% SINGLE TOP t-channel
+\begin{page}
+\fmfframe(-5,10)(-5,10){ % padding (LTRB)
+\begin{fmffile}{feynmp-tu-scat-tchan-cf}
+  \begin{fmfgraph*}(120,70)
+    \defineMPColors % load my custom colors into MetaPost
+    \defineMPStyles % load my custom line styles into MetaPost
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % skeleton
+    \fmf{phantom,t=1.0}{i1,v1,o1} % top line
+    \fmf{phantom,t=1.0}{o2,v2,i2} % bottom line
+    \fmf{phantom,t=0.7}{v2,v1} % t-channel
+    \fmffreeze
+    % main: top line
+    \fmf{fermion,f=myrd}{i1,g1L} % top line
+    \fmf{phantom,t=20}{g1L,v1,g1R} % gap
+    \fmf{fermion,f=mygr}{g1R,o1} % top line
+    % main: bottom line
+    \fmf{fermion,f=myrd}{g2L,i2} % bottom line
+    \fmf{phantom,t=20}{g2L,v2,g2R} % gap
+    \fmf{fermion,f=mygr}{o2,g2R} % bottom line
+    \fmffreeze
+    % main: t-channel
+    \fmf{shiftedarrow,f=myrd}{g1L,g2L} % left line
+    \fmf{shiftedarrow,f=mygr,l.s=right,l.d=5,
+      label=$g_{\mathrm{\color{myrd}R\color{mygr}\overline{G}}}$}{g2R,g1R} % right line
+    \fmfi{gluon,f=glrd}{vpath (__g2L,__g1L) scaled 1.0 shifted (4.5,0)} % ghost gluon
+    % labels
+    \fmfv{l.d=6,l.a=160,l=\color{myrd}u}{i1}
+    \fmfv{l.d=6,l.a=-165,l=\color{myrd}$\overline{\mathrm{t}}$}{i2}
+    \fmfv{l.d=6,l.a=20,l=\color{mygr}u}{o1}
+    \fmfv{l.d=6,l.a=-18,l=\color{mygr}$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% SINGLE TOP t-channel, color reconnection
+\begin{page}
+\fmfframe(-5,10)(-5,10){ % padding (LTRB)
+\begin{fmffile}{feynmp-singletop-tchan-cf-cr}
+  \begin{fmfgraph*}(120,70)
+    \defineMPColors % load my custom colors into MetaPost
+    \defineMPStyles % load my custom line styles into MetaPost
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % skeleton
+    \fmf{phantom,t=1.3}{i1,v1} % incoming line
+    \fmf{phantom,t=0.9}{v1,o1} % outgoing line
+    \fmf{phantom,t=1.3}{v2,i2} % incoming line
+    \fmf{phantom,t=0.9}{o2,v2} % outgoing line
+    \fmf{phantom,t=0.7}{v2,v1} % t-channel
+    \fmffreeze
+    % main: top line
+    \fmf{fermion,f=myrd}{i1,v1} % incoming line
+    \fmf{fermion,f=myrd}{v1,g1L} % internal line
+    \fmf{phantom,t=6}{g1L,g1R} % gap
+    \fmf{fermion,f=mygr}{g1R,o1} % outgoing line
+    % main: bottom line
+    \fmf{fermion,f=mybl}{v2,i2} % incoming line
+    \fmf{fermion,f=mybl}{g2L,v2} % internal line
+    \fmf{phantom,t=6}{g2L,g2R} % gap
+    \fmf{fermion,f=mygr}{o2,g2R} % outgoing line
+    % main: cross on impossible vertex
+    \fmf{phantom}{g2L,g2,g2R} % define middle of gap
+    \fmfv{d.sh=cross,d.si=11}{g2} % cross impossible vertex
+    % main: boson
+    \fmf{boson,label=W,l.s=left,l.d=4}{v2,v1} % t-channel
+    % main: gluon (color reconnection)
+    \fmffreeze
+    %\fmfset{arrow_len}{1mm} % does not work locally :(
+    \fmf{shiftedarrow,f=myrd}{g1L,g2L} % left line
+    \fmf{shiftedarrow,f=mygr,l.s=right,l.d=5,
+      label=$g_{\mathrm{\color{myrd}R\color{mygr}\overline{G}}}$}{g2R,g1R} % right line
+    \fmfi{gluon,f=glrd}{vpath (__g2L,__g1L) scaled 1.03 shifted (1.6,-.8)} % ghost gluon
+    % labels
+    \fmfv{l.d=6,l.a=160,l=\color{myrd}d}{i1}
+    \fmfv{l.d=6,l.a=-165,l=\color{mybl}$\overline{\mathrm{b}}$}{i2}
+    \fmfv{l.d=6,l.a=20,l=\color{mygr}u}{o1}
+    \fmfv{l.d=6,l.a=-18,l=\color{mygr}$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+% SINGLE TOP t-channel, color reconnection (same color)
+\begin{page}
+\fmfframe(-5,10)(-5,10){ % padding (LTRB)
+\begin{fmffile}{feynmp-singletop-tchan-cf-cr2}
+  \begin{fmfgraph*}(120,70)
+    \defineMPColors % load my custom colors into MetaPost
+    \defineMPStyles % load my custom line styles into MetaPost
+    \fmfleft{i2,i1} % incoming vertices
+    \fmfright{o2,o1} % outgoing vertices
+    % skeleton
+    \fmf{phantom,t=1.3}{i1,v1} % incoming line
+    \fmf{phantom,t=0.9}{v1,o1} % outgoing line
+    \fmf{phantom,t=1.3}{v2,i2} % incoming line
+    \fmf{phantom,t=0.9}{o2,v2} % outgoing line
+    \fmf{phantom,t=0.7}{v2,v1} % t-channel
+    \fmffreeze
+    % main: top line
+    \fmf{fermion,f=myrd}{i1,v1} % incoming line
+    \fmf{fermion,f=myrd}{v1,g1L} % internal line
+    \fmf{phantom,t=6}{g1L,g1R} % gap
+    \fmf{fermion,f=mygr}{g1R,o1} % outgoing line
+    % main: bottom line
+    \fmf{fermion,f=myrd}{v2,i2} % incoming line
+    \fmf{fermion,f=myrd}{g2L,v2} % internal line
+    \fmf{phantom,t=6}{g2L,g2R} % gap
+    \fmf{fermion,f=mygr}{o2,g2R} % outgoing line
+    % main: boson
+    \fmf{boson,label=W,l.s=left,l.d=4}{v2,v1} % t-channel
+    % main: gluon (color reconnection)
+    \fmffreeze
+    %\fmfset{arrow_len}{1mm} % does not work locally :(
+    \fmf{shiftedarrow,f=myrd}{g1L,g2L} % left line
+    \fmf{shiftedarrow,f=mygr,l.s=right,l.d=5,
+      label=$g_{\mathrm{\color{myrd}R\color{mygr}\overline{G}}}$}{g2R,g1R} % right line
+    \fmfi{gluon,f=glrd}{vpath (__g2L,__g1L) scaled 1.03 shifted (1.6,-.8)} % ghost gluon
+    % labels
+    \fmfv{l.d=6,l.a=160,l=\color{myrd}d}{i1}
+    \fmfv{l.d=6,l.a=-165,l=\color{myrd}$\overline{\mathrm{b}}$}{i2}
+    \fmfv{l.d=6,l.a=20,l=\color{mygr}u}{o1}
+    \fmfv{l.d=6,l.a=-18,l=\color{mygr}$\overline{\mathrm{t}}$}{o2}
+  \end{fmfgraph*}
+\end{fmffile}
+}
+\end{page}
+
+
+\end{document}

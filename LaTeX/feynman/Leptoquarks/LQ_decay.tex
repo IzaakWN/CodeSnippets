@@ -1,0 +1,114 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (September 2024)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape LQ_decay.tex
+\documentclass[11pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+
+% DEFINE TEXT COLORS
+\usepackage{xcolor}
+\definecolor{colvtx}{rgb}{0,.1,1} % LQ vertex (blue)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colvtx}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}} % \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{dash_len}{8} % dashes length
+    \fmfcmd\MPcolors % define custom line colors in MetaPost
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% LQ DECAY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% LQ DECAY
+\begin{fmfpicture}{14,14}{1,14}{LQ_decay_ql} % padding (LTRB)
+  \begin{fmfgraph*}(60,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i}
+    \fmfright{q,l}
+    \fmf{dashes,l.s=left,t=1.2}{i,v}
+    % LQ -> ql
+    \fmf{fermion}{v,q}
+    \fmf{fermion}{v,l}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\strut\colvtx$\lambda$,l.d=6,l.a=-8}{v}
+    % labels
+    \fmfv{l=LQ}{i}
+    \fmfv{l.a=-28,l=$q$}{q}
+    \fmfv{l.a=28,l=$\ell$}{l}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% LQ DECAY
+\begin{fmfpicture}{14,14}{2,14}{LQ_decay_btau} % padding (LTRB)
+  \begin{fmfgraph*}(60,60) % dimensions (WH)
+    % external vertices
+    \fmfleft{i}
+    \fmfright{q,l}
+    \fmf{dashes,l.s=left,t=1.2}{i,v}
+    % LQ -> ql
+    \fmf{fermion}{v,q}
+    \fmf{fermion}{v,l}
+    % vertex
+    \fmfv{d.sh=circle,d.f=full,d.si=4,f=colvtx,
+          l=\strut\colvtx$\lambda$,l.d=6,l.a=-8}{v}
+    % labels
+    \fmfv{l=LQ}{i}
+    \fmfv{l.a=-28,l=b}{q}
+    \fmfv{l.a=28,l=$\tau$}{l}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% LQ PAIR DECAY - combinatorics
+\begin{fmfpicture}{-4,10}{43,10}{LQ_decay_pair} % padding (LTRB)
+  \def\b#1{\makebox[16pt][l]{#1}} % macro to have horizontal alignment
+  \begin{fmfgraph*}(60,90) % dimensions (WH)
+    % external vertices
+    \fmfstraight
+    \fmfleft{t2,m,t1}
+    \fmfright{o4,o3,o2,o1}
+    % internal vertices (exact placement)
+    \fmfforce{(.52w,.84h)}{v1} % exact placement
+    \fmfforce{(.52w,.16h)}{v2} % exact placement
+    % LQ pair
+    \fmf{dashes,t=1.4,l.s=right,label=LQ}{v1,m}
+    \fmf{dashes,t=1.4,l.s=right,label=$\overline{\mathrm{LQ}}$}{m,v2}
+    % LQ decay
+    \fmf{fermion,t=1.1}{v1,o1}
+    \fmf{fermion,t=1.1}{v1,o2}
+    \fmf{fermion,t=1.1}{v2,o3}
+    \fmf{fermion,t=1.1}{v2,o4}
+    % labels
+    \fmfv{l=\b{$\tau$,,}\b{$\tau$,,}\b{$\nu$},l.d=8,l.a=0}{o1}
+    \fmfv{l=\b{b,,}\b{b,,}\b{t},l.d=8,l.a=0}{o2}
+    \fmfv{l=\b{$\tau$,,}\b{$\nu$,,}\b{$\nu$},l.d=8,l.a=0}{o3}
+    \fmfv{l=\b{b,,}\b{t,,}\b{t},l.d=8,l.a=0}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+\end{document}

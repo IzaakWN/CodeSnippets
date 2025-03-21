@@ -1,0 +1,108 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (June 2024)
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape Zprime.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{amsmath}
+\usepackage{feynmp-auto}
+\usepackage{xcolor}
+\usepackage{pgffor} % for \foreach
+
+% DEFINE TEXT COLORS
+%\definecolor{collep}{rgb}{.1,.6,.1} % lepton (green)
+%\definecolor{collep}{rgb}{.74,.05,.05} % lepton (red)
+%\definecolor{colrad}{rgb}{.20,.41,.90} % radiation (cyan)
+%\definecolor{colvtx}{rgb}{.1,.1,.7} % vertex (dark blue)
+%\definecolor{mybl}{rgb}{0,0,1} % blue
+%\definecolor{mygr}{rgb}{.1,.7,.1} % green
+%\definecolor{myor}{rgb}{1,0.5,0} % orange
+%\newcommand\collep{\color{collep}}
+%\newcommand\colrad{\color{colrad}}
+%\newcommand\colvtx{\color{colvtx}}
+
+% DEFINE ENVIRONMENT
+\usepackage{environ}
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{14} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    %\fmfcmd{ % define custom line colors in MetaPost (does not work in \fmfv)
+    %  %color collep; collep := (.1,.6,.1); % lepton (green)
+    %  color collep; collep := (.74,.05,.05); % lepton (red)
+    %  color colrad; colrad := (.20,.41,.90); % lepton (red)
+    %}
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+% LOOP MACRO
+%\def\foreachlep#1{\foreach \lep in {\mathrm{e},\mu,\tau,\ell}{#1}}
+%\def\foreachlep#1{\foreach \lep in {\ell,\tau}{#1}}
+\def\foreachlep#1{\foreach \lep in {\tau}{#1}}
+
+\begin{document}
+\large
+
+
+% Z prime - Quark-antiquark annihilation
+\foreachlep{
+\begin{fmfpicture}{-10,12}{-1,8}{feynmp-zprime-qq} % padding (LTRB)
+  \begin{fmfgraph*}(110,60)
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main
+    \fmf{fermion}{i1,v1,i2}
+    \fmf{boson,l.s=right,l.d=7,label=Z$'$}{v2,v1} % s-channel
+    \fmf{fermion}{o2,v2,o1}
+    % labels
+    \fmfv{l.a=160,l.d=4,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=4,l=$\overline{q}$}{i2}
+    \fmfv{l.a=24,l.d=4,l=$\lep^-$}{o1}
+    \fmfv{l.a=-22,l.d=4,l=$\lep^+$}{o2}
+  \end{fmfgraph*}
+\end{fmfpicture}}
+
+
+% Z prime - Vector boson fusion
+\foreachlep{
+\begin{fmfpicture}{-12,8}{12,8}{feynmp-zprime-vbf} % padding (LTRB)
+  \begin{fmfgraph*}(130,80)
+    \fmfleft{i2,i1}
+    \fmfright{o2,l2,l1,o1}
+    \fmfshift{3 up}{l1}
+    \fmfshift{3 down}{l2}
+    \fmfshift{3 right}{l1,l2}
+    % skeleton
+    \fmf{phantom,t=1.5}{i1,v1} % incoming top
+    \fmf{phantom,t=1.5}{i2,v2} % incoming bottom
+    \fmf{phantom,t=1.0}{v1,o1} % outgoing top
+    \fmf{phantom,t=1.0}{v2,o2} % outgoing bottom
+    \fmf{phantom,t=0.4}{v1,v2} % t-channel
+    \fmffreeze
+    % main
+    \fmf{fermion}{i1,v1,o1} % top quark line
+    \fmf{fermion}{o2,v2,i2} % bottom quark line
+    %\fmf{boson,l.s=right,l.d=2,label=W$^+$}{v1,z1}
+    %\fmf{boson,l.s=left,l.d=2,label=W$^-$}{v2,z1}
+    \fmf{boson}{v1,z1,v2}
+    \fmf{boson,l.s=left,l.d=7,t=1,label=Z$'$}{z1,z2} % s-channel
+    \fmf{fermion,t=1.1}{l1,z2,l2} % leptons
+    % labels
+    \fmfv{l.a=-105,l.d=13,l=W$^+$}{v1}
+    \fmfv{l.a=105,l.d=13,l=W$^-$}{v2}
+    \fmfv{l.a=160,l.d=4,l=$q$}{i1}
+    \fmfv{l.a=-158,l.d=3,l=$\overline{q}'$}{i2}
+    \fmfv{l.a=20,l.d=5,l=$q''$}{o1}
+    \fmfv{l.a=-22,l.d=5,l=$\overline{q}'''$}{o2}
+    \fmfv{l.a=24,l.d=5,l=$\lep^-$}{l1}
+    \fmfv{l.a=-22,l.d=5,l=$\lep^+$}{l2}
+  \end{fmfgraph*}
+\end{fmfpicture}}
+
+
+\end{document}

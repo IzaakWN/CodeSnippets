@@ -1,0 +1,605 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (January 2024)
+% Description: HNL production & decay in pp collisions
+% Sources: https://cms-results.web.cern.ch/cms-results/public-results/publications/EXO-23-006
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape HNL.tex
+\documentclass[10pt,border=2pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+\usepackage{amsmath}
+
+% DEFINE TEXT COLORS
+\usepackage{xcolor}
+\definecolor{colHNL}{rgb}{.1,.5,.1} % HNL (green)
+\definecolor{colBSM}{rgb}{.96,.3,0} % BSM mediator (orange)
+\definecolor{colvtx}{rgb}{.9,0,0} % vertex (red)
+
+% DEFINE COLOR MACROS
+% The following loops over the user color names and defines
+% a handy \<colname> command to set text color, as well as
+% defines colors in MetaPost of the same and value for lines
+\usepackage{pgffor} % for \foreach
+\def\MPcolors{} % MetaPost code importing xcolor names
+\foreach \colname in {colHNL,colBSM,colvtx}{ % create command & MetaPost code
+  \expandafter\xdef\csname\colname\endcsname{\noexpand\color{\colname}} % \newcommand\<colname>
+  \convertcolorspec{named}{\colname}{rgb}\tmprgb % get rgb code
+  \xdef\MPcolors{\MPcolors color \colname; \colname := (\tmprgb); } % add color name
+}
+
+% DEFINE fmfpicture ENVIRONMENT
+% The following defines a custom picture environment that
+% helps to create standalone pages with common settings,
+% and correctly padding the diagram with \fmfframe
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \fmfcmd{ % custom line style: double arrows for Majorana neutrino
+      style_def majorana
+        expr p = cdraw p;
+        cfill (tarrow (p,0.18)); % shift arrow 
+        cfill (tarrow (reverse(p),0.18)); % shift arrow
+      enddef;
+    }
+    \fmfcmd\MPcolors % define custom line colors in MetaPost
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+% BRACES
+\usepackage{scalerel}
+\newcommand{\mylbrace}[2]{\vspace{#2pt}\hspace{4pt}\scaleleftright[\dimexpr6pt+#1\dimexpr0.11pt]{\lbrace}{\rule[\dimexpr2pt-#1\dimexpr0.5pt]{-4pt}{#1pt}}{.}}
+\newcommand{\myrbrace}[2]{\vspace{#2pt}\scaleleftright[\dimexpr6pt+#1\dimexpr0.11pt]{.}{\rule[\dimexpr2pt-#1\dimexpr0.5pt]{-4pt}{#1pt}}{\rbrace}\hspace{2pt}}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% HNL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% HNL single production without W/Z decay
+\begin{fmfpicture}{0,-7}{17,12}{hnl_qq-llV} % padding (LT)(RB)
+  \begin{fmfgraph*}(130,105) % canvas (W,H)
+    % external vertices
+    %\fmfstraight
+    \fmfleft{d,i2,d,i1,d} % incoming vertices
+    \fmfright{o3,o2,o1} % outgoing vertices
+    \fmfshift{10 left}{o2}
+    %\fmfshift{5 up}{o2}
+    %\fmfshift{5 up}{o3}
+    % skeleton
+    \fmf{fermion,t=1.0}{i1,v1,i2} % incoming particles
+    \fmf{phantom,t=0.38}{o3,v2,o1} % outgoing particles (pull)
+    \fmf{boson,t=0.9,label=W$^\pm$/Z,l.s=right,l.d=3}{v2,v1} % s-channel
+    \fmffreeze
+    % HNL + SM lepton
+    \fmf{fermion}{n1,v2} % SM lepton
+    \fmf{fermion,f=colHNL,label=\colHNL N,l.s=right,l.d=4}{v2,n2} % HNL
+    \fmf{phantom,t=1.2}{n1,o1} % pull SM lepton
+    \fmf{phantom,t=1.0,f=colHNL}{n2,o3} % pull HNL
+    \fmffreeze
+    % HNL decay
+    \fmf{fermion}{n2,o2} % outgoing particles
+    \fmf{boson}{n2,o3} % W/Z boson
+    % labels
+    \fmfv{l.d=5,l.a=155,l=q}{i1}
+    \fmfv{l.d=3,l.a=-155,l=$\overline{\mathrm{q}}'$}{i2}
+    \fmfv{l.d=2,l.a=40,l=$\ell^\pm/\nu$}{n1}
+    \fmfv{l.d=2,l.a=26,l=$\ell'^\mp/\overline{\nu}'$}{o2}
+    \fmfv{l.d=3,l.a=-20,l=W$^\pm$/Z\vspace{-5pt}}{o3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HNL single production with W_R decay
+\begin{fmfpicture}{3,-17}{10,10}{hnl_qq-llqq-WR} % padding (LT)(RB)
+  \begin{fmfgraph*}(140,120) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,d,i1,d} % incoming vertices
+    \fmfright{o4,o3,o2,d,o1} % outgoing vertices
+    \fmfshift{10 left}{o2}
+    \fmfshift{5 up}{o2}
+    \fmfshift{5 up}{o3}
+    % skeleton
+    \fmf{fermion,t=1.0}{i1,v1,i2} % incoming particles
+    \fmf{phantom,t=0.35}{o4,v2,o1} % outgoing particles (pull)
+    \fmf{boson,t=1.1,f=colBSM,label=\colBSM W$_\mathrm{R}^\pm$,l.s=right,l.d=4}{v2,v1} % s-channel
+    \fmffreeze
+    % HNL + SM lepton
+    \fmf{fermion}{n1,v2} % SM lepton
+    \fmf{majorana,f=colHNL,label=\colHNL N$_\ell$,l.s=right,l.d=4}{v2,n2} % HNL
+    \fmf{phantom,t=0.9}{n1,o1} % pull SM lepton
+    \fmf{phantom,t=0.6}{n2,o4} % pull HNL
+    \fmffreeze
+    % HNL decay
+    \fmf{fermion}{n2,o2} % outgoing particles
+    \fmf{boson,t=1,f=colBSM,label=\colBSM W$_\mathrm{R}^\pm$,l.s=right,l.d=3}{n2,v3} % W/Z boson
+    \fmf{fermion}{o4,v3} % outgoing particles
+    \fmffreeze
+    \fmf{fermion}{v3,o3} % outgoing particles
+    % labels
+    \fmfv{l.d=5,l.a=155,l=q}{i1}
+    \fmfv{l.d=3,l.a=-155,l=$\overline{\mathrm{q}}'$}{i2}
+    \fmfv{l.d=2,l.a=40,l=$\ell^\pm$}{n1}
+    \fmfv{l.d=3,l.a=26,l=$\ell'^\mp$}{o2}
+    \fmfv{l.d=4,l.a=24,l=q$'$}{o3}
+    \fmfv{l.d=5,l.a=-20,l=$\overline{\mathrm{q}}''$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HNL single production with W/Z decay
+\begin{fmfpicture}{3,-15}{53,10}{hnl_qq-llqq} % padding (LT)(RB)
+  \begin{fmfgraph*}(140,120) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,d,i1,d} % incoming vertices
+    \fmfright{o4,o3,o2,d,o1} % outgoing vertices
+    \fmfshift{10 left}{o2}
+    \fmfshift{5 up}{o2}
+    \fmfshift{5 up}{o3}
+    % skeleton
+    \fmf{fermion,t=1.0}{i1,v1,i2} % incoming particles
+    \fmf{phantom,t=0.35}{o4,v2,o1} % outgoing particles (pull)
+    \fmf{boson,t=1.1,label=W$^\pm$/Z,l.s=right,l.d=4}{v2,v1} % s-channel
+    \fmffreeze
+    % HNL + SM lepton
+    \fmf{fermion}{n1,v2} % SM lepton
+    \fmf{fermion,f=colHNL,label=\colHNL N,l.s=right,l.d=4}{v2,n2} % HNL
+    \fmf{phantom,t=0.9}{n1,o1} % pull SM lepton
+    \fmf{phantom,t=0.6}{n2,o4} % pull HNL
+    \fmffreeze
+    % HNL decay
+    \fmf{fermion}{n2,o2} % outgoing particles
+    \fmf{boson,t=1.0,label=W$^\pm$/Z,l.s=right,l.d=3}{n2,v3} % W/Z boson
+    \fmf{fermion}{o4,v3} % outgoing particles
+    \fmffreeze
+    \fmf{fermion}{v3,o3} % outgoing particles
+    % labels
+    \fmfv{l.d=5,l.a=155,l=q}{i1}
+    \fmfv{l.d=3,l.a=-155,l=$\overline{\mathrm{q}}'$}{i2}
+    \fmfv{l.d=2,l.a=40,l=$\ell^\pm/\nu$}{n1}
+    \fmfv{l.d=3,l.a=26,l=$\ell'^\mp/\overline{\nu}'$}{o2}
+    \fmfv{l.d=4,l.a=24,l=$q''/\ell''^\mp/\nu''$}{o3}
+    \fmfv{l.d=5,l.a=-20,l=$\overline{\mathrm{q}}'''/\ell''^\pm/\overline{\nu}''$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HNL single production through Wgamma
+\begin{fmfpicture}{2,-11}{13,10}{hnl_gW-llqqq} % padding (LT)(RB)
+  \begin{fmfgraph*}(150,140) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,d,i1,d} % incoming vertices
+    \fmfright{o5,o4,o3,o2,o1} % outgoing vertices
+    \fmfshift{7 down}{o2,o3}
+    \fmfshift{5 down}{o4}
+    % skeleton
+    \fmf{fermion,t=2.5}{i1,v1} % top incoming particle
+    \fmf{boson,t=2.5}{i2,v2} % bottom incoming particle (photon)
+    \fmf{fermion,t=2}{v1,p1} % top outgoing particle (quark)
+    \fmf{phantom,t=2}{p1,o1} % top outgoing particle (to pull quark)
+    \fmf{phantom,t=2}{v2,p2,o5} % bottom outgoing particle
+    \fmf{boson,t=2.8,label=W$^\pm$,l.s=right,l.d=3}{v1,v2} % t-channel W boson
+    \fmffreeze
+    % HNL decay
+    \fmf{boson,label=W$^\pm$\!,l.s=right,l.d=4}{v2,N1} % fused W boson
+    \fmf{majorana,f=colHNL,label=\colHNL N,l.s=right,l.d=4}{N1,N2} % HNL
+    \fmf{boson,label=W$^\pm$\!,l.s=right,l.d=4}{N2,w} % W boson from HNL decay
+    \fmf{fermion}{o5,w} % quark from W decay
+    \fmffreeze
+    % outgoing leptons
+    \fmf{fermion}{l1,N1} % lepton from W decay
+    \fmf{fermion}{N2,l2} % lepton from HNL decay
+    % outgoing quark
+    \fmf{fermion}{w,o4} % quark from W decay
+    \fmf{phantom,t=1.7}{l1,o2} % pull
+    \fmf{phantom,t=2.4}{l2,o3} % pull
+    % labels
+    \fmfv{l.d=5,l.a=155,l=q}{i1}
+    \fmfv{l.d=5,l.a=-155,l=$\gamma$}{i2}
+    \fmfv{l.d=5,l.a=26,l=$\ell^\pm$}{l1}
+    \fmfv{l.d=5,l.a=26,l=$\ell^\pm$}{l2}
+    \fmfv{l.d=5,l.a=23,l=q$'$}{p1}
+    \fmfv{l.d=5,l.a=23,l=q$''$}{o4}
+    \fmfv{l.d=5,l.a=-20,l=$\overline{\mathrm{q}}'''$}{o5}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HNL from B decay
+% https://wiki.physik.uzh.ch/cms/latex:feynman#neutron_beta_decay_with_spectator_quarks
+\begin{fmfpicture}{13,18}{34,20}{hnl_B_decay} % padding (LT)(RB)
+  \begin{fmfgraph*}(160,80) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmftop{t1,t2,t3} % top vertices
+    \fmfbottom{b1,b2,d,b3} % bottom vertices
+    \fmfright{o2,o1,d,d}
+    \fmfshift{10 right}{o1,o2}
+    \fmfshift{6 right}{b2} % make quark line longer
+    \fmfshift{3 right}{t2} % move outgoing (primary) lepton
+    % skeleton
+    \fmf{phantom,t=1.3}{v1,t1} % pull
+    \fmf{phantom,t=1}{v1,b1} % pull
+    \fmf{fermion,t=1.2,f=colHNL,label=\colHNL N$_\ell$,l.s=right,l.d=6}{v1,v2} % HNL s-channel
+    \fmf{fermion,t=1.3}{v2,t3} % outgoing lepton
+    \fmf{phantom,t=1}{v2,b3} % pull
+    \fmffreeze
+    % B decay
+    \fmf{boson,t=1.5,label=W$^{\pm*}$,l.s=left,l.d=4}{d1,v1} % left W boson
+    \fmf{fermion,t=2}{b2,d1,b1} % B meson top quark lines
+    \fmf{phantom,t=0.6}{b1,d1} % pull left W decay vertex to left
+    % B decay spectator quarks
+    \fmffreeze % before using \fmfi
+    \fmf{phantom,t=0}{d1,b2} % hack to reverse arrowhead
+    \fmfi{fermion}{vpath (__b1,__d1) shifted (0,-13)} % incoming spectator quark
+    \fmfi{fermion}{vpath (__d1,__b2) shifted (0,-13)} % outgoing spectator quark
+    \fmfv{l=\parbox{6pt}{B}\mylbrace{21}{-12},l.d=8,l.a=180}{b1} % left brace
+    \fmfv{l=\myrbrace{21}{-12}\parbox{2pt}{$X$},l.d=8,l.a=0}{b2} % right brace
+    % HNL decay
+    \fmf{fermion,t=1.1}{t2,v1} % outgoing (primary) lepton
+    \fmf{boson,t=2,label=W$^{\pm*}$,l.s=left,l.d=4}{d2,v2}
+    \fmf{fermion,t=2}{o1,d2,o2} % right W decay
+    \fmf{phantom,t=1.4}{b2,d2} % pull right W decay vertex to left
+    \fmf{phantom,t=1.4}{o2,d2} % pull right W decay vertex to right
+    \fmfv{l=\myrbrace{34}{-26}\parbox{2pt}{$\pi^\pm$},l.d=8,l.a=0}{o1} % right brace
+    % labels
+    \fmfv{l.d=3,l.a=25,l=$\ell^\pm_\mathrm{P}$}{t2}
+    \fmfv{l.d=4,l.a=60,l=$\ell^\mp$}{t3}
+    %\fmfv{d.sh=circle,d.si=3,f=(.9,,0,,0),l.d=3,l.a=113,
+    %      l=\normalsize\colvtx$V_{\ell N}$}{v1} % neutrino
+    %\fmfv{d.sh=circle,d.si=3,f=(.9,,0,,0),l.d=3,l.a=113,
+    %      l=\normalsize\colvtx$V_{\ell N}$}{v2} % neutrino
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HNL from B decay with explicit mixing
+% https://wiki.physik.uzh.ch/cms/latex:feynman#neutron_beta_decay_with_spectator_quarks
+\begin{fmfpicture}{13,18}{34,20}{hnl_B_decay-mix} % padding (LT)(RB)
+  \begin{fmfgraph*}(180,80) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmftop{t1,t2,t3} % top vertices
+    \fmfbottom{b1,b2,d,b3} % bottom vertices
+    \fmfright{o2,o1,d,d}
+    \fmfshift{10 right}{o1,o2}
+    \fmfshift{6 right}{b2} % make quark line longer
+    \fmfshift{3 right}{t2} % move outgoing (primary) lepton
+    % skeleton
+    \fmf{phantom,t=1.3}{v1,t1} % pull
+    \fmf{phantom,t=1}{v1,b1} % pull
+    \fmf{phantom,t=1.2}{v1,v2}
+    \fmf{fermion,t=1.3}{v2,t3} % outgoing lepton
+    \fmf{phantom,t=1}{v2,b3} % pull
+    \fmffreeze
+    % B decay
+    \fmf{boson,t=1.5,label=W$^{\pm*}$,l.s=left,l.d=4}{d1,v1} % left W boson
+    \fmf{fermion,t=2}{b2,d1,b1} % B meson top quark lines
+    \fmf{phantom,t=0.6}{b1,d1} % pull left W decay vertex to left
+    % B decay spectator quarks
+    \fmffreeze % before using \fmfi
+    \fmf{phantom,t=0}{d1,b2} % hack to reverse arrowhead
+    \fmfi{fermion}{vpath (__b1,__d1) shifted (0,-13)} % incoming spectator quark
+    \fmfi{fermion}{vpath (__d1,__b2) shifted (0,-13)} % outgoing spectator quark
+    \fmfv{l=\parbox{6pt}{B}\mylbrace{21}{-12},l.d=8,l.a=180}{b1} % left brace
+    \fmfv{l=\myrbrace{21}{-12}\parbox{2pt}{$X$},l.d=8,l.a=0}{b2} % right brace
+    % s-channel
+    \fmf{plain,t=2,label=$\nu_{\ell_\mathrm{P}}$,l.s=right,l.d=4}{v1,n1} % neutrino s-channel
+    \fmf{plain,t=2,label=$\nu_\ell$,l.s=right,l.d=4}{n2,v2} % neutrino s-channel
+    \fmf{fermion,f=colHNL,label=\colHNL N$_\ell$,l.s=right,l.d=6}{n1,n2} % HNL s-channel
+    \fmfv{decor.shape=cross,decor.size=8}{n1,n2} % t-channel neutrino
+    % HNL decay
+    \fmf{fermion,t=1.1}{t2,v1} % outgoing (primary) lepton
+    \fmf{boson,t=2,label=W$^{\pm*}$,l.s=right,l.d=3}{d2,v2}
+    \fmf{fermion,t=2}{o1,d2,o2} % right W decay
+    \fmf{phantom,t=1.4}{b2,d2} % pull right W decay vertex to left
+    \fmf{phantom,t=1.4}{o2,d2} % pull right W decay vertex to right
+    \fmfv{l=\myrbrace{34}{-26}\parbox{2pt}{$\pi^\pm$},l.d=8,l.a=0}{o1} % right brace
+    % labels
+    \fmfv{l.d=3,l.a=25,l=$\ell^\pm_\mathrm{P}$}{t2}
+    \fmfv{l.d=4,l.a=60,l=$\ell^\mp$}{t3}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% WEINBERG operator - t-channel
+\begin{fmfpicture}{-8,10}{10,10}{hnl_vbf-ll-wein} % padding (LT)(RB)
+  \begin{fmfgraph*}(120,100) % canvas (W,H)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{1 up}{o2}
+    \fmfshift{1 down}{o3}
+    % VBF process
+    \fmf{fermion,t=1.7}{i1,v1} % top incoming quark
+    \fmf{fermion,t=1.7}{i2,v2} % bottom incoming quark
+    \fmf{phantom,t=0.4}{v1,v2} % t-channel
+    \fmf{fermion}{v1,o1} % top outgoing quark
+    \fmf{fermion}{o4,v2} % bottom outgoing quark
+    \fmffreeze
+    % main process
+    \fmf{fermion,t=1}{l1,o2} % outgoing lepton
+    \fmf{fermion,t=1}{l2,o3} % outgoing lepton
+    %\fmf{plain,t=1.5,label=\strut$\nu_\ell$,l.s=left,l.d=3}{l2,x} % t-channel
+    %\fmf{plain,t=1.5,label=$\overline{\nu}_\ell$,l.s=left,l.d=3}{x,l1} % t-channel
+    \fmf{plain,t=1.5}{l2,x,l1} % t-channel
+    \fmfv{decor.shape=cross,decor.size=8}{x} % t-channel neutrino
+    \fmf{boson,t=1.3,label=W$^\pm$,l.s=left,l.d=3}{l1,v1} % boson
+    \fmf{boson,t=1.3,label=W$^\pm$,l.s=right,l.d=3}{l2,v2} % boson
+    % labels
+    \fmfv{l.d=5,l.a=160,l=q}{i1}
+    \fmfv{l.d=4,l.a=-160,l=q$'$}{i2}
+    \fmfv{l.d=5,l.a=22,l=q$''$}{o1}
+    \fmfv{l.d=5,l.a=10,l=$\ell^\pm$}{o2}
+    \fmfv{l.d=5,l.a=-10,l=$\ell^\pm$}{o3}
+    \fmfv{l.d=5,l.a=-20,l=q$''''$}{o4}
+    \fmfv{l.d=5,l.a=-120,l=$\nu_\ell$}{l1} % neutrino
+    \fmfv{l.d=5,l.a=120,l=$\overline{\nu}_\ell$}{l2} % neutrino
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HNL (Majorana) - t-channel
+\begin{fmfpicture}{-8,10}{10,10}{hnl_vbf-ll-majo} % padding (LT)(RB)
+  \begin{fmfgraph*}(120,100) % canvas (W,H)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o4,o3,o2,o1}
+    \fmfshift{1 up}{o2}
+    \fmfshift{1 down}{o3}
+    % VBF process
+    \fmf{fermion,t=1.7}{i1,v1} % top incoming quark
+    \fmf{fermion,t=1.7}{i2,v2} % bottom incoming quark
+    \fmf{phantom,t=0.4}{v1,v2} % t-channel
+    \fmf{fermion}{v1,o1} % top outgoing quark
+    \fmf{fermion}{v2,o4} % bottom outgoing quark
+    \fmffreeze
+    % main process
+    \fmf{fermion,t=1}{l1,o2} % outgoing lepton
+    \fmf{fermion,t=1}{l2,o3} % outgoing lepton
+    %\fmf{fermion,t=0.75,f=colHNL,label=\colHNL N,l.d=4}{l2,l1} % t-channel Majorana
+    %\fmf{fermion,t=0.00,f=colHNL}{l1,l2} % t-channel Majorana
+    \fmf{majorana,t=0.75,f=colHNL,label=\colHNL N$_\ell$,l.s=left,l.d=4}{l2,l1} % t-channel Majorana
+    \fmf{boson,t=1.3,label=W$^\pm$,l.s=left,l.d=2}{l1,v1} % boson
+    \fmf{boson,t=1.3,label=W$^\pm$,l.s=right,l.d=1}{l2,v2} % boson
+    % vertices highlights
+    \fmfv{d.sh=circle,d.si=3,f=(.9,,0,,0),l.d=4,l.a=-50,
+          l=\normalsize\colvtx$V_{\ell N}$}{l1} % neutrino
+    \fmfv{d.sh=circle,d.si=3,f=(.9,,0,,0),l.d=4,l.a=50,
+          l=\normalsize\colvtx$V_{\ell N}$}{l2} % neutrino
+    % labels
+    \fmfv{l.d=5,l.a=160,l=q}{i1}
+    \fmfv{l.d=4,l.a=-160,l=q$'$}{i2}
+    \fmfv{l.d=5,l.a=22,l=q$''$}{o1}
+    \fmfv{l.d=5,l.a=10,l=$\ell^\pm$}{o2}
+    \fmfv{l.d=5,l.a=-10,l=$\ell^\pm$}{o3}
+    \fmfv{l.d=5,l.a=-20,l=q$''''$}{o4}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HNL (Type-III Seesaw) pair production through W*
+\begin{fmfpicture}{3,14}{11,13}{hnl_qq-w_decay} % padding (LT)(RB)
+  \begin{fmfgraph*}(160,140) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,d,i1,d}
+    \fmfright{o6,o5,o4,o3,o2,o1}
+    \fmfshift{10 left}{o1,o6}
+    \fmfshift{5 down}{i1}
+    \fmfshift{5 up}{i2}
+    % qq -> W & skeleton
+    \fmf{fermion,t=1.5}{i1,v1,i2}
+    \fmf{boson,t=1.5,label=W$^{\pm}$,l.s=right,l.d=4}{v2,v1}
+    \fmf{fermion,t=0.7}{w1,o1} % top outgoing fermion
+    \fmf{fermion,t=0.7}{o6,w2} % bottom outgoing fermion
+    % W decay to heavy leptons
+    \fmf{fermion,t=1.1,f=colHNL,label=\colHNL $\Sigma^0$,l.d=3,l.s=left}{v2,w1} % HNL
+    \fmf{fermion,t=1.1,f=colHNL,label=\colHNL $\Sigma^\pm$,l.d=4,l.s=left}{w2,v2} % HNL
+    \fmffreeze
+    % HNL decay
+    \fmf{boson,t=1.2,label=$\mathrm{W}^\pm$,l.d=5,l.s=right}{w1,d1} % W boson
+    \fmf{fermion}{o2,d1,o3}
+    % HCL decay
+    \fmf{boson,t=1.2,label=$\mathrm{W}^\pm$,l.d=5,l.s=left}{w2,d2} % W boson
+    \fmf{fermion}{o5,d2,o4}
+    % labels
+    \fmfv{l.d=4,l.a=155,l=q}{i1}
+    \fmfv{l.d=3,l.a=-155,l=$\overline{\mathrm{q}}'$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$\ell^\mp$}{o1}
+    \fmfv{l.d=5,l.a=20,l=$\overline{\nu}$}{o2}
+    \fmfv{l.d=5,l.a=-15,l=$\ell^\pm$}{o3}
+    \fmfv{l.d=5,l.a=15,l=$\nu$}{o4}
+    \fmfv{l.d=5,l.a=-15,l=$\ell^\pm$}{o5}
+    \fmfv{l.d=5,l.a=-25,l=$\overline{\nu}$}{o6}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HNL (Type-III Seesaw) pair production through Z
+\begin{fmfpicture}{1,14}{11,14}{hnl_qq-z_decay} % padding (LT)(RB)
+  \begin{fmfgraph*}(160,140) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,d,i1,d}
+    \fmfright{o6,o5,o4,o3,o2,o1}
+    \fmfshift{10 left}{o1,o6}
+    \fmfshift{5 down}{i1}
+    \fmfshift{5 up}{i2}
+    % qq -> Z & skeleton
+    \fmf{fermion,t=1.5}{i1,v1,i2}
+    \fmf{boson,t=1.5,label=Z/$\gamma^*$,l.s=right,l.d=4}{v2,v1}
+    \fmf{fermion,t=0.7}{w1,o1} % top outgoing fermion
+    \fmf{fermion,t=0.7}{o6,w2} % bottom outgoing fermion
+    % W decay to heavy leptons
+    \fmf{fermion,t=1.1,f=colHNL,label=\colHNL $\Sigma^\mp$,l.d=3,l.s=left}{v2,w1} % HNL
+    \fmf{fermion,t=1.1,f=colHNL,label=\colHNL $\Sigma^\pm$,l.d=4,l.s=left}{w2,v2} % HNL
+    \fmffreeze
+    % HNL decay
+    \fmf{boson,t=1.2,label=Z,l.d=5,l.s=right}{w1,d1} % Z boson
+    \fmf{fermion}{o2,d1,o3}
+    % HCL decay
+    \fmf{boson,t=1.2,label=Z,l.d=5,l.s=left}{w2,d2} % Z boson
+    \fmf{fermion}{o5,d2,o4}
+    % labels
+    \fmfv{l.d=4,l.a=155,l=q}{i1}
+    \fmfv{l.d=4,l.a=-155,l=$\overline{\mathrm{q}}$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$\ell^\mp$}{o1}
+    \fmfv{l.d=5,l.a=20,l=q$'$}{o2}
+    \fmfv{l.d=5,l.a=-15,l=$\overline{\mathrm{q}}'$}{o3}
+    \fmfv{l.d=5,l.a=15,l=$\ell^\mp$}{o4}
+    \fmfv{l.d=5,l.a=-15,l=$\ell^\pm$}{o5}
+    \fmfv{l.d=4,l.a=-25,l=$\ell^\pm$}{o6}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HNL pair production through Z'
+\begin{fmfpicture}{1,14}{15,14}{hnl_qq-zp_decay} % padding (LT)(RB)
+  \begin{fmfgraph*}(160,140) % canvas (W,H)
+    % external vertices
+    \fmfstraight
+    \fmfleft{d,i2,d,i1,d}
+    \fmfright{o6,o5,o4,o3,o2,o1}
+    \fmfshift{10 left}{o1,o6}
+    \fmfshift{5 down}{i1}
+    \fmfshift{5 up}{i2}
+    % qq -> Z' & skeleton
+    \fmf{fermion,t=1.5}{i1,v1,i2}
+    \fmf{boson,t=1.5,f=colBSM,label=\colBSM Z$'$,l.s=right,l.d=4}{v2,v1}
+    \fmf{fermion,t=0.7}{w1,o1} % top outgoing fermion
+    \fmf{fermion,t=0.7}{o6,w2} % bottom outgoing fermion
+    % Z' decay to heavy leptons
+    \fmf{majorana,t=1.1,f=colHNL,label=\colHNL N$_\ell$,l.d=4,l.s=left}{v2,w1} % HNL
+    \fmf{majorana,t=1.1,f=colHNL,label=\colHNL N$_\ell$,l.d=4,l.s=left}{w2,v2} % HNL
+    \fmffreeze
+    % HNL decay on top
+    \fmf{boson,t=1.2,f=colBSM,label=\colBSM W$_\mathrm{R}^{\pm*}$,l.d=4,l.s=right}{w1,d1} % W boson
+    \fmf{fermion}{o3,d1,o2}
+    % HCL decay on bottom
+    \fmf{boson,t=1.2,f=colBSM,label=\colBSM W$_\mathrm{R}^{\mp*}$,l.d=4,l.s=left}{w2,d2} % W boson
+    \fmf{fermion}{o5,d2,o4}
+    % labels
+    \fmfv{l.d=4,l.a=155,l=q}{i1}
+    \fmfv{l.d=4,l.a=-155,l=$\overline{\mathrm{q}}$}{i2}
+    \fmfv{l.d=5,l.a=25,l=$\ell^\mp$}{o1}
+    \fmfv{l.d=5,l.a=21,l=q$'$}{o2}
+    \fmfv{l.d=5,l.a=-21,l=$\overline{\mathrm{q}}''$}{o3}
+    \fmfv{l.d=5,l.a=21,l=q$'''$}{o4}
+    \fmfv{l.d=5,l.a=-22,l=$\overline{\mathrm{q}}''''$}{o5}
+    \fmfv{l.d=4,l.a=-25,l=$\ell^\pm$}{o6}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+% HLN four-fermion interaction
+\begin{fmfpicture}{-5,13}{-17,16}{hnl_four-fermion} % padding (LT)(RB)
+  \parbox{110pt}{\begin{fmfgraph*}(90,70) % canvas (W,H)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main process
+    \fmf{fermion}{i1,v,i2} % incoming particles
+    \fmf{fermion}{v,o1} % outgoing particle
+    \fmf{majorana,f=colHNL}{o2,v} % outgoing particle
+    % labels
+    \fmfv{l.d=5,l.a=155,l=q}{i1}
+    \fmfv{l.d=4,l.a=-155,l=$\overline{\mathrm{q}}'$}{i2}
+    \fmfv{l.d=4,l.a=25,l=$\ell^\mp$}{o1}
+    \fmfv{l.d=4,l.a=-25,l=\colHNL N$_\ell$}{o2}
+    \fmfblob{20}{v}
+  \end{fmfgraph*}}
+  =\quad
+  \parbox{120pt}{\begin{fmfgraph*}(110,65) % canvas (W,H)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main process
+    \fmf{fermion}{i1,v1,i2} % incoming particles
+    \fmf{boson,t=1,label=W$^\pm$,l.s=left}{v1,w2} % s-channel
+    \fmf{fermion}{w2,o1} % outgoing particle
+    \fmf{majorana,f=colHNL}{o2,w2} % outgoing particle
+    % labels
+    \fmfv{l.d=5,l.a=155,l=q}{i1}
+    \fmfv{l.d=4,l.a=-155,l=$\overline{\mathrm{q}}'$}{i2}
+    \fmfv{l.d=4,l.a=25,l=$\ell^\pm$}{o1}
+    \fmfv{l.d=4,l.a=-25,l=\colHNL N$_\ell$}{o2}
+    \fmfdot{w2}
+  \end{fmfgraph*}}
+  +\quad
+  \parbox{110pt}{\begin{fmfgraph*}(90,65) % canvas (W,H)
+    % external vertices
+    \fmfleft{i2,i1}
+    \fmfright{o2,o1}
+    % main process
+    \fmf{fermion}{i1,v,i2} % incoming particles
+    \fmf{fermion}{v,o1} % outgoing particle
+    \fmf{majorana,f=colHNL}{o2,v} % outgoing particle
+    % labels
+    \fmfv{l.d=5,l.a=155,l=q}{i1}
+    \fmfv{l.d=4,l.a=-155,l=$\overline{\mathrm{q}}'$}{i2}
+    \fmfv{l.d=4,l.a=25,l=$\ell^\pm$}{o1}
+    \fmfv{l.d=4,l.a=-25,l=\colHNL N$_\ell$}{o2}
+    \fmfdot{v}
+  \end{fmfgraph*}}
+\end{fmfpicture}
+
+% HLN decay
+\begin{fmfpicture}{-8,13}{-11,14}{hnl_decay-blob} % padding (LT)(RB)
+  \parbox{120pt}{\begin{fmfgraph*}(100,70) % canvas (W,H)
+    % external vertices
+    \fmfleft{i1}
+    \fmfright{o3,o2,o1}
+    % main process
+    \fmf{majorana,f=colHNL,t=1,label=\colHNL N$_\ell$,l.s=left}{i1,v}
+    \fmf{fermion}{o2,v}
+    \fmffreeze
+    \fmf{fermion}{v,o1}
+    \fmf{fermion}{v,o3}
+    % labels
+    \fmfv{l.d=5,l.a=25,l=q}{o1}
+    \fmfv{l.d=5,l.a=0,l=$\overline{\mathrm{q}}'$}{o2}
+    \fmfv{l.d=4,l.a=-25,l=$\ell^\mp$}{o3}
+    \fmfblob{20}{v}
+  \end{fmfgraph*}}
+  =\quad
+  \parbox{120pt}{\begin{fmfgraph*}(100,70) % canvas (W,H)
+    % external vertices
+    \fmfleft{i1}
+    \fmfright{o3,d,m,o2,o1}
+    \fmftop{t} % for pulling
+    \fmfshift{9 down}{o2}
+    \fmfshift{4 left}{o3}
+    % main process
+    \fmf{majorana,f=colHNL,t=1.2,label=\colHNL N$_\ell$,l.s=left}{i1,v}
+    \fmf{phantom,t=1.1}{v,m}
+    \fmffreeze
+    %\fmf{boson,t=1.5,label=W$^\pm$,l.d=1,l.s=left}{v,w}
+    \fmf{boson,t=1.5}{v,w}
+    \fmf{fermion}{o2,w,o1}
+    \fmf{fermion}{v,o3}
+    \fmf{phantom,t=0.4}{w,t}
+    % labels
+    \fmfv{l.d=5,l.a=25,l=q}{o1}
+    \fmfv{l.d=5,l.a=0,l=$\overline{\mathrm{q}}'$}{o2}
+    \fmfv{l.d=4,l.a=-25,l=$\ell^\mp$}{o3}
+    \fmfv{l.d=8,l.a=180,l=W$^\pm$}{w} % for boson line
+  \end{fmfgraph*}}
+  +\quad
+  \parbox{110pt}{\begin{fmfgraph*}(90,65) % canvas (W,H)
+    % external vertices
+    \fmfleft{i1}
+    \fmfright{o3,o2,o1}
+    \fmf{majorana,f=colHNL,t=1,label=\colHNL N$_\ell$,l.s=left}{i1,v}
+    \fmf{fermion}{o2,v}
+    \fmffreeze
+    \fmf{fermion}{v,o1}
+    \fmf{fermion}{v,o3}
+    % labels
+    \fmfv{l.d=5,l.a=25,l=q}{o1}
+    \fmfv{l.d=5,l.a=0,l=$\overline{\mathrm{q}}'$}{o2}
+    \fmfv{l.d=4,l.a=-25,l=$\ell^\mp$}{o3}
+    \fmfdot{v}
+  \end{fmfgraph*}}
+\end{fmfpicture}
+
+\end{document}

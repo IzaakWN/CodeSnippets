@@ -1,0 +1,98 @@
+% !TEX program = pdflatexmk
+% !TEX parameter = -shell-escape
+% Author: Izaak Neutelings (September 2024)
+% Description: Anomalous magnetic moment in pp collisions
+% Sources: https://cms.cern.ch/iCMS/analysisadmin/cadilines?line=EXO-23-005
+% Instructions: To compile via command line, run the following twice
+%   pdflatex -shell-escape anomalous_momentum_arrows.tex
+% Sources:
+%  https://feynm.net/g-2/#g-2-016
+%  https://wiki.physik.uzh.ch/cms/latex:feynman#adding_momentum_arrows
+\documentclass[11pt,border=4pt,multi=page,crop]{standalone}
+\usepackage{feynmp-auto}
+\usepackage{pgffor} % for \foreach
+
+
+% DEFINE fmfpicture ENVIRONMENT
+% The following defines a custom picture environment that
+% helps to create standalone pages with common settings,
+% and correctly padding the diagram with \fmfframe
+\usepackage{environ} % for \NewEnviron
+\NewEnviron{fmfpicture}[3]{%
+  \begin{page} % to create standalone page
+  \fmfframe(#1)(#2){ % padding (LT)(RB)
+  \begin{fmffile}{feynmp-#3} % auxiliary files (use unique name!)
+    \fmfset{wiggly_len}{12} % boson wavelength
+    \fmfset{wiggly_slope}{65} % boson slope of waves
+    \BODY % main code
+  \end{fmffile}
+  }
+  \end{page}
+}
+
+% MOMENTUM ARROW
+\newcommand{\fmfarrow}[5]{%
+  %  Arguments:
+  %  1. unique label of the arrow object (containing only letters);
+  %  2. postion of the momentum arrow w.r.t. the particle leg: `down`, `up`;
+  %  3. position of the label w.r.t. momentum arrow (optional): `bot`, `top`;
+  %  4. label text drawn with the arrow (optional);
+  %  5. comma-separated vertices between which the momentum arrow is drawn.
+  \fmfcmd{
+    style_def marrow#1
+      expr p = drawarrow subpath (0.15, 0.6) of p shifted 6 #2 withpen pencircle scaled 0.4;
+      label.#3(btex #4 etex, point 0.3 of p shifted 6 #2);
+    enddef;
+  }
+  \fmf{marrow#1,tension=0}{#5}
+}
+\newcommand{\fmfbentarrow}[5]{%
+  %  Arguments:
+  %  1. unique label of the arrow object (containing only letters);
+  %  2. postion of the momentum arrow w.r.t. the particle leg: `down`, `up`;
+  %  3. position of the label w.r.t. momentum arrow (optional): `bot`, `top`, `lft`;
+  %  4. label text drawn with the arrow (optional);
+  %  5. comma-separated vertices between which the momentum arrow is drawn.
+  \fmfcmd{
+    style_def mbentarrow#1
+      expr p = drawarrow subpath (0.5, 1.3) of p shifted 8 #2 withpen pencircle scaled 0.4;
+      label.#3(btex #4 etex, point 0.8 of p shifted 10 #2);
+    enddef;
+  }
+  \fmf{mbentarrow#1,left=0.6,tension=0}{#5}
+}
+
+\begin{document}
+
+
+% gamma -> ee
+\begin{fmfpicture}{15,6}{2,6}{loop} % padding (LT)(RB)
+  \begin{fmfgraph*}(80,100) % canvas (W,H)
+    % external vertices
+    \fmfright{g}
+    \fmfleft{f2,f1}
+    % main process
+    \fmf{boson,tension=0.9}{g,v} % photon
+    \fmf{fermion,tension=1.1,label.distance=2,
+         label.side=right,label=$k$}{v2,v} % internal lepton
+    \fmf{fermion,tension=1.1,label.distance=1,
+         label.side=right,label=$k'=k+p$}{v,v1} % internal lepton
+    \fmf{fermion,label.distance=2,
+         label.side=right,label=$p$}{v1,f1} % incoming lepton
+    \fmf{fermion,label.distance=2,
+         label.side=right,label=$p'$}{f2,v2} % outgoing lepton
+    % virtual photon
+    \fmffreeze % freeze to fix fermion lines
+    \fmf{boson,right=0.6}{v1,v2} %,label=$\gamma$,label.side=right
+    % ARROWS
+    \fmfarrow{q}{down}{bot}{$q$}{g,v}
+    \fmfbentarrow{k}{left}{lft}{$p-k$}{v2,v1}
+    % labels
+    %\fmfv{l.a=-120,l.d=8,l=$\gamma$}{g}
+    %\fmfv{l.a=140,l.d=4,l=e}{f1}
+    %\fmfv{l.a=-155,l.d=4,l=e}{f2}
+  \end{fmfgraph*}
+\end{fmfpicture}
+
+
+\end{document}
