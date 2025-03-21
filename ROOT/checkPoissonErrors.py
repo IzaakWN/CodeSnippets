@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # Author: Izaak Neutelings (January 2018)
 #
 # Copy file:
@@ -10,13 +10,11 @@
 #  https://github.com/DESY-CMS-SUS/cmgtools-lite/blob/8_0_25/TTHAnalysis/python/plotter/susy-1lep/RcsDevel/plotDataPredictWithSyst.py#L12-L21
 #  https://root.cern.ch/doc/master/TH1_8cxx_source.html#l08344
 #  https://root.cern.ch/doc/master/group__QuantFunc.html
-
 import sys, os
 import re
-from argparse import ArgumentParser
-#import CMS_lumi, tdrstyle
-import ROOT
-from ROOT import gPad, gROOT, gStyle, TFile, TVectorD, Math, Double,\
+import ctypes # for passing by reference
+import ROOT; ROOT.PyConfig.IgnoreCommandLineOptions = True
+from ROOT import gPad, gROOT, gStyle, TFile, TVectorD, Math,\
                  TCanvas, TLegend, TLatex, TText,\
                  TH1D, TH1F, TH2F, THStack, TF1, TGraph, TGraphErrors, TGraphAsymmErrors,\
                  kBlack, kRed, kBlue, kAzure, kGreen, kGreen, kYellow, kOrange, kMagenta, kViolet,\
@@ -25,17 +23,8 @@ from math import sqrt, log, floor, ceil
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 gStyle.SetOptStat(0)
 
-argv = sys.argv
-description = '''This script runs combine on data cards, extracts limits from the output and plot them.'''
-parser = ArgumentParser(prog="plotLimits",description=description,epilog="Succes!")
-parser.add_argument( "-v", "--verbose", dest="verbose", default=False, action='store_true',
-                     help="set verbose" )
-parser.add_argument( "-f", "--force", dest="force", default=False, action='store_true',
-                     help="force overwriting of existing files" )
-args = parser.parse_args()
-
-force       = args.force
-verbosity   = 1*args.verbose
+force     = False
+verbosity = 1
 colors = [ kRed+2, kAzure+5, kOrange-5, kGreen+2, kMagenta+2, kYellow+2,
            kRed-7, kAzure-4, kOrange+6, kGreen-2, kMagenta-3, kYellow-2 ] #kViolet
 styles = [ kSolid, kDashed, kDashDotted, ] #kDotted
@@ -51,7 +40,7 @@ def checkDataPoissonErrors():
     hist1  = TH1D("data1","TH1.kPoisson",N,0,N)
     hist2  = TH1D("data2","#chi^{2} quantile",N,0,N)
     
-    for i in xrange(0,N+2):
+    for i in range(0,N+2):
         y = max(0,i-1)
         hist0.SetBinContent(i,y)
         hist1.SetBinContent(i,y)
@@ -65,19 +54,19 @@ def checkDataPoissonErrors():
     table   = [ ]
     table.append("%22s  %14s  %14s  %14s"%(
                     " ","default".center(14),"kPoisson".center(14),"chi^2".center(14)))
-    table.append("%4s %7s  %7s   %6s %6s   %6s %6s   %6s %6s"%(
-                    "bin","content","sqrt(N)","errLow","errUp","errLow","errUp","errLow","errUp"))
-    for i in xrange(1,N+1):
+    table.append("%5s %5s  %7s   %6s %6s   %6s %6s   %6s %6s"%(
+                    "bin","N","sqrt(N)","errLow","errUp","errLow","errUp","errLow","errUp"))
+    for i in range(1,N+1):
         y = hist0.GetBinContent(i)
-        table.append("%4d %5d    %7.2f   %6.2f %6.2f   %6.2f %6.2f   %6.2f %6.2f"%(
+        table.append("%5d %5d  %7.2f   %6.2f %6.2f   %6.2f %6.2f   %6.2f %6.2f"%(
                         i,y,sqrt(y),hist0.GetBinErrorLow(i), hist0.GetBinErrorUp(i),
                                     graph1.GetErrorYlow(i-1),graph1.GetErrorYhigh(i-1),
                                     graph2.GetErrorYlow(i-1),graph2.GetErrorYhigh(i-1)))
     
     # PRINT table
     for line in table:
-        print ">>> " + line
-    print ">>> "
+        print(">>> "+line)
+    print(">>> ")
     
     # GRAPHS
     function = TF1("function1","sqrt(x)",0,N)
@@ -103,10 +92,10 @@ def checkDataPoissonErrors():
     y1 = 0.20; y2 = y1 + height
     
     # CANVAS
-    canvas = TCanvas("canvas","canvas",100,100,W,H)
+    canvas = TCanvas('canvas','canvas',100,100,W,H)
     canvas.Divide(2)
     canvas.cd(1)
-    gPad.SetPad("pad1","pad1",0,0.37,1,1,0,-1,0)
+    gPad.SetPad('pad1','pad1',0,0.37,1,1,0,-1,0)
     gPad.SetTopMargin(  T/H ); gPad.SetBottomMargin( 0.01 )
     gPad.SetLeftMargin( L/W ); gPad.SetRightMargin(  R/W  )
     gPad.SetTickx(0)
@@ -165,7 +154,7 @@ def checkDataPoissonErrors():
     
     # RATIO plot
     canvas.cd(2)
-    gPad.SetPad("pad2","pad2",0,0,1,0.36,0,-1,0)
+    gPad.SetPad('pad2','pad2',0,0,1,0.36,0,-1,0)
     gPad.SetTopMargin(  0.05 ); gPad.SetBottomMargin( 0.24 )
     gPad.SetLeftMargin( L/W  ); gPad.SetRightMargin(  R/W  )
     
@@ -181,8 +170,8 @@ def checkDataPoissonErrors():
     frame_ratio.GetYaxis().SetTitleOffset(0.63)
     frame_ratio.GetXaxis().SetNdivisions(508)
     frame_ratio.GetYaxis().CenterTitle(True)
-    frame_ratio.GetYaxis().SetTitle("ratio")
-    frame_ratio.GetXaxis().SetTitle("number of events N")
+    frame_ratio.GetYaxis().SetTitle("Ratio")
+    frame_ratio.GetXaxis().SetTitle("Number of events N")
     frame_ratio.GetYaxis().SetNdivisions(5)
     
     # DRAW ratio
@@ -205,7 +194,6 @@ def checkDataPoissonErrors():
     canvas.Close()
     
 
-
 # MAKE graph
 def makeErrorGraph(graph):
     '''Make graphs of the low and high error of a given graph.'''
@@ -216,9 +204,10 @@ def makeErrorGraph(graph):
     graphEup.SetName(   graph.GetName() +"_graphEup"   )
     graphElow.SetTitle( graph.GetTitle()+" low error"  )
     graphEup.SetTitle(  graph.GetTitle()+" high error" )
-    for i in xrange(0,N):
-        x, y = Double(), Double()
-        graph.GetPoint(i,x,y)
+    for i in range(0,N):
+        #x, y = ctypes.c_double(), ctypes.c_double()
+        #graph.GetPoint(i,x,y)
+        x, y = graph.GetPointX(i), graph.GetPointY(i)
         graphElow.SetPoint( i, x, graph.GetErrorYlow(i)  )
         graphEup.SetPoint(  i, x, graph.GetErrorYhigh(i) )
     graphElow.SetLineWidth(graph.GetLineWidth())
@@ -236,7 +225,6 @@ def makeErrorGraph(graph):
     return [ graphElow, graphEup ]
     
 
-
 # MAKE graph
 def makeGraphFromTF1(function,N):
     '''Make graphs from a given function.'''
@@ -244,7 +232,7 @@ def makeGraphFromTF1(function,N):
     graph = TGraph(N)
     graph.SetName(  function.GetName() +"_function"  )
     graph.SetTitle( function.GetTitle() )
-    for i in xrange(0,N):
+    for i in range(0,N):
         x = a + i*float(b-a)/N
         y = function.Eval(x)
         graph.SetPoint(i,x,y)
@@ -257,7 +245,6 @@ def makeGraphFromTF1(function,N):
     return graph
     
 
-
 # MAKE ratio
 def makeRatioTGraphs(graph0,graph1,**kwargs):
     '''Make a ratio of two TGraphs bin by bin.'''
@@ -265,25 +252,25 @@ def makeRatioTGraphs(graph0,graph1,**kwargs):
     # SETTINGS
     verbose     = kwargs.get('verbose',False)    
     N           = graph0.GetN()
-    x0, y0      = Double(), Double()
-    x1, y1      = Double(), Double()
     graph_ratio = TGraph()
     
     # CHECK binning hist1
     N1 = graph1.GetN()
     if N != N1:
-      print ">>> Warning! makeRatioTGraphs: different number of points: %d != %d!"%(N,N1)
+      print(f">>> Warning! makeRatioTGraphs: different number of points: {N} != {N1}!")
       exit(1)
     
     if verbose:
-      print ">>> %3s  %9s %9s %9s %9s %9s"%("i","x0","x1","y0","y1","ratio")
+      print(">>> %3s  %9s %9s %9s %9s %9s"%("i","x0","x1","y0","y1","ratio"))
     
     # CALCULATE ratio bin-by-bin
     for i in range(0,N):
-        graph0.GetPoint(i,x0,y0)
-        graph1.GetPoint(i,x1,y1)
+        x0 = graph0.GetPointX(i)
+        y0 = graph0.GetPointY(i)
+        x1 = graph1.GetPointX(i)
+        y1 = graph1.GetPointY(i)
         if x0!=x1:
-          print ">>> Warning! makeRatioTGraphs: graphs' points %i have different x values: %.2f vs. %.2f !"%(i,x0,x1)
+          print(f">>> Warning! makeRatioTGraphs: graphs' points {i} have different x values: {x0:.2f} vs. {x1:.2f} !")
           exit(0)
         ratio = 0
         if y1:          ratio = y0/y1
@@ -291,7 +278,7 @@ def makeRatioTGraphs(graph0,graph1,**kwargs):
         elif y0>100*y1: ratio = 100.0
         graph_ratio.SetPoint( i, x0, ratio )
         if verbose:
-          print ">>> %3s  %9.3f %9.3f %9.3f %9.3f %9.3f"%(i,x0,x1,y0,y1,ratio)
+          print(f">>> {i:3}  {x0:9.3f} {x1:9.3f} {y0:9.3f} {y1:9.3f} {ratio:9.3f}")
     
     return graph_ratio
     
@@ -315,7 +302,7 @@ def getDataPoissonErrors(hist, kPoisson=False, drawZeroBins=False, drawXbars=Fal
     graph = TGraphAsymmErrors(Nbins)
     graph.SetName(hist.GetName()+"_graph")
     graph.SetTitle(hist.GetTitle())
-    for i in xrange(1,Nbins+1):
+    for i in range(1,Nbins+1):
         N  = hist.GetBinContent(i)
         if N<=0 and not drawZeroBins: continue
         dN = hist.GetBinError(i)
@@ -351,14 +338,22 @@ def getDataPoissonErrors(hist, kPoisson=False, drawZeroBins=False, drawXbars=Fal
 
 # MAIN
 def main():
-    print ""
-    
+    print("")
     checkDataPoissonErrors()
     
 
-
 if __name__ == '__main__':
-    main()
-    print ">>>\n>>> done\n"
+    from argparse import ArgumentParser
+    description = '''This script compares computation methods of the Poisson error.'''
+    parser = ArgumentParser(prog="plotLimits",description=description,epilog="Good luck!")
+    parser.add_argument('-v', '--verbose', dest='verbose', default=False, action='store_true',
+                         help="set verbose" )
+    parser.add_argument('-f', '--force', dest='force', default=False, action='store_true',
+                         help="force overwriting of existing files" )
+    args = parser.parse_args()
     
-
+    force     = args.force
+    verbosity = 1*args.verbose
+    main()
+    print(">>>\n>>> Done\n")
+    
